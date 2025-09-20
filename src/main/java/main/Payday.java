@@ -1,6 +1,5 @@
 package main;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
@@ -20,21 +19,18 @@ public class Payday {
     public static boolean connected;
 
     public static void main(String[] args) {
-        //Initalize SplashScreen before launch page
+        //Initialize SplashScreen before launch page
 //        SplashScreen splash = new SplashScreen();
 //        splash.showSplash(0);
 
-        //RUNS LAUNCH PAGE AFTER INITIALIZATION
+        //RUNS MainFrame (which now starts with LoginPage)
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-
                 Database.getInstance().DBConnect();
                 if(connected) {
-                    MainFrame mainF = new MainFrame();
+                    MainFrame mainF = new MainFrame(); // This will now show LoginPage first
                 }
             }
         });
     }
-    
-
 }

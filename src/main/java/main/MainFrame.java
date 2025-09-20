@@ -28,18 +28,39 @@ public class MainFrame extends JFrame {
         mainFrame.setResizable(false);
         mainFrame.setLayout(new BorderLayout());
         mainFrame.setUndecorated(true);
-
     }
 
     private void setupUI(){
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
 
-//        mainPanel.add(new LoginPage(this::changeCard), "Login");
+        // Add LoginPage first (will be shown initially)
+        mainPanel.add(new LoginPage(this::handleLoginResult), "Login");
+
+        // Add other pages
         mainPanel.add(new LaunchPage(), "Launch");
+
+        // Show LoginPage first
+        cardLayout.show(mainPanel, "Login");
+
         mainFrame.setContentPane(mainPanel);
     }
 
+    // Handle login results and navigation
+    private void handleLoginResult(String result){
+        if("success".equals(result)) {
+            // Navigate to LaunchPage after successful login
+            cardLayout.show(mainPanel, "Launch");
+        } else if("Launch".equals(result)) {
+            // Direct navigation to Launch page (if needed)
+            cardLayout.show(mainPanel, "Launch");
+        } else {
+            // Handle other navigation requests
+            changeCard(result);
+        }
+    }
+
+    // General card switching method (for other pages)
     private void changeCard(String text){
         cardLayout.show(mainPanel, text);
     }

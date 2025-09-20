@@ -1,251 +1,338 @@
-//package pages;
-//
-//import javax.swing.*;
-//import java.awt.*;
-//import java.awt.event.MouseAdapter;
-//import java.awt.event.MouseEvent;
-//import java.util.function.Consumer;
-//
-//import components.*;
-//import data.Users;
-//import panels.*;
-//import util.FontLoader;
-//import util.ThemeManager;
-//
-//public class LoginPage extends JPanel{
-//
-//    Users user = new Users();
-//    boolean userValid = false, passValid = false;
-//    JLabel loginLabel = new JLabel("Log In");
-//    JLabel registerLabel = new JLabel("Sign Up");
-//
-//    public LoginPage(Consumer<String> onButtonClick) {
-//        //MAIN CONTAINER
-//        JPanel mainContainer = new JPanel();
-//        mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
-//        mainContainer.setBackground(Color.white);
-//        mainContainer.setPreferredSize(new Dimension(420, 650));
-//
-//        // PANEL CREATE
-//        //N PANEL
-//        JPanel nPanel = new JPanel();
-//        nPanel.setPreferredSize(new Dimension(420, 60));
-//        nPanel.setMaximumSize(new Dimension(420, 60));
-//        nPanel.setLayout(new GridLayout(1,2));
-//        nPanel.setOpaque(false);
-//        nPanel.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
-//
-//        //LOGIN PANEL
-//        JPanel loginPanel = new JPanel();
-//        loginPanel.setLayout(new BorderLayout());
-//        loginPanel.setPreferredSize(new Dimension(210, 50));
-//
-//        //REGISTER PANEL
-//        JPanel registerPanel = new JPanel();
-//        registerPanel.setLayout(new BorderLayout());
-//        registerPanel.setPreferredSize(new Dimension(210, 50));
-//
-//        //rPanelLogin
-//        RoundedPanel rPanelLogin = new RoundedPanel(15, Color.white);
-//        rPanelLogin.setPreferredSize(new Dimension(170, 5));
-//        rPanelLogin.setBackground(ThemeManager.getInstance().pBlue);
-//
-//        //rPanelRegister
-//        RoundedPanel rPanelRegister = new RoundedPanel(15, Color.white);
-//        rPanelRegister.setPreferredSize(new Dimension(170, 5));
-//        rPanelRegister.setBackground(ThemeManager.getInstance().transparent);
-//
-//        JPanel cRegisterPanel = new JPanel();
-//
-//        //------------------------------------TOP PANEL------------------------------------------------
-//
-//        // North Bottom Panels
-//        JPanel loginBottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-//        loginBottomPanel.setOpaque(false);
-//        loginBottomPanel.setPreferredSize(new Dimension(210, 5));
-//
-//        JPanel registerBottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-//        registerBottomPanel.setOpaque(false);
-//        registerBottomPanel.setPreferredSize(new Dimension(210, 5));
-//
-//        // Label Containers
-//        JPanel loginLabelContainer = new JPanel();
-//        loginLabelContainer.setPreferredSize(new Dimension(60, 30));
-//        loginLabelContainer.setOpaque(false);
-//        loginLabelContainer.setLayout(new FlowLayout(FlowLayout.RIGHT, 60, 20));
-//
-//        JPanel registerLabelContainer = new JPanel();
-//        registerLabelContainer.setPreferredSize(new Dimension(60, 30));
-//        registerLabelContainer.setOpaque(false);
-//        registerLabelContainer.setLayout(new FlowLayout(FlowLayout.LEFT, 50, 20));
-//
-//        loginLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"));
-//        loginLabel.setForeground(ThemeManager.getInstance().dBlue);
-//        registerLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"));
-//        registerLabel.setForeground(new Color(178, 177, 177));
-//
-//        // Top Area
-//        loginLabelContainer.add(loginLabel);
-//        registerLabelContainer.add(registerLabel);
-//        loginBottomPanel.add(rPanelLogin);
-//        registerBottomPanel.add(rPanelRegister);
-//        loginPanel.add(loginBottomPanel, BorderLayout.SOUTH);
-//        loginPanel.add(loginLabelContainer, BorderLayout.CENTER);
-//        registerPanel.add(registerLabelContainer, BorderLayout.CENTER);
-//        registerPanel.add(registerBottomPanel, BorderLayout.SOUTH);
-//        nPanel.add(loginPanel);
-//        nPanel.add(registerPanel);
-//        //--------------------------------END OF TOP PANEL-----------------------------------------
-//
-//
-//        //---------------------------------CENTER PANEL--------------------------------------------
-//        JPanel centerPanel = new JPanel();
-//        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-//        centerPanel.setBackground(Color.white);
-//        centerPanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
-//        centerPanel.setPreferredSize(new Dimension(420, 200));
-//        centerPanel.setMaximumSize(new Dimension(420, 200));
-//        centerPanel.setMinimumSize(new Dimension(420, 200));
-//
-//        //logo
-//        ImageIcon logo = new ImageIcon("appLogo.png");
-//        Image scaledLogo = logo.getImage().getScaledInstance(250,250,Image.SCALE_SMOOTH);
-//        ImageIcon resizedLogo = new ImageIcon(scaledLogo);
-//
-//        JLabel logoLabel = new JLabel(resizedLogo);
-//        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//
-//        //add to center panel
-//        centerPanel.add(logoLabel);
-//
-//        //-----------------------------END OF CENTER PANEL-------------------------------------------
-//
-//        //-----------------------------------BOTTOM PANEL--------------------------------------------
-//
-//        JPanel cLoginPanel = new JPanel();
-//        cLoginPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 30));
-//        cLoginPanel.setBackground(Color.white);
-//        cLoginPanel.setOpaque(false);
-//
-//        JPanel inputPanel = new JPanel();
-//        inputPanel.setPreferredSize(new Dimension(350, 160));
-//        inputPanel.setBackground(Color.white);
-//        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
-//
-//        // Center Text Fields
-//        RoundedTextField userField = new RoundedTextField(13, new Color(234,232,228), ThemeManager.getInstance().transparent, 3);
-//        userField.setPreferredSize(new Dimension(350, 50));
-//        userField.setMaximumSize(new Dimension(350, 50));
-//        userField.setAlignmentX(Component.LEFT_ALIGNMENT);
-//
-//        RoundedTextField passField = new RoundedTextField(13, new Color(234,232,228), ThemeManager.getInstance().transparent, 3);
-//        passField.setPreferredSize(new Dimension(350, 50));
-//        passField.setMaximumSize(new Dimension(350, 50));
-//        passField.setAlignmentX(Component.LEFT_ALIGNMENT);
-//
-//        // Center Labels
-//        JLabel userLabel = new JLabel("Your Username");
-//        userLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
-//        userLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-//
-//        JLabel passLabel = new JLabel("Your Password");
-//        passLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
-//        passLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-//
-//
-//        //ADD INPUT PANELS
-//        inputPanel.add(Box.createVerticalStrut(10));
-//        inputPanel.add(userLabel);
-//        inputPanel.add(Box.createVerticalStrut(5));
-//        inputPanel.add(userField);
-//        inputPanel.add(Box.createVerticalStrut(15));
-//        inputPanel.add(passLabel);
-//        inputPanel.add(Box.createVerticalStrut(5));
-//        inputPanel.add(passField);
-//        inputPanel.add(Box.createVerticalGlue());
-//
-//        // Buttons
-//        RoundedButton loginButton = new RoundedButton("Log In", 15, ThemeManager.getInstance().pBlue);
-//        loginButton.setPreferredSize(new Dimension(350, 50));
-//        loginButton.setForeground(Color.WHITE);
-//        loginButton.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-//
-//
-//        cLoginPanel.add(inputPanel);
-//        cLoginPanel.add(loginButton);
-//
-//        //-------------------------------END OF BOTTOM PANEL-------------------------------------------
-//
-//        // Center Area Register
-//        cRegisterPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 40, 30));
-//        cRegisterPanel.setBackground(Color.white);
-//
-//        //ADD COMPONENTS TO FRAME
-//        mainContainer.add(nPanel);
-//        mainContainer.add(centerPanel);
-//        mainContainer.add(cLoginPanel);
-//
-//
-//        this.add(mainContainer);
-//        //-------------------------------MOUSE LISTENERS---------------------------------------------
-//        loginButton.addActionListener(e -> {
-//            if(userField.getText().isEmpty()){
-//                userField.setBorderColor(Color.red);
-//                userValid = false;
-//            }
-//            else{
-//                userValid = true;
-//            }
-//            if(passField.getText().isEmpty()){
-//                passField.setBorderColor(Color.red);
-//                passValid = false;
-//            }
-//            else{
-//                passValid = true;
-//            }
-//
-//            if(userValid){
-//                userField.setBorderColor(new Color(234,232,228));
-//            }
-//            if(passValid){
-//                passField.setBorderColor(new Color(234,232,228));
-//            }
-//            System.out.println("press");
-//            if(userValid && passValid){
-//                user.loginAccount(userField.getText(), passField.getText(), onButtonClick);
-//            }
-//            user.test(onButtonClick);
-//        });
-//
-//        // loginPanel MOUSE LISTENER
-//        loginPanel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e){
-//                rPanelLogin.setBackground(ThemeManager.getInstance().pBlue);
-//                rPanelRegister.setBackground(ThemeManager.getInstance().transparent);
-//
-//                loginLabel.setForeground(ThemeManager.getInstance().dBlue);
-//                registerLabel.setForeground(new Color(178, 177, 177));
-//                loginButton.setText("Login");
-//
-//            }
-//        });
-//
-//        // registerPanel
-//        registerPanel.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mousePressed(MouseEvent e){
-//                rPanelRegister.setBackground(ThemeManager.getInstance().pBlue);
-//                rPanelLogin.setBackground(ThemeManager.getInstance().transparent);
-//
-//                loginLabel.setForeground(new Color(178, 177, 177));
-//                registerLabel.setForeground(ThemeManager.getInstance().dBlue);
-//                loginButton.setText("Register");
-//
-//            }
-//        });
-//        //---------------------------------END OF MOUSE LISTENERS--------------------------------------
-//
-//        this.setVisible(true);
-//    }
-//}
+package pages;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
+
+import components.*;
+import data.Users;
+import panels.*;
+import util.FontLoader;
+import util.ThemeManager;
+
+public class LoginPage extends JPanel{
+
+    private Users user = new Users();
+    private boolean isLoginMode = true;
+    private StringBuilder pinInput = new StringBuilder();
+    private JLabel[] pinDots = new JLabel[4];
+
+    private JLabel loginLabel = new JLabel("Log In");
+    private JLabel registerLabel = new JLabel("Sign Up");
+
+    // Cache components for efficiency
+    private RoundedPanel rPanelLogin;
+    private RoundedPanel rPanelRegister;
+    private CardLayout cardLayout;
+    private JPanel cardPanel;
+
+    public LoginPage(Consumer<String> onButtonClick) {
+        initializeComponents();
+        setupLayout(onButtonClick);
+        this.setVisible(true);
+    }
+
+    private void initializeComponents() {
+        // Initialize main container
+        this.setLayout(new BorderLayout());
+        this.setBackground(ThemeManager.getWhite());
+        this.setPreferredSize(new Dimension(420, 650));
+
+        // Initialize cached components
+        rPanelLogin = new RoundedPanel(15, ThemeManager.getWhite());
+        rPanelLogin.setPreferredSize(new Dimension(170, 5));
+        rPanelLogin.setBackground(ThemeManager.getPBlue());
+
+        rPanelRegister = new RoundedPanel(15, ThemeManager.getWhite());
+        rPanelRegister.setPreferredSize(new Dimension(170, 5));
+        rPanelRegister.setBackground(ThemeManager.getTransparent());
+
+        // Style labels once
+        loginLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"));
+        loginLabel.setForeground(ThemeManager.getDBlue());
+        registerLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"));
+        registerLabel.setForeground(ThemeManager.getLightGray());
+    }
+
+    private void setupLayout(Consumer<String> onButtonClick) {
+        JPanel mainContainer = new JPanel();
+        mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
+        mainContainer.setBackground(ThemeManager.getWhite());
+        mainContainer.setPreferredSize(new Dimension(420, 650));
+
+        // Create panels
+        JPanel topPanel = createTopPanel();
+        JPanel centerPanel = createCenterPanel();
+
+        // Setup card layout
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+        cardPanel.setBackground(ThemeManager.getWhite());
+        cardPanel.setPreferredSize(new Dimension(420, 410));
+
+        cardPanel.add(createPinLoginPanel(onButtonClick), "LOGIN");
+        cardPanel.add(createRegisterPanel(onButtonClick), "REGISTER");
+
+        // Add components
+        mainContainer.add(topPanel);
+        mainContainer.add(centerPanel);
+        mainContainer.add(cardPanel);
+
+        this.add(mainContainer, BorderLayout.CENTER);
+    }
+
+    private JPanel createTopPanel() {
+        JPanel topContainer = new JPanel();
+        topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.Y_AXIS));
+        topContainer.setBackground(ThemeManager.getWhite());
+        topContainer.setPreferredSize(new Dimension(420, 60));
+        topContainer.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+
+        JPanel nPanel = new JPanel(new GridLayout(1, 2));
+        nPanel.setOpaque(false);
+
+        // Create tab panels
+        JPanel loginPanel = createTabPanel(loginLabel, rPanelLogin, true);
+        JPanel registerPanel = createTabPanel(registerLabel, rPanelRegister, false);
+
+        // Add mouse listeners
+        addTabMouseListener(loginPanel, true);
+        addTabMouseListener(registerPanel, false);
+
+        nPanel.add(loginPanel);
+        nPanel.add(registerPanel);
+        topContainer.add(nPanel);
+
+        return topContainer;
+    }
+
+    private JPanel createTabPanel(JLabel label, RoundedPanel roundedPanel, boolean isLeft) {
+        JPanel tabPanel = new JPanel(new BorderLayout());
+        tabPanel.setPreferredSize(new Dimension(210, 50));
+
+        JPanel labelContainer = new JPanel();
+        labelContainer.setOpaque(false);
+        labelContainer.setLayout(new FlowLayout(isLeft ? FlowLayout.RIGHT : FlowLayout.LEFT, isLeft ? 60 : 50, 15));
+        labelContainer.add(label);
+
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setOpaque(false);
+        bottomPanel.setLayout(new FlowLayout(isLeft ? FlowLayout.RIGHT : FlowLayout.LEFT, 0, 0));
+        bottomPanel.add(roundedPanel);
+
+        tabPanel.add(labelContainer, BorderLayout.CENTER);
+        tabPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+        return tabPanel;
+    }
+
+    private void addTabMouseListener(JPanel panel, boolean isLoginTab) {
+        panel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                switchTab(isLoginTab);
+            }
+        });
+    }
+
+    private void switchTab(boolean toLogin) {
+        isLoginMode = toLogin;
+
+        if (toLogin) {
+            rPanelLogin.setBackground(ThemeManager.getPBlue());
+            rPanelRegister.setBackground(ThemeManager.getTransparent());
+            loginLabel.setForeground(ThemeManager.getDBlue());
+            registerLabel.setForeground(ThemeManager.getLightGray());
+            cardLayout.show(cardPanel, "LOGIN");
+            clearPinInput();
+        } else {
+            rPanelRegister.setBackground(ThemeManager.getPBlue());
+            rPanelLogin.setBackground(ThemeManager.getTransparent());
+            loginLabel.setForeground(ThemeManager.getLightGray());
+            registerLabel.setForeground(ThemeManager.getDBlue());
+            cardLayout.show(cardPanel, "REGISTER");
+        }
+    }
+
+    private JPanel createCenterPanel() {
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
+        centerPanel.setBackground(ThemeManager.getWhite());
+        centerPanel.setPreferredSize(new Dimension(420, 180));
+
+        // Logo with error handling
+        try {
+            ImageIcon logo = new ImageIcon("appLogo.png");
+            Image scaledLogo = logo.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
+            ImageIcon resizedLogo = new ImageIcon(scaledLogo);
+
+            JLabel logoLabel = new JLabel(resizedLogo);
+            logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            centerPanel.add(logoLabel);
+        } catch (Exception e) {
+            // Fallback if logo not found
+            JLabel fallbackLabel = new JLabel("LOGO", SwingConstants.CENTER);
+            fallbackLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 24f, "Quicksand-Bold"));
+            fallbackLabel.setForeground(ThemeManager.getDBlue());
+            fallbackLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            centerPanel.add(fallbackLabel);
+        }
+
+        return centerPanel;
+    }
+
+    private JPanel createPinLoginPanel(Consumer<String> onButtonClick) {
+        JPanel pinPanel = new JPanel();
+        pinPanel.setLayout(new BoxLayout(pinPanel, BoxLayout.Y_AXIS));
+        pinPanel.setBackground(ThemeManager.getWhite());
+        pinPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+
+        // PIN title
+        JLabel pinTitle = new JLabel("Enter your 4-digit PIN", SwingConstants.CENTER);
+        pinTitle.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        pinTitle.setForeground(ThemeManager.getDBlue());
+        pinTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // PIN dots panel
+        JPanel pinDotsPanel = createPinDotsPanel();
+
+        // Keypad
+        JPanel keypadPanel = createKeypadPanel(onButtonClick);
+
+        // Assembly
+        pinPanel.add(Box.createVerticalStrut(10));
+        pinPanel.add(pinTitle);
+        pinPanel.add(Box.createVerticalStrut(15));
+        pinPanel.add(pinDotsPanel);
+        pinPanel.add(Box.createVerticalStrut(20));
+
+        JPanel keypadContainer = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        keypadContainer.setOpaque(false);
+        keypadContainer.add(keypadPanel);
+        pinPanel.add(keypadContainer);
+
+        return pinPanel;
+    }
+
+    private JPanel createPinDotsPanel() {
+        JPanel pinDotsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        pinDotsPanel.setOpaque(false);
+        pinDotsPanel.setPreferredSize(new Dimension(420, 35));
+
+        for (int i = 0; i < 4; i++) {
+            pinDots[i] = new JLabel("○");
+            pinDots[i].setFont(new Font("Arial", Font.PLAIN, 22));
+            pinDots[i].setForeground(ThemeManager.getLightGray());
+            pinDotsPanel.add(pinDots[i]);
+        }
+
+        return pinDotsPanel;
+    }
+
+    private JPanel createKeypadPanel(Consumer<String> onButtonClick) {
+        JPanel keypadPanel = new JPanel(new GridLayout(4, 3, 8, 8));
+        keypadPanel.setOpaque(false);
+        keypadPanel.setPreferredSize(new Dimension(240, 260));
+
+
+        for (int i = 1; i <= 9; i++) {
+            keypadPanel.add(createNumberButton(String.valueOf(i), onButtonClick));
+        }
+
+
+        keypadPanel.add(createEmptySpace());
+        keypadPanel.add(createNumberButton("0", onButtonClick));
+        keypadPanel.add(createBackspaceButton());
+
+        return keypadPanel;
+    }
+
+    private RoundedButton createNumberButton(String number, Consumer<String> onButtonClick) {
+        RoundedButton button = new RoundedButton(number, 20, ThemeManager.getSBlue());
+        button.setForeground(ThemeManager.getDBlue());
+        button.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        button.setPreferredSize(new Dimension(72, 58));
+        button.addActionListener(e -> addPinDigit(number, onButtonClick));
+        return button;
+    }
+
+    private RoundedButton createBackspaceButton() {
+        RoundedButton button = new RoundedButton("✕", 20, ThemeManager.getLightGray());
+        button.setForeground(ThemeManager.getDBlue());
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setPreferredSize(new Dimension(72, 58));
+        button.addActionListener(e -> removePinDigit());
+        return button;
+    }
+
+    private JPanel createEmptySpace() {
+        JPanel emptySpace = new JPanel();
+        emptySpace.setOpaque(false);
+        return emptySpace;
+    }
+
+    private JPanel createRegisterPanel(Consumer<String> onButtonClick) {
+        JPanel registerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 30));
+        registerPanel.setBackground(ThemeManager.getWhite());
+
+        RoundedButton registerButton = new RoundedButton("Register", 15, ThemeManager.getPBlue());
+        registerButton.setPreferredSize(new Dimension(350, 50));
+        registerButton.setForeground(ThemeManager.getWhite());
+        registerButton.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
+
+        registerPanel.add(registerButton);
+
+        return registerPanel;
+    }
+
+    private void addPinDigit(String digit, Consumer<String> onButtonClick) {
+        if (pinInput.length() < 4) {
+            pinInput.append(digit);
+            updatePinDots();
+
+            if (pinInput.length() == 4) {
+
+                Timer timer = new Timer(200, e -> {
+                    processPin(onButtonClick);
+                    clearPinInput();
+                });
+                timer.setRepeats(false);
+                timer.start();
+            }
+        }
+    }
+
+    private void processPin(Consumer<String> onButtonClick) {
+        String pin = pinInput.toString();
+        System.out.println("PIN entered: " + pin);
+
+
+        user.loginAccount("PIN_USER", pin, onButtonClick);
+    }
+
+    private void removePinDigit() {
+        if (pinInput.length() > 0) {
+            pinInput.deleteCharAt(pinInput.length() - 1);
+            updatePinDots();
+        }
+    }
+
+    private void updatePinDots() {
+        for (int i = 0; i < 4; i++) {
+            if (i < pinInput.length()) {
+                pinDots[i].setText("●");
+                pinDots[i].setForeground(ThemeManager.getDBlue());
+            } else {
+                pinDots[i].setText("○");
+                pinDots[i].setForeground(ThemeManager.getLightGray());
+            }
+        }
+    }
+
+    private void clearPinInput() {
+        pinInput.setLength(0);
+        updatePinDots();
+    }
+}
