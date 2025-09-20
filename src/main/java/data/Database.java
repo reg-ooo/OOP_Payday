@@ -22,7 +22,7 @@ public class Database extends Payday {
     public static void DBConnect(){
         db = "banksystem";
         uname = "admin";
-        pswd = "H04q8vW).TS-A~|(#Y:W!nM$hQPe";
+        pswd = "Yi:p3jL<BG7.10<9qlXFDk#qC#iZ";
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
