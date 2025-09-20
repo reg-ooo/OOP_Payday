@@ -19,9 +19,6 @@ public class Payday {
     public static boolean connected;
 
     public static void main(String[] args) {
-        //Initialize SplashScreen before launch page
-//        SplashScreen splash = new SplashScreen();
-//        splash.showSplash(0);
 
         //RUNS MainFrame (which now starts with LoginPage)
         SwingUtilities.invokeLater(new Runnable() {
