@@ -15,45 +15,16 @@ import util.ThemeManager;
 public class LoginPage extends JPanel{
 
     private Users user = new Users();
-    private boolean isLoginMode = true;
     private StringBuilder pinInput = new StringBuilder();
     private JLabel[] pinDots = new JLabel[4];
 
-    private JLabel loginLabel = new JLabel("Log In");
-    private JLabel registerLabel = new JLabel("Sign Up");
-
-    // Cache components for efficiency
-    private RoundedPanel rPanelLogin;
-    private RoundedPanel rPanelRegister;
-    private CardLayout cardLayout;
-    private JPanel cardPanel;
-
     public LoginPage(Consumer<String> onButtonClick) {
-        initializeComponents();
-        setupLayout(onButtonClick);
-        this.setVisible(true);
-    }
-
-    private void initializeComponents() {
-        // Initialize main container
         this.setLayout(new BorderLayout());
         this.setBackground(ThemeManager.getWhite());
         this.setPreferredSize(new Dimension(420, 650));
 
-        // Initialize cached components
-        rPanelLogin = new RoundedPanel(15, ThemeManager.getWhite());
-        rPanelLogin.setPreferredSize(new Dimension(170, 5));
-        rPanelLogin.setBackground(ThemeManager.getPBlue());
-
-        rPanelRegister = new RoundedPanel(15, ThemeManager.getWhite());
-        rPanelRegister.setPreferredSize(new Dimension(170, 5));
-        rPanelRegister.setBackground(ThemeManager.getTransparent());
-
-        // Style labels once
-        loginLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"));
-        loginLabel.setForeground(ThemeManager.getDBlue());
-        registerLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"));
-        registerLabel.setForeground(ThemeManager.getLightGray());
+        setupLayout(onButtonClick);
+        this.setVisible(true);
     }
 
     private void setupLayout(Consumer<String> onButtonClick) {
@@ -62,132 +33,59 @@ public class LoginPage extends JPanel{
         mainContainer.setBackground(ThemeManager.getWhite());
         mainContainer.setPreferredSize(new Dimension(420, 650));
 
-        // Create panels
-        JPanel topPanel = createTopPanel();
-        JPanel centerPanel = createCenterPanel();
+        // Logo section
+        JPanel logoPanel = createLogoPanel();
 
-        // Setup card layout
-        cardLayout = new CardLayout();
-        cardPanel = new JPanel(cardLayout);
-        cardPanel.setBackground(ThemeManager.getWhite());
-        cardPanel.setPreferredSize(new Dimension(420, 410));
+        // PIN login section
+        JPanel pinLoginPanel = createPinLoginPanel(onButtonClick);
 
-        cardPanel.add(createPinLoginPanel(onButtonClick), "LOGIN");
-        cardPanel.add(createRegisterPanel(onButtonClick), "REGISTER");
+        // Register link section
+        JPanel registerLinkPanel = createRegisterLinkPanel(onButtonClick);
 
-        // Add components
-        mainContainer.add(topPanel);
-        mainContainer.add(centerPanel);
-        mainContainer.add(cardPanel);
+        // Add components with adjusted spacing to move keypad higher
+        mainContainer.add(Box.createVerticalStrut(15));
+        mainContainer.add(logoPanel);
+        mainContainer.add(Box.createVerticalStrut(10));
+        mainContainer.add(pinLoginPanel);
+        mainContainer.add(Box.createVerticalStrut(5));
+        mainContainer.add(registerLinkPanel);
+        mainContainer.add(Box.createVerticalStrut(30));
 
         this.add(mainContainer, BorderLayout.CENTER);
     }
 
-    private JPanel createTopPanel() {
-        JPanel topContainer = new JPanel();
-        topContainer.setLayout(new BoxLayout(topContainer, BoxLayout.Y_AXIS));
-        topContainer.setBackground(ThemeManager.getWhite());
-        topContainer.setPreferredSize(new Dimension(420, 60));
-        topContainer.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
+    private JPanel createLogoPanel() {
+        JPanel logoPanel = new JPanel();
+        logoPanel.setLayout(new BoxLayout(logoPanel, BoxLayout.Y_AXIS));
+        logoPanel.setBackground(ThemeManager.getWhite());
+        logoPanel.setOpaque(false);
 
-        JPanel nPanel = new JPanel(new GridLayout(1, 2));
-        nPanel.setOpaque(false);
-
-        // Create tab panels
-        JPanel loginPanel = createTabPanel(loginLabel, rPanelLogin, true);
-        JPanel registerPanel = createTabPanel(registerLabel, rPanelRegister, false);
-
-        // Add mouse listeners
-        addTabMouseListener(loginPanel, true);
-        addTabMouseListener(registerPanel, false);
-
-        nPanel.add(loginPanel);
-        nPanel.add(registerPanel);
-        topContainer.add(nPanel);
-
-        return topContainer;
-    }
-
-    private JPanel createTabPanel(JLabel label, RoundedPanel roundedPanel, boolean isLeft) {
-        JPanel tabPanel = new JPanel(new BorderLayout());
-        tabPanel.setPreferredSize(new Dimension(210, 50));
-
-        JPanel labelContainer = new JPanel();
-        labelContainer.setOpaque(false);
-        labelContainer.setLayout(new FlowLayout(isLeft ? FlowLayout.RIGHT : FlowLayout.LEFT, isLeft ? 60 : 50, 15));
-        labelContainer.add(label);
-
-        JPanel bottomPanel = new JPanel();
-        bottomPanel.setOpaque(false);
-        bottomPanel.setLayout(new FlowLayout(isLeft ? FlowLayout.RIGHT : FlowLayout.LEFT, 0, 0));
-        bottomPanel.add(roundedPanel);
-
-        tabPanel.add(labelContainer, BorderLayout.CENTER);
-        tabPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-        return tabPanel;
-    }
-
-    private void addTabMouseListener(JPanel panel, boolean isLoginTab) {
-        panel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                switchTab(isLoginTab);
-            }
-        });
-    }
-
-    private void switchTab(boolean toLogin) {
-        isLoginMode = toLogin;
-
-        if (toLogin) {
-            rPanelLogin.setBackground(ThemeManager.getPBlue());
-            rPanelRegister.setBackground(ThemeManager.getTransparent());
-            loginLabel.setForeground(ThemeManager.getDBlue());
-            registerLabel.setForeground(ThemeManager.getLightGray());
-            cardLayout.show(cardPanel, "LOGIN");
-            clearPinInput();
-        } else {
-            rPanelRegister.setBackground(ThemeManager.getPBlue());
-            rPanelLogin.setBackground(ThemeManager.getTransparent());
-            loginLabel.setForeground(ThemeManager.getLightGray());
-            registerLabel.setForeground(ThemeManager.getDBlue());
-            cardLayout.show(cardPanel, "REGISTER");
-        }
-    }
-
-    private JPanel createCenterPanel() {
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBackground(ThemeManager.getWhite());
-        centerPanel.setPreferredSize(new Dimension(420, 180));
-
-        // Logo with error handling
+        // Logo with error handling - bigger size
         try {
             ImageIcon logo = new ImageIcon("appLogo.png");
-            Image scaledLogo = logo.getImage().getScaledInstance(160, 160, Image.SCALE_SMOOTH);
+            Image scaledLogo = logo.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
             ImageIcon resizedLogo = new ImageIcon(scaledLogo);
 
             JLabel logoLabel = new JLabel(resizedLogo);
             logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            centerPanel.add(logoLabel);
+            logoPanel.add(logoLabel);
         } catch (Exception e) {
             // Fallback if logo not found
             JLabel fallbackLabel = new JLabel("LOGO", SwingConstants.CENTER);
-            fallbackLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 24f, "Quicksand-Bold"));
+            fallbackLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 30f, "Quicksand-Bold"));
             fallbackLabel.setForeground(ThemeManager.getDBlue());
             fallbackLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            centerPanel.add(fallbackLabel);
+            logoPanel.add(fallbackLabel);
         }
 
-        return centerPanel;
+        return logoPanel;
     }
 
     private JPanel createPinLoginPanel(Consumer<String> onButtonClick) {
         JPanel pinPanel = new JPanel();
         pinPanel.setLayout(new BoxLayout(pinPanel, BoxLayout.Y_AXIS));
         pinPanel.setBackground(ThemeManager.getWhite());
-        pinPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 10, 10));
+        pinPanel.setOpaque(false);
 
         // PIN title
         JLabel pinTitle = new JLabel("Enter your 4-digit PIN", SwingConstants.CENTER);
@@ -202,7 +100,6 @@ public class LoginPage extends JPanel{
         JPanel keypadPanel = createKeypadPanel(onButtonClick);
 
         // Assembly
-        pinPanel.add(Box.createVerticalStrut(10));
         pinPanel.add(pinTitle);
         pinPanel.add(Box.createVerticalStrut(15));
         pinPanel.add(pinDotsPanel);
@@ -217,7 +114,7 @@ public class LoginPage extends JPanel{
     }
 
     private JPanel createPinDotsPanel() {
-        JPanel pinDotsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        JPanel pinDotsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 18, 0));
         pinDotsPanel.setOpaque(false);
         pinDotsPanel.setPreferredSize(new Dimension(420, 35));
 
@@ -236,12 +133,12 @@ public class LoginPage extends JPanel{
         keypadPanel.setOpaque(false);
         keypadPanel.setPreferredSize(new Dimension(240, 260));
 
-
+        // Create number buttons 1-9
         for (int i = 1; i <= 9; i++) {
             keypadPanel.add(createNumberButton(String.valueOf(i), onButtonClick));
         }
 
-
+        // Bottom row: empty, 0, backspace
         keypadPanel.add(createEmptySpace());
         keypadPanel.add(createNumberButton("0", onButtonClick));
         keypadPanel.add(createBackspaceButton());
@@ -273,16 +170,44 @@ public class LoginPage extends JPanel{
         return emptySpace;
     }
 
-    private JPanel createRegisterPanel(Consumer<String> onButtonClick) {
-        JPanel registerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 30));
-        registerPanel.setBackground(ThemeManager.getWhite());
+    private JPanel createRegisterLinkPanel(Consumer<String> onButtonClick) {
+        JPanel registerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        registerPanel.setOpaque(false);
 
-        RoundedButton registerButton = new RoundedButton("Register", 15, ThemeManager.getPBlue());
-        registerButton.setPreferredSize(new Dimension(350, 50));
-        registerButton.setForeground(ThemeManager.getWhite());
-        registerButton.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
+        // "New User?" label
+        JLabel newUserLabel = new JLabel("New User? ");
+        newUserLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        newUserLabel.setForeground(ThemeManager.getDBlue());
 
-        registerPanel.add(registerButton);
+        // "Register here" clickable label
+        JLabel registerLabel = new JLabel("Register here");
+        registerLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
+        registerLabel.setForeground(ThemeManager.getPBlue());
+        registerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Add click listener to register label
+        registerLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                // Navigate to register page (blank page for now)
+                onButtonClick.accept("Register");
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Add hover effect - make text slightly darker
+                registerLabel.setForeground(ThemeManager.getDBlue());
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                // Reset color when mouse leaves
+                registerLabel.setForeground(ThemeManager.getPBlue());
+            }
+        });
+
+        registerPanel.add(newUserLabel);
+        registerPanel.add(registerLabel);
 
         return registerPanel;
     }
@@ -293,7 +218,6 @@ public class LoginPage extends JPanel{
             updatePinDots();
 
             if (pinInput.length() == 4) {
-
                 Timer timer = new Timer(200, e -> {
                     processPin(onButtonClick);
                     clearPinInput();
@@ -307,7 +231,6 @@ public class LoginPage extends JPanel{
     private void processPin(Consumer<String> onButtonClick) {
         String pin = pinInput.toString();
         System.out.println("PIN entered: " + pin);
-
 
         user.loginAccount("PIN_USER", pin, onButtonClick);
     }

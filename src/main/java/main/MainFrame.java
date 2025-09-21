@@ -37,6 +37,9 @@ public class MainFrame extends JFrame {
         // Add LoginPage first (will be shown initially)
         mainPanel.add(new LoginPage(this::handleLoginResult), "Login");
 
+        // Add RegisterPage
+        mainPanel.add(new RegisterPage(this::handleRegisterResult), "Register");
+
         // Add other pages
         mainPanel.add(new LaunchPage(), "Launch");
 
@@ -51,8 +54,25 @@ public class MainFrame extends JFrame {
         if("success".equals(result)) {
             // Navigate to LaunchPage after successful login
             cardLayout.show(mainPanel, "Launch");
+        } else if("Register".equals(result)) {
+            // Navigate to RegisterPage when user clicks "Register here"
+            cardLayout.show(mainPanel, "Register");
         } else if("Launch".equals(result)) {
             // Direct navigation to Launch page (if needed)
+            cardLayout.show(mainPanel, "Launch");
+        } else {
+            // Handle other navigation requests
+            changeCard(result);
+        }
+    }
+
+    // Handle register page results and navigation
+    private void handleRegisterResult(String result){
+        if("BackToLogin".equals(result)) {
+            // Navigate back to LoginPage
+            cardLayout.show(mainPanel, "Login");
+        } else if("success".equals(result)) {
+            // Navigate to main app after successful registration
             cardLayout.show(mainPanel, "Launch");
         } else {
             // Handle other navigation requests
