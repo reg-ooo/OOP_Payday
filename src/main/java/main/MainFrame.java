@@ -44,7 +44,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new LaunchPage(), "Launch");
 
         // Show LoginPage first
-        cardLayout.show(mainPanel, "Login");
+        cardLayout.show(mainPanel, "Launch");
 
         mainFrame.setContentPane(mainPanel);
     }

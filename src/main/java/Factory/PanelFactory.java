@@ -1,12 +1,12 @@
 package Factory;
 
-import util.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class PanelFactory {
     private static PanelFactory instance;
+
 
     public static PanelFactory getInstance() {
         if (instance == null) {
@@ -24,5 +24,9 @@ public class PanelFactory {
 
         return panel;
     }
+
+
+
+
 
 }

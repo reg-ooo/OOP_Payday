@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import Factory.LabelFactory;
+import Factory.PanelBuilder;
 import Factory.PanelFactory;
 import main.Payday;
 import util.FontLoader;
@@ -24,7 +25,10 @@ public class NPanel extends JPanel {
 
 
     //UPPER PANELS
-    JPanel containerPanel = PanelFactory.getInstance().createPanel(new Dimension(360, 150), null, new FlowLayout());
+    JPanel containerPanel = new PanelBuilder()
+            .setPreferredSize(new Dimension(360, 150))
+            .setLayout(new FlowLayout())
+            .build();
     JPanel headerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 15), null, null);
     JPanel upperBalancePanel = PanelFactory.getInstance().createPanel(new Dimension(360, 45), null, new FlowLayout(FlowLayout.LEFT, 15, 10));
     JPanel amountPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 200), null, new FlowLayout(FlowLayout.LEFT, 15, 0));

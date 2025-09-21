@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
+
+import Factory.PanelFactory;
 import components.*;
 import data.Users;
 import main.Payday;
@@ -14,7 +16,6 @@ import util.ThemeManager;
 public class RegisterPage extends JPanel {
     private static final FontLoader fontLoader = FontLoader.getInstance();
     private static final ThemeManager themeManager = ThemeManager.getInstance();
-    private static Payday payday = new Payday(); // Single instance for database access
     private Users user = new Users(); // Use existing Payday instance
     private RoundedTextField usernameField;
     private RoundedTextField fullNameField;
@@ -32,7 +33,7 @@ public class RegisterPage extends JPanel {
     }
 
     private void setupLayout(Consumer<String> onButtonClick) {
-        JPanel mainContainer = new JPanel();
+        JPanel mainContainer = PanelFactory.getInstance().createPanel(null, null, null);
         mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
         mainContainer.setBackground(themeManager.getWhite());
         mainContainer.setPreferredSize(new Dimension(420, 600));
