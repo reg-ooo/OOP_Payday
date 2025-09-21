@@ -10,11 +10,10 @@ import data.Transaction;
 import main.Payday;
 import util.FontLoader;
 import util.ThemeManager;
+import data.Database;
 
 public class TransactionPanel extends JPanel{
     private Transaction trans;
-
-    private Payday db = new Payday();
 
     public RoundedPanel transactionRoundedPanel = new RoundedPanel(15, ThemeManager.getInstance().getSBlue());
     private JPanel transactionHeaderPanel = PanelFactory.getInstance().createPanel(new Dimension(364, 35), null, new BorderLayout());
@@ -158,9 +157,9 @@ public class TransactionPanel extends JPanel{
     public Transaction getTransaction() {
         String query1 = "select * from Transactions where transactionID = 1;";
         try {
-            db.rs = db.st.executeQuery(query1);
-            db.rs.next();
-            trans = new Transaction(db.rs.getString("transactionType"), db.rs.getDouble("amount"), db.rs.getString("transactionDate"));
+            Database.rs = Database.st.executeQuery(query1);
+            Database.rs.next();
+            trans = new Transaction(Database.rs.getString("transactionType"), Database.rs.getDouble("amount"), Database.rs.getString("transactionDate"));
         } catch (Exception e) {
             e.printStackTrace();
         }

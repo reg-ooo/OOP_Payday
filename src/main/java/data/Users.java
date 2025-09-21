@@ -1,17 +1,15 @@
 package data;
 
 import pages.*;
-import main.Payday;
 
 import java.util.function.Consumer;
 
-public class Users extends Payday{
-
+public class Users {
 
     public void addUser(String username, String password){
         String query = String.format("INSERT INTO user(username, password) VALUES (\"%s\", \"%s\")", username, password);
         try {
-            st.executeUpdate(query);
+            Database.st.executeUpdate(query);
             System.out.println("User added successfully!");
 //            new LaunchPage();
         } catch (Exception e) {
@@ -22,8 +20,8 @@ public class Users extends Payday{
     public void loginAccount (String username, String password, Consumer<String> onButtonClick){
         String query = String.format("SELECT * FROM user WHERE username = \"%s\" AND password = \"%s\"", username, password);
         try{
-            rs = st.executeQuery(query);
-            if(rs.next()){
+            Database.rs = Database.st.executeQuery(query);
+            if(Database.rs.next()){
                 System.out.println("Login successful!");
                 onButtonClick.accept("test1");
             }

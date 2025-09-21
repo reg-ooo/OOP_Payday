@@ -4,13 +4,13 @@ import javax.swing.border.Border;
 import java.awt.*;
 
 public class PanelBuilder {
-    public LayoutManager layout;
-    public Dimension preferredSize;
-    public Color color;
-    public Dimension maxSize;
-    public Dimension minSize;
-    public Border border;
-    public boolean isOpaque = true;
+    private LayoutManager layout;
+    private Dimension preferredSize;
+    private Color color;
+    private Dimension maxSize;
+    private Dimension minSize;
+    private Border border;
+    private boolean isOpaque = false;
 
     public PanelBuilder setLayout(LayoutManager layout) {
         this.layout = layout;
@@ -47,7 +47,27 @@ public class PanelBuilder {
         return this;
     }
 
-    public Panel build(){
-        return new Panel(this);
+    public Panel build() {
+        Panel panel = new Panel(this);
+        reset();
+        return panel;
     }
+
+    private void reset() {
+        layout = null;
+        preferredSize = null;
+        color = null;
+        maxSize = null;
+        minSize = null;
+        border = null;
+        isOpaque = false;
+    }
+
+    LayoutManager getLayout() { return layout; }
+    Dimension getPreferredSize() { return preferredSize; }
+    Color getColor() { return color; }
+    Dimension getMaxSize() { return maxSize; }
+    Dimension getMinSize() { return minSize; }
+    Border getBorder() { return border; }
+    boolean isOpaque() { return isOpaque; }
 }

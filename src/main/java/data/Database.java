@@ -3,11 +3,15 @@ package data;
 import main.Payday;
 import util.ImageLoader;
 
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
-public class Database extends Payday {
+public class Database {
     private static Database instance;
+    public static String db,uname,pswd;
+    public static Connection con;
+    public static Statement st;
+    public static ResultSet rs;
+    public static boolean connected;
     private Database(){
 
     }
@@ -39,7 +43,6 @@ public class Database extends Payday {
             System.out.println("Failed to connect to database: " + e.getMessage());
             return;
         }
-        Payday.connected = true;
+        connected = true;
     }
-
 }

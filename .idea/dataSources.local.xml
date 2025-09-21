@@ -5,5 +5,19 @@
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL_AURORA" />
       <schema-mapping />
     </data-source>
+    <data-source name="Aurora MySQL (AWS driver)" uuid="bad9c0ba-2aa7-4152-891d-216be8f46b1a">
+      <database-info product="MySQL" version="8.0.39" jdbc-version="4.2" driver-name="Amazon Web Services (AWS) JDBC Driver for MySQL" driver-version="aws-mysql-connector-java-1.1.14 (Revision: 4629bb4ea3ade12a811483453fafcb8fc2a66bb5)" dbms="MYSQL_AURORA" exact-version="3.8.2" exact-driver-version="1.1">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>admin</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="banksystem" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
   </component>
 </project>

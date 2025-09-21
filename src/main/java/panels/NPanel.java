@@ -6,16 +6,14 @@ import java.awt.*;
 import Factory.LabelFactory;
 import Factory.PanelBuilder;
 import Factory.PanelFactory;
-import main.Payday;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
 
+import data.Database;
 import javax.swing.border.EmptyBorder;
 
 public class NPanel extends JPanel {
-    Payday db = new Payday();
-
 
     ThemeManager themeManager = ThemeManager.getInstance();
 
@@ -29,9 +27,23 @@ public class NPanel extends JPanel {
             .setPreferredSize(new Dimension(360, 150))
             .setLayout(new FlowLayout())
             .build();
-    JPanel headerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 15), null, null);
-    JPanel upperBalancePanel = PanelFactory.getInstance().createPanel(new Dimension(360, 45), null, new FlowLayout(FlowLayout.LEFT, 15, 10));
-    JPanel amountPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 200), null, new FlowLayout(FlowLayout.LEFT, 15, 0));
+//    JPanel headerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 15), null, null);
+    JPanel headerPanel = new PanelBuilder()
+            .setPreferredSize(new Dimension(420, 15))
+            .build();
+
+    JPanel upperBalancePanel = new PanelBuilder()
+            .setPreferredSize(new Dimension(360, 45))
+            .setLayout(new FlowLayout(FlowLayout.LEFT, 15, 10))
+            .setOpaque(false)
+            .build();
+
+//    JPanel amountPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 200), null, new FlowLayout(FlowLayout.LEFT, 15, 0));
+
+    JPanel amountPanel = new PanelBuilder()
+            .setPreferredSize(new Dimension(420, 200))
+            .setLayout(new FlowLayout(FlowLayout.LEFT, 15, 0))
+            .build();
 
     GradientPanel balPanel = new GradientPanel(ThemeManager.getInstance().getDvBlue(), ThemeManager.getInstance().getVBlue(), 15);
 
@@ -47,9 +59,6 @@ public class NPanel extends JPanel {
         balPanel.setLayout(new BorderLayout());
         balPanel.setPreferredSize(new Dimension(360, 110));
         balPanel.setOpaque(false);
-
-        upperBalancePanel.setOpaque(false);
-        amountPanel.setOpaque(false);
 
         balanceText.setHorizontalTextPosition(JLabel.LEFT);
         amountText.setVerticalTextPosition(JLabel.CENTER);
@@ -127,12 +136,12 @@ public class NPanel extends JPanel {
     private double getBalance(){
         double balance = 0;
 
-        String query = "select balance from  Wallets where userID = 1;";
+        String query = "select balance from   Wallets where userID = 1;";
 
         try{
-            db.rs = db.st.executeQuery(query);
-            db.rs.next();
-            balance = db.rs.getDouble("balance");
+            Database.rs = Database.st.executeQuery(query);
+            Database.rs.next();
+            balance = Database.rs.getDouble("balance");
         }catch (Exception e){
             e.printStackTrace();
         }

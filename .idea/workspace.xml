@@ -5,16 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/discord.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Factory/Panel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/Panel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Factory/PanelFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/PanelFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Payday.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Payday.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Factory/PanelFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/PanelFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Database.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/Users.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Users.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/Payday$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/Payday$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/Payday.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/Payday.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +32,21 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "reg-ooo"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/reg-ooo/OOP_Payday.git",
+    "accountId": "fe1d59f3-e850-4205-9e10-09ea83a6d5f8"
+  }
+}]]></component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -49,7 +73,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable",
+    "settings.editor.selected.configurable": "preferences.keymap",
     "to.speed.mode.migration.done": "true",
     "vue.rearranger.settings.migration": "true"
   }
@@ -95,6 +119,7 @@
       <option name="presentableId" value="Default" />
       <updated>1758381557541</updated>
       <workItem from="1758381558973" duration="452000" />
+      <workItem from="1758457484586" duration="2382000" />
     </task>
     <servers />
   </component>

@@ -3,13 +3,25 @@ package Factory;
 import javax.swing.*;
 
 public class Panel extends JPanel {
-    public Panel(PanelBuilder pb){
-        this.setLayout(pb.layout);
-        this.setPreferredSize(pb.preferredSize);
-        this.setBackground(pb.color);
-        this.setMaximumSize(pb.maxSize);
-        this.setMinimumSize(pb.minSize);
-        this.setOpaque(pb.isOpaque);
-        this.setBorder(pb.border);
+    Panel(PanelBuilder pb) {
+        if (pb.getLayout() != null) {
+            this.setLayout(pb.getLayout());
+        }
+        if (pb.getPreferredSize() != null) {
+            this.setPreferredSize(pb.getPreferredSize());
+        }
+        if (pb.getColor() != null){
+            this.setBackground(pb.getColor());
+        }
+        if (pb.getMaxSize() != null) {
+            this.setMaximumSize(pb.getMaxSize());
+        }
+        if (pb.getMinSize() != null) {
+            this.setMinimumSize(pb.getMinSize());
+        }
+        if (pb.getBorder() != null) {
+            this.setBorder(pb.getBorder());
+        }
+        this.setOpaque(pb.isOpaque());
     }
 }
