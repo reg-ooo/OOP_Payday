@@ -25,7 +25,7 @@ public class LabelBuilder {
     }
     
     public LabelBuilder setFontStyle(Font fontStyle) {
-        this.fontStyle = FontLoader.loadFont(fontStyle);
+//        this.fontStyle = FontLoader.loadFont(fontStyle);
         return this;
     }
     

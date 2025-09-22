@@ -16,9 +16,16 @@ public class FontLoader {
             Font chosenFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
             return chosenFont.deriveFont(style, size);
         } catch (Exception e) {
-            System.out.println("Could not load font: " + e.getMessage());
+            try{
+                InputStream fontStream = getClass().getResourceAsStream("/fonts/" + fontName + ".otf");
+                Font chosenFont = Font.createFont(Font.TRUETYPE_FONT, fontStream);
+                return chosenFont.deriveFont(style, size);
+            }catch (Exception e2){
+                System.out.println("Font not found: " + fontName);
+                return new Font("Arial", style, (int)size);
+            }
 
-            return new Font("Arial", style, (int)size);
+
         }
     }
 

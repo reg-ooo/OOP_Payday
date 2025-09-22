@@ -1,7 +1,7 @@
 package Factory;
 
-public class Label {
-    public Label(LabelBuilder lb) {
-        if()
-    }
-}
+//public class Label {
+//    public Label(LabelBuilder lb) {
+//        if()
+//    }
+//}
