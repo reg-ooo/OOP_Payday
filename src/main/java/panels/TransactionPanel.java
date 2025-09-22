@@ -157,8 +157,7 @@ public class TransactionPanel extends JPanel{
                 .setBorder(BorderFactory.createEmptyBorder(15, 10, 5, 10))
                 .build();
 
-        JLabel dateLabel = LabelFactory.getInstance().createLabel(date, FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-Bold"), ThemeManager.getInstance().getDBlue());
-        dateLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        JLabel dateLabel = LabelFactory.getInstance().createLabel(date, FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"), ThemeManager.getInstance().getDBlue());
 
         datePanel.add(dateLabel, BorderLayout.WEST);
 

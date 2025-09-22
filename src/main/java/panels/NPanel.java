@@ -37,8 +37,6 @@ public class NPanel extends JPanel {
             .setOpaque(false)
             .build();
 
-
-
     JPanel amountPanel = new PanelBuilder()
             .setPreferredSize(new Dimension(420, 200))
             .setLayout(new FlowLayout(FlowLayout.LEFT, 15, 0))
@@ -134,7 +132,7 @@ public class NPanel extends JPanel {
     private double getBalance(){
         double balance = 0;
 
-        String query = "select balance from   Wallets where userID = 1;";
+        String query = "select balance from  Wallets where userID = 1;";
 
         try{
             Database.rs = Database.st.executeQuery(query);

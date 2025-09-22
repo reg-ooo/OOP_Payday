@@ -24,8 +24,6 @@ public class FontLoader {
                 System.out.println("Font not found: " + fontName);
                 return new Font("Arial", style, (int)size);
             }
-
-
         }
     }
 

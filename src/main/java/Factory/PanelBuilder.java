@@ -48,9 +48,8 @@ public class PanelBuilder {
     }
 
     public Panel build() {
-        Panel panel = new Panel(this);
         reset();
-        return panel;
+        return new Panel(this);
     }
 
     private void reset() {

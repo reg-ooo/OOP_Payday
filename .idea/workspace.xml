@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Factory/Label.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/Label.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Factory/LabelBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/LabelBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/util/FontLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/FontLoader.java" afterDir="false" />
     </list>
@@ -112,7 +115,7 @@
       <updated>1758381557541</updated>
       <workItem from="1758381558973" duration="452000" />
       <workItem from="1758457484586" duration="4605000" />
-      <workItem from="1758537258061" duration="3339000" />
+      <workItem from="1758537258061" duration="4905000" />
     </task>
     <servers />
   </component>
