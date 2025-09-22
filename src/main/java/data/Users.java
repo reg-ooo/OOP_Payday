@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 public class Users {
 
     public void addUser(String username, String password){
-        String query = String.format("INSERT INTO user(username, password) VALUES (\"%s\", \"%s\")", username, password);
+        String query = String.format("INSERT INTO user(username,  pin) VALUES (\"%s\", \"%s\")", username, password);
         try {
             Database.st.executeUpdate(query);
             System.out.println("User added successfully!");
@@ -18,7 +18,7 @@ public class Users {
     }
 
     public void loginAccount (String username, String password, Consumer<String> onButtonClick){
-        String query = String.format("SELECT * FROM user WHERE username = \"%s\" AND password = \"%s\"", username, password);
+        String query = String.format("SELECT * FROM user WHERE username = \"%s\" AND pin = \"%s\"", username, password);
         try{
             Database.rs = Database.st.executeQuery(query);
             if(Database.rs.next()){

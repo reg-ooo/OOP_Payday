@@ -4,10 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 import Factory.LabelFactory;
-import Factory.PanelFactory;
+import Factory.PanelBuilder;
 import components.*;
 import data.Transaction;
-import main.Payday;
 import util.FontLoader;
 import util.ThemeManager;
 import data.Database;
@@ -16,8 +15,15 @@ public class TransactionPanel extends JPanel{
     private Transaction trans;
 
     public RoundedPanel transactionRoundedPanel = new RoundedPanel(15, ThemeManager.getInstance().getSBlue());
-    private JPanel transactionHeaderPanel = PanelFactory.getInstance().createPanel(new Dimension(364, 35), null, new BorderLayout());
-    private JPanel transactionContentPanel = PanelFactory.getInstance().createPanel(new Dimension(364, 240), null, null);
+
+    private JPanel transactionHeaderPanel = new PanelBuilder()
+            .setPreferredSize(new Dimension(364,35))
+            .setLayout(new BorderLayout())
+            .build();
+
+    private JPanel transactionContentPanel = new PanelBuilder()
+            .setPreferredSize(new Dimension(364,35))
+            .build();
 
     private JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History", FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"), ThemeManager.getInstance().getDBlue());
     private JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
@@ -34,7 +40,6 @@ public class TransactionPanel extends JPanel{
 
 // TRANSACTION HEADER PANEL (with "Transaction History" and "See all")
         transactionHeaderPanel.setOpaque(false);
-
 
         seeAllLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -69,10 +74,12 @@ public class TransactionPanel extends JPanel{
 
     // Add this method to create transaction history items
     private JPanel createTransactionItem(String time, String description, String amount, boolean isPositive) {
-        JPanel transactionPanel = PanelFactory.getInstance().createPanel(null, null, new BorderLayout()); // no hardcoded bg
-        transactionPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        JPanel transactionPanel = new PanelBuilder()
+                .setLayout(new BorderLayout())
+                .setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10))
+                .build();
 
-        JPanel leftPanel = PanelFactory.getInstance().createPanel(null, null, null); // no bg here either
+        JPanel leftPanel = new PanelBuilder().build();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
         JLabel descLabel = new JLabel(description);
@@ -81,7 +88,7 @@ public class TransactionPanel extends JPanel{
 
         JLabel timeLabel = new JLabel(time);
         timeLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        timeLabel.setForeground(ThemeManager.getInstance().getGray());
+        timeLabel.setForeground(ThemeManager.getInstance().getBlack());
 
         leftPanel.add(descLabel);
         leftPanel.add(timeLabel);
@@ -90,6 +97,7 @@ public class TransactionPanel extends JPanel{
         amountLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Regular"));
         amountLabel.setForeground(isPositive ? new Color(0, 128, 0) : Color.RED);
         amountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+
 
         transactionPanel.add(leftPanel, BorderLayout.WEST);
         transactionPanel.add(amountLabel, BorderLayout.EAST);
@@ -143,8 +151,11 @@ public class TransactionPanel extends JPanel{
 
     // Add this method to create date sections
     private JPanel createDateSection(String date) {
-        JPanel datePanel = PanelFactory.getInstance().createPanel(null, new Color(230, 240, 250), new BorderLayout());
-        datePanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 5, 10));
+        JPanel datePanel = new PanelBuilder()
+                .setColor(ThemeManager.getInstance().getSBlue())
+                .setLayout(new BorderLayout())
+                .setBorder(BorderFactory.createEmptyBorder(15, 10, 5, 10))
+                .build();
 
         JLabel dateLabel = LabelFactory.getInstance().createLabel(date, FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-BOLD"), ThemeManager.getInstance().getDBlue());
         dateLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));

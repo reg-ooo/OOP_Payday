@@ -6,10 +6,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
-import Factory.PanelFactory;
+import Factory.PanelBuilder;
 import components.*;
 import data.Users;
-import main.Payday;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -33,10 +32,11 @@ public class RegisterPage extends JPanel {
     }
 
     private void setupLayout(Consumer<String> onButtonClick) {
-        JPanel mainContainer = PanelFactory.getInstance().createPanel(null, null, null);
+         JPanel mainContainer = new PanelBuilder()
+                .setColor(themeManager.getWhite())
+                .setPreferredSize(new Dimension(420, 600))
+                .build();
         mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
-        mainContainer.setBackground(themeManager.getWhite());
-        mainContainer.setPreferredSize(new Dimension(420, 600));
 
         JPanel headerPanel = createHeaderPanel(onButtonClick);
         JPanel formPanel = createFormPanel();

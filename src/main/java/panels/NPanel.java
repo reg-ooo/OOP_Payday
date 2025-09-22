@@ -5,7 +5,6 @@ import java.awt.*;
 
 import Factory.LabelFactory;
 import Factory.PanelBuilder;
-import Factory.PanelFactory;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -27,7 +26,7 @@ public class NPanel extends JPanel {
             .setPreferredSize(new Dimension(360, 150))
             .setLayout(new FlowLayout())
             .build();
-//    JPanel headerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 15), null, null);
+
     JPanel headerPanel = new PanelBuilder()
             .setPreferredSize(new Dimension(420, 15))
             .build();
@@ -38,7 +37,7 @@ public class NPanel extends JPanel {
             .setOpaque(false)
             .build();
 
-//    JPanel amountPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 200), null, new FlowLayout(FlowLayout.LEFT, 15, 0));
+
 
     JPanel amountPanel = new PanelBuilder()
             .setPreferredSize(new Dimension(420, 200))
@@ -131,7 +130,6 @@ public class NPanel extends JPanel {
             }
         });
     }
-
 
     private double getBalance(){
         double balance = 0;
