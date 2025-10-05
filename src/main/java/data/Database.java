@@ -26,7 +26,7 @@ public class Database {
     public static void DBConnect(){
         db = "banksystem";
         uname = "admin";
-        pswd = "Yi:p3jL<BG7.10<9qlXFDk#qC#iZ";
+        pswd = "FF?JW$BO-Z:cXx23tHAL4sco55vo";
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");

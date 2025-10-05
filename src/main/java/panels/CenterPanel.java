@@ -1,7 +1,7 @@
 package panels;
 
 import Factory.LabelFactory;
-import Factory.PanelBuilder;
+import Factory.PanelFactory;
 import components.RoundedBorder;
 
 import javax.swing.*;
@@ -16,10 +16,7 @@ import util.ThemeManager;
 public class CenterPanel extends JPanel {
     private final JPanel payBillsWrapper,cashInWrapper, cashOutWrapper, requestMoneyWrapper, bankTransferWrapper, buyCryptoWrapper;
 
-    public JPanel centerPanel = new PanelBuilder()
-            .setPreferredSize(new Dimension(420, 220))
-            .setLayout(new FlowLayout(FlowLayout.CENTER, 0, 15))
-            .build();
+    public JPanel centerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 220), null, new FlowLayout(FlowLayout.CENTER, 0, 15));
 
     private ArrayList<RoundedBorder> buttons = new ArrayList<>();
 
@@ -32,9 +29,7 @@ public class CenterPanel extends JPanel {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0,0));
 
         //BUTTON PANELS
-        JPanel buttonPanel = new PanelBuilder()
-                .setLayout(new GridLayout(2,3,25,10))
-                .build();
+        JPanel buttonPanel = PanelFactory.getInstance().createPanel(null, null, new GridLayout(2, 3, 25, 10));
         for(int i = 0; i<6; i++){
             buttons.add(new RoundedBorder(25, ThemeManager.getInstance().getVBlue(), 2));
         }
@@ -56,12 +51,7 @@ public class CenterPanel extends JPanel {
 
     private JPanel styleButton(RoundedBorder button, String text, ImageIcon image) {
         //WRAPPER PANEL
-
-        JPanel wrapperPanel = new PanelBuilder()
-                .setPreferredSize(new Dimension(95, 90))
-                .setLayout(new BorderLayout())
-                .build();
-
+        JPanel wrapperPanel = PanelFactory.getInstance().createPanel(new Dimension(95, 90), null, new BorderLayout());
 
         //BUTTON
         button.setPreferredSize(new Dimension(50, 70));

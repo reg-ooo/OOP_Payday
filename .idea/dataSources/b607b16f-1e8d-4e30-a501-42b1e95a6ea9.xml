@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="Aiven">
+  <database-model serializer="dbm" dbms="MYSQL" family-id="MYSQL" format-version="4.53">
+    <root id="1">
+      <DefaultCasing>exact</DefaultCasing>
+      <DefaultEngine>InnoDB</DefaultEngine>
+      <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
+      <ServerVersion>8.0.35</ServerVersion>
+    </root>
+    <schema id="2" parent="1" name="banksystem">
+      <AutoIntrospectionLevel>3</AutoIntrospectionLevel>
+      <LastIntrospectionLevel>3</LastIntrospectionLevel>
+      <LastIntrospectionLocalTimestamp>2025-10-05.05:56:06</LastIntrospectionLocalTimestamp>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="3" parent="1" name="defaultdb">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="4" parent="1" name="information_schema">
+      <CollationName>utf8mb3_general_ci</CollationName>
+    </schema>
+    <schema id="5" parent="1" name="mysql">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="6" parent="1" name="performance_schema">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <schema id="7" parent="1" name="sys">
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </schema>
+    <table id="8" parent="2" name="Banks">
+      <DetailsLevel>3</DetailsLevel>
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="9" parent="2" name="Billers">
+      <DetailsLevel>3</DetailsLevel>
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="10" parent="2" name="Transactions">
+      <DetailsLevel>3</DetailsLevel>
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="11" parent="2" name="Users">
+      <DetailsLevel>3</DetailsLevel>
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <table id="12" parent="2" name="Wallets">
+      <DetailsLevel>3</DetailsLevel>
+      <Engine>InnoDB</Engine>
+      <CollationName>utf8mb4_0900_ai_ci</CollationName>
+    </table>
+    <column id="13" parent="8" name="bankID">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="14" parent="8" name="bankName">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(45)|0s</StoredType>
+    </column>
+    <index id="15" parent="8" name="PRIMARY">
+      <ColNames>bankID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="16" parent="8" name="bankID_UNIQUE">
+      <ColNames>bankID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="17" parent="8" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="18" parent="8" name="bankID_UNIQUE">
+      <UnderlyingIndexName>bankID_UNIQUE</UnderlyingIndexName>
+    </key>
+    <column id="19" parent="9" name="billerID">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="20" parent="9" name="billerName">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(45)|0s</StoredType>
+    </column>
+    <column id="21" parent="9" name="billerCategory">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(45)|0s</StoredType>
+    </column>
+    <index id="22" parent="9" name="PRIMARY">
+      <ColNames>billerID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="23" parent="9" name="billerID_UNIQUE">
+      <ColNames>billerID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="24" parent="9" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="25" parent="9" name="billerID_UNIQUE">
+      <UnderlyingIndexName>billerID_UNIQUE</UnderlyingIndexName>
+    </key>
+    <column id="26" parent="10" name="transactionID">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="27" parent="10" name="walletID">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="28" parent="10" name="transactionType">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>enum(&apos;Send Money&apos;, &apos;Receive Money&apos;, &apos;Cash In&apos;, &apos;Cash Out&apos;, &apos;Pay Bills&apos;, &apos;Loan Money&apos;, &apos;BankTransfer&apos;)|0e</StoredType>
+    </column>
+    <column id="29" parent="10" name="referenceID">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>varchar(45)|0s</StoredType>
+    </column>
+    <column id="30" parent="10" name="transactionDate">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>timestamp|0s</StoredType>
+    </column>
+    <column id="31" parent="10" name="amount">
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+      <StoredType>decimal(12,2 digit)|0s</StoredType>
+    </column>
+    <foreign-key id="32" parent="10" name="walletID">
+      <ColNames>walletID</ColNames>
+      <RefColNames>walletID</RefColNames>
+      <RefTableName>Wallets</RefTableName>
+    </foreign-key>
+    <index id="33" parent="10" name="PRIMARY">
+      <ColNames>transactionID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="34" parent="10" name="transactionID_UNIQUE">
+      <ColNames>transactionID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="35" parent="10" name="walletID_UNIQUE">
+      <ColNames>walletID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="36" parent="10" name="referenceID_UNIQUE">
+      <ColNames>referenceID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="37" parent="10" name="amount_UNIQUE">
+      <ColNames>amount</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="38" parent="10" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="39" parent="10" name="transactionID_UNIQUE">
+      <UnderlyingIndexName>transactionID_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="40" parent="10" name="walletID_UNIQUE">
+      <UnderlyingIndexName>walletID_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="41" parent="10" name="referenceID_UNIQUE">
+      <UnderlyingIndexName>referenceID_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="42" parent="10" name="amount_UNIQUE">
+      <UnderlyingIndexName>amount_UNIQUE</UnderlyingIndexName>
+    </key>
+    <column id="43" parent="11" name="userID">
+      <AutoIncrement>2</AutoIncrement>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="44" parent="11" name="fullName">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>varchar(100)|0s</StoredType>
+    </column>
+    <column id="45" parent="11" name="phoneNumber">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>varchar(11)|0s</StoredType>
+    </column>
+    <column id="46" parent="11" name="email">
+      <NotNull>1</NotNull>
+      <Position>4</Position>
+      <StoredType>varchar(45)|0s</StoredType>
+    </column>
+    <column id="47" parent="11" name="pin">
+      <NotNull>1</NotNull>
+      <Position>5</Position>
+      <StoredType>varchar(4)|0s</StoredType>
+    </column>
+    <column id="48" parent="11" name="birthDate">
+      <NotNull>1</NotNull>
+      <Position>6</Position>
+      <StoredType>date|0s</StoredType>
+    </column>
+    <column id="49" parent="11" name="createdAt">
+      <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
+      <NotNull>1</NotNull>
+      <Position>7</Position>
+      <StoredType>timestamp|0s</StoredType>
+    </column>
+    <index id="50" parent="11" name="PRIMARY">
+      <ColNames>userID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="51" parent="11" name="userID_UNIQUE">
+      <ColNames>userID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="52" parent="11" name="phoneNumber_UNIQUE">
+      <ColNames>phoneNumber</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="53" parent="11" name="emial_UNIQUE">
+      <ColNames>email</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="54" parent="11" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="55" parent="11" name="userID_UNIQUE">
+      <UnderlyingIndexName>userID_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="56" parent="11" name="phoneNumber_UNIQUE">
+      <UnderlyingIndexName>phoneNumber_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="57" parent="11" name="emial_UNIQUE">
+      <UnderlyingIndexName>emial_UNIQUE</UnderlyingIndexName>
+    </key>
+    <column id="58" parent="12" name="walletID">
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="59" parent="12" name="userID">
+      <NotNull>1</NotNull>
+      <Position>2</Position>
+      <StoredType>int|0s</StoredType>
+    </column>
+    <column id="60" parent="12" name="balance">
+      <NotNull>1</NotNull>
+      <Position>3</Position>
+      <StoredType>decimal(12,2 digit)|0s</StoredType>
+    </column>
+    <foreign-key id="61" parent="12" name="userID">
+      <ColNames>userID</ColNames>
+      <RefColNames>userID</RefColNames>
+      <RefTableName>Users</RefTableName>
+    </foreign-key>
+    <index id="62" parent="12" name="PRIMARY">
+      <ColNames>walletID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="63" parent="12" name="walletID_UNIQUE">
+      <ColNames>walletID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <index id="64" parent="12" name="userID_UNIQUE">
+      <ColNames>userID</ColNames>
+      <Type>btree</Type>
+      <Unique>1</Unique>
+    </index>
+    <key id="65" parent="12" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <Primary>1</Primary>
+      <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
+    </key>
+    <key id="66" parent="12" name="walletID_UNIQUE">
+      <UnderlyingIndexName>walletID_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="67" parent="12" name="userID_UNIQUE">
+      <UnderlyingIndexName>userID_UNIQUE</UnderlyingIndexName>
+    </key>
+  </database-model>
+</dataSource>

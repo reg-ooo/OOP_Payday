@@ -19,5 +19,20 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="Aiven" uuid="b607b16f-1e8d-4e30-a501-42b1e95a6ea9">
+      <database-info product="MySQL" version="8.0.35" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-j-8.2.0 (Revision: 06a1f724497fd81c6a659131fda822c9e5085b6c)" dbms="MYSQL" exact-version="8.0.35" exact-driver-version="8.2">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>&quot;</identifier-quote-string>
+        <jdbc-catalog-is-schema>true</jdbc-catalog-is-schema>
+      </database-info>
+      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>avnadmin</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" qname="banksystem" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
   </component>
 </project>
