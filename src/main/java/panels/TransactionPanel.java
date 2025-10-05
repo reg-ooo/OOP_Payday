@@ -11,24 +11,27 @@ import data.Transaction;
 import main.Payday;
 import util.FontLoader;
 import util.ThemeManager;
-
 import data.Database;
+import Factory.PanelBuilder;
 
 public class TransactionPanel extends JPanel{
     private Transaction trans;
 
-    private Payday db = new Payday();
 
     public RoundedPanel transactionRoundedPanel = new RoundedPanel(15, ThemeManager.getInstance().getSBlue());
-    private JPanel transactionHeaderPanel = PanelFactory.getInstance().createPanel(new Dimension(364, 35), null, new BorderLayout());
-    private JPanel transactionContentPanel = PanelFactory.getInstance().createPanel(new Dimension(364, 240), null, null);
+    private final JPanel transactionContentPanel = new PanelBuilder()
+            .setPreferredSize(new Dimension(364, 240))
+            .setOpaque(false)
+            .setColor(ThemeManager.getInstance().getSBlue())
+            .build();
 
-    private JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History", FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"), ThemeManager.getInstance().getDBlue());
-    private JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
+    private final JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History", FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"), ThemeManager.getInstance().getDBlue());
+    private final JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
 
     public TransactionPanel() {
+        ThemeManager.getInstance();
         this.setOpaque(true);
-        this.setBackground(ThemeManager.getInstance().getWhite());
+        this.setBackground(ThemeManager.getWhite());
 
         // TRANSACTION HEADER PANEL (with "Transaction History" and "See all")
 // TRANSACTION ROUNDED PANEL - Main container;
@@ -37,31 +40,32 @@ public class TransactionPanel extends JPanel{
         transactionRoundedPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
 // TRANSACTION HEADER PANEL (with "Transaction History" and "See all")
-        transactionHeaderPanel.setOpaque(false);
-
+        JPanel transactionHeaderPanel = new PanelBuilder()
+                .setPreferredSize(new Dimension(364, 35))
+                .setLayout(new BorderLayout())
+                .setOpaque(false)
+                .build();
 
         seeAllLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
         transactionHeaderPanel.add(transactionLabel, BorderLayout.WEST);
         transactionHeaderPanel.add(seeAllLabel, BorderLayout.EAST);
 
 // Create transaction history content panel
         transactionContentPanel.setLayout(new BoxLayout(transactionContentPanel, BoxLayout.Y_AXIS));
-        transactionContentPanel.setBackground(ThemeManager.getInstance().getSBlue());
-        transactionContentPanel.setOpaque(false);
+
 
 // Add transaction items (hardcoded)
         String time = getTransaction().getDate().substring(getTransaction().getDate().indexOf(" "), getTransaction().getDate().length() - 3);
         String validatedTime = checkTime(time);
         transactionContentPanel.add(createDateSection(getTransaction().getDate().substring(0, getTransaction().getDate().indexOf(" "))));
-        transactionContentPanel.add(createTransactionItem(validatedTime, getTransaction().getType(), "\u20B1" + getTransaction().getAmount(), !getTransaction().getType().equals("send")));
+        transactionContentPanel.add(createTransactionItem(validatedTime, getTransaction().getType(), "₱" + getTransaction().getAmount(), !getTransaction().getType().equals("send")));
 
 // Add header and content to the rounded panel
         transactionRoundedPanel.add(transactionHeaderPanel, BorderLayout.NORTH);
         transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
 
 // Transaction container wrapper
-        RoundedBorder transactionContainer = new RoundedBorder(15, ThemeManager.getInstance().getVBlue(), 2);
+        RoundedBorder transactionContainer = new RoundedBorder(15, ThemeManager.getVBlue(), 2);
         transactionContainer.setLayout(new FlowLayout());
         transactionContainer.setOpaque(false);
         transactionContainer.setMaximumSize(new Dimension(390, 160));
@@ -73,19 +77,23 @@ public class TransactionPanel extends JPanel{
 
     // Add this method to create transaction history items
     private JPanel createTransactionItem(String time, String description, String amount, boolean isPositive) {
-        JPanel transactionPanel = PanelFactory.getInstance().createPanel(null, null, new BorderLayout()); // no hardcoded bg
-        transactionPanel.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        ThemeManager.getInstance();
+        JPanel transactionPanel = new PanelBuilder()
+                .setLayout(new BorderLayout())
+                .setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10))
+                .build();
 
-        JPanel leftPanel = PanelFactory.getInstance().createPanel(null, null, null); // no bg here either
+        JPanel leftPanel = new PanelBuilder().build();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
         JLabel descLabel = new JLabel(description);
         descLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        descLabel.setForeground(ThemeManager.getInstance().getBlack());
+
+        descLabel.setForeground(ThemeManager.getBlack());
 
         JLabel timeLabel = new JLabel(time);
         timeLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        timeLabel.setForeground(ThemeManager.getInstance().getBlack());
+        timeLabel.setForeground(ThemeManager.getBlack());
 
         leftPanel.add(descLabel);
         leftPanel.add(timeLabel);
@@ -102,17 +110,18 @@ public class TransactionPanel extends JPanel{
     }
 
     public void applyTheme(boolean isDarkMode) {
+        ThemeManager.getInstance();
         // Background of the whole panel
-        this.setBackground(isDarkMode ? Color.BLACK : ThemeManager.getInstance().getWhite());
+        this.setBackground(isDarkMode ? Color.BLACK : ThemeManager.getWhite());
 
         // Card backgrounds
-        Color lightCard = ThemeManager.getInstance().getSBlue();   // sky blue
-        Color darkCard = ThemeManager.getInstance().getDSBlue();     // dark slate blue
+        Color lightCard = ThemeManager.getSBlue();   // sky blue
+        Color darkCard = ThemeManager.getDSBlue();     // dark slate blue
         transactionRoundedPanel.setBackground(isDarkMode ? darkCard : lightCard);
 
         // Header labels
-        transactionLabel.setForeground(isDarkMode ? ThemeManager.getInstance().getWhite() : ThemeManager.getInstance().getDBlue());
-        seeAllLabel.setForeground(isDarkMode ? ThemeManager.getInstance().getNBlue() : ThemeManager.getInstance().getPBlue());
+        transactionLabel.setForeground(isDarkMode ? ThemeManager.getWhite() : ThemeManager.getDBlue());
+        seeAllLabel.setForeground(isDarkMode ? ThemeManager.getNBlue() : ThemeManager.getPBlue());
 
         // Update children inside content panel
         for (Component comp : transactionContentPanel.getComponents()) {
@@ -125,15 +134,15 @@ public class TransactionPanel extends JPanel{
 
                         // Date labels
                         if (text.matches("\\d{4}-\\d{2}-\\d{2}")) {
-                            lbl.setForeground(isDarkMode ? ThemeManager.getInstance().getNBlue() : ThemeManager.getInstance().getDBlue());
+                            lbl.setForeground(isDarkMode ? ThemeManager.getNBlue() : ThemeManager.getDBlue());
                         }
                         // Time labels
-                        else if (lbl.getForeground().equals(ThemeManager.getInstance().getGray())) {
-                            lbl.setForeground(isDarkMode ? ThemeManager.getInstance().getLightGray() : ThemeManager.getInstance().getGray());
+                        else if (lbl.getForeground().equals(ThemeManager.getGray())) {
+                            lbl.setForeground(isDarkMode ? ThemeManager.getLightGray() : ThemeManager.getGray());
                         }
                         // Description labels
-                        else if (lbl.getForeground().equals(ThemeManager.getInstance().getBlack())) {
-                            lbl.setForeground(isDarkMode ? ThemeManager.getInstance().getWhite() : ThemeManager.getInstance().getBlack());
+                        else if (lbl.getForeground().equals(ThemeManager.getBlack())) {
+                            lbl.setForeground(isDarkMode ? ThemeManager.getWhite() : ThemeManager.getBlack());
                         }
                         // Amount stays green/red, no change
                     }
@@ -147,8 +156,13 @@ public class TransactionPanel extends JPanel{
 
     // Add this method to create date sections
     private JPanel createDateSection(String date) {
-        JPanel datePanel = PanelFactory.getInstance().createPanel(null, new Color(230, 240, 250), new BorderLayout());
-        datePanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 5, 10));
+        ThemeManager.getInstance();
+        JPanel datePanel = new PanelBuilder()
+                .setColor(ThemeManager.getSBlue())
+                .setLayout(new BorderLayout())
+                .setBorder(BorderFactory.createEmptyBorder(15, 10, 5, 10))
+                .build();
+
 
         JLabel dateLabel = LabelFactory.getInstance().createLabel(date, FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-BOLD"), ThemeManager.getInstance().getDBlue());
         dateLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));

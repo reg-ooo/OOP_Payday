@@ -10,9 +10,7 @@ public class Panel extends JPanel {
         if (pb.getPreferredSize() != null) {
             this.setPreferredSize(pb.getPreferredSize());
         }
-        if (pb.getColor() != null){
             this.setBackground(pb.getColor());
-        }
         if (pb.getMaxSize() != null) {
             this.setMaximumSize(pb.getMaxSize());
         }
