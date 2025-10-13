@@ -25,6 +25,16 @@ public class ImageLoader {
 
         images.put("darkModeOff", resizeImage("darkModeOff.png", 50, 50));
         images.put("bigDarkModeOff", resizeImage("darkModeOn.png", 55, 55));
+
+        //PROFILE ICONS
+        images.put("edit", resizeImage("icons/edit.png", 30, 30));
+        images.put("editHover", resizeImage("icons/edit_hover.png", 30, 30));
+        images.put("lock", resizeImage("icons/lock.png", 30, 30));
+        images.put("lockHover", resizeImage("icons/lock_hover.png", 30, 30));
+        images.put("logout", resizeImage("icons/logout.png", 30, 30));
+        images.put("logoutHover", resizeImage("icons/logout_hover.png", 30, 30));
+        images.put("arrow", resizeImage("icons/arrow.png", 30, 30));
+        images.put("arrowHover", resizeImage("icons/arrow_hover.png", 30, 30));
     }
 
     public static ImageLoader getInstance() {

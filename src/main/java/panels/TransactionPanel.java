@@ -50,11 +50,11 @@ public class TransactionPanel extends JPanel{
         transactionContentPanel.setBackground(ThemeManager.getInstance().getSBlue());
         transactionContentPanel.setOpaque(false);
 
-// Add transaction items (hardcoded)
-        String time = getTransaction().getDate().substring(getTransaction().getDate().indexOf(" "), getTransaction().getDate().length() - 3);
-        String validatedTime = checkTime(time);
-        transactionContentPanel.add(createDateSection(getTransaction().getDate().substring(0, getTransaction().getDate().indexOf(" "))));
-        transactionContentPanel.add(createTransactionItem(validatedTime, getTransaction().getType(), "\u20B1" + getTransaction().getAmount(), !getTransaction().getType().equals("send")));
+//// Add transaction items (hardcoded)
+//        String time = getTransaction().getDate().substring(getTransaction().getDate().indexOf(" "), getTransaction().getDate().length() - 3);
+//        String validatedTime = checkTime(time);
+//        transactionContentPanel.add(createDateSection(getTransaction().getDate().substring(0, getTransaction().getDate().indexOf(" "))));
+//        transactionContentPanel.add(createTransactionItem(validatedTime, getTransaction().getType(), "\u20B1" + getTransaction().getAmount(), !getTransaction().getType().equals("send")));
 
 // Add header and content to the rounded panel
         transactionRoundedPanel.add(transactionHeaderPanel, BorderLayout.NORTH);

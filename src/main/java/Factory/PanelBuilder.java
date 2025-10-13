@@ -48,18 +48,7 @@ public class PanelBuilder {
     }
 
     public Panel build() {
-        reset();
         return new Panel(this);
-    }
-
-    private void reset() {
-        layout = null;
-        preferredSize = null;
-        color = null;
-        maxSize = null;
-        minSize = null;
-        border = null;
-        isOpaque = false;
     }
 
     LayoutManager getLayout() { return layout; }

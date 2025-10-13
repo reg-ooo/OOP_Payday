@@ -34,7 +34,7 @@ public class NPanel extends JPanel {
 
     //LABELS
     JLabel balanceText = LabelFactory.getInstance().createLabel("Available Balance: ", FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
-    JLabel amountText = LabelFactory.getInstance().createLabel(String.format( "%s %.2f", "\u20B1", getBalance()), FontLoader.getInstance().loadFont(Font.PLAIN, 40f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
+    JLabel amountText = LabelFactory.getInstance().createLabel(String.format( "%s %.2f", "\u20B1", 500.0), FontLoader.getInstance().loadFont(Font.PLAIN, 40f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
 
     public NPanel() {
         this.setLayout(new BorderLayout());

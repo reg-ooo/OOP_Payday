@@ -3,19 +3,22 @@ package pages;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.function.Consumer;
+
 import components.*;
 import panels.*;
 
 public class LaunchPage extends JPanel {
     private NPanel nPanel = new NPanel();
     private TransactionPanel tPanel = new TransactionPanel();
-    private NavigationBar navBarPanel = new NavigationBar();
-    private CenterPanel centerPanel = new CenterPanel();
+    private CenterPanel centerPanel;
 
-    public LaunchPage() {
+    public LaunchPage(Consumer<String> onButtonClick) {
         this.setOpaque(true);
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
+
+        centerPanel = new CenterPanel(onButtonClick);
 
         JPanel mainContentPanel = new JPanel();
         mainContentPanel.setLayout(new BoxLayout(mainContentPanel, BoxLayout.Y_AXIS));
@@ -25,7 +28,6 @@ public class LaunchPage extends JPanel {
 
         add(nPanel, BorderLayout.NORTH);
         add(mainContentPanel, BorderLayout.CENTER);
-        add(navBarPanel, BorderLayout.SOUTH);
     }
 }
 

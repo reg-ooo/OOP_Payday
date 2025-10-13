@@ -5,20 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Factory/PanelFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/b607b16f-1e8d-4e30-a501-42b1e95a6ea9.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/components/NavigationBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/components/NavigationBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Payday.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Payday.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/LaunchPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/LaunchPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/LabelBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/LabelBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ThemeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ThemeManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/Factory/PanelBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/PanelBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/NavigationBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/NavigationBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/Payday$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/Payday$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/LaunchPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/LaunchPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/LoginPage$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/panels/CenterPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/CenterPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/panels/CenterPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/CenterPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/util/FontLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/FontLoader.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,8 +58,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday.git&quot;,
-    &quot;accountId&quot;: &quot;fe1d59f3-e850-4205-9e10-09ea83a6d5f8&quot;
+    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday&quot;,
+    &quot;accountId&quot;: &quot;ddb72bb0-e265-4938-8c6e-4e20f69a2e75&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -58,36 +73,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Payday.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "junie.onboarding.icon.badge.shown": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/regor/OneDrive/Documents/GitHub/OOP_Payday/src/main/java/Factory",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Payday.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/IdeaProjects/draftPayDay&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\IdeaProjects\draftPayDay" />
       <recent name="C:\Users\regor\OneDrive\Documents\GitHub\OOP_Payday\src\main\java\Factory" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Admin\IdeaProjects\draftPayDay\target" />
     </key>
   </component>
   <component name="RunManager">
@@ -129,6 +148,17 @@
       <workItem from="1758457484586" duration="4605000" />
       <workItem from="1758537258061" duration="6781000" />
       <workItem from="1759641678677" duration="2311000" />
+      <workItem from="1759834178389" duration="2148000" />
+      <workItem from="1760020912908" duration="3510000" />
+      <workItem from="1760080662750" duration="7282000" />
+      <workItem from="1760095937675" duration="8577000" />
+      <workItem from="1760179383976" duration="9957000" />
+      <workItem from="1760250781754" duration="1463000" />
+      <workItem from="1760255078262" duration="3836000" />
+      <workItem from="1760264076517" duration="2919000" />
+      <workItem from="1760287506555" duration="8252000" />
+      <workItem from="1760337459678" duration="2181000" />
+      <workItem from="1760341739074" duration="9175000" />
     </task>
     <servers />
   </component>
