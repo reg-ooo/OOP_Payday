@@ -8,6 +8,7 @@ import components.RoundedBorder;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import util.FontLoader;
 import util.ImageLoader;
@@ -15,7 +16,8 @@ import util.ThemeManager;
 
 
 public class CenterPanel extends JPanel {
-    private final JPanel payBillsWrapper,cashInWrapper, cashOutWrapper, requestMoneyWrapper, bankTransferWrapper, buyCryptoWrapper;
+    private final JPanel sendMoneyWrapper,cashInWrapper, cashOutWrapper, requestMoneyWrapper, bankTransferWrapper, buyCryptoWrapper;
+    private final Consumer<String> onButtonClick;
 
 //    public JPanel centerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 220), null, new FlowLayout(FlowLayout.CENTER, 0, 15));
 
@@ -29,10 +31,11 @@ public class CenterPanel extends JPanel {
 
     private ArrayList<RoundedBorder> buttons = new ArrayList<>();
 
-    public CenterPanel() {
+    public CenterPanel(Consumer<String> onButtonClick) {
         //CENTER PANEL
         this.setOpaque(true);
         this.setBackground(ThemeManager.getInstance().getWhite());
+        this.onButtonClick = onButtonClick;
 
         //BUTTON PANELS
 //        JPanel buttonPanel = PanelFactory.getInstance().createPanel(null, null, new GridLayout(2, 3, 25, 10));
@@ -44,7 +47,7 @@ public class CenterPanel extends JPanel {
         }
 
         //Style Buttons WITH WRAPPER (ANG STYLE METHOD GINA COPY AND PASTE YUNG SAME BUTTON DESIGN)
-        payBillsWrapper = styleButton(buttons.get(0), "Pay Bills", ImageLoader.getInstance().getImage("sendMoney"));
+        sendMoneyWrapper = styleButton(buttons.get(0), "Send Money", ImageLoader.getInstance().getImage("sendMoney"));
         cashInWrapper = styleButton(buttons.get(1), "Cash In", ImageLoader.getInstance().getImage("cashIn"));
         cashOutWrapper = styleButton(buttons.get(2), "Cash Out", ImageLoader.getInstance().getImage("cashOut"));
         requestMoneyWrapper = styleButton(buttons.get(3), "Request Money", ImageLoader.getInstance().getImage("requestMoney"));
@@ -101,7 +104,11 @@ public class CenterPanel extends JPanel {
                 button.repaint();
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                JOptionPane.showMessageDialog(centerPanel, "Button Pressed!");
+                if (text.equals("Send Money")) {
+                    onButtonClick.accept("SendMoney");
+                } else {
+                    JOptionPane.showMessageDialog(centerPanel, text + " clicked!");
+                }
             }
         });
 
@@ -112,7 +119,7 @@ public class CenterPanel extends JPanel {
     }
 
     private void addAllButtons(JPanel buttonPanel) {
-        buttonPanel.add(payBillsWrapper);
+        buttonPanel.add(sendMoneyWrapper);
         buttonPanel.add(cashInWrapper);
         buttonPanel.add(cashOutWrapper);
         buttonPanel.add(requestMoneyWrapper);

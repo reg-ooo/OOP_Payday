@@ -1,17 +1,21 @@
 package main;
 
+import components.NavigationBar;
 import components.RoundedFrame;
 
 import javax.swing.*;
 import java.awt.*;
 import pages.*;
 //import pages.SplashScreen;
+import util.ThemeManager;
+import util.AnimatedPageSwitcher;
 import panels.*;
 
 public class MainFrame extends JFrame {
     private RoundedFrame mainFrame = new RoundedFrame(30);
     private JPanel mainPanel = new JPanel();
     private CardLayout cardLayout;
+    private NavigationBar navBar;
 
     public MainFrame(){
         setMainFrame();
@@ -33,51 +37,100 @@ public class MainFrame extends JFrame {
     private void setupUI(){
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
+        mainPanel.setBackground(ThemeManager.getWhite());
 
-        // Add LoginPage first (will be shown initially)
+        // FIX: Make sure NavigationBar has the right constructor
+        navBar = new NavigationBar(this::handleNavBarClick);
+
+        // Add all pages
         mainPanel.add(new LoginPage(this::handleLoginResult), "Login");
-
-        // Add RegisterPage
         mainPanel.add(new RegisterPage(this::handleRegisterResult), "Register");
+        mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
+        mainPanel.add(new SendMoneyPage(this::handleSendMoneyResult), "SendMoney");
+        mainPanel.add(new SendMoneyPage2(this::handleSendMoney2Result), "SendMoney2");
+        mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
 
-        // Add other pages
-        mainPanel.add(new LaunchPage(), "Launch");
+        // Main container
+        JPanel container = new JPanel(new BorderLayout());
+        container.add(mainPanel, BorderLayout.CENTER);
+        container.add(navBar, BorderLayout.SOUTH);
 
-        // Show LoginPage first
-        cardLayout.show(mainPanel, "Launch");
+        // FIX: Start with Login page and hide nav bar
+        navBar.setVisible(true); // Hide initially
+        cardLayout.show(mainPanel, "Login"); //
 
-        mainFrame.setContentPane(mainPanel);
+        mainFrame.setContentPane(container);
     }
 
-    // Handle login results and navigation
-    private void handleLoginResult(String result){
-        if("success".equals(result)) {
-            // Navigate to LaunchPage after successful login
-            cardLayout.show(mainPanel, "Launch");
-        } else if("Register".equals(result)) {
-            // Navigate to RegisterPage when user clicks "Register here"
-            cardLayout.show(mainPanel, "Register");
-        } else if("Launch".equals(result)) {
-            // Direct navigation to Launch page (if needed)
-            cardLayout.show(mainPanel, "Launch");
-        } else {
-            // Handle other navigation requests
-            changeCard(result);
+    private void handleNavBarClick(String result) {
+        switch (result) {
+            case "Launch" -> slideContentTransition("Launch", -1);
+            case "Profile" -> slideContentTransition("Profile", 1);
         }
     }
 
-    // Handle register page results and navigation
-    private void handleRegisterResult(String result){
-        if("BackToLogin".equals(result)) {
-            // Navigate back to LoginPage
-            cardLayout.show(mainPanel, "Login");
-        } else if("success".equals(result)) {
-            // Navigate to main app after successful registration
-            cardLayout.show(mainPanel, "Launch");
-        } else {
-            // Handle other navigation requests
-            changeCard(result);
+    private void handleLoginResult(String result) {
+        switch (result) {
+            case "success" -> slideContentTransition("Launch", -1);
+            case "Register" -> slideContentTransition("Register", 1);
+            default -> slideContentTransition(result, 1);
         }
+    }
+
+    private void handleRegisterResult(String result) {
+        switch (result) {
+            case "BackToLogin" -> slideContentTransition("Login", -1);
+            case "success" -> slideContentTransition("Launch", -1);
+            default -> slideContentTransition(result, 1);
+        }
+    }
+
+    private void handleLaunchResult(String result) {
+        switch (result) {
+            case "SendMoney" -> slideContentTransition("SendMoney", 1);
+            case "Profile" -> slideContentTransition("Profile", 1);
+            default -> System.out.println("Unknown action: " + result);
+        }
+    }
+
+    private void handleSendMoneyResult(String result) {
+        switch (result) {
+            case "Launch" -> slideContentTransition("Launch", -1);
+            case "SendMoney2" -> slideContentTransition("SendMoney2", 1);
+            default -> System.out.println("Unknown action: " + result);
+        }
+    }
+
+    private void handleSendMoney2Result(String result) {
+        switch (result) {
+            case "SendMoneyPage1" -> slideContentTransition("SendMoney", -1);
+            case "ConfirmSendMoney" -> System.out.println("Go to confirmation page soon");
+        }
+    }
+
+    private void handleProfileResult(String result) {
+        switch (result) {
+            case "Launch" -> slideContentTransition("Launch", -1);
+            case "ChangeDetails" -> System.out.println("Go to Change Account Details page");
+            case "ChangePassword" -> System.out.println("Go to Change Password page");
+            case "Logout" -> slideContentTransition("Login", -1);
+            default -> System.out.println("Unknown profile action: " + result);
+        }
+    }
+
+    private void slideContentTransition(String targetCard, int direction) {
+        // Show/hide nav bar based on page
+        boolean showNavBar = targetCard.equals("Launch") || targetCard.equals("Profile");
+        navBar.setVisible(showNavBar);
+
+        // Update nav bar active state
+        if (showNavBar) {
+            String activeButton = targetCard.equals("Launch") ? "Home" : "Profile";
+            navBar.setActiveButton(activeButton);
+        }
+
+        // Use your existing animation on mainContentPanel only
+        AnimatedPageSwitcher.slideTransition(mainPanel, targetCard, direction);
     }
 
     // General card switching method (for other pages)
