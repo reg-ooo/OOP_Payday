@@ -25,15 +25,15 @@ public class Database {
 
     public static void DBConnect(){
         db = "banksystem";
-        uname = "admin";
-        pswd = "FF?JW$BO-Z:cXx23tHAL4sco55vo";
+        uname = "avnadmin";
+        pswd = "AVNS_Lsn477Zm8ouE1ILPcOl";
 
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            String url = "jdbc:mysql://paydaybank.cluster-chqoc26c4kyy.ap-southeast-1.rds.amazonaws.com:3306/" + db + "?serverTimezone=UTC";
+            String url = "jdbc:mysql://mysql-payday-regorego2006-b400.e.aivencloud.com:15983/" + db + "?serverTimezone=UTC%2B8";
             con = DriverManager.getConnection(url, uname, pswd);
             st = con.createStatement();
-
+            st.executeUpdate("SET SESSION time_zone = '+08:00'");
             System.out.println("Connected to MySQL database successfully!");
 
         } catch (ClassNotFoundException e) {

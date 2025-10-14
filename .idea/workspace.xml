@@ -8,18 +8,23 @@
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/Panel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/Panel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/PanelBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/Panel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/Panel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/PanelBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/PanelBuilder.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Database.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/Payday.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/Payday.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Database.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/Payday$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/Payday$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/panels/CenterPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/CenterPanel$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/panels/CenterPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/CenterPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

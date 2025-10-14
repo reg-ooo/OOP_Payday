@@ -20,7 +20,7 @@ public class Payday {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 DBConnect();
-                if(!Database.connected) {
+                if(Database.connected) {
                     MainFrame mainF = new MainFrame(); // This will now show LoginPage first
                 }
             }

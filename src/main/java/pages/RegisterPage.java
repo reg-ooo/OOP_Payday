@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
+
 import Factory.PanelBuilder;
 import Factory.RegisterUIFactory;
 import components.*;
@@ -25,6 +26,8 @@ public class RegisterPage extends JPanel {
     private RoundedTextField phoneField;
     private RoundedTextField emailField;
     private RoundedTextField pinField;
+
+
 
     public RegisterPage(Consumer<String> onButtonClick) {
         this.setLayout(new BorderLayout());
@@ -108,8 +111,12 @@ public class RegisterPage extends JPanel {
         String pin = pinField.getText().trim();
 
         try {
-            user.addUser(username, pin);
-            showSuccess("Account created successfully!");
+            if(user.addUser(fullName, phone, email, pin, birthday, username)) {
+                showSuccess("Account created successfully!");
+            }
+            else{
+                showError("Account creation failed.");
+            }
             Timer timer = new Timer(1500, e -> onButtonClick.accept("BackToLogin"));
             timer.setRepeats(false);
             timer.start();
@@ -117,6 +124,8 @@ public class RegisterPage extends JPanel {
             showError("Registration failed: " + e.getMessage());
         }
     }
+
+
 
     //  Dialog Helpers
     private boolean showError(String message) {
@@ -127,4 +136,6 @@ public class RegisterPage extends JPanel {
     private void showSuccess(String message) {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
+
+
 }

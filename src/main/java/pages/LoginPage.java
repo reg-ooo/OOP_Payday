@@ -23,8 +23,10 @@ public class LoginPage extends JPanel {
     private final JLabel[] pinDots = new JLabel[4];
     private final StringBuilder pinInput = new StringBuilder();
     private final Users user = new Users();
+    private final Consumer<String> onButtonClick;
 
     public LoginPage(Consumer<String> onButtonClick) {
+        this.onButtonClick = onButtonClick;
         setDoubleBuffered(true);
         setLayout(new BorderLayout());
         setBackground(themeManager.getWhite());
@@ -41,7 +43,9 @@ public class LoginPage extends JPanel {
                     }
                 },
                 this::clearPinInput,
-                () -> processPin(onButtonClick)
+                this::processPin
+
+
         );
 
         add(mainUI, BorderLayout.CENTER);
@@ -57,17 +61,17 @@ public class LoginPage extends JPanel {
             pinInput.append(input);
             updatePinDots();
             if (pinInput.length() == 4) {
-                Timer t = new Timer(200, e -> processPin(null));
+                Timer t = new Timer(200, e -> processPin());
                 t.setRepeats(false);
                 t.start();
             }
         }
     }
 
-    private void processPin(Consumer<String> onButtonClick) {
+    private void processPin() {
         String pin = pinInput.toString();
         System.out.println("PIN entered: " + pin);
-        user.loginAccount("PIN_USER", pin, onButtonClick);
+        user.loginAccount(usernameField.getText(), pin, onButtonClick);
         clearPinInput();
     }
 
