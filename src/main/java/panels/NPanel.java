@@ -5,6 +5,7 @@ import java.awt.*;
 
 import Factory.LabelFactory;
 import Factory.PanelFactory;
+import data.UserInfo;
 import main.Payday;
 import util.FontLoader;
 import util.ImageLoader;
@@ -49,9 +50,10 @@ public class NPanel extends JPanel {
         amountPanel.setOpaque(false);
 
         //LABELS
+        UserInfo userInfo = UserInfo.getInstance();
         JLabel balanceText = LabelFactory.getInstance().createLabel("Available Balance: ", FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
         balanceText.setHorizontalTextPosition(JLabel.LEFT);
-        JLabel amountText = LabelFactory.getInstance().createLabel(String.format("%s %.2f", "\u20B1", getBalance()), FontLoader.getInstance().loadFont(Font.PLAIN, 40f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
+        JLabel amountText = LabelFactory.getInstance().createLabel(String.format("%s %.2f", "\u20B1", userInfo.getBalance(1)), FontLoader.getInstance().loadFont(Font.PLAIN, 40f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
         amountText.setVerticalTextPosition(JLabel.CENTER);
 
         balanceText.setBorder(new EmptyBorder(0, 10, 0, 0));
@@ -133,19 +135,5 @@ public class NPanel extends JPanel {
     }
 
 
-    private double getBalance(){
-        double balance = 0;
-
-        String query = "select balance from  Wallets where userID = 1;";
-
-        try{
-            Database.rs = Database.st.executeQuery(query);
-            Database.rs.next();
-            balance = Database.rs.getDouble("balance");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        return balance;
-    }
+    
 }

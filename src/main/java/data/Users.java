@@ -7,19 +7,17 @@ import java.sql.ResultSet;
 import java.util.function.Consumer;
 
 public class Users {
-
+//
     public boolean addUser(String fullName, String phoneNumber, String email, String password, String birthDate, String username) {
-        if (!validateUsername(username)) {
-            return false;
-        }
 
+//            System.out.println("Invalid input detected");
+//            return false;
+//
 
-        if (!isValidInput(fullName) || !isValidInput(phoneNumber) || !isValidInput(email) ||
-                !isValidInput(password) || !isValidInput(birthDate)) {
+        if(!isInputInvalid(fullName, phoneNumber, email, password, birthDate, username)){
             System.out.println("Invalid input detected");
             return false;
         }
-
 
         String query = "INSERT INTO Users(fullName, phoneNumber, email, pin, birthDate, username) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -39,7 +37,6 @@ public class Users {
             return false;
         }
     }
-
 
     public void loginAccount(String username, String password, Consumer<String> onButtonClick) {
         // Validate inputs
@@ -93,24 +90,15 @@ public class Users {
         if (name == null || name.isEmpty()) {
             return name;
         }
-
-        
         name = name.trim();
-
-        
         if (name.isEmpty()) {
             return name;
         }
-
-       
         int spaceIndex = name.indexOf(' ');
-
-        
         if (spaceIndex == -1) {
             return Character.toUpperCase(name.charAt(0)) + name.substring(1).toLowerCase();
         }
 
-        
         String firstWord = name.substring(0, spaceIndex);
         String rest = name.substring(spaceIndex + 1);
 
@@ -137,6 +125,18 @@ public class Users {
         }
 
         return true;
+    }
+
+    private boolean isValidNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.trim().isEmpty() || phoneNumber.length() != 11) {
+            return false;
+        }
+        return phoneNumber.matches("09\\d{9}");
+    }
+
+    private boolean isInputInvalid(String fullName, String phoneNumber, String email, String password, String birthDate, String username){
+        return !validateUsername(username) || !isValidInput(fullName) || !isValidNumber(phoneNumber) || !isValidInput(email) ||
+                !isValidInput(password) || !isValidInput(birthDate);
     }
 
 }

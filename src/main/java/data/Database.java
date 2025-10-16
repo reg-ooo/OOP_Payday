@@ -5,7 +5,7 @@ import util.ImageLoader;
 
 import java.sql.*;
 
-public class Database {
+public class Database implements DatabaseService {
     private static Database instance;
     public static String db,uname,pswd;
     public static Connection con;
@@ -44,5 +44,30 @@ public class Database {
             return;
         }
         connected = true;
+    }
+
+    @Override
+    public Connection getConnection() {
+        return con;
+    }
+
+    @Override
+    public ResultSet executeQuery(String query) throws SQLException {
+        return st.executeQuery(query);
+    }
+
+    @Override
+    public int executeUpdate(String query) throws SQLException {
+        return st.executeUpdate(query);
+    }
+
+    @Override
+    public boolean isConnected() {
+        return connected;
+    }
+
+    @Override
+    public void connect() {
+        DBConnect();
     }
 }

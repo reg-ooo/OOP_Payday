@@ -4,18 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 
 import Factory.LabelFactory;
-import Factory.PanelFactory;
 import components.*;
-import data.Database;
-import data.Transaction;
-import main.Payday;
+import data.TransactionList;
+import data.UserInfo;
 import util.FontLoader;
 import util.ThemeManager;
-import data.Database;
 import Factory.PanelBuilder;
 
+
 public class TransactionPanel extends JPanel{
-    private Transaction trans;
+    private TransactionList trans;
 
 
     public RoundedPanel transactionRoundedPanel = new RoundedPanel(15, ThemeManager.getInstance().getSBlue());
@@ -55,10 +53,11 @@ public class TransactionPanel extends JPanel{
 
 
 // Add transaction items (hardcoded)
-        String time = getTransaction().getDate().substring(getTransaction().getDate().indexOf(" "), getTransaction().getDate().length() - 3);
+        UserInfo userInfo = UserInfo.getInstance();
+        String time = userInfo.getTransaction(1).getDate().substring(userInfo.getTransaction(1).getDate().indexOf(" "), userInfo.getTransaction(1).getDate().length() - 3);
         String validatedTime = checkTime(time);
-        transactionContentPanel.add(createDateSection(getTransaction().getDate().substring(0, getTransaction().getDate().indexOf(" "))));
-        transactionContentPanel.add(createTransactionItem(validatedTime, getTransaction().getType(), "₱" + getTransaction().getAmount(), !getTransaction().getType().equals("send")));
+        transactionContentPanel.add(createDateSection(userInfo.getTransaction(1).getDate().substring(0, userInfo.getTransaction(1).getDate().indexOf(" "))));
+        transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction(1).getType(), "₱" + userInfo.getTransaction(1).getAmount(), !userInfo.getTransaction(1).getType().equals("send")));
 
 // Add header and content to the rounded panel
         transactionRoundedPanel.add(transactionHeaderPanel, BorderLayout.NORTH);
@@ -172,18 +171,7 @@ public class TransactionPanel extends JPanel{
         return datePanel;
     }
 
-    public Transaction getTransaction() {
-        String query1 = "select * from Transactions where transactionID = 1;";
-        try {
-            Database.rs = Database.st.executeQuery(query1);
-            Database.rs.next();
-            trans = new Transaction(Database.rs.getString("transactionType"), Database.rs.getDouble("amount"), Database.rs.getString("transactionDate"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        return trans;
-    }
 
     public String checkTime(String time){
         int hour = Integer.parseInt(time.substring(0, 3).trim());

@@ -27,8 +27,6 @@ public class RegisterPage extends JPanel {
     private RoundedTextField emailField;
     private RoundedTextField pinField;
 
-
-
     public RegisterPage(Consumer<String> onButtonClick) {
         this.setLayout(new BorderLayout());
         this.setBackground(themeManager.getWhite());
