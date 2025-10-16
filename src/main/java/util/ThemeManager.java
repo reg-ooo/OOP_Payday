@@ -1,5 +1,6 @@
 package util;
 import components.NavigationBar;
+import main.MainFrame;
 import pages.LaunchPage;
 import panels.CenterPanel;
 import panels.GradientPanel;
@@ -62,6 +63,8 @@ public class ThemeManager {
     }
 
     public void applyTheme(Component comp) {
+        MainFrame.container.setBackground(isDarkMode ? Color.BLACK : Color.WHITE);
+        
         if (comp instanceof GradientPanel gp) {
             // Gradient panels (backgrounds)
             if (isDarkMode) {
@@ -97,6 +100,7 @@ public class ThemeManager {
             } else {
                 lp.setBackground(Color.white);
             }
+
         }
 
         // Recurse for children
@@ -107,7 +111,6 @@ public class ThemeManager {
                 }
             }
         }
-
         comp.revalidate();
         comp.repaint();
     }

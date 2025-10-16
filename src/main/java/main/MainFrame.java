@@ -16,6 +16,7 @@ public class MainFrame extends JFrame {
     private JPanel mainPanel = new JPanel();
     private CardLayout cardLayout;
     private NavigationBar navBar;
+    public static JPanel container;
 
     public MainFrame(){
         setMainFrame();
@@ -51,7 +52,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
 
         // Main container
-        JPanel container = new JPanel(new BorderLayout());
+        container = new JPanel(new BorderLayout());
         container.add(mainPanel, BorderLayout.CENTER);
         container.add(navBar, BorderLayout.SOUTH);
 

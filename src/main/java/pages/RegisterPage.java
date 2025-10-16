@@ -123,8 +123,6 @@ public class RegisterPage extends JPanel {
         }
     }
 
-
-
     //  Dialog Helpers
     private boolean showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
@@ -134,6 +132,4 @@ public class RegisterPage extends JPanel {
     private void showSuccess(String message) {
         JOptionPane.showMessageDialog(this, message, "Success", JOptionPane.INFORMATION_MESSAGE);
     }
-
-
 }
