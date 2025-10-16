@@ -1,13 +1,16 @@
 package data;
 
 import pages.*;
+import panels.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.function.Consumer;
 
+
 public class Users {
-//
+    UserInfo userInfo = UserInfo.getInstance();
+
     public boolean addUser(String fullName, String phoneNumber, String email, String password, String birthDate, String username) {
 
 //            System.out.println("Invalid input detected");
@@ -53,8 +56,12 @@ public class Users {
             pstmt.setString(2, password);
 
             try (ResultSet rs = pstmt.executeQuery()) {
+
                 if (rs.next()) {
+                    int userID = rs.getInt("userID");
                     System.out.println("Login successful!");
+                    userInfo.loginUser(userID);
+                    loadComponents();
                     onButtonClick.accept("success");
                 } else {
                     System.out.println("Login failed!");
@@ -139,6 +146,10 @@ public class Users {
                 !isValidInput(password) || !isValidInput(birthDate);
     }
 
+    private void loadComponents(){
+        NPanel.getInstance().loadComponents();
+        TransactionPanel.getInstance().loadComponents();
+    }
 }
 
 

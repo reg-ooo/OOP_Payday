@@ -16,18 +16,31 @@ import data.Database;
 import Factory.PanelBuilder;
 
 public class NPanel extends JPanel {
+    private static NPanel instance;
     ThemeManager themeManager = ThemeManager.getInstance();
+
+    public static NPanel getInstance() {
+        if (instance == null) {
+            instance = new NPanel();
+        }
+        return instance;
+    }
 
     //BUTTON
     ImageIcon icon = ImageLoader.getInstance().getImage("darkModeOn");
     JButton balanceButton = new JButton(icon);
+    JLabel amountText;
 
 
     //    JPanel headerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 15), null, null);
 //    JPanel upperBalancePanel = PanelFactory.getInstance().createPanel(new Dimension(360, 45), null, new FlowLayout(FlowLayout.LEFT, 15, 10));
 //    JPanel amountPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 200), null, new FlowLayout(FlowLayout.LEFT, 15, 0));
 
-    public NPanel() {
+    private NPanel() {
+        initComponents();
+    }
+
+    private void initComponents(){
         ThemeManager.getInstance();
         this.setLayout(new BorderLayout());
         this.setBackground(ThemeManager.getWhite());
@@ -50,10 +63,10 @@ public class NPanel extends JPanel {
         amountPanel.setOpaque(false);
 
         //LABELS
-        UserInfo userInfo = UserInfo.getInstance();
+
         JLabel balanceText = LabelFactory.getInstance().createLabel("Available Balance: ", FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
         balanceText.setHorizontalTextPosition(JLabel.LEFT);
-        JLabel amountText = LabelFactory.getInstance().createLabel(String.format("%s %.2f", "\u20B1", userInfo.getBalance(1)), FontLoader.getInstance().loadFont(Font.PLAIN, 40f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
+        amountText = LabelFactory.getInstance().createLabel(String.format("%s %.2f", "\u20B1", 0.00), FontLoader.getInstance().loadFont(Font.PLAIN, 40f, "Quicksand-Regular"), ThemeManager.getInstance().getWhite());
         amountText.setVerticalTextPosition(JLabel.CENTER);
 
         balanceText.setBorder(new EmptyBorder(0, 10, 0, 0));
@@ -84,6 +97,13 @@ public class NPanel extends JPanel {
         containerPanel.add(balPanel);
 
         this.add(containerPanel, BorderLayout.CENTER);
+    }
+
+    public void loadComponents(){
+        UserInfo userInfo = UserInfo.getInstance();
+        amountText.setText(String.format("%s %.2f", "\u20B1", userInfo.getBalance()));
+        revalidate();
+        repaint();
     }
 
     private void styleDarkModeButton(JButton button){
@@ -133,7 +153,4 @@ public class NPanel extends JPanel {
             }
         });
     }
-
-
-    
 }

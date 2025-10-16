@@ -92,14 +92,13 @@ public class DatabaseProtectionProxy implements DatabaseService {
         boolean accessingSensitiveTable =
                 upperQuery.contains("WALLETS") ||
                         upperQuery.contains("TRANSACTIONS") ||
-                        upperQuery.contains("USERS") ||
-                        upperQuery.contains("CARDS") ||
-                        upperQuery.contains("BENEFICIARIES");
+                        upperQuery.contains("USERS");
+
 
         if (accessingSensitiveTable) {
             // Query MUST filter by userID
             if (!query.contains("userID = " + userIdStr) &&
-                    !query.contains("userID=" + userIdStr)) {
+                    !query.contains("userID=" + userIdStr) && !query.contains("WHERE userID = " + userIdStr) && !query.contains("WHERE walletID = " + userIdStr)) {
 
                 LOGGER.warning("User " + userId + " attempted to access data without userID filter");
                 throw new SecurityException("You can only access your own account data");

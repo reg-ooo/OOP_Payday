@@ -9,8 +9,8 @@ import components.*;
 import panels.*;
 
 public class LaunchPage extends JPanel {
-    private NPanel nPanel = new NPanel();
-    private TransactionPanel tPanel = new TransactionPanel();
+    private NPanel nPanel = NPanel.getInstance();
+    private TransactionPanel tPanel = TransactionPanel.getInstance();
     private CenterPanel centerPanel;
 
     public LaunchPage(Consumer<String> onButtonClick) {

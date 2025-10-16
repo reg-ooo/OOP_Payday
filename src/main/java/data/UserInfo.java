@@ -33,13 +33,12 @@ public class UserInfo {
         this.database = null;
     }
 
-    public TransactionList getTransaction(int transactionId) {
+    public TransactionList getTransaction() {
         if (!isLoggedIn) {
             throw new SecurityException("Please login first");
         }
 
-        String query = "SELECT * FROM Transactions WHERE transactionID = " + transactionId +
-                " AND userID = " + currentUserId + ";";  // ✅ Filter by userID
+        String query = "SELECT * FROM Transactions WHERE walletID = " + currentUserId ;  // ✅ Filter by userID
         try {
             ResultSet rs = database.executeQuery(query);  // ✅ Goes through proxy
             if (rs.next()) {

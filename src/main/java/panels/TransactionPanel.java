@@ -14,19 +14,32 @@ import Factory.PanelBuilder;
 
 public class TransactionPanel extends JPanel{
     private TransactionList trans;
-
-
+    private RoundedBorder transactionContainer;
     public RoundedPanel transactionRoundedPanel = new RoundedPanel(15, ThemeManager.getInstance().getSBlue());
+    private final JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History", FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"), ThemeManager.getInstance().getDBlue());
+    private final JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
+
+    private static TransactionPanel instance;
+
+    public static TransactionPanel getInstance() {
+        if (instance == null) {
+            instance = new TransactionPanel();
+        }
+        return instance;
+    }
+
     private final JPanel transactionContentPanel = new PanelBuilder()
             .setPreferredSize(new Dimension(364, 240))
             .setOpaque(false)
             .setColor(ThemeManager.getInstance().getSBlue())
             .build();
 
-    private final JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History", FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"), ThemeManager.getInstance().getDBlue());
-    private final JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
 
-    public TransactionPanel() {
+    private TransactionPanel() {
+        initComponents();
+    }
+
+    private void initComponents(){
         ThemeManager.getInstance();
         this.setOpaque(true);
         this.setBackground(ThemeManager.getWhite());
@@ -50,21 +63,12 @@ public class TransactionPanel extends JPanel{
 
 // Create transaction history content panel
         transactionContentPanel.setLayout(new BoxLayout(transactionContentPanel, BoxLayout.Y_AXIS));
-
-
-// Add transaction items (hardcoded)
-        UserInfo userInfo = UserInfo.getInstance();
-        String time = userInfo.getTransaction(1).getDate().substring(userInfo.getTransaction(1).getDate().indexOf(" "), userInfo.getTransaction(1).getDate().length() - 3);
-        String validatedTime = checkTime(time);
-        transactionContentPanel.add(createDateSection(userInfo.getTransaction(1).getDate().substring(0, userInfo.getTransaction(1).getDate().indexOf(" "))));
-        transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction(1).getType(), "₱" + userInfo.getTransaction(1).getAmount(), !userInfo.getTransaction(1).getType().equals("send")));
-
 // Add header and content to the rounded panel
         transactionRoundedPanel.add(transactionHeaderPanel, BorderLayout.NORTH);
         transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
 
 // Transaction container wrapper
-        RoundedBorder transactionContainer = new RoundedBorder(15, ThemeManager.getVBlue(), 2);
+        transactionContainer = new RoundedBorder(15, ThemeManager.getVBlue(), 2);
         transactionContainer.setLayout(new FlowLayout());
         transactionContainer.setOpaque(false);
         transactionContainer.setMaximumSize(new Dimension(390, 160));
@@ -72,6 +76,20 @@ public class TransactionPanel extends JPanel{
         transactionContainer.add(transactionRoundedPanel);
 
         this.add(transactionContainer, BorderLayout.CENTER);
+    }
+
+    public void loadComponents(){
+        UserInfo userInfo = UserInfo.getInstance();
+        String time = userInfo.getTransaction().getDate().substring(userInfo.getTransaction().getDate().indexOf(" "), userInfo.getTransaction().getDate().length() - 3);
+        String validatedTime = checkTime(time);
+        transactionContentPanel.add(createDateSection(userInfo.getTransaction().getDate().substring(0, userInfo.getTransaction().getDate().indexOf(" "))));
+        transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction().getType(), "₱" + userInfo.getTransaction().getAmount(), !userInfo.getTransaction().getType().equals("send")));
+        transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
+        transactionContainer.add(transactionRoundedPanel);
+        this.add(transactionContainer, BorderLayout.CENTER);
+
+        repaint();
+        revalidate();
     }
 
     // Add this method to create transaction history items
