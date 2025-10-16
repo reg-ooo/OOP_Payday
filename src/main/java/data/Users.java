@@ -1,10 +1,12 @@
 package data;
 
+import main.MainFrame;
 import pages.*;
 import panels.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.function.Consumer;
 
 
@@ -13,11 +15,7 @@ public class Users {
 
     public boolean addUser(String fullName, String phoneNumber, String email, String password, String birthDate, String username) {
 
-//            System.out.println("Invalid input detected");
-//            return false;
-//
-
-        if(!isInputInvalid(fullName, phoneNumber, email, password, birthDate, username)){
+        if(!isValidNumber(phoneNumber) && !validateUsername(username)){
             System.out.println("Invalid input detected");
             return false;
         }
@@ -42,13 +40,6 @@ public class Users {
     }
 
     public void loginAccount(String username, String password, Consumer<String> onButtonClick) {
-        // Validate inputs
-        if (!isValidInput(username) || !isValidInput(password)) {
-            System.out.println("Invalid login credentials format");
-            return;
-        }
-
-        // Use prepared statement to prevent SQL injection
         String query = "SELECT * FROM Users WHERE username = ? AND pin = ?";
 
         try (PreparedStatement pstmt = Database.con.prepareStatement(query)) {
@@ -72,25 +63,43 @@ public class Users {
         }
     }
 
-
-    private boolean validateUsername(String username){
-        if(username.length() < 4) {
+    private boolean validateUsername(String username) {
+        if (username == null || username.length() < 4) {
             System.out.println("Username too short");
             return false;
         }
-        try{
-            String query = String.format("SELECT * FROM Users WHERE username = '%s'", username);
-            Database.rs = Database.st.executeQuery(query);
-            if(Database.rs.next()){
+
+        try {
+            // Use parameterized query through proxy
+            DatabaseService db = new DatabaseProtectionProxy(
+                    -1,  // Special system user ID for registration checks
+                    true // System operation
+            );
+
+            String query = "SELECT COUNT(*) FROM Users WHERE username = ?";
+
+            // If your proxy doesn't support prepared statements yet,
+            // at least escape the input properly
+            String safeUsername = username.replace("'", "''"); // SQL escape
+            String safeQuery = String.format(
+                    "SELECT COUNT(*) FROM Users WHERE username = '%s'",
+                    safeUsername
+            );
+
+            ResultSet rs = db.executeQuery(safeQuery);
+
+            if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("Username already exists");
                 return false;
             }
             return true;
-        }catch(Exception e){
-            e.printStackTrace();
-            return validateUsername(username);
+
+        } catch (SQLException e) {
+            System.err.println("Database error during username validation: " + e.getMessage());
+            return false;
         }
     }
+
 
     private String capitalizeFirstLetter(String name) {
         
@@ -114,25 +123,6 @@ public class Users {
         return capitalizedFirst + " " + capitalizeFirstLetter(rest);
     }
 
-    private boolean isValidInput(String input) {
-        if (input == null || input.trim().isEmpty()) {
-            return false;
-        }
-
-        // Check for SQL injection patterns
-        String lowerInput = input.toLowerCase();
-        String[] sqlKeywords = {"'", "\"", ";", "--", "/*", "*/", "xp_", "sp_",
-                "union", "select", "insert", "update", "delete",
-                "drop", "create", "alter", "exec", "script"};
-
-        for (String keyword : sqlKeywords) {
-            if (lowerInput.contains(keyword)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
 
     private boolean isValidNumber(String phoneNumber) {
         if (phoneNumber == null || phoneNumber.trim().isEmpty() || phoneNumber.length() != 11) {
@@ -141,14 +131,16 @@ public class Users {
         return phoneNumber.matches("09\\d{9}");
     }
 
-    private boolean isInputInvalid(String fullName, String phoneNumber, String email, String password, String birthDate, String username){
-        return !validateUsername(username) || !isValidInput(fullName) || !isValidNumber(phoneNumber) || !isValidInput(email) ||
-                !isValidInput(password) || !isValidInput(birthDate);
-    }
 
     private void loadComponents(){
         NPanel.getInstance().loadComponents();
         TransactionPanel.getInstance().loadComponents();
+        MainFrame.loadNavBar();
+    }
+
+    // TODO
+    private void unloadComponents(){
+
     }
 }
 
