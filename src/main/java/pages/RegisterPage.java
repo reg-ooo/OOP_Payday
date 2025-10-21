@@ -6,13 +6,15 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
-
 import util.FontLoader;
 import util.ThemeManager;
 
 public class RegisterPage extends JPanel {
     private static final FontLoader fontLoader = FontLoader.getInstance();
     private static final ThemeManager themeManager = ThemeManager.getInstance();
+    private static final Color dBlue = themeManager.getDBlue(); // 0x163F5C for text
+    private static final Color lBlue = themeManager.getLBlue(); // 0xC4E4FF for button backgrounds
+
     private final JTextField usernameField = new JTextField();
     private final JTextField fullNameField = new JTextField();
     private final JComboBox<String> monthCombo;
@@ -38,22 +40,20 @@ public class RegisterPage extends JPanel {
     public RegisterPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setLayout(new GridBagLayout());
-        setBackground(themeManager.getWhite());
-        setPreferredSize(new Dimension(350, 550)); // Kept smaller size
-        setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8)); // Kept reduced outer padding
+        setBackground(themeManager.getWhite()); // White background
+        setPreferredSize(new Dimension(350, 550));
+        setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 15, 10, 15); // Kept reduced insets
+        gbc.insets = new Insets(10, 15, 10, 15);
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Title
         JLabel titleLabel = new JLabel("Create Account");
-        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Medium"));
-        titleLabel.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
+        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Regular")); // Changed to Regular
+        titleLabel.setForeground(dBlue); // Dark blue for title
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         add(titleLabel, gbc);
 
         // Username
@@ -64,11 +64,9 @@ public class RegisterPage extends JPanel {
 
         // Birthday
         JLabel birthdayLabel = new JLabel("Birthday");
-        birthdayLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
-        birthdayLabel.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        gbc.gridwidth = 1;
+        birthdayLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular")); // Changed to Regular
+        birthdayLabel.setForeground(dBlue); // Dark blue for label
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 1;
         add(birthdayLabel, gbc);
 
         String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
@@ -85,10 +83,9 @@ public class RegisterPage extends JPanel {
 
         // Phone Number
         JLabel phoneLabel = new JLabel("Phone");
-        phoneLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
-        phoneLabel.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0;
-        gbc.gridy = 4;
+        phoneLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular")); // Changed to Regular
+        phoneLabel.setForeground(dBlue); // Dark blue for label
+        gbc.gridx = 0; gbc.gridy = 4;
         add(phoneLabel, gbc);
 
         Map<String, String> countryCodes = new HashMap<>();
@@ -120,27 +117,33 @@ public class RegisterPage extends JPanel {
         // PIN
         addLabelAndField("PIN", pinField, gbc, 6);
 
-        // Create Account Button
-        JButton createButton = new JButton("Create Account");
-        createButton.setBackground(themeManager.getDBlue());
-        createButton.setForeground(Color.WHITE);
-        createButton.setFocusPainted(false);
-        createButton.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Medium"));
-        createButton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getDBlue(), 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
-        createButton.addActionListener(e -> onButtonClick.accept("success"));
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.NONE;
-        gbc.anchor = GridBagConstraints.CENTER;
-        add(createButton, gbc);
+        // Create Account Button with Custom Panel for Higher Text
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBackground(lBlue); // Light blue background
+        buttonPanel.setPreferredSize(new Dimension(150, 40)); // Adjust size as needed
+        GridBagConstraints buttonGbc = new GridBagConstraints();
+        buttonGbc.insets = new Insets(0, 0, 0, 0); // No top padding to move text higher
+        buttonGbc.anchor = GridBagConstraints.NORTH; // Align text to the top
+        JLabel buttonLabel = new JLabel("Create Account");
+        buttonLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Regular")); // Changed to Regular
+        buttonLabel.setForeground(dBlue); // Dark blue text
+        buttonPanel.add(buttonLabel, buttonGbc);
+
+        buttonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                onButtonClick.accept("success");
+            }
+        });
+        buttonPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.CENTER;
+        add(buttonPanel, gbc);
 
         // Login Link
         JLabel loginLink = new JLabel("Already have an account? Log In");
-        loginLink.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
-        loginLink.setForeground(themeManager.getDBlue());
+        loginLink.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular")); // Changed to Regular, not bold
+        loginLink.setForeground(dBlue); // Dark blue text, matching the image
         loginLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loginLink.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -148,27 +151,23 @@ public class RegisterPage extends JPanel {
                 onButtonClick.accept("BackToLogin");
             }
         });
-        gbc.gridy = 8;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridy = 8; gbc.anchor = GridBagConstraints.CENTER;
         add(loginLink, gbc);
     }
 
     private void addLabelAndField(String labelText, JComponent field, GridBagConstraints gbc, int row) {
         JLabel label = new JLabel(labelText);
-        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
-        label.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0;
-        gbc.gridy = row;
-        gbc.gridwidth = 1;
+        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular")); // Changed to Regular
+        label.setForeground(dBlue); // Dark blue for label
+        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
         gbc.fill = GridBagConstraints.NONE;
         add(label, gbc);
 
         field.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(themeManager.getLightGray(), 1),
                 BorderFactory.createEmptyBorder(1, 2, 1, 2)));
-        field.setPreferredSize(new Dimension(90, 16)); // Kept smaller size
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        field.setPreferredSize(new Dimension(90, 16));
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         add(field, gbc);
     }
 
