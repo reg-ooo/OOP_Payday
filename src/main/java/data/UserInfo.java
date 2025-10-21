@@ -7,7 +7,7 @@ public class UserInfo {
     private static UserInfo instance;
     private DatabaseService database;  // Use interface instead of direct Database
     private int currentUserId;
-    private boolean isLoggedIn;
+    private boolean isLoggedIn = false;
 
     private UserInfo() {}
 
@@ -73,5 +73,9 @@ public class UserInfo {
         }
 
         return balance;
+    }
+
+    public boolean isLoggedIn() {
+        return isLoggedIn;
     }
 }

@@ -38,19 +38,19 @@ public class RegisterPage extends JPanel {
     public RegisterPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setLayout(new GridBagLayout());
-        setBackground(themeManager.getWhite()); // Consistent with LoginPage
-        setPreferredSize(new Dimension(350, 550));
-        setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+        setBackground(themeManager.getWhite());
+        setPreferredSize(new Dimension(350, 550)); // Kept smaller size
+        setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8)); // Kept reduced outer padding
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(20, 15, 20, 15); // Kept vertical gap
+        gbc.insets = new Insets(10, 15, 10, 15); // Kept reduced insets
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         // Title
         JLabel titleLabel = new JLabel("Create Account");
-        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Medium")); // Consistent with LoginPage title inference
-        titleLabel.setForeground(themeManager.getDBlue()); // Matches LoginPage active elements
+        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Medium"));
+        titleLabel.setForeground(themeManager.getDBlue());
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -64,8 +64,8 @@ public class RegisterPage extends JPanel {
 
         // Birthday
         JLabel birthdayLabel = new JLabel("Birthday");
-        birthdayLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium")); // Consistent with LoginPage labels
-        birthdayLabel.setForeground(themeManager.getDBlue()); // Matches LoginPage
+        birthdayLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
+        birthdayLabel.setForeground(themeManager.getDBlue());
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 1;
@@ -85,8 +85,8 @@ public class RegisterPage extends JPanel {
 
         // Phone Number
         JLabel phoneLabel = new JLabel("Phone");
-        phoneLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium")); // Consistent with LoginPage
-        phoneLabel.setForeground(themeManager.getDBlue()); // Matches LoginPage
+        phoneLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
+        phoneLabel.setForeground(themeManager.getDBlue());
         gbc.gridx = 0;
         gbc.gridy = 4;
         add(phoneLabel, gbc);
@@ -122,10 +122,10 @@ public class RegisterPage extends JPanel {
 
         // Create Account Button
         JButton createButton = new JButton("Create Account");
-        createButton.setBackground(themeManager.getDBlue()); // Matches LoginPage button inference
-        createButton.setForeground(Color.WHITE); // Consistent with LoginPage
+        createButton.setBackground(themeManager.getDBlue());
+        createButton.setForeground(Color.WHITE);
         createButton.setFocusPainted(false);
-        createButton.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Medium")); // Consistent with LoginPage button
+        createButton.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Medium"));
         createButton.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(themeManager.getDBlue(), 2),
                 BorderFactory.createEmptyBorder(10, 20, 10, 20)));
@@ -139,8 +139,8 @@ public class RegisterPage extends JPanel {
 
         // Login Link
         JLabel loginLink = new JLabel("Already have an account? Log In");
-        loginLink.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium")); // Consistent with LoginPage
-        loginLink.setForeground(themeManager.getDBlue()); // Matches LoginPage active elements
+        loginLink.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
+        loginLink.setForeground(themeManager.getDBlue());
         loginLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         loginLink.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -155,8 +155,8 @@ public class RegisterPage extends JPanel {
 
     private void addLabelAndField(String labelText, JComponent field, GridBagConstraints gbc, int row) {
         JLabel label = new JLabel(labelText);
-        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium")); // Consistent with LoginPage
-        label.setForeground(themeManager.getDBlue()); // Matches LoginPage
+        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Medium"));
+        label.setForeground(themeManager.getDBlue());
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.gridwidth = 1;
@@ -164,9 +164,9 @@ public class RegisterPage extends JPanel {
         add(label, gbc);
 
         field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getLightGray(), 1), // Matches LoginPage inactive elements
+                BorderFactory.createLineBorder(themeManager.getLightGray(), 1),
                 BorderFactory.createEmptyBorder(1, 2, 1, 2)));
-        field.setPreferredSize(new Dimension(120, 24)); // Kept slightly bigger text fields
+        field.setPreferredSize(new Dimension(90, 16)); // Kept smaller size
         gbc.gridx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         add(field, gbc);

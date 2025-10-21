@@ -1,6 +1,7 @@
 package data;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -14,7 +15,6 @@ public class DatabaseProtectionProxy implements DatabaseService {
     private final int userId;  // Customer's user ID
     private final boolean isAuthenticated;
 
-    // Operations that customers should NEVER perform
     private static final List<String> FORBIDDEN_OPERATIONS = Arrays.asList(
             "DROP", "TRUNCATE", "ALTER", "CREATE", "GRANT", "REVOKE"
     );
@@ -144,4 +144,46 @@ public class DatabaseProtectionProxy implements DatabaseService {
         );
         LOGGER.info(logMessage);
     }
+
+    @Override
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        logAccess("prepareStatement: " + sql);
+
+        checkAuthentication();
+
+        // Validate the SQL template (without parameters)
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new SQLException("Query cannot be empty");
+        }
+
+        // Block forbidden operations
+        if (containsForbiddenOperation(sql)) {
+            LOGGER.severe("Forbidden operation attempted by user: " + userId);
+            throw new SecurityException("This operation is not allowed");
+        }
+
+        // Check if accessing sensitive tables (warn but allow - params will be validated at execution)
+        checkSensitiveTableAccess(sql);
+
+        // Return a wrapped PreparedStatement that validates parameters
+        PreparedStatement ps = realDatabase.prepareStatement(sql);
+        return new SecurePreparedStatementWrapper(ps, sql, userId, LOGGER);
+    }
+
+    // Helper method to check if query accesses sensitive tables
+    private void checkSensitiveTableAccess(String sql) {
+        String upperSql = sql.toUpperCase();
+        boolean accessingSensitiveTable =
+                upperSql.contains("WALLETS") ||
+                        upperSql.contains("TRANSACTIONS") ||
+                        upperSql.contains("USERS");
+
+        if (accessingSensitiveTable) {
+            LOGGER.info("User " + userId + " preparing statement for sensitive table");
+            // Don't block here - the wrapper will validate parameters
+        }
+    }
+
+
+
 }

@@ -5,6 +5,8 @@ import components.RoundedFrame;
 
 import javax.swing.*;
 import java.awt.*;
+
+import data.UserInfo;
 import pages.*;
 //import pages.SplashScreen;
 import util.ThemeManager;
@@ -15,7 +17,8 @@ public class MainFrame extends JFrame {
     private RoundedFrame mainFrame = new RoundedFrame(30);
     private JPanel mainPanel = new JPanel();
     private CardLayout cardLayout;
-    private NavigationBar navBar;
+    private static NavigationBar navBar;
+    public static JPanel container;
 
     public MainFrame(){
         setMainFrame();
@@ -51,12 +54,13 @@ public class MainFrame extends JFrame {
         mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
 
         // Main container
-        JPanel container = new JPanel(new BorderLayout());
+        container = new JPanel(new BorderLayout());
         container.add(mainPanel, BorderLayout.CENTER);
         container.add(navBar, BorderLayout.SOUTH);
 
         // FIX: Start with Login page and hide nav bar
-        navBar.setVisible(true); // Hide initially
+        // Hide initially
+        navBar.setVisible(false);
         cardLayout.show(mainPanel, "Login"); //
 
         mainFrame.setContentPane(container);
@@ -136,5 +140,9 @@ public class MainFrame extends JFrame {
     // General card switching method (for other pages)
     private void changeCard(String text){
         cardLayout.show(mainPanel, text);
+    }
+
+    public static void loadNavBar(){
+        navBar.setVisible(UserInfo.getInstance().isLoggedIn());
     }
 }

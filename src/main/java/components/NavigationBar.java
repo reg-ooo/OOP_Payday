@@ -42,7 +42,6 @@ public class NavigationBar extends JPanel {
         navBarPanel.add(profileBtn);
 
         this.add(navBarPanel, BorderLayout.CENTER);
-
         // Set initial active state
         setActiveButton(currentActivePage);
     }

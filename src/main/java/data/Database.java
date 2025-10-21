@@ -62,6 +62,12 @@ public class Database implements DatabaseService {
     }
 
     @Override
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        return con.prepareStatement(sql);
+    }
+
+
+    @Override
     public boolean isConnected() {
         return connected;
     }
@@ -70,4 +76,6 @@ public class Database implements DatabaseService {
     public void connect() {
         DBConnect();
     }
+
+
 }
