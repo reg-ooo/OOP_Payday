@@ -27,14 +27,20 @@ public class ImageLoader {
         images.put("bigDarkModeOff", resizeImage("darkModeOn.png", 55, 55));
 
         //PROFILE ICONS
-        images.put("edit", resizeImage("icons/edit.png", 30, 30));
-        images.put("editHover", resizeImage("icons/edit_hover.png", 30, 30));
-        images.put("lock", resizeImage("icons/lock.png", 30, 30));
-        images.put("lockHover", resizeImage("icons/lock_hover.png", 30, 30));
-        images.put("logout", resizeImage("icons/logout.png", 30, 30));
-        images.put("logoutHover", resizeImage("icons/logout_hover.png", 30, 30));
-        images.put("arrow", resizeImage("icons/arrow.png", 30, 30));
-        images.put("arrowHover", resizeImage("icons/arrow_hover.png", 30, 30));
+        images.put("edit", resizeImage("icons/profile/edit.png", 30, 30));
+        images.put("editHover", resizeImage("icons/profile/edit_hover.png", 30, 30));
+        images.put("lock", resizeImage("icons/profile/lock.png", 30, 30));
+        images.put("lockHover", resizeImage("icons/profile/lock_hover.png", 30, 30));
+        images.put("logout", resizeImage("icons/profile/logout.png", 30, 30));
+        images.put("logoutHover", resizeImage("icons/profile/logout_hover.png", 30, 30));
+        images.put("arrow", resizeImage("icons/profile/arrow.png", 30, 30));
+        images.put("arrowHover", resizeImage("icons/profile/arrow_hover.png", 30, 30));
+
+        //SEND MONEY ICONS
+        images.put("payWith", resizeImage("icons/sendMoney/payWith.png", 65, 65));
+        images.put("availableBalance", resizeImage("icons/sendMoney/availableBalance.png", 60, 60));
+        images.put("amount", resizeImage("icons/sendMoney/amount.png", 60, 60));
+        images.put("successMoney", resizeImage("icons/sendMoney/successMoney.png", 60, 60));
     }
 
     public static ImageLoader getInstance() {

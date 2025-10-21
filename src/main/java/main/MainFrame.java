@@ -9,9 +9,11 @@ import java.awt.*;
 import data.UserInfo;
 import pages.*;
 //import pages.SplashScreen;
+import pages.sendMoney.SendMoneyPage;
+import pages.sendMoney.SendMoneyPage2;
+import pages.sendMoney.SendMoneyPage3;
 import util.ThemeManager;
 import util.AnimatedPageSwitcher;
-import panels.*;
 
 public class MainFrame extends JFrame {
     private RoundedFrame mainFrame = new RoundedFrame(30);
@@ -51,6 +53,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
         mainPanel.add(new SendMoneyPage(this::handleSendMoneyResult), "SendMoney");
         mainPanel.add(new SendMoneyPage2(this::handleSendMoney2Result), "SendMoney2");
+        mainPanel.add(new SendMoneyPage3(this::handleSendMoney3Result), "SendMoney3");
         mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
 
         // Main container
@@ -91,24 +94,97 @@ public class MainFrame extends JFrame {
 
     private void handleLaunchResult(String result) {
         switch (result) {
-            case "SendMoney" -> slideContentTransition("SendMoney", 1);
+            case "SendMoney" -> {
+                // Refresh balance before showing SendMoneyPage
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof SendMoneyPage) {
+                        SendMoneyPage sendMoneyPage = (SendMoneyPage) comp;
+                        sendMoneyPage.refreshBalance(); // Refresh the balance
+                        break;
+                    }
+                }
+                slideContentTransition("SendMoney", 1);
+            }
             case "Profile" -> slideContentTransition("Profile", 1);
             default -> System.out.println("Unknown action: " + result);
         }
     }
 
     private void handleSendMoneyResult(String result) {
-        switch (result) {
-            case "Launch" -> slideContentTransition("Launch", -1);
-            case "SendMoney2" -> slideContentTransition("SendMoney2", 1);
-            default -> System.out.println("Unknown action: " + result);
+        if (result.startsWith("SendMoney2")) {
+            String phoneNumber = "";
+            String amount = "100.00"; // Default
+
+            // Extract phone and amount from result string
+            if (result.contains(":")) {
+                String[] parts = result.split(":");
+                if (parts.length > 2) {
+                    phoneNumber = parts[1];
+                    amount = parts[2];
+                }
+            }
+
+            // Update SendMoneyPage2 with both values
+            Component[] components = mainPanel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof SendMoneyPage2) {
+                    SendMoneyPage2 sendMoneyPage2 = (SendMoneyPage2) comp;
+                    sendMoneyPage2.updateTransactionData(phoneNumber, amount);
+                    break;
+                }
+            }
+            slideContentTransition("SendMoney2", 1);
+        }
+        else if (result.equals("Launch")) {
+            slideContentTransition("Launch", -1);
+        }
+        else {
+            System.out.println("Unknown action: " + result);
         }
     }
 
     private void handleSendMoney2Result(String result) {
+        if (result.startsWith("SendMoney3")) {
+            String recipientName = "";
+            String phoneNumber = "";
+            String amount = "0.00";
+
+            // Extract data from result string
+            if (result.contains(":")) {
+                String[] parts = result.split(":");
+                if (parts.length > 3) {
+                    recipientName = parts[1];
+                    phoneNumber = parts[2];
+                    amount = parts[3];
+                }
+            }
+
+            // Update SendMoneyPage3 with just the essential data
+            Component[] components = mainPanel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof SendMoneyPage3) {
+                    SendMoneyPage3 sendMoneyPage3 = (SendMoneyPage3) comp;
+                    sendMoneyPage3.updateTransactionData(recipientName, phoneNumber, amount);
+                    break;
+                }
+            }
+            slideContentTransition("SendMoney3", 1);
+        }
+        else if (result.equals("SendMoney")) {
+            slideContentTransition("SendMoney", -1);
+        }
+        else {
+            System.out.println("Unknown action: " + result);
+        }
+    }
+
+    private void handleSendMoney3Result(String result) {
         switch (result) {
-            case "SendMoneyPage1" -> slideContentTransition("SendMoney", -1);
-            case "ConfirmSendMoney" -> System.out.println("Go to confirmation page soon");
+            case "SendMoney2" -> slideContentTransition("SendMoney2", -1);
+            case "SendMoney" -> slideContentTransition("SendMoney", -1);
+            case "Launch" -> slideContentTransition("Launch", -1);
+            default -> System.out.println("Unknown action: " + result);
         }
     }
 

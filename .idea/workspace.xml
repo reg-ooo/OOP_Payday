@@ -5,17 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/Database.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Database.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/DatabaseProtectionProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/DatabaseProtectionProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/DatabaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/edit.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/edit_hover.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/lock.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/lock_hover.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/logout.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/logout_hover.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/ComponentFactory.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/SendMoneyPage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/SendMoneyPage2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/util/ThemeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ThemeManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/UserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/ComponentFactory.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Database.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/DatabaseProtectionProxy.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/DatabaseProtectionProxy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/DatabaseService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/DatabaseService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/data/Users.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Users.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/SendMoneyPage$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/SendMoneyPage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/SendMoneyPage2$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/SendMoneyPage2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/util/ThemeManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ThemeManager.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -26,12 +42,14 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="UPDATE_TYPE" value="REBASE" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
   &quot;lastFilter&quot;: {
@@ -41,12 +59,12 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday.git&quot;,
-    &quot;accountId&quot;: &quot;fe1d59f3-e850-4205-9e10-09ea83a6d5f8&quot;
+    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday&quot;,
+    &quot;accountId&quot;: &quot;ddb72bb0-e265-4938-8c6e-4e20f69a2e75&quot;
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -133,6 +151,8 @@
       <workItem from="1760591533275" duration="2277000" />
       <workItem from="1760596175628" duration="5981000" />
       <workItem from="1760614157958" duration="4680000" />
+      <workItem from="1761025548778" duration="29603000" />
+      <workItem from="1761073927067" duration="907000" />
     </task>
     <servers />
   </component>
