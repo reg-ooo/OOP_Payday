@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.function.Consumer;
 
-public class ConcreteSendMoneyPage3Factory implements SendMoneyPage3Factory {
+public class ConcreteSendMoneyPage3Factory extends ConcreteSendMoneyBaseFactory implements SendMoneyPage3Factory {
     private static final ThemeManager themeManager = ThemeManager.getInstance();
     private static final FontLoader fontLoader = FontLoader.getInstance();
 
@@ -128,10 +128,8 @@ public class ConcreteSendMoneyPage3Factory implements SendMoneyPage3Factory {
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        RegisterUIFactory registerUIFactory = new RegisterUIFactory();
-
         // Done Button
-        JPanel doneButtonPanel = registerUIFactory.createNextButtonPanel(
+        JPanel doneButtonPanel = createNextButtonPanel(
                 onButtonClick,
                 () -> onButtonClick.accept("Launch")
         );
