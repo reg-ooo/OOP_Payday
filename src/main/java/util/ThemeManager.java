@@ -12,6 +12,7 @@ import java.awt.*;
 
 public class ThemeManager {
     private static final Color gray = new Color(0xD3D3D3);
+    private static final Color dGray = new Color(55, 55, 55);
     private static final Color pBlue = new Color(0x2D76BD);
     private static final Color dBlue = new Color(0x163F5C);
     private static final Color sBlue = new Color(230, 240, 250);
@@ -170,4 +171,5 @@ public class ThemeManager {
 
     public static Color getGradientLBlue() {return gradientLBlue;}
     public static Color getRed() {return red;}
+    public static Color getDGray() {return dGray;}
 }
