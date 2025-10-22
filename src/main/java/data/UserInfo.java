@@ -45,7 +45,7 @@ public class UserInfo {
             throw new SecurityException("Please login first");
         }
 
-        String query = "SELECT * FROM Transactions WHERE walletID = ?"  ;  // ✅ Filter by userID
+        String query = "SELECT * FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 1"  ;  // ✅ Filter by userID
         try(PreparedStatement pstmt = database.prepareStatement(query)) {
             pstmt.setInt(1, currentUserId);
             ResultSet rs = pstmt.executeQuery();  // ✅ Goes through proxy

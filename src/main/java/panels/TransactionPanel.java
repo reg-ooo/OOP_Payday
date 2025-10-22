@@ -79,6 +79,8 @@ public class TransactionPanel extends JPanel{
     }
 
     public void loadComponents(){
+        transactionContentPanel.removeAll();
+
         UserInfo userInfo = UserInfo.getInstance();
         String time = userInfo.getTransaction().getDate().substring(userInfo.getTransaction().getDate().indexOf(" "), userInfo.getTransaction().getDate().length() - 3);
         String validatedTime = checkTime(time);
