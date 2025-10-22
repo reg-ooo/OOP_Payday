@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class ConcreteSendMoneyPage2Factory implements SendMoneyPage2Factory {
+public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory implements SendMoneyPage2Factory {
     private static final ThemeManager themeManager = ThemeManager.getInstance();
     private static final FontLoader fontLoader = FontLoader.getInstance();
 
@@ -25,7 +25,15 @@ public class ConcreteSendMoneyPage2Factory implements SendMoneyPage2Factory {
         // Header with back button
         JPanel headerPanel = createConfirmationHeader(onBack);
         panel.add(headerPanel);
-        panel.add(Box.createVerticalStrut(50));
+        panel.add(Box.createVerticalStrut(23));
+
+        // ADD CONFIRM PAYMENT TITLE HERE
+        JLabel confirmTitle = new JLabel("Confirm Payment");
+        confirmTitle.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
+        confirmTitle.setForeground(themeManager.getDBlue());
+        confirmTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(confirmTitle);
+        panel.add(Box.createVerticalStrut(30)); // Space after title
 
         // Center the main content
         JPanel contentPanel = new JPanel();
@@ -243,9 +251,8 @@ public class ConcreteSendMoneyPage2Factory implements SendMoneyPage2Factory {
     //PAGE2
     @Override
     public JPanel createConfirmButton(String amount, Consumer<String> onConfirm) {
-        RegisterUIFactory registerUIFactory = new RegisterUIFactory();
 
-        JPanel buttonPanel = registerUIFactory.createNextButtonPanel(
+        JPanel buttonPanel = createNextButtonPanel(
                 onConfirm,
                 () -> onConfirm.accept("SendMoney3")
         );

@@ -10,7 +10,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
-public class ConcreteSendMoneyPage1Factory implements SendMoneyPage1Factory {
+public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory implements SendMoneyPage1Factory {
     private static final ThemeManager themeManager = ThemeManager.getInstance();
     private static final FontLoader fontLoader = FontLoader.getInstance();
 
@@ -99,12 +99,6 @@ public class ConcreteSendMoneyPage1Factory implements SendMoneyPage1Factory {
     }
 
     @Override
-    public JPanel createNextButtonPanel(Consumer<String> onButtonClick, Runnable nextAction) {
-        RegisterUIFactory registerFactory = new RegisterUIFactory();
-        return registerFactory.createNextButtonPanel(onButtonClick, nextAction);
-    }
-
-    @Override
     public JPanel createHeaderPanel(JLabel backLabel) {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setOpaque(false);
@@ -188,14 +182,91 @@ public class ConcreteSendMoneyPage1Factory implements SendMoneyPage1Factory {
         textField.setForeground(themeManager.getLightGray());
         textField.setHorizontalAlignment(JTextField.CENTER);
 
+        // Add key listener to prevent deleting peso sign AND placeholder
+        textField.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                String currentText = textField.getText();
+                String fullPlaceholder = "₱ " + placeholder;
+
+                // If we're in placeholder state, prevent ANY editing
+                if (currentText.equals(fullPlaceholder)) {
+                    e.consume(); // Block all keys when showing placeholder
+                    return;
+                }
+
+                // Prevent backspace/delete if it would remove the peso sign
+                if ((e.getKeyCode() == java.awt.event.KeyEvent.VK_BACK_SPACE ||
+                        e.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) &&
+                        currentText.length() <= 2) { // "₱ " is 2 characters
+                    e.consume(); // Prevent the key event
+                }
+            }
+
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent e) {
+                String currentText = textField.getText();
+                String fullPlaceholder = "₱ " + placeholder;
+
+                // Block any typing if we're still in placeholder state
+                if (currentText.equals(fullPlaceholder)) {
+                    e.consume(); // Block all character input
+                    return;
+                }
+
+                char c = e.getKeyChar();
+
+                // Allow only digits (0-9) and decimal point
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume(); // Block non-numeric characters
+                    return;
+                }
+
+                // Get the actual number part (without peso sign)
+                String numberPart = currentText.replace("₱ ", "").replace("₱", "").trim();
+
+                // Prevent leading zeros (except for "0." pattern)
+                if (numberPart.isEmpty() && c == '0') {
+                    // Allow single zero but not multiple zeros
+                    // This will allow "0" but not "00", "01", etc.
+                } else if (numberPart.equals("0") && c != '.') {
+                    // If current text is just "0" and user types another digit, replace it
+                    // This prevents "01", "02", etc.
+                    textField.setText("₱ " + c);
+                    e.consume(); // Consume the original key event since we manually set text
+                    return;
+                }
+
+                // Prevent multiple decimal points
+                if (c == '.' && numberPart.contains(".")) {
+                    e.consume(); // Block second decimal point
+                    return;
+                }
+
+                // Limit to 2 decimal places
+                if (numberPart.contains(".")) {
+                    int decimalIndex = numberPart.indexOf(".");
+                    int decimalPlaces = numberPart.length() - decimalIndex - 1;
+                    if (decimalPlaces >= 2 && Character.isDigit(c)) {
+                        e.consume(); // Block if already has 2 decimal places
+                        return;
+                    }
+                }
+            }
+        });
+
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 String currentText = textField.getText();
-                if (currentText.equals("₱ " + placeholder) || currentText.equals(placeholder)) {
+                String fullPlaceholder = "₱ " + placeholder;
+
+                if (currentText.equals(fullPlaceholder)) {
+                    // Clear the placeholder but KEEP the peso sign
                     textField.setText("₱ ");
                     textField.setForeground(themeManager.getDBlue());
                     textField.setHorizontalAlignment(JTextField.LEFT);
+                    textField.setCaretPosition(2); // Position cursor after "₱ "
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(activeBorder, 1),
@@ -205,11 +276,24 @@ public class ConcreteSendMoneyPage1Factory implements SendMoneyPage1Factory {
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                String currentText = textField.getText();
-                if (currentText.isEmpty() || currentText.equals("₱ ")) {
+                String currentText = textField.getText().replace("₱ ", "").replace("₱", "").trim();
+                if (currentText.isEmpty() || currentText.equals("0")) {
                     textField.setText("₱ " + placeholder);
                     textField.setForeground(themeManager.getLightGray());
                     textField.setHorizontalAlignment(JTextField.CENTER);
+                } else {
+                    // Format the number to remove any unnecessary leading zeros
+                    try {
+                        double value = Double.parseDouble(currentText);
+                        String formatted = String.format("%.2f", value);
+                        // Remove trailing .00 if whole number
+                        if (formatted.endsWith(".00")) {
+                            formatted = formatted.substring(0, formatted.length() - 3);
+                        }
+                        textField.setText("₱ " + formatted);
+                    } catch (NumberFormatException e) {
+                        // Keep as is if parsing fails
+                    }
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(normalBorder, 1),
@@ -224,11 +308,13 @@ public class ConcreteSendMoneyPage1Factory implements SendMoneyPage1Factory {
             public void changedUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
 
             private void updateAlignment() {
-                String text = textField.getText().replace("₱ ", "").trim();
+                String text = textField.getText().replace("₱ ", "").replace("₱", "").trim();
                 if (text.isEmpty() || text.equals(placeholder)) {
                     textField.setHorizontalAlignment(JTextField.CENTER);
+                    textField.setForeground(themeManager.getLightGray());
                 } else {
                     textField.setHorizontalAlignment(JTextField.LEFT);
+                    textField.setForeground(themeManager.getDBlue());
                 }
             }
         });

@@ -184,6 +184,4 @@ public class DatabaseProtectionProxy implements DatabaseService {
         }
     }
 
-
-
 }

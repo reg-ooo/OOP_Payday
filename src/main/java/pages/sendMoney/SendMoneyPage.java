@@ -80,6 +80,49 @@ public class SendMoneyPage extends JPanel {
         String enteredAmount = getEnteredAmount();
         String enteredPhone = getEnteredPhoneNumber();
 
+        // Validate phone number
+        if (enteredPhone.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a phone number", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Validate amount
+        if (enteredAmount.isEmpty() || enteredAmount.equals("0.00")) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // Convert entered amount to double
+            double amount = Double.parseDouble(enteredAmount);
+
+            // Get user's current balance
+            double currentBalance = UserInfo.getInstance().getBalance();
+
+            // Check if amount exceeds balance
+            if (amount > currentBalance) {
+                JOptionPane.showMessageDialog(this,
+                        "Insufficient balance!\nAvailable: PHP " + String.format("%.2f", currentBalance) +
+                                "\nRequested: PHP " + String.format("%.2f", amount),
+                        "Insufficient Balance",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if amount is positive
+            if (amount <= 0) {
+                JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error checking balance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         if(isValidInput()){
             onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
         }else{
@@ -125,7 +168,7 @@ public class SendMoneyPage extends JPanel {
             double currentBalance = UserInfo.getInstance().getBalance();
             String amountText = getEnteredAmount();
 
-            if (getEnteredAmount().isEmpty() || getEnteredAmount().equals("0.00")) {
+            if (amountText.isEmpty() || amountText.equals("0.00")) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));
                 balanceLabel.setForeground(themeManager.getDSBlue());
                 return;
@@ -136,7 +179,7 @@ public class SendMoneyPage extends JPanel {
                 double updatedBalance = currentBalance - enteredAmount;
 
                 if (updatedBalance < 0) {
-                    balanceLabel.setText("Available balance: PHP " + String.format("%.2f", updatedBalance));
+                    balanceLabel.setText("Insufficient Balance");
                     balanceLabel.setForeground(Color.RED);
                 } else {
                     balanceLabel.setText("Available balance: PHP " + String.format("%.2f", updatedBalance));

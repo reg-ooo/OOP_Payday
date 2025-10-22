@@ -249,7 +249,7 @@ public class RegisterUIFactory {
     public static JPanel createNextButtonPanel(Consumer<String> onButtonClick, Runnable onNextClick) {
         JPanel buttonPanel = new JPanel(new GridBagLayout());
         buttonPanel.setBackground(themeManager.getVBlue());
-        buttonPanel.setPreferredSize(new Dimension(120, 35));
+        buttonPanel.setPreferredSize(new Dimension(100, 50));
 
         GridBagConstraints buttonGbc = new GridBagConstraints();
         buttonGbc.insets = new Insets(0, 0, 0, 0);

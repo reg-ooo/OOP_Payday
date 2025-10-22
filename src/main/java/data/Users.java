@@ -86,7 +86,7 @@ public class Users {
 
 
     private String capitalizeFirstLetter(String name) {
-        
+
         if (name == null || name.isEmpty()) {
             return name;
         }
@@ -127,5 +127,4 @@ public class Users {
 
     }
 }
-
 
