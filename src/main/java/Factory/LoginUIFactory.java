@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
 import components.NumPad;
-import components.RoundedButton;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -21,18 +20,17 @@ public class LoginUIFactory {
         mainContainer.setBackground(themeManager.getWhite());
         mainContainer.setPreferredSize(new Dimension(420, 650));
 
-        mainContainer.add(Box.createVerticalStrut(15));
+        mainContainer.add(Box.createVerticalStrut(2));
         mainContainer.add(createLogoSection(usernameField));
-        mainContainer.add(Box.createVerticalStrut(10));
+        mainContainer.add(Box.createVerticalStrut(2));
         mainContainer.add(createPinLoginPanel(pinDots, onButtonClick, processPinDigit, clearPinInput));
-        mainContainer.add(Box.createVerticalStrut(5));
+        mainContainer.add(Box.createVerticalGlue()); // Push everything up, register link goes to bottom
         mainContainer.add(createRegisterLinkPanel(onButtonClick));
-        mainContainer.add(Box.createVerticalStrut(30));
+        mainContainer.add(Box.createVerticalStrut(20)); // Small padding at bottom
 
         return mainContainer;
     }
 
-    // --- LOGO + USERNAME FIELD ---
     private static JPanel createLogoSection(JTextField usernameField) {
         JPanel logoPanel = new JPanel();
         logoPanel.setLayout(new BoxLayout(logoPanel, BoxLayout.Y_AXIS));
@@ -67,20 +65,17 @@ public class LoginUIFactory {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Draw rounded background
                 g2.setColor(getBackground());
                 g2.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
 
-                // Let Swing draw the normal text
                 super.paintComponent(g2);
 
-                // Draw placeholder text when empty
                 if (getText().isEmpty()) {
                     g2.setFont(getFont());
-                    g2.setColor(new Color(150, 150, 150)); // light gray placeholder
+                    g2.setColor(new Color(150, 150, 150));
                     FontMetrics fm = g2.getFontMetrics();
                     int textY = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
-                    g2.drawString("Username", 77, textY); // padding 77px from left
+                    g2.drawString("Username", 77, textY);
                 }
 
                 g2.dispose();
@@ -99,14 +94,13 @@ public class LoginUIFactory {
         field.setOpaque(false);
         field.setMaximumSize(new Dimension(220, 38));
         field.setPreferredSize(new Dimension(220, 38));
-        field.setHorizontalAlignment(JTextField.LEFT); // left align text
+        field.setHorizontalAlignment(JTextField.LEFT);
         field.setFont(fontLoader.loadFont(Font.PLAIN, 15f, "Quicksand-Regular"));
         field.setForeground(themeManager.getDBlue());
         field.setBackground(Color.WHITE);
         field.setAlignmentX(Component.CENTER_ALIGNMENT);
-        field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10)); // padding
+        field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-        // Sync text with external reference
         field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             private void update() { usernameField.setText(field.getText()); }
             public void insertUpdate(javax.swing.event.DocumentEvent e) { update(); }
@@ -117,7 +111,6 @@ public class LoginUIFactory {
         return field;
     }
 
-    // --- PIN PANEL (Title, Dots, Keypad) ---
     private static JPanel createPinLoginPanel(JLabel[] pinDots, Consumer<String> onButtonClick, Runnable processPinDigit, Runnable clearPinInput) {
         JPanel pinPanel = new JPanel();
         pinPanel.setLayout(new BoxLayout(pinPanel, BoxLayout.Y_AXIS));
@@ -160,7 +153,6 @@ public class LoginUIFactory {
         return pinDotsPanel;
     }
 
-    // --- REGISTER LINK ---
     private static JPanel createRegisterLinkPanel(Consumer<String> onButtonClick) {
         JPanel registerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         registerPanel.setOpaque(false);

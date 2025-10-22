@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.KeyListener;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
-import components.*;
-import data.Users;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -16,233 +16,287 @@ public class RegisterUIFactory {
     private static final FontLoader fontLoader = FontLoader.getInstance();
     private static final ThemeManager themeManager = ThemeManager.getInstance();
 
-    // Create header - keep left aligned
-    public JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        headerPanel.setOpaque(false);
+    public static void setupRegisterUI(
+            JPanel mainContainer,
+            JTextField usernameField,
+            JTextField fullNameField,
+            JComboBox<String> monthCombo,
+            JComboBox<Integer> dayCombo,
+            JComboBox<Integer> yearCombo,
+            JComboBox<String> countryCodeCombo,
+            JTextField phoneField,
+            JTextField emailField,
+            JPasswordField pinField,
+            Consumer<String> onButtonClick) {
 
+        mainContainer.setLayout(new GridBagLayout());
+        mainContainer.setBackground(themeManager.getWhite());
+        mainContainer.setPreferredSize(new Dimension(350, 650));
+        mainContainer.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 15, 10, 15);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        // Title
         JLabel titleLabel = new JLabel("Create Account");
-        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 28f, "Quicksand-Bold"));
+        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Regular"));
         titleLabel.setForeground(themeManager.getDBlue());
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        mainContainer.add(titleLabel, gbc);
 
-        headerPanel.add(titleLabel);
-        return headerPanel;
+        // Spacer after title
+        JPanel spacer0 = new JPanel();
+        spacer0.setBackground(themeManager.getWhite());
+        spacer0.setPreferredSize(new Dimension(0, 5));
+        gbc.gridy = 1; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainContainer.add(spacer0, gbc);
+
+        // Username
+        addLabelAndFieldToContainer(mainContainer, "Username", usernameField, gbc, 2);
+
+        // Spacer
+        JPanel spacer1 = new JPanel();
+        spacer1.setBackground(themeManager.getWhite());
+        spacer1.setPreferredSize(new Dimension(0, 5));
+        gbc.gridy = 3; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainContainer.add(spacer1, gbc);
+
+        // Full Name
+        addLabelAndFieldToContainer(mainContainer, "Full Name", fullNameField, gbc, 4);
+
+        // Spacer
+        JPanel spacer2 = new JPanel();
+        spacer2.setBackground(themeManager.getWhite());
+        spacer2.setPreferredSize(new Dimension(0, 5));
+        gbc.gridy = 5; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainContainer.add(spacer2, gbc);
+
+        // Birthday
+        addBirthdayToContainer(mainContainer, monthCombo, dayCombo, yearCombo, gbc, 6);
+
+        // Spacer
+        JPanel spacer3 = new JPanel();
+        spacer3.setBackground(themeManager.getWhite());
+        spacer3.setPreferredSize(new Dimension(0, 5));
+        gbc.gridy = 7; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainContainer.add(spacer3, gbc);
+
+        // Phone
+        addPhoneToContainer(mainContainer, countryCodeCombo, phoneField, gbc, 8);
+
+        // Spacer
+        JPanel spacer4 = new JPanel();
+        spacer4.setBackground(themeManager.getWhite());
+        spacer4.setPreferredSize(new Dimension(0, 5));
+        gbc.gridy = 9; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainContainer.add(spacer4, gbc);
+
+        // Email
+        addLabelAndFieldToContainer(mainContainer, "Email", emailField, gbc, 10);
+
+        // Spacer
+        JPanel spacer5 = new JPanel();
+        spacer5.setBackground(themeManager.getWhite());
+        spacer5.setPreferredSize(new Dimension(0, 5));
+        gbc.gridy = 11; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainContainer.add(spacer5, gbc);
+
+        // PIN
+        addLabelAndFieldToContainer(mainContainer, "PIN", pinField, gbc, 12);
+
+        // Create Button
+        JPanel buttonPanel = createButtonPanel(onButtonClick);
+        gbc.gridx = 0; gbc.gridy = 13; gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.CENTER;
+        mainContainer.add(buttonPanel, gbc);
+
+        // Login Link
+        JPanel loginLinkPanel = createLoginLinkPanel(onButtonClick);
+        gbc.gridy = 14;
+        gbc.anchor = GridBagConstraints.CENTER;
+        mainContainer.add(loginLinkPanel, gbc);
     }
 
-    public JPanel createLoginLinkPanel(Consumer<String> onButtonClick) {
-        JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)); // Changed to CENTER
+    private static void addLabelAndFieldToContainer(JPanel container, String labelText, JComponent field, GridBagConstraints gbc, int row) {
+        gbc.insets = new Insets(10, 15, 10, 15);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        JLabel label = new JLabel(labelText);
+        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        label.setForeground(themeManager.getDBlue());
+        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(label, gbc);
+
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(themeManager.getLightGray(), 1),
+                BorderFactory.createEmptyBorder(1, 2, 1, 2)));
+        field.setPreferredSize(new Dimension(90, 25));
+        field.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        container.add(field, gbc);
+    }
+
+    private static void addBirthdayToContainer(JPanel container, JComboBox<String> monthCombo, JComboBox<Integer> dayCombo, JComboBox<Integer> yearCombo, GridBagConstraints gbc, int row) {
+        gbc.insets = new Insets(10, 15, 10, 15);
+
+        JLabel label = new JLabel("Birthday");
+        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        label.setForeground(themeManager.getDBlue());
+        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(label, gbc);
+
+        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        datePanel.setBackground(themeManager.getWhite());
+        monthCombo.setPreferredSize(new Dimension(100, 25));
+        dayCombo.setPreferredSize(new Dimension(50, 25));
+        yearCombo.setPreferredSize(new Dimension(70, 25));
+        monthCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        dayCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        yearCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        datePanel.add(monthCombo);
+        datePanel.add(dayCombo);
+        datePanel.add(yearCombo);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        container.add(datePanel, gbc);
+    }
+
+    private static void addPhoneToContainer(JPanel container, JComboBox<String> countryCodeCombo, JTextField phoneField, GridBagConstraints gbc, int row) {
+        gbc.insets = new Insets(10, 15, 10, 15);
+
+        JLabel label = new JLabel("Phone");
+        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        label.setForeground(themeManager.getDBlue());
+        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.NONE;
+        container.add(label, gbc);
+
+        JPanel phonePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        phonePanel.setBackground(themeManager.getWhite());
+        countryCodeCombo.setPreferredSize(new Dimension(60, 25));
+        phoneField.setPreferredSize(new Dimension(90, 25));
+        countryCodeCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        phoneField.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        phonePanel.add(countryCodeCombo);
+        phonePanel.add(phoneField);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
+        container.add(phonePanel, gbc);
+    }
+
+    private static JPanel createButtonPanel(Consumer<String> onButtonClick) {
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBackground(themeManager.getVBlue());
+        buttonPanel.setPreferredSize(new Dimension(120, 35));
+
+        GridBagConstraints buttonGbc = new GridBagConstraints();
+        buttonGbc.insets = new Insets(0, 0, 0, 0);
+        buttonGbc.anchor = GridBagConstraints.CENTER;
+
+        JLabel buttonLabel = new JLabel("Create");
+        buttonLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        buttonLabel.setForeground(themeManager.getWhite());
+        buttonPanel.add(buttonLabel, buttonGbc);
+
+        buttonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                onButtonClick.accept("success");
+            }
+        });
+        buttonPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        return buttonPanel;
+    }
+
+    private static JPanel createLoginLinkPanel(Consumer<String> onButtonClick) {
+        JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
         loginPanel.setOpaque(false);
 
-        JLabel existingUserLabel = new JLabel("Already have an account? ");
-        existingUserLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        existingUserLabel.setForeground(themeManager.getDBlue());
+        JLabel alreadyHaveLabel = new JLabel("Already have an account? ");
+        alreadyHaveLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        alreadyHaveLabel.setForeground(themeManager.getDBlue());
 
         JLabel loginLabel = new JLabel("Log In");
         loginLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         loginLabel.setForeground(themeManager.getPBlue());
-        loginLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        loginLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         loginLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mousePressed(MouseEvent e) { onButtonClick.accept("BackToLogin"); }
+            public void mousePressed(MouseEvent e) {
+                onButtonClick.accept("BackToLogin");
+            }
 
             @Override
-            public void mouseEntered(MouseEvent e) { loginLabel.setForeground(themeManager.getDBlue()); }
+            public void mouseEntered(MouseEvent e) {
+                loginLabel.setForeground(themeManager.getDBlue());
+            }
 
             @Override
-            public void mouseExited(MouseEvent e) { loginLabel.setForeground(themeManager.getPBlue()); }
+            public void mouseExited(MouseEvent e) {
+                loginLabel.setForeground(themeManager.getPBlue());
+            }
         });
 
-        loginPanel.add(existingUserLabel);
+        loginPanel.add(alreadyHaveLabel);
         loginPanel.add(loginLabel);
         return loginPanel;
     }
 
-    // Create text field - center aligned
-    public RoundedTextField createTextField(String placeholder) {
-        RoundedTextField field = new RoundedTextField(13, new Color(234, 232, 228), themeManager.getTransparent(), 3);
-        field.setPreferredSize(new Dimension(300, 40));
-        field.setMaximumSize(new Dimension(300, 40));
-        field.setMinimumSize(new Dimension(300, 40));
-        field.setAlignmentX(Component.CENTER_ALIGNMENT); // Changed to CENTER
-        return field;
-    }
+    public static JPanel createNextButtonPanel(Consumer<String> onButtonClick, Runnable onNextClick) {
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBackground(themeManager.getVBlue());
+        buttonPanel.setPreferredSize(new Dimension(120, 35));
 
-    // Create a field section with label top left aligned
-    public JPanel createFieldSection(String labelText, RoundedTextField textField) {
-        JPanel fieldSection = new JPanel();
-        fieldSection.setLayout(new BoxLayout(fieldSection, BoxLayout.Y_AXIS));
-        fieldSection.setOpaque(false);
-        fieldSection.setAlignmentX(Component.LEFT_ALIGNMENT); // left align section
-        fieldSection.setMaximumSize(new Dimension(300, 60));
+        GridBagConstraints buttonGbc = new GridBagConstraints();
+        buttonGbc.insets = new Insets(0, 0, 0, 0);
+        buttonGbc.anchor = GridBagConstraints.CENTER;
 
-        JLabel label = new JLabel(labelText);
-        label.setFont(fontLoader.loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
-        label.setForeground(themeManager.getDBlue());
-        label.setAlignmentX(Component.LEFT_ALIGNMENT); // keep label to the left
+        JLabel buttonLabel = new JLabel("Next");
+        buttonLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        buttonLabel.setForeground(themeManager.getWhite());
+        buttonPanel.add(buttonLabel, buttonGbc);
 
-        textField.setAlignmentX(Component.LEFT_ALIGNMENT); // align field left too
-
-        fieldSection.add(label);
-        fieldSection.add(Box.createVerticalStrut(5));
-        fieldSection.add(textField);
-
-        return fieldSection;
-    }
-
-    // Create form container - center aligned
-    public JPanel createFormPanel(
-            RoundedTextField username,
-            RoundedTextField fullName,
-            RoundedTextField birthday,
-            RoundedTextField phone,
-            RoundedTextField email,
-            RoundedTextField pin
-    ) {
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
-        formPanel.setOpaque(false);
-        formPanel.setAlignmentX(Component.CENTER_ALIGNMENT); // Changed to CENTER
-
-        JPanel[] fields = {
-                createFieldSection("Username", username),
-                createFieldSection("Full Name", fullName),
-                createFieldSection("Birthday", birthday),
-                createFieldSection("Phone Number", phone),
-                createFieldSection("Email", email),
-                createFieldSection("PIN", pin)
-        };
-
-        for (JPanel section : fields) {
-            section.setAlignmentX(Component.CENTER_ALIGNMENT); // Changed to CENTER
-            formPanel.add(section);
-            formPanel.add(Box.createVerticalStrut(10));
-        }
-
-        return formPanel;
-    }
-
-    // Create button panel - center aligned
-    public JPanel createButtonPanel(Consumer<String> onButtonClick, Runnable onRegisterClick, String text) {
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-        buttonPanel.setOpaque(false);
-
-        RoundedButton registerButton = new RoundedButton(text, 15, themeManager.getVBlue());
-        registerButton.setPreferredSize(new Dimension(300, 50));
-        registerButton.setMaximumSize(new Dimension(300, 50));
-        registerButton.setForeground(themeManager.getWhite());
-        registerButton.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-
-        Color normalBg = themeManager.getVBlue();       // default blue
-        Color hoverBg = themeManager.getGradientLBlue();        // brighter hover blue
-        Color normalText = themeManager.getWhite();     // text color stays white
-        Color hoverText = themeManager.getWhite();      // or try a light gray if you want a subtle difference
-
-        final int animationSteps = 10;
-        final int animationDelay = 15;
-
-        final javax.swing.Timer[] timer = new javax.swing.Timer[1];
-        final boolean[] isHovered = {false};
-
-        registerButton.addMouseListener(new MouseAdapter() {
+        buttonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) {
-                isHovered[0] = true;
-                if (timer[0] != null && timer[0].isRunning()) timer[0].stop();
-                timer[0] = createColorFadeTimer(registerButton, normalBg, hoverBg, normalText, hoverText, animationSteps, animationDelay, isHovered, true);
-                timer[0].start();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                isHovered[0] = false;
-                if (timer[0] != null && timer[0].isRunning()) timer[0].stop();
-                timer[0] = createColorFadeTimer(registerButton, hoverBg, normalBg, hoverText, normalText, animationSteps, animationDelay, isHovered, false);
-                timer[0].start();
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                onNextClick.run();
             }
         });
-
-        registerButton.addActionListener(e -> onRegisterClick.run());
-        buttonPanel.add(registerButton);
+        buttonPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         return buttonPanel;
     }
 
-    //TO BE MOVED IN A RELATED FACTORY FOR NEXT MONEY PAGE1
-    public JPanel createNextButtonPanel(Consumer<String> onButtonClick, Runnable onRegisterClick) {
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
-        buttonPanel.setOpaque(false);
-
-        RoundedButton registerButton = new RoundedButton("Next", 15, themeManager.getVBlue());
-        registerButton.setPreferredSize(new Dimension(300, 50));
-        registerButton.setMaximumSize(new Dimension(300, 50));
-        registerButton.setForeground(themeManager.getWhite());
-        registerButton.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-
-        Color normalBg = themeManager.getVBlue();       // default blue
-        Color hoverBg = themeManager.getGradientLBlue();        // brighter hover blue
-        Color normalText = themeManager.getWhite();     // text color stays white
-        Color hoverText = themeManager.getWhite();      // or try a light gray if you want a subtle difference
-
-        final int animationSteps = 10;
-        final int animationDelay = 15;
-
-        final javax.swing.Timer[] timer = new javax.swing.Timer[1];
-        final boolean[] isHovered = {false};
-
-        registerButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                isHovered[0] = true;
-                if (timer[0] != null && timer[0].isRunning()) timer[0].stop();
-                timer[0] = createColorFadeTimer(registerButton, normalBg, hoverBg, normalText, hoverText, animationSteps, animationDelay, isHovered, true);
-                timer[0].start();
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                isHovered[0] = false;
-                if (timer[0] != null && timer[0].isRunning()) timer[0].stop();
-                timer[0] = createColorFadeTimer(registerButton, hoverBg, normalBg, hoverText, normalText, animationSteps, animationDelay, isHovered, false);
-                timer[0].start();
-            }
-        });
-
-        registerButton.addActionListener(e -> onRegisterClick.run());
-        buttonPanel.add(registerButton);
-
-        return buttonPanel;
+    // Helper methods
+    public static Integer[] getDaysArray() {
+        Integer[] days = new Integer[31];
+        for (int i = 1; i <= 31; i++) days[i - 1] = i;
+        return days;
     }
 
-    private static javax.swing.Timer createColorFadeTimer(
-            JButton button, Color startBg, Color endBg,
-            Color startText, Color endText,
-            int steps, int delay, boolean[] isHovered, boolean entering) {
-
-        return new javax.swing.Timer(delay, new java.awt.event.ActionListener() {
-            int step = 0;
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                float progress = (float) step / steps;
-                Color newBg = blendColors(startBg, endBg, progress);
-                Color newText = blendColors(startText, endText, progress);
-
-                button.setBackground(newBg);
-                button.setForeground(newText);
-                button.repaint();
-
-                step++;
-                if (step > steps) ((javax.swing.Timer) e.getSource()).stop();
-            }
-        });
+    public static Integer[] getYearsArray() {
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        Integer[] years = new Integer[100];
+        for (int i = 0; i < 100; i++) years[i] = currentYear - i;
+        return years;
     }
 
-    private static Color blendColors(Color c1, Color c2, float ratio) {
-        ratio = Math.max(0, Math.min(1, ratio));
-        int red = (int) (c1.getRed() + ratio * (c2.getRed() - c1.getRed()));
-        int green = (int) (c1.getGreen() + ratio * (c2.getGreen() - c1.getGreen()));
-        int blue = (int) (c1.getBlue() + ratio * (c2.getBlue() - c1.getBlue()));
-        return new Color(red, green, blue);
+    public static String[] getMonthsArray() {
+        return new String[]{"January", "February", "March", "April", "May", "June", "July", "August",
+                "September", "October", "November", "December"};
+    }
+
+    public static Map<String, String> getCountryCodes() {
+        Map<String, String> countryCodes = new HashMap<>();
+        countryCodes.put("+63", "Philippines");
+        countryCodes.put("+1", "USA");
+        countryCodes.put("+44", "UK");
+        countryCodes.put("+81", "Japan");
+        countryCodes.put("+86", "China");
+        return countryCodes;
     }
 }
