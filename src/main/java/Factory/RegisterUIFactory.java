@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import components.RoundedButton;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -245,6 +244,31 @@ public class RegisterUIFactory {
         loginPanel.add(alreadyHaveLabel);
         loginPanel.add(loginLabel);
         return loginPanel;
+    }
+
+    public static JPanel createNextButtonPanel(Consumer<String> onButtonClick, Runnable onNextClick) {
+        JPanel buttonPanel = new JPanel(new GridBagLayout());
+        buttonPanel.setBackground(themeManager.getVBlue());
+        buttonPanel.setPreferredSize(new Dimension(100, 50));
+
+        GridBagConstraints buttonGbc = new GridBagConstraints();
+        buttonGbc.insets = new Insets(0, 0, 0, 0);
+        buttonGbc.anchor = GridBagConstraints.CENTER;
+
+        JLabel buttonLabel = new JLabel("Next");
+        buttonLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        buttonLabel.setForeground(themeManager.getWhite());
+        buttonPanel.add(buttonLabel, buttonGbc);
+
+        buttonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                onNextClick.run();
+            }
+        });
+        buttonPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        return buttonPanel;
     }
 
     // Helper methods
