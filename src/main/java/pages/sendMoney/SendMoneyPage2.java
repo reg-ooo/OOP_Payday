@@ -5,6 +5,7 @@ import java.awt.*;
 import java.util.function.Consumer;
 import Factory.sendMoney.SendMoneyPage2Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage2Factory;
+import data.SendMoney;
 import data.UserInfo;
 import util.ThemeManager;
 
@@ -66,6 +67,7 @@ public class SendMoneyPage2 extends JPanel {
     public void updateTransactionData(String phoneNumber, String sendAmount) {
         // Convert phone number to recipient name (you can customize this)
         this.recipientName = phoneNumber;
+        this.phoneNumber = phoneNumber;
         this.amount = sendAmount;
         refreshUI();
     }
@@ -90,6 +92,8 @@ public class SendMoneyPage2 extends JPanel {
     // Example: "SendMoney3:09171234567:09171234567:100.00"
     private void handleConfirm(String destination) {
         // Pass phone number, amount, and recipient name to SendMoneyPage3
+        SendMoney sendMoney = new SendMoney();
+        sendMoney.sendMoney(phoneNumber, Double.parseDouble(amount));
         onButtonClick.accept("SendMoney3:" + recipientName + ":" + phoneNumber + ":" + amount);
     }
 

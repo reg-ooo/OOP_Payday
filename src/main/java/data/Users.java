@@ -142,7 +142,7 @@ public class Users {
     }
 
 
-    private void loadComponents(){
+    public void loadComponents(){
         NPanel.getInstance().loadComponents();
         TransactionPanel.getInstance().loadComponents();
         MainFrame.loadNavBar();

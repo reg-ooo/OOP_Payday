@@ -5,25 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="NEW VERSION&#10;&#10;FIXED AND IMPROVED SEND MONEY PAGE&#10;NO MORE LEADING ZEROES">
+      <change afterPath="$PROJECT_DIR$/src/main/java/data/SendMoney.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/DatabaseProtectionProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/DatabaseProtectionProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/DatabaseService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/SecurePreparedStatementWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/SecurePreparedStatementWrapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Users.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/DatabaseProtectionProxy.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/DatabaseProtectionProxy.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/SecurePreparedStatementWrapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/SecurePreparedStatementWrapper.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/UserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/data/Users.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Users.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -80,7 +80,6 @@ public class UserInfo {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return balance;
     }
 
