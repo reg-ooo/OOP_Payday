@@ -5,28 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="NEW VERSION&#10;&#10;FIXED AND IMPROVED SEND MONEY PAGE&#10;NO MORE LEADING ZEROES">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage1Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage1Factory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage2Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage2Factory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage3Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage3Factory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/SendMoneyBaseFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/SendMoneyBaseFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage2Factory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage2Factory$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage2Factory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage2Factory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage3Factory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage3Factory$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage3Factory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage3Factory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/SendMoneyBaseFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/SendMoneyBaseFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/DatabaseProtectionProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/DatabaseProtectionProxy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/DatabaseService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/DatabaseService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/SecurePreparedStatementWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/SecurePreparedStatementWrapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/Users.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/Users.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/LoginPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/DatabaseProtectionProxy.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/DatabaseProtectionProxy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/SecurePreparedStatementWrapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/SecurePreparedStatementWrapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/UserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/Users.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Users.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" afterDir="false" />
     </list>

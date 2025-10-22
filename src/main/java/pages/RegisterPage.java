@@ -1,15 +1,18 @@
 package pages;
 
 import javax.swing.*;
+import java.time.Month;
 import java.util.function.Consumer;
 
 import Factory.RegisterUIFactory;
+import data.Users;
 import util.FontLoader;
 import util.ThemeManager;
 
 public class RegisterPage extends JPanel {
     private static final FontLoader fontLoader = FontLoader.getInstance();
     private static final ThemeManager themeManager = ThemeManager.getInstance();
+    private Users user = Users.getInstance();
 
     private final JTextField usernameField = new JTextField();
     private final JTextField fullNameField = new JTextField();
@@ -17,7 +20,7 @@ public class RegisterPage extends JPanel {
     private final JComboBox<Integer> dayCombo;
     private final JComboBox<Integer> yearCombo;
     private final JComboBox<String> countryCodeCombo;
-    private final JTextField phoneField = new JTextField(10);
+    private final JTextField phoneField = new JTextField(11);
     private final JPasswordField pinField = new JPasswordField(4) {
         {
             setDocument(new javax.swing.text.PlainDocument() {
@@ -70,7 +73,7 @@ public class RegisterPage extends JPanel {
         phoneField.setDocument(new javax.swing.text.PlainDocument() {
             @Override
             public void insertString(int offs, String str, javax.swing.text.AttributeSet a) throws javax.swing.text.BadLocationException {
-                if (getLength() < 10 && str.matches("\\d")) {
+                if (getLength() < 11 && str.matches("\\d")) {
                     super.insertString(offs, str, a);
                 }
             }
@@ -78,8 +81,18 @@ public class RegisterPage extends JPanel {
     }
 
     private void handleRegisterClick() {
-        if (validateForm()) {
-            onButtonClick.accept("success");
+        if (validateForm() ) {
+            if(user.addUser(
+                    getFullName(),
+                    getPhone(),
+                    getEmail(),
+                    getPIN(),
+                    validateBirthdate(),
+                    getUsername()
+            )) {
+                onButtonClick.accept("success");
+                clearForm();
+            }
         } else {
             JOptionPane.showMessageDialog(this,
                     "Please fill in all fields correctly.",
@@ -100,31 +113,31 @@ public class RegisterPage extends JPanel {
     }
 
 
-    public String getUsername() {
+    private String getUsername() {
         return usernameField.getText();
     }
 
-    public String getFullName() {
+    private String getFullName() {
         return fullNameField.getText();
     }
 
-    public String getBirthday() {
+    private String getBirthday() {
         return monthCombo.getSelectedItem() + " " + dayCombo.getSelectedItem() + ", " + yearCombo.getSelectedItem();
     }
 
-    public String getPhone() {
-        return countryCodeCombo.getSelectedItem() + " " + phoneField.getText();
+    private String getPhone() {
+        return phoneField.getText();
     }
 
-    public String getEmail() {
+    private String getEmail() {
         return emailField.getText();
     }
 
-    public String getPIN() {
+    private String getPIN() {
         return pinField.getText();
     }
 
-    public void clearForm() {
+    private void clearForm() {
         usernameField.setText("");
         fullNameField.setText("");
         monthCombo.setSelectedIndex(0);
@@ -134,5 +147,11 @@ public class RegisterPage extends JPanel {
         phoneField.setText("");
         emailField.setText("");
         pinField.setText("");
+    }
+
+    private String validateBirthdate(){
+        String monthName = monthCombo.getSelectedItem().toString();
+        int monthNumber = Month.valueOf(monthName.toUpperCase()).getValue();
+        return yearCombo.getSelectedItem() + "-" + monthNumber + "-" + dayCombo.getSelectedItem();
     }
 }

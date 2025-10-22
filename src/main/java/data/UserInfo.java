@@ -10,7 +10,9 @@ public class UserInfo {
     private int currentUserId;
     private boolean isLoggedIn = false;
 
-    private UserInfo() {}
+    private UserInfo() {
+        this.database = DatabaseProtectionProxy.getInstance();
+    }
 
     public static UserInfo getInstance() {
         if (instance == null) {
@@ -24,14 +26,18 @@ public class UserInfo {
         this.currentUserId = userId;
         this.isLoggedIn = true;
         // Create protected database access for this user
-        this.database = new DatabaseProtectionProxy(userId, true);
+        DatabaseProtectionProxy.getInstance().setUserContext(userId, true);
     }
 
     // Call this when user logs out
     public void logoutUser() {
         this.isLoggedIn = false;
         this.currentUserId = 0;
-        this.database = null;
+        DatabaseProtectionProxy.getInstance().clearUserContext();
+    }
+
+    public int getCurrentUserId() {
+        return currentUserId;
     }
 
     public TransactionList getTransaction() {

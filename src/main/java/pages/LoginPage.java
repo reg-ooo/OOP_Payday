@@ -22,7 +22,7 @@ public class LoginPage extends JPanel {
     private final JTextField usernameField = new JTextField();
     private final JLabel[] pinDots = new JLabel[4];
     private final StringBuilder pinInput = new StringBuilder();
-    private final Users user = new Users();
+    private final Users user = Users.getInstance();
     private final Consumer<String> onButtonClick;
 
     public LoginPage(Consumer<String> onButtonClick) {

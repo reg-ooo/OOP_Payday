@@ -12,5 +12,6 @@ public interface DatabaseService {
     PreparedStatement prepareStatement(String sql) throws SQLException;
     boolean isConnected();
     void connect();
+
 }
 

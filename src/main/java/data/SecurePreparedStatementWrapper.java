@@ -17,6 +17,8 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
     private final Logger logger;
     private final Map<Integer, Object> boundParameters = new HashMap<>();
 
+    private static final int SYSTEM_USER_ID = -1;
+
     public SecurePreparedStatementWrapper(PreparedStatement ps, String sql, int userId, Logger logger) {
         this.delegate = ps;
         this.sql = sql;
@@ -44,6 +46,7 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
 
     @Override
     public void setDouble(int parameterIndex, double value) throws SQLException {
+
         validateAmountParameter(value);
         boundParameters.put(parameterIndex, value);
         logger.info(String.format("User %d binding parameter %d: %.2f", authenticatedUserId, parameterIndex, value));
@@ -70,7 +73,13 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
 
     // ==================== VALIDATION METHODS ====================
 
+    // Update the validation method
     private void validateIntParameter(int parameterIndex, int value) throws SQLException {
+        // Skip validation for system operations
+        if (isSystemOperation()) {
+            return;
+        }
+
         // If this query touches sensitive tables and binds a userID
         if (isSensitiveTableQuery() && isUserIdParameter(parameterIndex)) {
             // The bound userID MUST match the authenticated user
@@ -82,13 +91,18 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
             }
         }
 
-        // Validate positive IDs
-        if (isIdParameter(parameterIndex) && value <= 0) {
+        // Validate positive IDs (but allow system operations)
+        if (isIdParameter(parameterIndex) && value <= 0 && value != SYSTEM_USER_ID) {
             throw new SQLException("ID parameters must be positive");
         }
     }
 
     private void validateLongParameter(int parameterIndex, long value) throws SQLException {
+        // Skip validation for system operations
+        if (isSystemOperation()) {
+            return;
+        }
+
         // Similar validation for long types
         if (isSensitiveTableQuery() && isUserIdParameter(parameterIndex)) {
             if (value != authenticatedUserId) {
@@ -100,8 +114,15 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
         }
     }
 
+    // Add helper method to check if this is a system operation
+    private boolean isSystemOperation() {
+        return authenticatedUserId == SYSTEM_USER_ID;
+    }
     private void validateAmountParameter(double amount) throws SQLException {
         // No negative amounts
+        if (isSystemOperation()) {
+            return;
+        }
         if (amount < 0) {
             logger.severe(String.format(
                     "User %d attempted negative transaction: %.2f",

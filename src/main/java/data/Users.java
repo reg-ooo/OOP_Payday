@@ -11,10 +11,25 @@ import java.util.function.Consumer;
 
 
 public class Users {
-    private static final DatabaseService SYSTEM_DB = new DatabaseProtectionProxy(-1, true);
-    UserInfo userInfo = UserInfo.getInstance();
+    private static Users instance;
+    private DatabaseService database;
+    private UserInfo userInfo = UserInfo.getInstance();
 
-    public boolean addUser(String fullName, String phoneNumber, String email, String password, String birthDate, String username) {
+    private Users() {
+        this.database = DatabaseProtectionProxy.getInstance();
+    }
+
+    public static Users getInstance() {
+        if (instance == null) {
+            instance = new Users();
+        }
+        return instance;
+    }
+
+    public boolean addUser(String fullName, String phoneNumber, String email,
+                           String password, String birthDate, String username) {
+
+        DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
 
         if(!isValidNumber(phoneNumber) && !validateUsername(username)){
             System.out.println("Invalid input detected");
@@ -22,9 +37,8 @@ public class Users {
         }
 
         String query = "INSERT INTO Users(fullName, phoneNumber, email, pin, birthDate, username) VALUES (?, ?, ?, ?, ?, ?)";
-        String query2 = "INSERT INTO WALLETS(userID, balance) VALUES (?, ?)";
-
-        try (PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)) {
+        String query2 = "INSERT INTO Wallets(userID, balance) VALUES (?, ?)";
+        try (PreparedStatement pstmt = database.prepareStatement(query)) {
             pstmt.setString(1, capitalizeFirstLetter(fullName));
             pstmt.setString(2, phoneNumber);
             pstmt.setString(3, email);
@@ -32,36 +46,38 @@ public class Users {
             pstmt.setString(5, birthDate);
             pstmt.setString(6, username);
 
-            pstmt.executeUpdate();
-            System.out.println("User added successfully!");
+            PreparedStatement pstmt2 = database.prepareStatement(query2);
+            pstmt2.setString(1, getUserID());
+            pstmt2.setDouble(2, 0);
 
+            pstmt.executeUpdate();
+            pstmt2.executeUpdate();
+            System.out.println("User added successfully!");
+            return true;
         } catch (Exception e) {
             System.out.println("Adding user failed: " + e.getMessage());
-            return false;
-        }
-        try(PreparedStatement pstmt2 = SYSTEM_DB.prepareStatement(query2)){
-            pstmt2.setString(1, getUserID());
-            pstmt2.setInt(2, 0);
-            return true;
-        }catch(Exception e){
-            System.out.println("Adding wallet failed: " + e.getMessage());
             return false;
         }
     }
 
     public void loginAccount(String username, String password, Consumer<String> onButtonClick) {
+        DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
+
         String query = "SELECT * FROM Users WHERE username = ? AND pin = ?";
 
-        try (PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)) {
+        try (PreparedStatement pstmt = database.prepareStatement(query)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
 
             try (ResultSet rs = pstmt.executeQuery()) {
-
                 if (rs.next()) {
                     int userID = rs.getInt("userID");
                     System.out.println("Login successful!");
                     userInfo.loginUser(userID);
+
+                    // Switch to authenticated user context
+                    DatabaseProtectionProxy.getInstance().setUserContext(userID, true);
+
                     loadComponents();
                     onButtonClick.accept("success");
                 } else {
@@ -79,7 +95,8 @@ public class Users {
             return false;
         }
         String query = "SELECT COUNT(*) FROM Users WHERE username = ?";
-        try (PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)){
+        try (PreparedStatement pstmt = database.prepareStatement(query)){
+            pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("Username already exists");
@@ -137,13 +154,13 @@ public class Users {
     }
 
     private String getUserID(){
-        String query = "SELECT MAX(userID) FROM WALLETS";
-        try(PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)){
+        String query = "SELECT MAX(userID) FROM Users";
+        try(PreparedStatement pstmt = database.prepareStatement(query)){
         ResultSet rs = pstmt.executeQuery();
         if(rs.next()){
-            String userID = rs.getString(1);
-            int id = Integer.parseInt(userID) + 1;
-            return String.valueOf(id);
+            System.out.println(rs.getString(1));
+            return rs.getString(1);
+
         }else{
             return null;
         }
