@@ -122,12 +122,7 @@ public class SendMoneyPage extends JPanel {
             JOptionPane.showMessageDialog(this, "Error checking balance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        if(isValidInput()){
             onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
-        }else{
-            return;
-        }
     }
 
     private void setupEventHandlers() {
@@ -203,18 +198,5 @@ public class SendMoneyPage extends JPanel {
     private String getEnteredAmount() {
         String text = amountField.getText().replace("₱ ", "").trim();
         return text.equals("0.00") ? "" : text;
-    }
-
-    private boolean isValidInput(){
-        if(getEnteredAmount().isEmpty() || getEnteredAmount().equals("0.00")){
-            return false;
-        }
-        if(getEnteredPhoneNumber().isEmpty()){
-            return false;
-        }
-        if(Double.parseDouble(getEnteredAmount()) > UserInfo.getInstance().getBalance()){
-            return false;
-        }
-        return getEnteredAmount().matches("\\d+");
     }
 }

@@ -22,6 +22,7 @@ public class Users {
         }
 
         String query = "INSERT INTO Users(fullName, phoneNumber, email, pin, birthDate, username) VALUES (?, ?, ?, ?, ?, ?)";
+        String query2 = "INSERT INTO WALLETS(userID, balance) VALUES (?, ?)";
 
         try (PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)) {
             pstmt.setString(1, capitalizeFirstLetter(fullName));
@@ -33,9 +34,17 @@ public class Users {
 
             pstmt.executeUpdate();
             System.out.println("User added successfully!");
-            return true;
+
         } catch (Exception e) {
             System.out.println("Adding user failed: " + e.getMessage());
+            return false;
+        }
+        try(PreparedStatement pstmt2 = SYSTEM_DB.prepareStatement(query2)){
+            pstmt2.setString(1, getUserID());
+            pstmt2.setInt(2, 0);
+            return true;
+        }catch(Exception e){
+            System.out.println("Adding wallet failed: " + e.getMessage());
             return false;
         }
     }
@@ -126,5 +135,23 @@ public class Users {
     private void unloadComponents(){
 
     }
+
+    private String getUserID(){
+        String query = "SELECT MAX(userID) FROM WALLETS";
+        try(PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)){
+        ResultSet rs = pstmt.executeQuery();
+        if(rs.next()){
+            String userID = rs.getString(1);
+            int id = Integer.parseInt(userID) + 1;
+            return String.valueOf(id);
+        }else{
+            return null;
+        }
+        }catch(Exception e) {
+            System.out.println("Getting userID failed: " + e.getMessage());
+            return null;
+        }
+    }
 }
+
 
