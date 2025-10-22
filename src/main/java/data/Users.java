@@ -11,6 +11,7 @@ import java.util.function.Consumer;
 
 
 public class Users {
+    private static final DatabaseService SYSTEM_DB = new DatabaseProtectionProxy(-1, true);
     UserInfo userInfo = UserInfo.getInstance();
 
     public boolean addUser(String fullName, String phoneNumber, String email, String password, String birthDate, String username) {
@@ -22,7 +23,7 @@ public class Users {
 
         String query = "INSERT INTO Users(fullName, phoneNumber, email, pin, birthDate, username) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement pstmt = Database.con.prepareStatement(query)) {
+        try (PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)) {
             pstmt.setString(1, capitalizeFirstLetter(fullName));
             pstmt.setString(2, phoneNumber);
             pstmt.setString(3, email);
@@ -42,7 +43,7 @@ public class Users {
     public void loginAccount(String username, String password, Consumer<String> onButtonClick) {
         String query = "SELECT * FROM Users WHERE username = ? AND pin = ?";
 
-        try (PreparedStatement pstmt = Database.con.prepareStatement(query)) {
+        try (PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)) {
             pstmt.setString(1, username);
             pstmt.setString(2, password);
 
@@ -68,26 +69,9 @@ public class Users {
             System.out.println("Username too short");
             return false;
         }
-
-        try {
-            // Use parameterized query through proxy
-            DatabaseService db = new DatabaseProtectionProxy(
-                    -1,  // Special system user ID for registration checks
-                    true // System operation
-            );
-
-            String query = "SELECT COUNT(*) FROM Users WHERE username = ?";
-
-            // If your proxy doesn't support prepared statements yet,
-            // at least escape the input properly
-            String safeUsername = username.replace("'", "''"); // SQL escape
-            String safeQuery = String.format(
-                    "SELECT COUNT(*) FROM Users WHERE username = '%s'",
-                    safeUsername
-            );
-
-            ResultSet rs = db.executeQuery(safeQuery);
-
+        String query = "SELECT COUNT(*) FROM Users WHERE username = ?";
+        try (PreparedStatement pstmt = SYSTEM_DB.prepareStatement(query)){
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next() && rs.getInt(1) > 0) {
                 System.out.println("Username already exists");
                 return false;

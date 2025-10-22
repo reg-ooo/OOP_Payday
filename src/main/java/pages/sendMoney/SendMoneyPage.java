@@ -80,16 +80,11 @@ public class SendMoneyPage extends JPanel {
         String enteredAmount = getEnteredAmount();
         String enteredPhone = getEnteredPhoneNumber();
 
-        if (enteredAmount.isEmpty() || enteredAmount.equals("0.00")) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
+        if(isValidInput()){
+            onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
+        }else{
             return;
         }
-        if (enteredPhone.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a phone number", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
     }
 
     private void setupEventHandlers() {
@@ -130,7 +125,7 @@ public class SendMoneyPage extends JPanel {
             double currentBalance = UserInfo.getInstance().getBalance();
             String amountText = getEnteredAmount();
 
-            if (amountText.isEmpty() || amountText.equals("0.00")) {
+            if (getEnteredAmount().isEmpty() || getEnteredAmount().equals("0.00")) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));
                 balanceLabel.setForeground(themeManager.getDSBlue());
                 return;
@@ -165,5 +160,18 @@ public class SendMoneyPage extends JPanel {
     private String getEnteredAmount() {
         String text = amountField.getText().replace("₱ ", "").trim();
         return text.equals("0.00") ? "" : text;
+    }
+
+    private boolean isValidInput(){
+        if(getEnteredAmount().isEmpty() || getEnteredAmount().equals("0.00")){
+            return false;
+        }
+        if(getEnteredPhoneNumber().isEmpty()){
+            return false;
+        }
+        if(Double.parseDouble(getEnteredAmount()) > UserInfo.getInstance().getBalance()){
+            return false;
+        }
+        return getEnteredAmount().matches("\\d+");
     }
 }

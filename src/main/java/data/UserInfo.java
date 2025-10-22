@@ -1,5 +1,6 @@
 package data;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class UserInfo {
@@ -38,9 +39,10 @@ public class UserInfo {
             throw new SecurityException("Please login first");
         }
 
-        String query = "SELECT * FROM Transactions WHERE walletID = " + currentUserId ;  // ✅ Filter by userID
-        try {
-            ResultSet rs = database.executeQuery(query);  // ✅ Goes through proxy
+        String query = "SELECT * FROM Transactions WHERE walletID = ?"  ;  // ✅ Filter by userID
+        try(PreparedStatement pstmt = database.prepareStatement(query)) {
+            pstmt.setInt(1, currentUserId);
+            ResultSet rs = pstmt.executeQuery();  // ✅ Goes through proxy
             if (rs.next()) {
                 trans = new TransactionList(
                         rs.getString("transactionType"),
@@ -61,10 +63,11 @@ public class UserInfo {
         }
 
         double balance = 0;
-        String query = "SELECT balance FROM Wallets WHERE userID = " + currentUserId + ";";
+        String query = "SELECT balance FROM Wallets WHERE userID = ?";
 
-        try {
-            ResultSet rs = database.executeQuery(query);  // ✅ Goes through proxy
+        try (PreparedStatement pstmt = database.prepareStatement(query)){
+            pstmt.setInt(1, currentUserId);
+            ResultSet rs = pstmt.executeQuery();  // ✅ Goes through proxy
             if (rs.next()) {
                 balance = rs.getDouble("balance");
             }

@@ -78,7 +78,7 @@ public class DatabaseProtectionProxy implements DatabaseService {
         if (!isAuthenticated) {
             throw new SecurityException("You must be logged in to perform this action");
         }
-        if (userId <= 0) {
+        if (userId <= 0 && userId != -1) {
             throw new SecurityException("Invalid user session");
         }
     }

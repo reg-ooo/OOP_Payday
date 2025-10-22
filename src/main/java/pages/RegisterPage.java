@@ -132,6 +132,7 @@ public class RegisterPage extends JPanel {
         buttonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
+                
                 onButtonClick.accept("success");
             }
         });
