@@ -5,8 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="NEW VERSION&#10;&#10;FIXED AND IMPROVED SEND MONEY PAGE&#10;NO MORE LEADING ZEROES">
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/UserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

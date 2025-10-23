@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 
 import util.FontLoader;
@@ -23,7 +21,6 @@ public class RegisterUIFactory {
             JComboBox<String> monthCombo,
             JComboBox<Integer> dayCombo,
             JComboBox<Integer> yearCombo,
-            JComboBox<String> countryCodeCombo,
             JTextField phoneField,
             JTextField emailField,
             JPasswordField pinField,
@@ -84,7 +81,7 @@ public class RegisterUIFactory {
         mainContainer.add(spacer3, gbc);
 
         // Phone
-        addPhoneToContainer(mainContainer, countryCodeCombo, phoneField, gbc, 8);
+        addPhoneToContainer(mainContainer, phoneField, gbc, 8);
 
         // Spacer
         JPanel spacer4 = new JPanel();
@@ -164,7 +161,7 @@ public class RegisterUIFactory {
         container.add(datePanel, gbc);
     }
 
-    private static void addPhoneToContainer(JPanel container, JComboBox<String> countryCodeCombo, JTextField phoneField, GridBagConstraints gbc, int row) {
+    private static void addPhoneToContainer(JPanel container, JTextField phoneField, GridBagConstraints gbc, int row) {
         gbc.insets = new Insets(10, 15, 10, 15);
 
         JLabel label = new JLabel("Phone");
@@ -174,16 +171,13 @@ public class RegisterUIFactory {
         gbc.fill = GridBagConstraints.NONE;
         container.add(label, gbc);
 
-        JPanel phonePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        phonePanel.setBackground(themeManager.getWhite());
-        countryCodeCombo.setPreferredSize(new Dimension(60, 25));
+        phoneField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(themeManager.getLightGray(), 1),
+                BorderFactory.createEmptyBorder(1, 2, 1, 2)));
         phoneField.setPreferredSize(new Dimension(90, 25));
-        countryCodeCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
         phoneField.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        phonePanel.add(countryCodeCombo);
-        phonePanel.add(phoneField);
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        container.add(phonePanel, gbc);
+        container.add(phoneField, gbc);
     }
 
     private static JPanel createButtonPanel(Consumer<String> onButtonClick) {
@@ -290,13 +284,4 @@ public class RegisterUIFactory {
                 "September", "October", "November", "December"};
     }
 
-    public static Map<String, String> getCountryCodes() {
-        Map<String, String> countryCodes = new HashMap<>();
-        countryCodes.put("+63", "Philippines");
-        countryCodes.put("+1", "USA");
-        countryCodes.put("+44", "UK");
-        countryCodes.put("+81", "Japan");
-        countryCodes.put("+86", "China");
-        return countryCodes;
-    }
 }

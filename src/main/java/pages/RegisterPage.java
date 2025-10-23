@@ -19,7 +19,6 @@ public class RegisterPage extends JPanel {
     private final JComboBox<String> monthCombo;
     private final JComboBox<Integer> dayCombo;
     private final JComboBox<Integer> yearCombo;
-    private final JComboBox<String> countryCodeCombo;
     private final JTextField phoneField = new JTextField(11);
     private final JPasswordField pinField = new JPasswordField(4) {
         {
@@ -42,8 +41,6 @@ public class RegisterPage extends JPanel {
         monthCombo = new JComboBox<>(RegisterUIFactory.getMonthsArray());
         dayCombo = new JComboBox<>(RegisterUIFactory.getDaysArray());
         yearCombo = new JComboBox<>(RegisterUIFactory.getYearsArray());
-        countryCodeCombo = new JComboBox<>(RegisterUIFactory.getCountryCodes().keySet().toArray(new String[0]));
-        countryCodeCombo.setSelectedItem("+63");
 
         configurePhoneField(phoneField);
 
@@ -54,7 +51,6 @@ public class RegisterPage extends JPanel {
                 monthCombo,
                 dayCombo,
                 yearCombo,
-                countryCodeCombo,
                 phoneField,
                 emailField,
                 pinField,
@@ -143,7 +139,6 @@ public class RegisterPage extends JPanel {
         monthCombo.setSelectedIndex(0);
         dayCombo.setSelectedIndex(0);
         yearCombo.setSelectedIndex(0);
-        countryCodeCombo.setSelectedItem("+63");
         phoneField.setText("");
         emailField.setText("");
         pinField.setText("");
