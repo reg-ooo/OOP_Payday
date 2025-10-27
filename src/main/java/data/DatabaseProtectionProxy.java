@@ -14,7 +14,6 @@ public class DatabaseProtectionProxy implements DatabaseService {
     private static DatabaseProtectionProxy instance;
     private final Database realDatabase;
 
-    // Make these mutable
     private int userId;
     private boolean isAuthenticated;
 
@@ -23,7 +22,6 @@ public class DatabaseProtectionProxy implements DatabaseService {
             "DROP", "TRUNCATE", "ALTER", "CREATE", "GRANT", "REVOKE"
     );
 
-    // Private constructor for singleton
     private DatabaseProtectionProxy() {
         this.realDatabase = Database.getInstance();
         this.userId = SYSTEM_USER_ID;
@@ -36,7 +34,6 @@ public class DatabaseProtectionProxy implements DatabaseService {
         }
         return instance;
     }
-
 
     public void setUserContext(int userId, boolean isAuthenticated) {
         this.userId = userId;
@@ -61,7 +58,7 @@ public class DatabaseProtectionProxy implements DatabaseService {
     public ResultSet executeQuery(String query) throws SQLException {
         logAccess("executeQuery: " + query);
         checkAuthentication();
-        validateQuery(query);
+        validateRawQuery(query);
         enforceUserDataAccess(query);
         return realDatabase.executeQuery(query);
     }
@@ -70,7 +67,7 @@ public class DatabaseProtectionProxy implements DatabaseService {
     public int executeUpdate(String query) throws SQLException {
         logAccess("executeUpdate: " + query);
         checkAuthentication();
-        validateQuery(query);
+        validateRawQuery(query);
 
         if (containsForbiddenOperation(query)) {
             LOGGER.severe("Forbidden operation attempted by user: " + userId);
@@ -93,6 +90,24 @@ public class DatabaseProtectionProxy implements DatabaseService {
         realDatabase.connect();
     }
 
+    @Override
+    public PreparedStatement prepareStatement(String sql) throws SQLException {
+        logAccess("prepareStatement: " + sql);
+        checkAuthentication();
+
+        if (sql == null || sql.trim().isEmpty()) {
+            throw new SQLException("Query cannot be empty");
+        }
+
+        if (containsForbiddenOperation(sql)) {
+            LOGGER.severe("Forbidden operation attempted by user: " + userId);
+            throw new SecurityException("This operation is not allowed");
+        }
+
+        PreparedStatement ps = realDatabase.prepareStatement(sql);
+        return new SecurePreparedStatementWrapper(ps, sql, userId, LOGGER);
+    }
+
     private void checkAuthentication() {
         if (userId == SYSTEM_USER_ID && isAuthenticated) {
             LOGGER.info("System operation authenticated");
@@ -107,9 +122,7 @@ public class DatabaseProtectionProxy implements DatabaseService {
         }
     }
 
-    // Updated to allow system operations
     private void enforceUserDataAccess(String query) throws SQLException {
-        // Allow system operations to bypass access control
         if (userId == SYSTEM_USER_ID) {
             LOGGER.info("System operation: bypassing user data access enforcement");
             return;
@@ -140,7 +153,7 @@ public class DatabaseProtectionProxy implements DatabaseService {
         return FORBIDDEN_OPERATIONS.stream().anyMatch(upperQuery::contains);
     }
 
-    private void validateQuery(String query) throws SQLException {
+    private void validateRawQuery(String query) throws SQLException {
         if (query == null || query.trim().isEmpty()) {
             throw new SQLException("Query cannot be empty");
         }
@@ -168,37 +181,5 @@ public class DatabaseProtectionProxy implements DatabaseService {
                 operation
         );
         LOGGER.info(logMessage);
-    }
-
-    @Override
-    public PreparedStatement prepareStatement(String sql) throws SQLException {
-        logAccess("prepareStatement: " + sql);
-        checkAuthentication();
-
-        if (sql == null || sql.trim().isEmpty()) {
-            throw new SQLException("Query cannot be empty");
-        }
-
-        if (containsForbiddenOperation(sql)) {
-            LOGGER.severe("Forbidden operation attempted by user: " + userId);
-            throw new SecurityException("This operation is not allowed");
-        }
-
-        checkSensitiveTableAccess(sql);
-
-        PreparedStatement ps = realDatabase.prepareStatement(sql);
-        return new SecurePreparedStatementWrapper(ps, sql, userId, LOGGER);
-    }
-
-    private void checkSensitiveTableAccess(String sql) {
-        String upperSql = sql.toUpperCase();
-        boolean accessingSensitiveTable =
-                upperSql.contains("WALLETS") ||
-                        upperSql.contains("TRANSACTIONS") ||
-                        upperSql.contains("USERS");
-
-        if (accessingSensitiveTable) {
-            LOGGER.info("User " + userId + " preparing statement for sensitive table");
-        }
     }
 }

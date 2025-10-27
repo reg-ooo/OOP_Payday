@@ -1,6 +1,7 @@
 package Factory.sendMoney;
 
 import Factory.RegisterUIFactory;
+import pages.sendMoney.SendMoneyPage;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -76,6 +77,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                SendMoneyPage.getInstance().clearForm();
                 backAction.run();
             }
         });

@@ -46,7 +46,6 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
 
     @Override
     public void setDouble(int parameterIndex, double value) throws SQLException {
-
         validateAmountParameter(value);
         boundParameters.put(parameterIndex, value);
         logger.info(String.format("User %d binding parameter %d: %.2f", authenticatedUserId, parameterIndex, value));
@@ -73,9 +72,7 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
 
     // ==================== VALIDATION METHODS ====================
 
-
     private void validateIntParameter(int parameterIndex, int value) throws SQLException {
-        // Skip validation for system operations
         if (isSystemOperation()) {
             return;
         }
@@ -95,11 +92,9 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
     }
 
     private void validateLongParameter(int parameterIndex, long value) throws SQLException {
-
         if (isSystemOperation()) {
             return;
         }
-
 
         if (isSensitiveTableQuery() && isUserIdParameter(parameterIndex)) {
             if (value != authenticatedUserId) {
@@ -111,12 +106,11 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
         }
     }
 
-
     private boolean isSystemOperation() {
         return authenticatedUserId == SYSTEM_USER_ID;
     }
-    private void validateAmountParameter(double amount) throws SQLException {
 
+    private void validateAmountParameter(double amount) throws SQLException {
         if (isSystemOperation()) {
             return;
         }
@@ -127,11 +121,9 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
             throw new SQLException("Transaction amount must be positive");
         }
 
-
         if (amount == 0) {
             throw new SQLException("Transaction amount must be greater than zero");
         }
-
 
         if (amount > 1_000_000_000) {
             logger.warning(String.format(
@@ -139,7 +131,6 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
                     authenticatedUserId, amount));
             throw new SQLException("Transaction amount exceeds maximum limit");
         }
-
 
         double rounded = Math.round(amount * 100) / 100.0;
         if (Math.abs(amount - rounded) > 0.001) {
@@ -167,7 +158,6 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
                 throw new SQLException("Invalid parameter value detected");
             }
         }
-
 
         if (value.length() > 1000) {
             throw new SQLException("Parameter value too long (max 1000 characters)");
@@ -265,7 +255,6 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
     }
 
     private void validateAllParametersSet() throws SQLException {
-        // Count ? placeholders in SQL
         int expectedParams = countPlaceholders(sql);
 
         if (boundParameters.size() < expectedParams) {

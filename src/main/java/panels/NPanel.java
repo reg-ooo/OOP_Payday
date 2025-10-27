@@ -4,15 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 import Factory.LabelFactory;
-import Factory.PanelFactory;
 import data.UserInfo;
-import main.Payday;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
 import javax.swing.border.EmptyBorder;
 
-import data.Database;
 import Factory.PanelBuilder;
 
 public class NPanel extends JPanel {

@@ -2,7 +2,6 @@ package panels;
 
 import Factory.LabelFactory;
 import Factory.PanelBuilder;
-import Factory.PanelFactory;
 import components.RoundedBorder;
 
 import javax.swing.*;

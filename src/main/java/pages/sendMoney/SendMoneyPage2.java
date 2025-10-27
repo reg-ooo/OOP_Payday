@@ -7,6 +7,7 @@ import Factory.sendMoney.SendMoneyPage2Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage2Factory;
 import data.SendMoney;
 import data.UserInfo;
+import data.Users;
 import util.ThemeManager;
 
 public class SendMoneyPage2 extends JPanel {
@@ -93,8 +94,11 @@ public class SendMoneyPage2 extends JPanel {
     private void handleConfirm(String destination) {
         // Pass phone number, amount, and recipient name to SendMoneyPage3
         SendMoney sendMoney = new SendMoney();
-        sendMoney.sendMoney(phoneNumber, Double.parseDouble(amount));
-        onButtonClick.accept("SendMoney3:" + recipientName + ":" + phoneNumber + ":" + amount);
+        if(Users.getInstance().revalidateUser()) {
+            sendMoney.sendMoney(phoneNumber, Double.parseDouble(amount));
+            SendMoneyPage.getInstance().clearForm();
+            onButtonClick.accept("SendMoney3:" + recipientName + ":" + phoneNumber + ":" + amount);
+        }
     }
 
     private void handleBack(String destination) {

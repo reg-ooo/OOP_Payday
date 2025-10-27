@@ -51,7 +51,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new LoginPage(this::handleLoginResult), "Login");
         mainPanel.add(new RegisterPage(this::handleRegisterResult), "Register");
         mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
-        mainPanel.add(new SendMoneyPage(this::handleSendMoneyResult), "SendMoney");
+        mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
         mainPanel.add(new SendMoneyPage2(this::handleSendMoney2Result), "SendMoney2");
         mainPanel.add(new SendMoneyPage3(this::handleSendMoney3Result), "SendMoney3");
         mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");

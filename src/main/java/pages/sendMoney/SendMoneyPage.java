@@ -8,10 +8,12 @@ import java.util.function.Consumer;
 
 import Factory.sendMoney.SendMoneyPage1Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
+import data.Database;
 import data.UserInfo;
 import util.ThemeManager;
 
 public class SendMoneyPage extends JPanel {
+    private static SendMoneyPage instance;
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
     private final SendMoneyPage1Factory factory;
@@ -20,7 +22,18 @@ public class SendMoneyPage extends JPanel {
     private JTextField amountField;
     private JTextField phoneField;
 
-    public SendMoneyPage(Consumer<String> onButtonClick) {
+    public static SendMoneyPage getInstance() {
+        return instance;
+    }
+
+    public static SendMoneyPage getInstance(Consumer<String> onButtonClick) {
+        if (instance == null) {
+            instance = new SendMoneyPage(onButtonClick);
+        }
+        return instance;
+    }
+
+    private SendMoneyPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         this.factory = new ConcreteSendMoneyPage1Factory();
         setupUI();
@@ -74,6 +87,13 @@ public class SendMoneyPage extends JPanel {
         // Setup event handlers
         setupEventHandlers();
         updateBalanceDisplay();
+    }
+
+    public void clearForm(){
+        phoneField.setText("");
+        amountField.setText("");
+        revalidate();
+        repaint();
     }
 
     private void handleNextButton() {

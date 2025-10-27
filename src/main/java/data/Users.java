@@ -4,6 +4,7 @@ import main.MainFrame;
 import pages.*;
 import panels.*;
 
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -110,6 +111,21 @@ public class Users {
         }
     }
 
+    public boolean revalidateUser(){
+        if(!userInfo.isLoggedIn()){
+            return false;
+        }
+        String pin = JOptionPane.showInputDialog(null, "Please enter your pin: ");
+        String query = "SELECT COUNT(*) FROM Users WHERE userID = ? and pin = ?";
+        try(PreparedStatement pstmt = database.prepareStatement(query)){
+            pstmt.setInt(1, userInfo.getCurrentUserId());
+            pstmt.setString(2, pin);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next() && rs.getInt(1) > 0;
+        }catch(Exception e){
+            return false;
+        }
+    }
 
     private String capitalizeFirstLetter(String name) {
 
