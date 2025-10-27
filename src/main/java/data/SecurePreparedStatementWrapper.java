@@ -73,16 +73,14 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
 
     // ==================== VALIDATION METHODS ====================
 
-    // Update the validation method
+
     private void validateIntParameter(int parameterIndex, int value) throws SQLException {
         // Skip validation for system operations
         if (isSystemOperation()) {
             return;
         }
 
-        // If this query touches sensitive tables and binds a userID
         if (isSensitiveTableQuery() && isUserIdParameter(parameterIndex)) {
-            // The bound userID MUST match the authenticated user
             if (value != authenticatedUserId) {
                 logger.severe(String.format(
                         "SECURITY VIOLATION: User %d attempted to access data for user %d",
@@ -91,19 +89,18 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
             }
         }
 
-        // Validate positive IDs (but allow system operations)
         if (isIdParameter(parameterIndex) && value <= 0 && value != SYSTEM_USER_ID) {
             throw new SQLException("ID parameters must be positive");
         }
     }
 
     private void validateLongParameter(int parameterIndex, long value) throws SQLException {
-        // Skip validation for system operations
+
         if (isSystemOperation()) {
             return;
         }
 
-        // Similar validation for long types
+
         if (isSensitiveTableQuery() && isUserIdParameter(parameterIndex)) {
             if (value != authenticatedUserId) {
                 logger.severe(String.format(
@@ -114,12 +111,12 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
         }
     }
 
-    // Add helper method to check if this is a system operation
+
     private boolean isSystemOperation() {
         return authenticatedUserId == SYSTEM_USER_ID;
     }
     private void validateAmountParameter(double amount) throws SQLException {
-        // No negative amounts
+
         if (isSystemOperation()) {
             return;
         }
@@ -130,12 +127,12 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
             throw new SQLException("Transaction amount must be positive");
         }
 
-        // No zero amounts
+
         if (amount == 0) {
             throw new SQLException("Transaction amount must be greater than zero");
         }
 
-        // Reasonable maximum (prevent integer overflow attacks)
+
         if (amount > 1_000_000_000) {
             logger.warning(String.format(
                     "User %d attempted unusually large transaction: %.2f",
@@ -143,7 +140,7 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
             throw new SQLException("Transaction amount exceeds maximum limit");
         }
 
-        // Validate decimal places (prevent floating point manipulation)
+
         double rounded = Math.round(amount * 100) / 100.0;
         if (Math.abs(amount - rounded) > 0.001) {
             throw new SQLException("Amount cannot have more than 2 decimal places");
@@ -152,10 +149,8 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
 
     private void validateStringParameter(String value) throws SQLException {
         if (value == null) {
-            return; // NULL is valid for SQL
+            return;
         }
-
-        // Detect SQL injection attempts in parameter values
         String[] dangerousPatterns = {
                 "--", "/*", "*/", ";--",
                 "xp_", "sp_",
@@ -173,7 +168,7 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
             }
         }
 
-        // Limit string length (prevent buffer overflow)
+
         if (value.length() > 1000) {
             throw new SQLException("Parameter value too long (max 1000 characters)");
         }
@@ -187,7 +182,6 @@ public class SecurePreparedStatementWrapper implements PreparedStatement {
     }
 
     private boolean isUserIdParameter(int parameterIndex) {
-        // Check if the SQL has "userID = ?" or "WHERE userID"
         String upperSql = sql.toUpperCase();
         return upperSql.contains("USERID") || upperSql.contains("USER_ID");
     }

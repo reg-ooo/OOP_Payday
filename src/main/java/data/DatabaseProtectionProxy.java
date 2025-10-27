@@ -37,7 +37,7 @@ public class DatabaseProtectionProxy implements DatabaseService {
         return instance;
     }
 
-    // Add methods to update context
+
     public void setUserContext(int userId, boolean isAuthenticated) {
         this.userId = userId;
         this.isAuthenticated = isAuthenticated;
@@ -93,9 +93,7 @@ public class DatabaseProtectionProxy implements DatabaseService {
         realDatabase.connect();
     }
 
-    // Updated to allow system operations
     private void checkAuthentication() {
-        // Allow system operations
         if (userId == SYSTEM_USER_ID && isAuthenticated) {
             LOGGER.info("System operation authenticated");
             return;
