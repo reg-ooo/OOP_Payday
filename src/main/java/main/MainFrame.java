@@ -8,7 +8,8 @@ import java.awt.*;
 
 import data.UserInfo;
 import pages.*;
-//import pages.SplashScreen;
+import pages.cashIn.BanksPage;
+import pages.cashIn.CashInPage;
 import pages.sendMoney.SendMoneyPage;
 import pages.sendMoney.SendMoneyPage2;
 import pages.sendMoney.SendMoneyPage3;
@@ -54,6 +55,8 @@ public class MainFrame extends JFrame {
         mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
         mainPanel.add(new SendMoneyPage2(this::handleSendMoney2Result), "SendMoney2");
         mainPanel.add(new SendMoneyPage3(this::handleSendMoney3Result), "SendMoney3");
+        mainPanel.add(CashInPage.getInstance(this::handleCashInResult), "CashIn");
+        mainPanel.add(new BanksPage(this::handleCashInBanksResult), "CashInBanks");
         mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
 
         // Main container
@@ -106,8 +109,36 @@ public class MainFrame extends JFrame {
                 }
                 slideContentTransition("SendMoney", 1);
             }
+            case "CashIn" -> slideContentTransition("CashIn", 1);
             case "Profile" -> slideContentTransition("Profile", 1);
             default -> System.out.println("Unknown action: " + result);
+        }
+    }
+
+    private void handleCashInResult(String result) {
+        switch (result) {
+            case "Launch" -> slideContentTransition("Launch", -1);
+            case "CashInBanks" -> slideContentTransition("CashInBanks", 1);
+            case "CashInStores" -> {
+                // TODO: Navigate to Physical Stores page when created
+                System.out.println("Navigate to Physical Stores page");
+                // slideContentTransition("CashInStores", 1);
+            }
+            default -> System.out.println("Unknown Cash In action: " + result);
+        }
+    }
+
+    private void handleCashInBanksResult(String result) {
+        if (result.startsWith("CashInBank:")) {
+            String bankName = result.substring("CashInBank:".length());
+            System.out.println("Processing cash in for bank: " + bankName);
+            // TODO: Navigate to amount/details page
+            // For now, just go back to CashIn
+            slideContentTransition("CashIn", -1);
+        } else if (result.equals("CashIn")) {
+            slideContentTransition("CashIn", -1);
+        } else {
+            System.out.println("Unknown Banks action: " + result);
         }
     }
 
