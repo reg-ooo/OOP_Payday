@@ -1,8 +1,11 @@
 package data.dao;
 
+import data.Database;
 import data.DatabaseService;
 import data.DatabaseProtectionProxy;
 import data.model.Transaction;
+import data.model.User;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,6 +13,14 @@ import java.util.List;
 
 public class TransactionDAOImpl implements TransactionDAO {
     private DatabaseService database;
+    private static TransactionDAOImpl instance;
+
+    public static TransactionDAOImpl getInstance() {
+        if (instance == null) {
+            instance = new TransactionDAOImpl();
+        }
+        return instance;
+    }
 
     public TransactionDAOImpl() {
         this.database = DatabaseProtectionProxy.getInstance();
@@ -35,12 +46,12 @@ public class TransactionDAOImpl implements TransactionDAO {
     }
 
     @Override
-    public Transaction findLatestByWalletId(int walletID) {
+    public Transaction getTransaction() {
         String query = "SELECT * FROM Transactions WHERE walletID = ? " +
                 "ORDER BY transactionID DESC LIMIT 1";
 
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setInt(1, walletID);
+            pstmt.setInt(1, User.getUserID());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {

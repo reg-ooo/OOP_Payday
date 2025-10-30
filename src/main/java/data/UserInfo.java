@@ -12,7 +12,7 @@ public class UserInfo {
 
     private UserInfo() {
         this.walletDAO = new WalletDAOImpl();
-        this.transactionDAO = new TransactionDAOImpl();
+        this.transactionDAO = TransactionDAOImpl.getInstance();
     }
 
     public static UserInfo getInstance() {
@@ -48,7 +48,7 @@ public class UserInfo {
 
         if (wallet != null) {
             int walletID = wallet.getWalletID();
-            return transactionDAO.findLatestByWalletId(walletID);
+            return transactionDAO.getTransaction();
         }
 
         return null;

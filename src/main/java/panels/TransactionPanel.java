@@ -7,6 +7,7 @@ import Factory.LabelFactory;
 import components.*;
 import data.TransactionList;
 import data.UserInfo;
+import data.dao.TransactionDAOImpl;
 import util.FontLoader;
 import util.ThemeManager;
 import Factory.PanelBuilder;
@@ -81,11 +82,11 @@ public class TransactionPanel extends JPanel{
     public void loadComponents(){
         transactionContentPanel.removeAll();
 
-        UserInfo userInfo = UserInfo.getInstance();
-        String time = userInfo.getTransaction().getDate().substring(userInfo.getTransaction().getDate().indexOf(" "), userInfo.getTransaction().getDate().length() - 3);
+        TransactionDAOImpl userInfo = TransactionDAOImpl.getInstance();
+        String time = userInfo.getTransaction().getTransactionDate().substring(userInfo.getTransaction().getTransactionDate().indexOf(" "), userInfo.getTransaction().getTransactionDate().length() - 3);
         String validatedTime = checkTime(time);
-        transactionContentPanel.add(createDateSection(userInfo.getTransaction().getDate().substring(0, userInfo.getTransaction().getDate().indexOf(" "))));
-        transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction().getType(), "₱" + userInfo.getTransaction().getAmount(), !userInfo.getTransaction().getType().equals("send")));
+        transactionContentPanel.add(createDateSection(userInfo.getTransaction().getTransactionDate().substring(0, userInfo.getTransaction().getTransactionDate().indexOf(" "))));
+        transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction().getTransactionType(), "₱" + userInfo.getTransaction().getAmount(), !userInfo.getTransaction().getTransactionType().equals("send")));
         transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
         transactionContainer.add(transactionRoundedPanel);
         this.add(transactionContainer, BorderLayout.CENTER);
