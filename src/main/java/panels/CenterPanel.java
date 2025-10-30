@@ -49,7 +49,7 @@ public class CenterPanel extends JPanel {
         sendMoneyWrapper = styleButton(buttons.get(0), "Send Money", ImageLoader.getInstance().getImage("sendMoney"));
         cashInWrapper = styleButton(buttons.get(1), "Cash In", ImageLoader.getInstance().getImage("cashIn"));
         cashOutWrapper = styleButton(buttons.get(2), "Cash Out", ImageLoader.getInstance().getImage("cashOut"));
-        requestMoneyWrapper = styleButton(buttons.get(3), "Request Money", ImageLoader.getInstance().getImage("requestMoney"));
+        requestMoneyWrapper = styleButton(buttons.get(3), "Rewards", ImageLoader.getInstance().getImage("requestMoney"));
         bankTransferWrapper = styleButton(buttons.get(4), "Bank Transfer", ImageLoader.getInstance().getImage("bankTransfer"));
         buyCryptoWrapper = styleButton(buttons.get(5), "Buy Crypto", ImageLoader.getInstance().getImage("buyCrypto"));
 
@@ -105,6 +105,10 @@ public class CenterPanel extends JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (text.equals("Send Money")) {
                     onButtonClick.accept("SendMoney");
+                } else if (text.equals("Cash In")) {
+                    onButtonClick.accept("CashIn");
+                } else if (text.equals("Rewards")) {
+                    onButtonClick.accept("Rewards");
                 } else {
                     JOptionPane.showMessageDialog(centerPanel, text + " clicked!");
                 }

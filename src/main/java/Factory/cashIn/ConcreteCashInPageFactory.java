@@ -6,6 +6,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import util.ThemeManager;
+import util.FontLoader;
 
 public class ConcreteCashInPageFactory implements CashInPageFactory {
     private final ThemeManager themeManager = ThemeManager.getInstance();
@@ -13,8 +14,8 @@ public class ConcreteCashInPageFactory implements CashInPageFactory {
     @Override
     public JLabel createBackLabel(Runnable onBackClick) {
         JLabel backLabel = new JLabel("Back");
-        backLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        backLabel.setForeground(themeManager.getDSBlue());
+        backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
+        backLabel.setForeground(themeManager.getDBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -28,47 +29,41 @@ public class ConcreteCashInPageFactory implements CashInPageFactory {
     @Override
     public JLabel createTitleLabel() {
         JLabel titleLabel = new JLabel("Cash In");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
-        titleLabel.setForeground(themeManager.getBlack());
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
+        titleLabel.setForeground(themeManager.getVBlue());
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         return titleLabel;
     }
 
     @Override
     public JButton createOptionButton(String text, Runnable onClickAction) {
-        JButton button = new JButton();
+        JButton button = new JButton(text);
         button.setPreferredSize(new Dimension(140, 140));
         button.setMinimumSize(new Dimension(140, 140));
         button.setMaximumSize(new Dimension(140, 140));
-        button.setLayout(new BorderLayout());
 
-        // Create text label
-        JLabel textLabel = new JLabel(text);
-        textLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        textLabel.setForeground(themeManager.getBlack());
-        textLabel.setHorizontalAlignment(JLabel.CENTER);
-
+        button.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        button.setForeground(themeManager.getDeepBlue());
         button.setBackground(themeManager.getWhite());
-        button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getDSBlue(), 4, true),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Add text at bottom
-        button.add(textLabel, BorderLayout.SOUTH);
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true),
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
 
-        // Add hover effect
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(new Color(240, 248, 255));
+                button.setBackground(themeManager.getGradientLBlue());
+                button.setForeground(themeManager.getWhite());
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(themeManager.getWhite());
+                button.setForeground(themeManager.getDeepBlue());
             }
 
             @Override
@@ -89,32 +84,12 @@ public class ConcreteCashInPageFactory implements CashInPageFactory {
     }
 
     @Override
-    public JPanel createContentPanel(JButton banksButton, JButton physicalStoresButton) {
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        contentPanel.setBackground(themeManager.getWhite());
-        contentPanel.setPreferredSize(new Dimension(380, 150));
-        contentPanel.add(banksButton);
-        contentPanel.add(physicalStoresButton);
-        return contentPanel;
+    public JPanel createContentPanel(JButton banksButton, JButton storesButton) {
+        return null;
     }
 
     @Override
     public JPanel createCenterPanel(JLabel titleLabel, JPanel contentPanel) {
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBackground(themeManager.getWhite());
-
-        // Center the title
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.setBackground(themeManager.getWhite());
-        titlePanel.add(titleLabel);
-
-        centerPanel.add(Box.createVerticalStrut(40));
-        centerPanel.add(titlePanel);
-        centerPanel.add(Box.createVerticalStrut(80));
-        centerPanel.add(contentPanel);
-
-        return centerPanel;
+        return null;
     }
 }

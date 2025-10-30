@@ -7,8 +7,10 @@ import java.util.function.Consumer;
 import Factory.cashIn.CashInPageFactory;
 import Factory.cashIn.ConcreteCashInPageFactory;
 import util.ThemeManager;
+import util.FontLoader;
 
 public class CashInPage extends JPanel {
+
     private static CashInPage instance;
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
@@ -31,48 +33,56 @@ public class CashInPage extends JPanel {
         setupUI();
     }
 
-    /** CASH IN PAGE
-     * This is the first page of the Cash In flow
-     * User selects between Banks or Physical Stores
-     * DATA FLOW: CASH IN PAGE → BANKS PAGE or PHYSICAL STORES PAGE
-     * FORMAT: "CashInBanks" or "CashInStores"
-     */
-
     private void setupUI() {
-        // Create ALL components through factory
+
         JLabel backLabel = factory.createBackLabel(() -> onButtonClick.accept("Launch"));
         JLabel titleLabel = factory.createTitleLabel();
 
-        // Create option buttons through factory
-        JButton banksButton = factory.createOptionButton(
-                "Banks",
-                this::handleBanksClick
-        );
+        JButton banksButton = factory.createOptionButton("Banks", this::handleBanksClick);
+        JButton storesButton = factory.createOptionButton("Stores", this::handleStoresClick);
 
-        JButton physicalStoresButton = factory.createOptionButton(
-                "Physical Stores",
-                this::handlePhysicalStoresClick
-        );
-
-        // Create ALL panels through factory
         JPanel headerPanel = factory.createHeaderPanel(backLabel);
-        JPanel contentPanel = factory.createContentPanel(banksButton, physicalStoresButton);
-        JPanel centerPanel = factory.createCenterPanel(titleLabel, contentPanel);
 
-        // Setup main panel
+        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel.setOpaque(false);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(0, 15, 0, 15); // 30px total gap
+        gbc.gridx = 0;
+        contentPanel.add(banksButton, gbc);
+        gbc.gridx = 1;
+        contentPanel.add(storesButton, gbc);
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setBackground(themeManager.getWhite());
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.insets = new Insets(20, 0, 30, 0);
+        centerPanel.add(titleLabel, gbc);
+
+        gbc.gridy = 1;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        centerPanel.add(contentPanel, gbc);
+
+        JLabel stepLabel = new JLabel("Step 1 of 4", SwingConstants.CENTER);
+        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
+        stepLabel.setForeground(themeManager.getDeepBlue());
+
+        // Main layout
         setLayout(new BorderLayout());
         setBackground(themeManager.getWhite());
-        setBorder(BorderFactory.createEmptyBorder(40, 30, 40, 30));
+        setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
         add(headerPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
+        add(stepLabel, BorderLayout.SOUTH);
     }
 
     private void handleBanksClick() {
         onButtonClick.accept("CashInBanks");
     }
 
-    private void handlePhysicalStoresClick() {
+    private void handleStoresClick() {
         onButtonClick.accept("CashInStores");
     }
 }
