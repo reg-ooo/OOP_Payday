@@ -8,7 +8,14 @@ import java.awt.*;
 
 import data.model.UserInfo;
 import pages.*;
+import pages.buyLoad.BuyLoadPage;
+import pages.buyLoad.BuyLoadPage2;
+import pages.buyLoad.BuyLoadPage3;
+import pages.buyLoad.BuyLoadReceiptPage;
 import pages.cashIn.*;
+import pages.cashOut.CashOutPage;
+import pages.cashOut.CashOutPage2;
+import pages.cashOut.CashOutReceiptPage;
 import pages.sendMoney.SendMoneyPage;
 import pages.sendMoney.SendMoneyPage2;
 import pages.sendMoney.SendMoneyPage3;
@@ -79,6 +86,17 @@ public class MainFrame extends JFrame {
         // We must fix the Banks2 handler to route the Stores2 key.
         mainPanel.add(QRPage.getInstance(this::handleCashInBanks2Result), "QRPage");
 
+        //CASH OUT PAGES
+        mainPanel.add(new CashOutPage(this::handleCashOutResult), "CashOut");
+        mainPanel.add(new CashOutPage2(this::handleCashOutResult), "CashOut2");
+        mainPanel.add(new CashOutReceiptPage(this::handleCashOutResult), "CashOutSuccess");
+
+        //BUY LOAD PAGES
+        mainPanel.add(new BuyLoadPage(this::handleBuyLoadResult), "BuyLoad");
+        mainPanel.add(new BuyLoadPage2(this::handleBuyLoadResult), "BuyLoad2");
+        mainPanel.add(new BuyLoadPage3(this::handleBuyLoadResult), "BuyLoad3");
+        mainPanel.add(new BuyLoadReceiptPage(this::handleBuyLoadResult), "BuyLoadReceipt");
+
         //REWARDS PAGES
         mainPanel.add(new pages.RewardsPage(this::handleRewardsResult), "Rewards");
         mainPanel.add(new RewardsPage2(this::handleRewards2Result), "Rewards2");
@@ -134,7 +152,20 @@ public class MainFrame extends JFrame {
                 }
                 slideContentTransition("SendMoney", 1);
             }
+            case "CashOut" ->  {
+                //CLEAR AMOUNT FIELD
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof CashOutPage) {
+                        ((CashOutPage) comp).clearAmountField();
+                        break;
+                    }
+                }
+
+                slideContentTransition("CashOut", 1);
+            }
             case "CashIn" -> slideContentTransition("CashIn", 1);
+            case "BuyLoad" -> slideContentTransition("BuyLoad", 1);
             case "Rewards" -> slideContentTransition("Rewards", 1);
             case "Profile" -> slideContentTransition("Profile", 1);
             default -> System.out.println("Unknown action: " + result);
@@ -230,6 +261,137 @@ public class MainFrame extends JFrame {
             slideContentTransition("Launch", -1);
         } else {
             System.out.println("Unknown CashInStores2 action: " + result);
+        }
+    }
+
+    private void handleBuyLoadResult(String result) {
+        if (result.equals("Launch")) {
+            slideContentTransition("Launch", -1);
+        }
+        else if (result.equals("BuyLoad")) {
+            slideContentTransition("BuyLoad", -1);
+        }
+        else if (result.startsWith("BuyLoad2:")) {
+            // Extract network from result string "BuyLoad2:Smart"
+            String network = result.substring("BuyLoad2:".length());
+
+            // Find the BuyLoadPage2 instance and update it with the selected network
+            Component[] components = mainPanel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof BuyLoadPage2) {
+                    BuyLoadPage2 buyLoadPage2 = (BuyLoadPage2) comp;
+                    buyLoadPage2.setSelectedNetwork(network);
+                    break;
+                }
+            }
+            slideContentTransition("BuyLoad2", 1);
+        }
+        else if (result.startsWith("BuyLoad2Back:")) {
+            // Extract network from result string "BuyLoad2Back:Smart"
+            String network = result.substring("BuyLoad2Back:".length());
+
+            // Find the BuyLoadPage2 instance and update it with the selected network
+            Component[] components = mainPanel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof BuyLoadPage2) {
+                    BuyLoadPage2 buyLoadPage2 = (BuyLoadPage2) comp;
+                    buyLoadPage2.setSelectedNetwork(network);
+                    break;
+                }
+            }
+            slideContentTransition("BuyLoad2", -1);
+        }
+        else if (result.startsWith("BuyLoad3:")) {
+            // Extract data from result string "BuyLoad3:Smart:100.00:09171234567"
+            String[] parts = result.split(":");
+            if (parts.length >= 4) {
+                String network = parts[1];
+                String amount = parts[2];
+                String phone = parts[3];
+
+                // Find the BuyLoadPage3 instance and update it with the transaction data
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof BuyLoadPage3) {
+                        BuyLoadPage3 buyLoadPage3 = (BuyLoadPage3) comp;
+                        buyLoadPage3.updateTransactionData(network, amount, phone);
+                        break;
+                    }
+                }
+            }
+            slideContentTransition("BuyLoad3", 1);
+        }
+        else if (result.startsWith("BuyLoadReceipt:")) {
+            // Extract data from result string "BuyLoadReceipt:Smart:100.00:09171234567"
+            String[] parts = result.split(":");
+            if (parts.length >= 4) {
+                String network = parts[1];
+                String amount = parts[2];
+                String phone = parts[3];
+
+                // Find the BuyLoadReceiptPage instance and update it with the transaction data
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof BuyLoadReceiptPage) {
+                        BuyLoadReceiptPage buyLoadReceiptPage = (BuyLoadReceiptPage) comp;
+                        buyLoadReceiptPage.updateTransactionData(network, amount, phone);
+                        break;
+                    }
+                }
+            }
+            slideContentTransition("BuyLoadReceipt", 1);
+        }
+        else if (result.startsWith("BuyLoadSuccess")) {
+            slideContentTransition("Launch", -1);
+        }
+    }
+
+    private void handleCashOutResult(String result) {
+        if (result.startsWith("Launch")) {
+            slideContentTransition("Launch", -1);
+        }
+        else if (result.equals("CashOut")) {
+            slideContentTransition("CashOut", -1);
+
+            //CLEAR AMOUNT FIELD
+            Component[] components = mainPanel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof CashOutPage) {
+                    ((CashOutPage) comp).clearAmountField();
+                    break;
+                }
+            }
+        }
+        else if (result.startsWith("CashOut2:")) {
+            // Extract amount from result string "CashOut2:100.00"
+            String amount = result.substring("CashOut2:".length());
+
+            // Find the CashOutPage2 instance and update it with the amount
+            Component[] components = mainPanel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof CashOutPage2) {
+                    CashOutPage2 cashOutPage2 = (CashOutPage2) comp;
+                    cashOutPage2.updateTransactionData(amount, "Cash Out");
+                    break;
+                }
+            }
+            slideContentTransition("CashOut2", 1);
+        }
+        else if (result.startsWith("CashOutSuccess:")) {
+            // Extract amount from result string "CashOutSuccess:100.00"
+            String amount = result.substring("CashOutSuccess:".length());
+            String service = "Cash Out";
+
+            // Update CashOutSuccessPage with the transaction data
+            Component[] components = mainPanel.getComponents();
+            for (Component comp : components) {
+                if (comp instanceof CashOutReceiptPage) {
+                    CashOutReceiptPage successPage = (CashOutReceiptPage) comp;
+                    successPage.updateTransactionData(amount, service);
+                    break;
+                }
+            }
+            slideContentTransition("CashOutSuccess", 1);
         }
     }
 

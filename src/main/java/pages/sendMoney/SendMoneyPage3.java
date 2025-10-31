@@ -15,11 +15,11 @@ public class SendMoneyPage3 extends JPanel {
     private final SendMoneyPage3Factory factory;
 
     // Transaction data
-    private String recipientName = "MICO PAT P.";
-    private String phoneNumber = "0805 038 0463";
-    private String amount = "30.00";
-    private String referenceNo = "1004 878 705210";
-    private String dateTime = "Jun 19 2022, 05:34 PM";
+    private String recipientName;
+    private String phoneNumber;
+    private String amount;
+    private String referenceNo;
+    private String dateTime;
 
     public SendMoneyPage3(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;

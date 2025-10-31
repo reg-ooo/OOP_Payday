@@ -52,7 +52,7 @@ public class CenterPanel extends JPanel {
         // --- MAJOR CHANGE HERE: Bank Transfer -> Pay Bills ---
         payBillsWrapper = styleButton(buttons.get(4), "Pay Bills", ImageLoader.getInstance().getImage("PayBills"));
 
-        buyCryptoWrapper = styleButton(buttons.get(5), "Buy Crypto", ImageLoader.getInstance().getImage("buyCrypto"));
+        buyCryptoWrapper = styleButton(buttons.get(5), "Buy Load", ImageLoader.getInstance().getImage("buyCrypto"));
 
         //ADD BUTTONS
         addAllButtons(buttonPanel);
@@ -112,8 +112,9 @@ public class CenterPanel extends JPanel {
                 } else if (text.equals("Cash Out")) {
                     onButtonClick.accept("CashOut");
                 } else if (text.equals("Pay Bills")) {
-                    // NEW: Action for the "Pay Bills" feature
                     onButtonClick.accept("PayBills");
+                } else if (text.equals("Buy Load")) {
+                    onButtonClick.accept("BuyLoad");
                 }
                 else {
                     JOptionPane.showMessageDialog(centerPanel, text + " clicked!");

@@ -40,6 +40,13 @@ public class ImageLoader {
         images.put("arrow", resizeImage("icons/profile/arrow.png", 30, 30));
         images.put("arrowHover", resizeImage("icons/profile/arrow_hover.png", 30, 30));
 
+        //BUY LOAD ICONS
+        images.put("smart", resizeImage("icons/buyLoad/Smart.png", 130, 130));
+        images.put("globe", resizeImage("icons/buyLoad/Globe.png", 130, 130));
+        images.put("tnt", resizeImage("icons/buyLoad/TNT.png", 130, 130));
+        images.put("dito", resizeImage("icons/buyLoad/dito.png", 130, 130));
+        images.put("telco", resizeImage("icons/buyLoad/Telco.png", 70, 70));
+
         //SEND MONEY ICONS
         images.put("payWith", resizeImage("icons/sendMoney/payWith.png", 65, 65));
         images.put("availableBalance", resizeImage("icons/sendMoney/availableBalance.png", 60, 60));

@@ -38,14 +38,6 @@ public class ConcreteSendMoneyPage3Factory extends ConcreteSendMoneyBaseFactory 
         panel.add(nameLabel);
         panel.add(Box.createVerticalStrut(10));
 
-//        // Phone Number
-//        JLabel phoneLabel = new JLabel(phoneNumber);
-//        phoneLabel.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-//        phoneLabel.setForeground(themeManager.getDSBlue());
-//        phoneLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        panel.add(phoneLabel);
-//        panel.add(Box.createVerticalStrut(30));
-
         // Amount Section
         panel.add(createDetailRow("Amount", "PHP " + amount));
         panel.add(Box.createVerticalStrut(15));
