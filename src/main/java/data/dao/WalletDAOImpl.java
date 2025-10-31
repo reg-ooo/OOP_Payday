@@ -8,11 +8,20 @@ import java.sql.ResultSet;
 
 public class WalletDAOImpl implements WalletDAO {
     private DatabaseService database;
+    private static WalletDAOImpl instance;
+
+    public static WalletDAOImpl getInstance() {
+        if (instance == null) {
+            instance = new WalletDAOImpl();
+        }
+        return instance;
+    }
 
     public WalletDAOImpl() {
         this.database = DatabaseProtectionProxy.getInstance();
     }
 
+    // Inserts a new wallet into the database
     @Override
     public boolean insert(Wallet wallet) {
         String query = "INSERT INTO Wallets(userID, balance) VALUES (?, ?)";
@@ -29,6 +38,7 @@ public class WalletDAOImpl implements WalletDAO {
         }
     }
 
+    // Returns the wallet data taken from the resultset
     @Override
     public Wallet findByUserId(int userID) {
         String query = "SELECT * FROM Wallets WHERE userID = ?";

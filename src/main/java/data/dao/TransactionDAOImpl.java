@@ -29,6 +29,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         this.database = DatabaseProtectionProxy.getInstance();
     }
 
+    // Inserts a new transaction into the database
     @Override
     public void insertTransaction(int walletID, String transactionType, double amount) {
         String sql = "INSERT INTO Transactions(walletID, transactionType, referenceID, amount, userID) VALUES(?, ?, ?, ?, ?)";
@@ -41,7 +42,7 @@ public class TransactionDAOImpl implements TransactionDAO {
             stmt.setString(2, transactionType);
             stmt.setString(3, referenceNum);
             stmt.setDouble(4, amount);
-            stmt.setInt(5, UserInfo.getInstance().getCurrentUserId());
+            stmt.setInt(5, walletID);
             stmt.executeUpdate();
             DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
         } catch (SQLException e) {
@@ -50,6 +51,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         }
     }
 
+    // Checks if there are any transactions for the current user
     public boolean checkForTransactions(){
         String query = "SELECT COUNT(*) FROM Transactions WHERE userID = ?";
         try (PreparedStatement pstmt = database.prepareStatement(query)){
@@ -64,6 +66,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         return false;
     }
 
+    // Generates a unique reference number for each transaction
     private String getReference(){
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");
@@ -75,6 +78,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         return referenceNum;
     }
 
+    // Gets the last transaction for the current user
     @Override
     public Transaction getTransaction() {
         String query = "SELECT * FROM Transactions WHERE walletID = ? " +
@@ -93,6 +97,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         return null;
     }
 
+    // Gets all the transactions for a given wallet
     @Override
     public List<Transaction> getAllTransactions(int walletID) {
         List<Transaction> transactions = new ArrayList<>();
@@ -112,6 +117,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         return transactions;
     }
 
+    // Returns the transactions data taken from the resultset
     private Transaction mapResultSetToTransaction(ResultSet rs) throws Exception {
         Transaction transaction = new Transaction();
         transaction.setTransactionID(rs.getInt("transactionID"));
@@ -120,5 +126,13 @@ public class TransactionDAOImpl implements TransactionDAO {
         transaction.setAmount(rs.getDouble("amount"));
         transaction.setTransactionDate(rs.getString("transactionDate"));
         return transaction;
+    }
+
+    // Checks if transaction is a gain or loss
+    public boolean gainMoney(Transaction transaction){
+        return !transaction.getTransactionType().equals("Send Money") &&
+                !transaction.getTransactionType().equals("Cash Out") &&
+                !transaction.getTransactionType().equals("Bank Transfer") &&
+                !transaction.getTransactionType().equals("Pay Bills");
     }
 }

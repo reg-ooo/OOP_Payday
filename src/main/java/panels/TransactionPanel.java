@@ -86,7 +86,7 @@ public class TransactionPanel extends JPanel{
             String time = userInfo.getTransaction().getTransactionDate().substring(userInfo.getTransaction().getTransactionDate().indexOf(" "), userInfo.getTransaction().getTransactionDate().length() - 3);
             String validatedTime = checkTime(time);
             transactionContentPanel.add(createDateSection(userInfo.getTransaction().getTransactionDate().substring(0, userInfo.getTransaction().getTransactionDate().indexOf(" "))));
-            transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction().getTransactionType(), "₱" + userInfo.getTransaction().getAmount(), !userInfo.getTransaction().getTransactionType().equals("send")));
+            transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction().getTransactionType(), "₱" + userInfo.getTransaction().getAmount(), userInfo.gainMoney(userInfo.getTransaction())));
             transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
             transactionContainer.add(transactionRoundedPanel);
             this.add(transactionContainer, BorderLayout.CENTER);
@@ -95,6 +95,8 @@ public class TransactionPanel extends JPanel{
             revalidate();
         }
     }
+
+
 
     public void unloadComponents(){
         transactionContentPanel.removeAll();
@@ -127,7 +129,7 @@ public class TransactionPanel extends JPanel{
 
         JLabel amountLabel = new JLabel(amount);
         amountLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Regular"));
-        amountLabel.setForeground(isPositive ? new Color(0, 128, 0) : Color.RED);
+        amountLabel.setForeground(isPositive ? ThemeManager.getGreen() : ThemeManager.getRed());
         amountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         transactionPanel.add(leftPanel, BorderLayout.WEST);

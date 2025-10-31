@@ -8,10 +8,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class SendMoneyDAOImpl implements MakeTransactionDAO{
-    UserInfo userInfo = UserInfo.getInstance();
-    private DatabaseProtectionProxy database = DatabaseProtectionProxy.getInstance();
-    TransactionDAO transactionDAO = TransactionDAOImpl.getInstance();
+    private final UserInfo userInfo = UserInfo.getInstance();
+    private final DatabaseProtectionProxy database = DatabaseProtectionProxy.getInstance();
+    private final TransactionDAO transactionDAO = TransactionDAOImpl.getInstance();
+    private final WalletDAOImpl walletDAO = WalletDAOImpl.getInstance();
 
+    // Sends money from the current user to the specified receiver
     public void sendMoney(String receiver, double amount){
         System.out.println("receiver: " + receiver);
         String sender = String.valueOf(UserInfo.getInstance().getCurrentUserId());
@@ -35,25 +37,17 @@ public class SendMoneyDAOImpl implements MakeTransactionDAO{
                 return;
             }
             else{
-                DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
+
                 senderBalance -= amount;
                 receiverBalance += amount;
-                String setSenderBalance = "UPDATE Wallets SET balance = ? WHERE userID = ?";
-                String setReceiverBalance = "UPDATE Wallets SET balance = ? WHERE userID = ?";
                 try{
-                    PreparedStatement pstmt2 = database.prepareStatement(setSenderBalance);
-                    pstmt2.setDouble(1, senderBalance);
-                    pstmt2.setString(2, sender);
-
-                    PreparedStatement pstmt3 = database.prepareStatement(setReceiverBalance);
-                    pstmt3.setDouble(1, receiverBalance);
-                    pstmt3.setString(2, receive);
-
-                    pstmt2.executeUpdate();
-                    pstmt3.executeUpdate();
+                    walletDAO.updateBalance(Integer.parseInt(sender), senderBalance);
+                    DatabaseProtectionProxy.getInstance().setSystemContext();
+                    walletDAO.updateBalance(Integer.parseInt(receive), receiverBalance);
                     DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
+
                 }catch(Exception e){
-                    DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
+
                     System.out.println("Failed to update balance: " + e.getMessage());
                 }
 
@@ -69,11 +63,13 @@ public class SendMoneyDAOImpl implements MakeTransactionDAO{
         }
     }
 
+    // Logs a transaction to the database
     @Override
     public void logTransaction(int user, String type, double amount){
         transactionDAO.insertTransaction(user, type, amount);
     }
 
+    // Gets the user ID from the database given a phone number
     private String getID(String number){
         String query = "SELECT userID FROM Users WHERE phoneNumber = ?";
         try (PreparedStatement pstmt = database.prepareStatement(query)){

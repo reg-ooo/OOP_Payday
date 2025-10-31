@@ -47,6 +47,11 @@ public class DatabaseProtectionProxy implements DatabaseService {
         LOGGER.info("User context cleared");
     }
 
+    public void setSystemContext() {
+        DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
+    }
+
+
     @Override
     public Connection getConnection() {
         logAccess("getConnection");

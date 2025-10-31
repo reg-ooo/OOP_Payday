@@ -30,6 +30,7 @@ public class UserInfo {
         return instance;
     }
 
+
     public void loginUser(int userId) {
         this.currentUserId = userId;
         this.isLoggedIn = true;

@@ -27,6 +27,7 @@ public class ThemeManager {
     private static final Color deepBlue = new Color(0, 120, 215);;
     private static final Color gradientLBlue = new Color(100, 180, 255);
     private static final Color red = new Color(255, 0 ,0);
+    private static final Color green = new Color(0, 128, 0);
 
     private static final Color transparent = new Color(0,0,0,0);
 
@@ -170,6 +171,10 @@ public class ThemeManager {
     public static Color getDeepBlue(){return deepBlue;}
 
     public static Color getGradientLBlue() {return gradientLBlue;}
+
     public static Color getRed() {return red;}
+
     public static Color getDGray() {return dGray;}
+
+    public static Color getGreen() {return green;}
 }

@@ -14,6 +14,7 @@ public class UserDAOImpl implements UserDAO {
         this.database = DatabaseProtectionProxy.getInstance();
     }
 
+    // Inserts a new user into the database
     @Override
     public boolean insert(UserInfo user) {
         String query = "INSERT INTO Users(fullName, phoneNumber, email, pin, birthDate, username) " +
@@ -35,6 +36,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    // Returns the user data taken from the resultset
     @Override
     public UserInfo findByUsername(String username) {
         String query = "SELECT * FROM Users WHERE username = ?";
@@ -52,23 +54,7 @@ public class UserDAOImpl implements UserDAO {
         return null;
     }
 
-    @Override
-    public UserInfo findById(int userID) {
-        String query = "SELECT * FROM Users WHERE userID = ?";
-
-        try (PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setInt(1, userID);
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-                return mapResultSetToUser(rs);
-            }
-        } catch (Exception e) {
-            System.err.println("Error finding user by ID: " + e.getMessage());
-        }
-        return null;
-    }
-
+    // Checks if the username already exists in the database
     @Override
     public boolean usernameExists(String username) {
         String query = "SELECT COUNT(*) FROM Users WHERE username = ?";
@@ -84,22 +70,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
-    @Override
-    public boolean validateCredentials(String username, String pin) {
-        String query = "SELECT COUNT(*) FROM Users WHERE username = ? AND pin = ?";
-
-        try (PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, pin);
-            ResultSet rs = pstmt.executeQuery();
-
-            return rs.next() && rs.getInt(1) > 0;
-        } catch (Exception e) {
-            System.err.println("Error validating credentials: " + e.getMessage());
-            return false;
-        }
-    }
-
+    // Returns true if the pin matches with the user's pin
     @Override
     public boolean validatePin(int userID, String pin) {
         String query = "SELECT COUNT(*) FROM Users WHERE userID = ? AND pin = ?";
@@ -116,6 +87,7 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    // Returns the maximum userID in the database
     @Override
     public int getMaxUserID() {
         String query = "SELECT MAX(userID) FROM Users";
@@ -132,6 +104,7 @@ public class UserDAOImpl implements UserDAO {
         return -1;
     }
 
+    // Returns all the data of the user taken from the resultset
     private UserInfo mapResultSetToUser(ResultSet rs) throws Exception {
         UserInfo user = UserInfo.getInstance();
         user.setUserID(rs.getInt("userID"));
