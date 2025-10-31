@@ -93,7 +93,7 @@ public class RewardsPage extends JPanel {
         backPanel.setBackground(ThemeManager.getWhite());
 
         JLabel backLabel = new JLabel("Back");
-        backLabel.setFont(FontLoader.getInstance().loadFont(0, 30.0F, "Quicksand-Bold"));
+        backLabel.setFont(FontLoader.getInstance().loadFont(0, 20.0F, "Quicksand-Bold"));
         backLabel.setForeground(ThemeManager.getDBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         // Using an anonymous inner class for MouseAdapter (standard practice)

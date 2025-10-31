@@ -5,25 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="Merge branch 'main' of https://github.com/reg-ooo/OOP_Payday&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;target/classes/data/SendMoney.class&#10;#&#9;target/classes/main/MainFrame.class&#10;#&#9;target/classes/pages/sendMoney/SendMoneyPage2.class">
-      <change afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RewardsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RewardsPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RewardsPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RewardsPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RewardsPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RewardsPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RewardsPage2$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RewardsPage2$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RewardsPage2$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RewardsPage2$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/RewardsPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RewardsPage2.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

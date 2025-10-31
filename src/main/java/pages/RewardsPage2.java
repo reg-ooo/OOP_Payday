@@ -26,7 +26,7 @@ public class RewardsPage2 extends JPanel {
     private JLabel amountLabel;
     private JLabel totalValueLabel;
 
-    private String phoneNumber = "09524805208";
+    private String phoneNumber = "0912";
     private int availablePoints = 300;
     private int requiredPoints = 300;
     private String rewardText = "₱ 100 Regular load";
@@ -58,40 +58,36 @@ public class RewardsPage2 extends JPanel {
     }
 
     private void setupUI() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBackground(ThemeManager.getWhite());
-        this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+        this.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // Header with back button
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        headerPanel.setBackground(ThemeManager.getWhite());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        JPanel headerPanel = createHeader();
+        this.add(headerPanel);
+        this.add(Box.createVerticalStrut(23));
 
-        JLabel backLabel = new JLabel("Back");
-        backLabel.setFont(FontLoader.getInstance().loadFont(0, 30.0F, "Quicksand-Bold"));
-        backLabel.setForeground(ThemeManager.getDBlue());
-        backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        backLabel.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                RewardsPage2.this.onButtonClick.accept("Rewards");
-            }
-        });
-        headerPanel.add(backLabel);
+        // ADD CONFIRM PAYMENT TITLE HERE
+        JLabel confirmTitle = new JLabel("Confirm Payment");
+        confirmTitle.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
+        confirmTitle.setForeground(ThemeManager.getDBlue());
+        confirmTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.add(confirmTitle);
+        this.add(Box.createVerticalStrut(30)); // Space after title
 
-        // Main content panel
+        // Center the main content
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(ThemeManager.getWhite());
+        contentPanel.setOpaque(false);
         contentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.setMaximumSize(new Dimension(400, Integer.MAX_VALUE));
 
         // Info sections
-        contentPanel.add(Box.createVerticalStrut(40));
-        contentPanel.add(createInfoSection("payWith", "Load To", phoneNumber));
+        contentPanel.add(createInfoSection("payWith", "Load To", phoneNumber, 60));
         contentPanel.add(Box.createVerticalStrut(25));
-        contentPanel.add(createInfoSection("availableBalance", "Available Points", availablePoints + " PTS"));
+        contentPanel.add(createInfoSection("availableBalance", "Available Points", availablePoints + " PTS", 80));
         contentPanel.add(Box.createVerticalStrut(25));
-        contentPanel.add(createInfoSection("successMoney", "Amount", requiredPoints + " PTS"));
+        contentPanel.add(createInfoSection("amount", "Amount", requiredPoints + " PTS", 80));
         contentPanel.add(Box.createVerticalStrut(25));
 
         // Total section
@@ -99,19 +95,45 @@ public class RewardsPage2 extends JPanel {
         contentPanel.add(totalPanel);
         contentPanel.add(Box.createVerticalStrut(30));
 
+        // Instruction
+        JLabel instruction = new JLabel("Check details before proceeding with payment");
+        instruction.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
+        instruction.setForeground(ThemeManager.getDSBlue());
+        instruction.setAlignmentX(Component.CENTER_ALIGNMENT);
+        contentPanel.add(instruction);
+        contentPanel.add(Box.createVerticalStrut(25));
+
         // Confirm button
         JPanel confirmButton = createConfirmButton();
         contentPanel.add(confirmButton);
-        contentPanel.add(Box.createVerticalGlue());
 
-        this.add(headerPanel, BorderLayout.NORTH);
-        this.add(contentPanel, BorderLayout.CENTER);
+        this.add(contentPanel);
+        this.add(Box.createVerticalGlue());
     }
 
-    private JPanel createInfoSection(String iconKey, String title, String value) {
+    private JPanel createHeader() {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setOpaque(false);
+        headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+
+        JLabel backLabel = new JLabel("Back");
+        backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
+        backLabel.setForeground(ThemeManager.getPBlue());
+        backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        backLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                RewardsPage2.this.onButtonClick.accept("Rewards");
+            }
+        });
+
+        headerPanel.add(backLabel, BorderLayout.WEST);
+        return headerPanel;
+    }
+
+    private JPanel createInfoSection(String iconKey, String title, String value, int maxHeight) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
-        panel.setMaximumSize(new Dimension(400, 80));
+        panel.setMaximumSize(new Dimension(400, maxHeight));
 
         // Text panel on the left
         JPanel textPanel = new JPanel();
@@ -120,12 +142,16 @@ public class RewardsPage2 extends JPanel {
         textPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 17.0F, "Quicksand-Bold"));
+        titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 17f, "Quicksand-Bold"));
         titleLabel.setForeground(ThemeManager.getDSBlue());
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel valueLabel = new JLabel(value);
-        valueLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18.0F, "Quicksand-Bold"));
+        // Use different font size for Amount section to match SendMoney style
+        float fontSize = title.equals("Amount") ? 22f : 18f;
+        int verticalStrut = title.equals("Amount") ? 8 : 5;
+
+        valueLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, fontSize, "Quicksand-Bold"));
         valueLabel.setForeground(ThemeManager.getDBlue());
         valueLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
@@ -139,7 +165,7 @@ public class RewardsPage2 extends JPanel {
         }
 
         textPanel.add(titleLabel);
-        textPanel.add(Box.createVerticalStrut(5));
+        textPanel.add(Box.createVerticalStrut(verticalStrut));
         textPanel.add(valueLabel);
 
         // Icon on the right
@@ -162,11 +188,11 @@ public class RewardsPage2 extends JPanel {
         panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, ThemeManager.getLightGray()));
 
         JLabel titleLabel = new JLabel("Total");
-        titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16.0F, "Quicksand-Bold"));
+        titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         titleLabel.setForeground(ThemeManager.getDBlue());
 
         totalValueLabel = new JLabel(totalValue);
-        totalValueLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16.0F, "Quicksand-Bold"));
+        totalValueLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         totalValueLabel.setForeground(ThemeManager.getDBlue());
 
         panel.add(titleLabel, BorderLayout.WEST);
@@ -194,8 +220,10 @@ public class RewardsPage2 extends JPanel {
         buttonPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel buttonLabel = new JLabel("Confirm Payment");
-        buttonLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18.0F, "Quicksand-Bold"));
+        // Format button text similar to SendMoney: "PAY [AMOUNT]"
+        String buttonText = "REDEEM " + requiredPoints + " PTS";
+        JLabel buttonLabel = new JLabel(buttonText);
+        buttonLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         buttonLabel.setForeground(Color.WHITE);
         buttonLabel.setHorizontalAlignment(SwingConstants.CENTER);
         buttonPanel.add(buttonLabel, BorderLayout.CENTER);
