@@ -1,16 +1,23 @@
 package pages;
 
 import java.awt.BorderLayout;
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Area;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.function.Consumer;
 import javax.swing.BorderFactory;
@@ -18,7 +25,6 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import util.FontLoader;
 import util.ThemeManager;
@@ -54,6 +60,11 @@ public class RewardsPage extends JPanel {
         if (pointsLabel != null) {
             pointsLabel.setText("Points: " + this.userPoints);
         }
+        // Force a UI refresh to update card states (e.g., if a card becomes redeemable)
+        this.removeAll();
+        this.setupUI();
+        this.revalidate();
+        this.repaint();
     }
 
     // Method to get current points
@@ -82,9 +93,10 @@ public class RewardsPage extends JPanel {
         backPanel.setBackground(ThemeManager.getWhite());
 
         JLabel backLabel = new JLabel("Back");
-        backLabel.setFont(FontLoader.getInstance().loadFont(0, 18.0F, "Quicksand-Bold"));
+        backLabel.setFont(FontLoader.getInstance().loadFont(0, 30.0F, "Quicksand-Bold"));
         backLabel.setForeground(ThemeManager.getDBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        // Using an anonymous inner class for MouseAdapter (standard practice)
         backLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 RewardsPage.this.onButtonClick.accept("Launch");
@@ -92,7 +104,7 @@ public class RewardsPage extends JPanel {
         });
         backPanel.add(backLabel);
 
-        // Right side - Points counter (changed format to "Points: 150")
+        // Right side - Points counter
         JPanel pointsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
         pointsPanel.setBackground(ThemeManager.getWhite());
 
@@ -111,18 +123,19 @@ public class RewardsPage extends JPanel {
         titleLabel.setForeground(ThemeManager.getVBlue());
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Rewards panel - Much bigger spacing between cards
+        // Rewards panel
         JPanel rewardsPanel = new JPanel();
         rewardsPanel.setLayout(new BoxLayout(rewardsPanel, BoxLayout.Y_AXIS));
         rewardsPanel.setBackground(ThemeManager.getWhite());
+        rewardsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         rewardsPanel.add(this.createRewardCard("50 PTS", "₱ 50 Regular load", 50));
-        rewardsPanel.add(Box.createVerticalStrut(40)); // Much bigger gap
+        rewardsPanel.add(Box.createVerticalStrut(40)); // Increased gap to 40
         rewardsPanel.add(this.createRewardCard("100 PTS", "₱ 75 Regular load", 100));
-        rewardsPanel.add(Box.createVerticalStrut(40)); // Much bigger gap
+        rewardsPanel.add(Box.createVerticalStrut(40)); // Increased gap to 40
         rewardsPanel.add(this.createRewardCard("200 PTS", "₱ 100 Regular load", 200));
 
-        // Center content - Cards placed higher under the title
+        // Center content
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(ThemeManager.getWhite());
@@ -133,7 +146,7 @@ public class RewardsPage extends JPanel {
 
         centerPanel.add(Box.createVerticalStrut(5));
         centerPanel.add(titlePanel);
-        centerPanel.add(Box.createVerticalStrut(20)); // Cards positioned higher below title
+        centerPanel.add(Box.createVerticalStrut(20));
         centerPanel.add(rewardsPanel);
         centerPanel.add(Box.createVerticalGlue());
 
@@ -141,130 +154,141 @@ public class RewardsPage extends JPanel {
         this.add(centerPanel, BorderLayout.CENTER);
     }
 
-    private JPanel createRewardCard(String points, String reward, int requiredPoints) {
-        // Create custom rounded panel
-        RoundedCardPanel card = new RoundedCardPanel(15);
-        card.setLayout(new BorderLayout());
-        card.setBackground(ThemeManager.getDvBlue());
-        card.setPreferredSize(new Dimension(450, 100));
-        card.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
-        card.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
+    private JPanel createRewardCard(String pointsText, String rewardText, int requiredPoints) {
 
-        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        final int CORNER_RADIUS = 15;
+        final int NOTCH_RADIUS = 10;
+        final float SEPARATOR_RATIO = 0.30f; // 30% width for points section
 
-        // Add click listener (always clickable)
-        card.addMouseListener(new MouseAdapter() {
+        boolean canRedeem = this.userPoints >= requiredPoints;
+        Color cardColor = canRedeem ? ThemeManager.getDvBlue() : Color.LIGHT_GRAY;
+
+        // Use an anonymous inner class extending JPanel for custom painting
+        JPanel card = new JPanel() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                redeemReward(requiredPoints, reward);
-            }
-        });
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
 
-        JLabel pointsLabel = new JLabel(points);
+                int width = getWidth();
+                int height = getHeight();
+                int separatorX = (int) (width * SEPARATOR_RATIO);
+
+                // 1. Create the base rounded rectangle shape
+                RoundRectangle2D baseRect = new RoundRectangle2D.Float(0, 0, width, height, CORNER_RADIUS, CORNER_RADIUS);
+                Area ticketShape = new Area(baseRect);
+
+                // 2. Create and subtract notches on the separator line
+                Ellipse2D notchLeftTop = new Ellipse2D.Float(separatorX - NOTCH_RADIUS, -NOTCH_RADIUS, NOTCH_RADIUS * 2, NOTCH_RADIUS * 2);
+                Ellipse2D notchLeftBottom = new Ellipse2D.Float(separatorX - NOTCH_RADIUS, height - NOTCH_RADIUS, NOTCH_RADIUS * 2, NOTCH_RADIUS * 2);
+
+                ticketShape.subtract(new Area(notchLeftTop));
+                ticketShape.subtract(new Area(notchLeftBottom));
+
+                // 3. Fill the ticket shape
+                g2.setColor(getBackground());
+                g2.fill(ticketShape);
+
+                // 4. Draw dashed separator line
+                g2.setColor(Color.WHITE);
+                float[] dashPattern = {5f, 5f};
+                BasicStroke dashedStroke = new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dashPattern, 0.0f);
+                g2.setStroke(dashedStroke);
+                g2.drawLine(separatorX, 0, separatorX, height);
+
+                g2.dispose();
+                // We rely on paintChildren for the labels
+            }
+
+            @Override
+            protected void paintChildren(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Clip children to the ticket shape for clean edges
+                int width = getWidth();
+                int height = getHeight();
+                int separatorX = (int) (width * SEPARATOR_RATIO);
+
+                RoundRectangle2D baseRect = new RoundRectangle2D.Float(0, 0, width, height, CORNER_RADIUS, CORNER_RADIUS);
+                Area ticketShape = new Area(baseRect);
+                Ellipse2D notchLeftTop = new Ellipse2D.Float(separatorX - NOTCH_RADIUS, -NOTCH_RADIUS, NOTCH_RADIUS * 2, NOTCH_RADIUS * 2);
+                Ellipse2D notchLeftBottom = new Ellipse2D.Float(separatorX - NOTCH_RADIUS, height - NOTCH_RADIUS, NOTCH_RADIUS * 2, NOTCH_RADIUS * 2);
+
+                ticketShape.subtract(new Area(notchLeftTop));
+                ticketShape.subtract(new Area(notchLeftBottom));
+
+                g2.setClip(ticketShape);
+
+                super.paintChildren(g2);
+                g2.dispose();
+            }
+
+            // Required for custom painting to show through transparent sections
+            @Override
+            public boolean isOpaque() {
+                return false;
+            }
+        };
+
+        // UI Setup
+        card.setLayout(new GridBagLayout());
+        card.setBackground(cardColor);
+        card.setPreferredSize(new Dimension(450, 100));
+        card.setMaximumSize(new Dimension(450, 100));
+        card.setCursor(canRedeem ? new Cursor(Cursor.HAND_CURSOR) : new Cursor(Cursor.DEFAULT_CURSOR));
+
+        if (canRedeem) {
+            // Using an anonymous inner class for MouseAdapter
+            card.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    redeemReward(requiredPoints, rewardText);
+                }
+            });
+        }
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        // Left part (Points) - **NOT ROTATED**
+        JLabel pointsLabel = new JLabel(pointsText);
         pointsLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 22.0F, "Quicksand-Bold"));
         pointsLabel.setForeground(Color.WHITE);
+        pointsLabel.setVerticalAlignment(SwingConstants.CENTER);
         pointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel rewardLabel = new JLabel(reward);
-        rewardLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18.0F, "Quicksand-Bold"));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = SEPARATOR_RATIO;
+        gbc.weighty = 1.0;
+        card.add(pointsLabel, gbc);
+
+        // Right part (Reward Description)
+        JLabel rewardLabel = new JLabel(rewardText);
+        rewardLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14.0F, "Quicksand-Bold"));
         rewardLabel.setForeground(Color.WHITE);
+        rewardLabel.setVerticalAlignment(SwingConstants.CENTER);
         rewardLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
-        separator.setForeground(Color.WHITE);
-        separator.setBackground(Color.WHITE);
-        separator.setPreferredSize(new Dimension(2, 60));
-        separator.setMaximumSize(new Dimension(2, Integer.MAX_VALUE));
-
-        JPanel leftPanel = new JPanel(new BorderLayout());
-        leftPanel.setOpaque(false);
-        leftPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 15));
-        leftPanel.add(pointsLabel, BorderLayout.CENTER);
-
-        JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setOpaque(false);
-        rightPanel.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 5));
-        rightPanel.add(rewardLabel, BorderLayout.CENTER);
-
-        card.add(leftPanel, BorderLayout.WEST);
-        card.add(separator, BorderLayout.CENTER);
-        card.add(rightPanel, BorderLayout.EAST);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0 - SEPARATOR_RATIO;
+        gbc.weighty = 1.0;
+        card.add(rewardLabel, gbc);
 
         return card;
     }
 
-    // Custom JPanel with rounded corners
-    private static class RoundedCardPanel extends JPanel {
-        private final int cornerRadius;
-
-        public RoundedCardPanel(int cornerRadius) {
-            this.cornerRadius = cornerRadius;
-            setOpaque(false);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            g2.setColor(getBackground());
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius);
-
-            g2.dispose();
-            super.paintComponent(g);
-        }
-
-        @Override
-        protected void paintChildren(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            // Clip children to rounded shape
-            RoundRectangle2D roundedRect = new RoundRectangle2D.Float(
-                    0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius
-            );
-            g2.setClip(roundedRect);
-
-            super.paintChildren(g2);
-            g2.dispose();
-        }
-    }
-
     private void redeemReward(int pointsCost, String reward) {
-        // Here you would implement the reward redemption logic
-        // For now, just subtract points and show a message
-        this.userPoints -= pointsCost;
-        updatePoints(this.userPoints);
-
-        // You might want to show a confirmation dialog here
-        System.out.println("Reward redeemed: " + reward);
-
-        // Refresh the page to update card states
-        this.removeAll();
-        this.setupUI();
-        this.revalidate();
-        this.repaint();
-    }
-
-    // Custom JPanel with rounded corners
-    private static class RoundedPanel extends JPanel {
-        private final int cornerRadius;
-
-        public RoundedPanel(int cornerRadius) {
-            this.cornerRadius = cornerRadius;
-            setOpaque(false);
-        }
-
-        @Override
-        protected void paintComponent(Graphics g) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            g2.setColor(getBackground());
-            g2.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius);
-
-            g2.dispose();
-            super.paintComponent(g);
+        if (this.userPoints >= pointsCost) {
+            // Navigate to confirmation page instead of immediately redeeming
+            // Format: Rewards2:phoneNumber:availablePoints:requiredPoints:rewardText
+            String phoneNumber = "09524805208"; // You can get this from UserInfo or wherever you store it
+            String result = "Rewards2:" + phoneNumber + ":" + this.userPoints + ":" + pointsCost + ":" + reward;
+            this.onButtonClick.accept(result);
         }
     }
 }

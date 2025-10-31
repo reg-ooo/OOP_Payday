@@ -81,6 +81,7 @@ public class MainFrame extends JFrame {
 
         //REWARDS PAGES
         mainPanel.add(new pages.RewardsPage(this::handleRewardsResult), "Rewards");
+        mainPanel.add(new RewardsPage2(this::handleRewards2Result), "Rewards2");
 
         // Main container
         container = new JPanel(new BorderLayout());
@@ -310,7 +311,27 @@ public class MainFrame extends JFrame {
     }
 
     private void handleRewardsResult(String result) {
-        if ("Launch".equals(result)) {
+        if (result.startsWith("Rewards2:")) {
+            String[] parts = result.split(":");
+            if (parts.length > 4) {
+                String phoneNumber = parts[1];
+                int availablePoints = Integer.parseInt(parts[2]);
+                int requiredPoints = Integer.parseInt(parts[3]);
+                String rewardText = parts[4];
+
+                // Update RewardsPage2 with data
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof RewardsPage2) {
+                        RewardsPage2 rewardsPage2 = (RewardsPage2) comp;
+                        rewardsPage2.updateRewardData(phoneNumber, availablePoints, requiredPoints, rewardText);
+                        break;
+                    }
+                }
+                slideContentTransition("Rewards2", 1);
+            }
+        }
+        else if ("Launch".equals(result)) {
             slideContentTransition("Launch", -1);
         }
         else {
@@ -354,5 +375,35 @@ public class MainFrame extends JFrame {
 
     public static void navBarVisibility(){
         navBar.setVisible(UserInfo.getInstance().isLoggedIn());
+    }
+
+    // In setupUI() method, add RewardsPage2 after RewardsPage:
+
+
+    private void handleRewards2Result(String result) {
+        if (result.startsWith("ConfirmRedemption:")) {
+            String[] parts = result.split(":");
+            if (parts.length > 2) {
+                int pointsCost = Integer.parseInt(parts[1]);
+                String rewardText = parts[2];
+
+                // Update RewardsPage points
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof RewardsPage) {
+                        RewardsPage rewardsPage = (RewardsPage) comp;
+                        rewardsPage.updatePoints(rewardsPage.getCurrentPoints() - pointsCost);
+                        break;
+                    }
+                }
+            }
+            slideContentTransition("Launch", -1);
+        }
+        else if (result.equals("Rewards")) {
+            slideContentTransition("Rewards", -1);
+        }
+        else {
+            System.out.println("Unknown Rewards2 action: " + result);
+        }
     }
 }
