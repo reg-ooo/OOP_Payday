@@ -1,5 +1,4 @@
 package pages.cashIn;
-
 import Factory.sendMoney.ConcreteSendMoneyBaseFactory;
 import Factory.sendMoney.SendMoneyBaseFactory;
 import util.ThemeManager;
@@ -13,28 +12,19 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
-/**
- * Cash-In Page Step 2 for Banks. This page handles inputting the bank account
- * number and amount before generating the QR code.
- */
 public class BanksPage2 extends JPanel {
-    // --- Utility and State Management ---
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final ImageLoader imageLoader = ImageLoader.getInstance();
-    // Callback function used to tell MainFrame which page to navigate to next
     private final Consumer<String> onButtonClick;
-    // Factory instance (Though currently simple, this shows the pattern usage)
     private final SendMoneyBaseFactory buttonFactory = new ConcreteSendMoneyBaseFactory();
 
-    // --- UI Components and Data Fields ---
-    private final JTextField accountField = new JTextField(); // Account number input
-    private final JTextField amountField = new JTextField();  // Amount input
+    private final JTextField accountField = new JTextField();
+    private final JTextField amountField = new JTextField();
     private JLabel bankImageLabel;
     private JLabel bankNameLabel;
-    private String selectedBankName = ""; // The name of the selected bank (e.g., "BPI")
+    private String selectedBankName = "";
 
-    // Component Constants (Shared for consistent UI)
     private final int MAX_COMPONENT_WIDTH = 300;
     private final String accountPlaceholder = "Enter number";
     private final String defaultAmountPlaceholder = "0.00";
@@ -46,15 +36,8 @@ public class BanksPage2 extends JPanel {
         setupUI();
     }
 
-    /**
-     * Updates the UI based on the bank selected from BanksPage.
-     * This method is called by MainFrame before navigating to this card.
-     * @param bankName The name of the selected bank (e.g., "BPI").
-     */
     public void updateSelected(String bankName) {
         this.selectedBankName = bankName;
-
-        // 1. Update the Bank Info Panel (Logo and Name)
         if (bankNameLabel != null) {
             bankNameLabel.setText(bankName);
         }
@@ -65,15 +48,14 @@ public class BanksPage2 extends JPanel {
             }
             if (bankIcon != null && bankIcon.getIconWidth() > 0) {
                 bankImageLabel.setIcon(bankIcon);
-                bankImageLabel.setText(""); // Clear fallback text
+                bankImageLabel.setText("");
             } else {
-                // Fallback if image asset is missing
                 bankImageLabel.setIcon(null);
                 bankImageLabel.setText("<html><center>" + bankName + "</center></html>");
             }
         }
 
-        // 2. Reset form fields to initial placeholder state
+        // Reset form fields to initial state
         accountField.setText(accountPlaceholder);
         accountField.setForeground(themeManager.getLightGray());
         accountField.setHorizontalAlignment(JTextField.CENTER);
@@ -88,7 +70,7 @@ public class BanksPage2 extends JPanel {
         setBackground(themeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
-        // --- HEADER: Back Button Logic ---
+        // Header
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         headerPanel.setBackground(themeManager.getWhite());
         JLabel backLabel = new JLabel("Back");
@@ -98,58 +80,60 @@ public class BanksPage2 extends JPanel {
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Navigate BACK to the previous page (BanksPage, which uses key "CashInBanks")
                 onButtonClick.accept("CashInBanks");
             }
         });
         headerPanel.add(backLabel);
 
-        // --- CENTER PANEL: Content Container ---
+        // Center panel setup (GridBagLayout)
         JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setBackground(themeManager.getWhite());
 
+        // Main content panel (BoxLayout Y_AXIS)
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBackground(themeManager.getWhite());
         contentPanel.setMaximumSize(new Dimension(500, Integer.MAX_VALUE));
         contentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Title Row (e.g., "Banks" + Icon)
+        // Title and Bank Info setup
         JPanel titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         titleRow.setBackground(themeManager.getWhite());
 
+        // 1. Title Label
         JLabel titleLabel = new JLabel("Banks");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
         titleLabel.setForeground(themeManager.getDeepBlue());
 
+        // 2. Title Icon - SCALING SIZE 50
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 50);
         JLabel iconLabel = new JLabel(titleIcon);
 
         titleRow.add(titleLabel);
         titleRow.add(iconLabel);
 
-        // Bank Info Panel (Logo and Name - dynamically updated)
         JPanel bankInfoPanel = new JPanel();
         bankInfoPanel.setLayout(new BoxLayout(bankInfoPanel, BoxLayout.Y_AXIS));
         bankInfoPanel.setBackground(themeManager.getWhite());
         bankInfoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 180));
         bankInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Logo/Image Placeholder setup
         JPanel imagePlaceholder = new JPanel();
         imagePlaceholder.setPreferredSize(new Dimension(100, 100));
+        imagePlaceholder.setMinimumSize(new Dimension(100, 100));
+        imagePlaceholder.setMaximumSize(new Dimension(100, 100));
         imagePlaceholder.setBorder(BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true));
         imagePlaceholder.setBackground(themeManager.getWhite());
         imagePlaceholder.setLayout(new BorderLayout());
         imagePlaceholder.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Initial image label setup (will be updated by updateSelected)
         bankImageLabel = new JLabel("<html><center>Placeholder<br>image</center></html>", SwingConstants.CENTER);
         bankImageLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         bankImageLabel.setForeground(themeManager.getDeepBlue());
+        bankImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        bankImageLabel.setVerticalAlignment(SwingConstants.CENTER);
         imagePlaceholder.add(bankImageLabel, BorderLayout.CENTER);
 
-        // Initial bank name label setup (will be updated by updateSelected)
         bankNameLabel = new JLabel("Placeholder text");
         bankNameLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         bankNameLabel.setForeground(themeManager.getDeepBlue());
@@ -159,15 +143,16 @@ public class BanksPage2 extends JPanel {
         bankInfoPanel.add(Box.createVerticalStrut(10));
         bankInfoPanel.add(bankNameLabel);
         bankInfoPanel.add(Box.createVerticalStrut(10));
+        // End Title and Bank Info setup
 
-        // --- FORM PANEL: Inputs and Button ---
+        // Form panel
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(themeManager.getWhite());
         formPanel.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, Integer.MAX_VALUE));
         formPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // 1. Cash In Section (Account Number)
+        // Cash In section
         JPanel cashInSection = new JPanel();
         cashInSection.setLayout(new BoxLayout(cashInSection, BoxLayout.Y_AXIS));
         cashInSection.setBackground(themeManager.getWhite());
@@ -179,14 +164,15 @@ public class BanksPage2 extends JPanel {
         cashInLabel.setForeground(themeManager.getDeepBlue());
         cashInLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JPanel accountPanel = setupAccountField(accountField); // Setup the account field with listeners
+        // Apply SendPage Account field logic
+        JPanel accountPanel = setupAccountField(accountField);
         accountPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         cashInSection.add(cashInLabel);
         cashInSection.add(Box.createVerticalStrut(2));
         cashInSection.add(accountPanel);
 
-        // 2. Amount section
+        // Amount section
         JPanel amountSection = new JPanel();
         amountSection.setLayout(new BoxLayout(amountSection, BoxLayout.Y_AXIS));
         amountSection.setBackground(themeManager.getWhite());
@@ -198,14 +184,15 @@ public class BanksPage2 extends JPanel {
         amountLabel.setForeground(themeManager.getDeepBlue());
         amountLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JPanel amountPanel = setupAmountField(amountField); // Setup the amount field with listeners
+        // Apply SendPage Amount field logic
+        JPanel amountPanel = setupAmountField(amountField);
         amountPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         amountSection.add(amountLabel);
         amountSection.add(Box.createVerticalStrut(2));
         amountSection.add(amountPanel);
 
-        // 3. Balance Hint
+        // Balance section
         JPanel balancePanelContainer = new JPanel();
         balancePanelContainer.setLayout(new BoxLayout(balancePanelContainer, BoxLayout.X_AXIS));
         balancePanelContainer.setBackground(themeManager.getWhite());
@@ -216,7 +203,7 @@ public class BanksPage2 extends JPanel {
         balanceHint.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         balanceHint.setForeground(Color.DARK_GRAY);
 
-        JLabel actualBalanceLabel = new JLabel("0.00"); // Placeholder for actual balance
+        JLabel actualBalanceLabel = new JLabel("0.00"); // Placeholder
         actualBalanceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         actualBalanceLabel.setForeground(Color.DARK_GRAY);
 
@@ -225,8 +212,8 @@ public class BanksPage2 extends JPanel {
         balancePanelContainer.add(Box.createHorizontalStrut(5));
         balancePanelContainer.add(actualBalanceLabel);
 
-        // 4. Next button and Disclaimer
-        JPanel nextButtonPanel = createSmallerNextButtonPanel(); // Contains the fixed navigation logic
+        // Next button and Disclaimer
+        JPanel nextButtonPanel = createSmallerNextButtonPanel();
         nextButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel disclaimer = new JLabel("Please check details before confirming");
@@ -234,7 +221,7 @@ public class BanksPage2 extends JPanel {
         disclaimer.setForeground(Color.DARK_GRAY);
         disclaimer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Assemble Form Panel
+        // Build form panel
         formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(cashInSection);
         formPanel.add(Box.createVerticalStrut(10));
@@ -247,7 +234,7 @@ public class BanksPage2 extends JPanel {
         formPanel.add(disclaimer);
         formPanel.add(Box.createVerticalGlue());
 
-        // Assemble Content Panel
+        // Build main content panel
         contentPanel.add(Box.createVerticalStrut(10));
         contentPanel.add(titleRow);
         contentPanel.add(Box.createVerticalStrut(20));
@@ -256,7 +243,7 @@ public class BanksPage2 extends JPanel {
         contentPanel.add(formPanel);
         contentPanel.add(Box.createVerticalGlue());
 
-        // Add to main structure
+        // Add content panel to center
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -265,7 +252,7 @@ public class BanksPage2 extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         centerPanel.add(contentPanel, gbc);
 
-        // Step label at the bottom
+        // Step label
         JLabel stepLabel = new JLabel("Step 3 of 4", SwingConstants.CENTER);
         stepLabel.setFont(fontLoader.loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
         stepLabel.setForeground(themeManager.getDeepBlue());
@@ -276,25 +263,58 @@ public class BanksPage2 extends JPanel {
     }
 
     /**
-     * Sets up the account field.
-     * Includes logic to display the placeholder when empty and switch alignment when typing.
+     * Sets up the account field with SendPage style (Center placeholder, Left typing)
+     * and returns the containing panel for proper sizing.
      */
     private JPanel setupAccountField(JTextField field) {
         final String placeholder = accountPlaceholder;
 
-        // ... (Field styling and sizing code omitted for brevity) ...
+        field.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
+        field.setForeground(themeManager.getDBlue());
+        field.setBackground(themeManager.getWhite());
+        field.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        field.setPreferredSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        field.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
 
-        // Placeholder Logic: Set initial state and add listeners
+        Color normalBorder = themeManager.getGray();
+        Color activeBorder = themeManager.getDBlue();
+
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(normalBorder, 1),
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)
+        ));
+
+        // Placeholder Logic
         field.setText(placeholder);
         field.setForeground(themeManager.getLightGray());
         field.setHorizontalAlignment(JTextField.CENTER);
 
-        // Focus Listener: Handles text switching on click/un-click
         field.addFocusListener(new java.awt.event.FocusAdapter() {
-            // ... (FocusAdapter logic omitted for brevity) ...
+            @Override
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                if (field.getText().equals(placeholder)) {
+                    field.setText("");
+                    field.setForeground(themeManager.getDBlue());
+                    field.setHorizontalAlignment(JTextField.LEFT);
+                }
+                field.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(activeBorder, 1),
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
+                ));
+            }
+            @Override
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                if (field.getText().isEmpty()) {
+                    field.setText(placeholder);
+                    field.setForeground(themeManager.getLightGray());
+                    field.setHorizontalAlignment(JTextField.CENTER);
+                }
+                field.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(normalBorder, 1),
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
+                ));
+            }
         });
-
-        // Document Listener: Ensures text alignment and color are correct as user types
         field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
             public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
@@ -311,58 +331,117 @@ public class BanksPage2 extends JPanel {
             }
         });
 
-        // Final Panel container setup
         JPanel panel = new JPanel(new BorderLayout());
-        // ... (Panel styling and sizing code omitted for brevity) ...
+        panel.setBackground(themeManager.getWhite());
+        panel.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        panel.setPreferredSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        panel.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
         panel.add(field, BorderLayout.CENTER);
 
         return panel;
     }
 
     /**
-     * Sets up the amount field.
-     * Includes complex logic for '₱ ' prefix, decimal point handling, and formatting.
+     * Sets up the amount field with SendPage style (Peso sign, placeholder)
+     * and returns the containing panel for proper sizing.
      */
     private JPanel setupAmountField(JTextField field) {
         final String placeholder = defaultAmountPlaceholder;
 
-        // ... (Field styling and sizing code omitted for brevity) ...
+        field.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
+        field.setForeground(themeManager.getDBlue());
+        field.setBackground(themeManager.getWhite());
+        field.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        field.setPreferredSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        field.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
 
-        // Placeholder Logic: Set initial state
+        Color normalBorder = themeManager.getGray();
+        Color activeBorder = themeManager.getDBlue();
+
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(normalBorder, 1),
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)
+        ));
+
+        // Placeholder Logic
         field.setText("₱ " + placeholder);
         field.setForeground(themeManager.getLightGray());
         field.setHorizontalAlignment(JTextField.CENTER);
 
-        // Key Listener: Handles input restrictions (only digits/one dot) and prevents
-        // accidental deletion of the "₱ " prefix.
         field.addKeyListener(new java.awt.event.KeyAdapter() {
-            // ... (KeyAdapter logic omitted for brevity) ...
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                String currentText = field.getText();
+                String fullPlaceholder = "₱ " + placeholder;
+                if (currentText.equals(fullPlaceholder)) {
+                    e.consume();
+                    return;
+                }
+                if ((e.getKeyCode() == java.awt.event.KeyEvent.VK_BACK_SPACE ||
+                        e.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) &&
+                        currentText.length() <= 2) {
+                    e.consume();
+                }
+            }
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent e) {
+                String currentText = field.getText();
+                String fullPlaceholder = "₱ " + placeholder;
+                if (currentText.equals(fullPlaceholder)) {
+                    e.consume();
+                    return;
+                }
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) && c != '.') {
+                    e.consume();
+                    return;
+                }
+                String numberPart = currentText.replace("₱ ", "").replace("₱", "").trim();
+                if (numberPart.equals("0") && c != '.') {
+                    field.setText("₱ " + c);
+                    e.consume();
+                    return;
+                }
+                if (c == '.' && numberPart.contains(".")) {
+                    e.consume();
+                    return;
+                }
+                if (numberPart.contains(".")) {
+                    int decimalIndex = numberPart.indexOf(".");
+                    int decimalPlaces = numberPart.length() - decimalIndex - 1;
+                    if (decimalPlaces >= 2 && Character.isDigit(c)) {
+                        e.consume();
+                        return;
+                    }
+                }
+            }
         });
 
-        // Focus Listener: Handles adding/removing the '₱ ' prefix and formatting on focus lost.
         field.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
                 String currentText = field.getText();
                 String fullPlaceholder = "₱ " + placeholder;
                 if (currentText.equals(fullPlaceholder)) {
-                    field.setText("₱ "); // Only "₱ " when active
+                    field.setText("₱ ");
                     field.setForeground(themeManager.getDBlue());
                     field.setHorizontalAlignment(JTextField.LEFT);
-                    field.setCaretPosition(2); // Set cursor after "₱ "
+                    field.setCaretPosition(2);
                 }
-                // ... (Border setup code omitted for brevity) ...
+                field.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(activeBorder, 1),
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
+                ));
             }
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 String currentText = field.getText().replace("₱ ", "").replace("₱", "").trim();
                 if (currentText.isEmpty() || currentText.equals("0")) {
-                    field.setText("₱ " + placeholder); // Back to placeholder
+                    field.setText("₱ " + placeholder);
                     field.setForeground(themeManager.getLightGray());
                     field.setHorizontalAlignment(JTextField.CENTER);
                 } else {
                     try {
-                        // Formatting logic: ensures correct decimal places
                         double value = Double.parseDouble(currentText);
                         String formatted = String.format("%.2f", value);
                         if (formatted.endsWith(".00")) {
@@ -371,11 +450,13 @@ public class BanksPage2 extends JPanel {
                         field.setText("₱ " + formatted);
                     } catch (NumberFormatException e) {}
                 }
-                // ... (Border setup code omitted for brevity) ...
+                field.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(normalBorder, 1),
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
+                ));
             }
         });
 
-        // Document Listener: Ensures text alignment is maintained while typing.
         field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
             public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
@@ -392,39 +473,59 @@ public class BanksPage2 extends JPanel {
             }
         });
 
-        // Final Panel container setup
         JPanel panel = new JPanel(new BorderLayout());
-        // ... (Panel styling and sizing code omitted for brevity) ...
+        panel.setBackground(themeManager.getWhite());
+        panel.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        panel.setPreferredSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
+        panel.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
         panel.add(field, BorderLayout.CENTER);
 
         return panel;
     }
 
     /**
-     * Creates a styled JPanel wrapper for the Next button.
-     * Contains the critical logic to navigate to QRPage and pass the source key.
+     * Creates a styled JPanel wrapper for the Next button with reduced height and width.
      */
     private JPanel createSmallerNextButtonPanel() {
         final int BUTTON_HEIGHT = 45;
         JPanel buttonPanel = new JPanel();
-        // ... (Button panel setup code omitted for brevity) ...
+        buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+        buttonPanel.setOpaque(false);
+        buttonPanel.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, BUTTON_HEIGHT));
+        buttonPanel.setPreferredSize(new Dimension(MAX_COMPONENT_WIDTH, BUTTON_HEIGHT));
+        buttonPanel.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, BUTTON_HEIGHT));
 
         JButton nextButton = new JButton("Next");
-        // ... (Button styling code omitted for brevity) ...
+        nextButton.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        nextButton.setBackground(themeManager.getVBlue());
+        nextButton.setForeground(themeManager.getWhite());
+        nextButton.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
+        nextButton.setFocusPainted(false);
+        nextButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        nextButton.setPreferredSize(new Dimension(MAX_COMPONENT_WIDTH, BUTTON_HEIGHT));
+        nextButton.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, BUTTON_HEIGHT));
+        nextButton.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, BUTTON_HEIGHT));
 
-        // --- NAVIGATION LOGIC: Go to QRPage ---
+        nextButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                nextButton.setBackground(themeManager.getGradientLBlue());
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+                nextButton.setBackground(themeManager.getVBlue());
+            }
+        });
+
+        // --- CORRECT NAVIGATION LOGIC ---
         nextButton.addActionListener(e -> {
-            // 1. Get the shared QRPage instance
+            // 1. Get the QRPage instance
             QRPage qrPage = QRPage.getInstance(onButtonClick);
-
-            // 2. Prepare QRPage with transaction details and the critical source key.
-            //    - true indicates the entity is a Bank.
-            //    - "CashInBanks2" is the key MainFrame needs to see if the user hits BACK
-            //      on the QRPage, ensuring they return to this specific page (BanksPage2).
+            // 2. Update the QRPage with the selected entity info and source page key
+            // true indicates it is a Bank
             qrPage.updateSelectedEntity(selectedBankName, true, "CashInBanks2");
-
             // 3. Navigate to QRPage
-            onButtonClick.accept("QRPage");
+            onButtonClick.accept("QRPage"); // <--- Sends the correct key
         });
         // --------------------------------
 
