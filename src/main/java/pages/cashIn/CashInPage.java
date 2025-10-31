@@ -45,7 +45,7 @@ public class CashInPage extends JPanel {
         // Title
         JLabel titleLabel = new JLabel("Cash In");
         titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getVBlue());
+        titleLabel.setForeground(ThemeManager.getDeepBlue());
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));

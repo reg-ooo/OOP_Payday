@@ -130,9 +130,9 @@ public class RewardsPage extends JPanel {
         rewardsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         rewardsPanel.add(this.createRewardCard("50 PTS", "₱ 50 Regular load", 50));
-        rewardsPanel.add(Box.createVerticalStrut(40)); // Increased gap to 40
+        rewardsPanel.add(Box.createVerticalStrut(50)); // INCREASED GAP TO 50
         rewardsPanel.add(this.createRewardCard("100 PTS", "₱ 75 Regular load", 100));
-        rewardsPanel.add(Box.createVerticalStrut(40)); // Increased gap to 40
+        rewardsPanel.add(Box.createVerticalStrut(50)); // INCREASED GAP TO 50
         rewardsPanel.add(this.createRewardCard("200 PTS", "₱ 100 Regular load", 200));
 
         // Center content
@@ -198,7 +198,6 @@ public class RewardsPage extends JPanel {
                 g2.drawLine(separatorX, 0, separatorX, height);
 
                 g2.dispose();
-                // We rely on paintChildren for the labels
             }
 
             @Override
@@ -235,8 +234,8 @@ public class RewardsPage extends JPanel {
         // UI Setup
         card.setLayout(new GridBagLayout());
         card.setBackground(cardColor);
-        card.setPreferredSize(new Dimension(450, 100));
-        card.setMaximumSize(new Dimension(450, 100));
+        card.setPreferredSize(new Dimension(500, 120)); // INCREASED SIZE TO 500x120
+        card.setMaximumSize(new Dimension(500, 120)); // INCREASED SIZE TO 500x120
         card.setCursor(canRedeem ? new Cursor(Cursor.HAND_CURSOR) : new Cursor(Cursor.DEFAULT_CURSOR));
 
         if (canRedeem) {
@@ -251,11 +250,14 @@ public class RewardsPage extends JPanel {
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.insets = new Insets(5, 5, 5, 5);
 
-        // Left part (Points) - **NOT ROTATED**
+        // Removed default insets to improve centering in the grid cell
+        gbc.insets = new Insets(0, 0, 0, 0);
+
+        // Left part (Points) - Centered with respect to separator
         JLabel pointsLabel = new JLabel(pointsText);
-        pointsLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 22.0F, "Quicksand-Bold"));
+        // REDUCED FONT SIZE: 22.0F -> 18.0F
+        pointsLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18.0F, "Quicksand-Bold"));
         pointsLabel.setForeground(Color.WHITE);
         pointsLabel.setVerticalAlignment(SwingConstants.CENTER);
         pointsLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -266,12 +268,16 @@ public class RewardsPage extends JPanel {
         gbc.weighty = 1.0;
         card.add(pointsLabel, gbc);
 
-        // Right part (Reward Description)
+        // Right part (Reward Description) - BIGGER FONT
         JLabel rewardLabel = new JLabel(rewardText);
-        rewardLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14.0F, "Quicksand-Bold"));
+        // FONT SIZE REMAINS 18.0F
+        rewardLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18.0F, "Quicksand-Bold"));
         rewardLabel.setForeground(Color.WHITE);
         rewardLabel.setVerticalAlignment(SwingConstants.CENTER);
         rewardLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        // Added slight padding to the right text area
+        gbc.insets = new Insets(0, 10, 0, 10);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -284,9 +290,8 @@ public class RewardsPage extends JPanel {
 
     private void redeemReward(int pointsCost, String reward) {
         if (this.userPoints >= pointsCost) {
-            // Navigate to confirmation page instead of immediately redeeming
-            // Format: Rewards2:phoneNumber:availablePoints:requiredPoints:rewardText
-            String phoneNumber = "09524805208"; // You can get this from UserInfo or wherever you store it
+
+            String phoneNumber = "0912pakyo"; // You can get this from UserInfo
             String result = "Rewards2:" + phoneNumber + ":" + this.userPoints + ":" + pointsCost + ":" + reward;
             this.onButtonClick.accept(result);
         }
