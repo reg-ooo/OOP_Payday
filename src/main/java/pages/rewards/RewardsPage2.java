@@ -1,11 +1,10 @@
-package pages;
+package pages.rewards;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -155,7 +154,6 @@ public class RewardsPage2 extends JPanel {
         valueLabel.setForeground(ThemeManager.getDBlue());
         valueLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Store references for updating
         if (title.equals("Load To")) {
             loadToLabel = valueLabel;
         } else if (title.equals("Available Points")) {
@@ -163,12 +161,9 @@ public class RewardsPage2 extends JPanel {
         } else if (title.equals("Amount")) {
             amountLabel = valueLabel;
         }
-
         textPanel.add(titleLabel);
         textPanel.add(Box.createVerticalStrut(verticalStrut));
         textPanel.add(valueLabel);
-
-        // Icon on the right
         ImageLoader imageLoader = ImageLoader.getInstance();
         ImageIcon icon = imageLoader.getImage(iconKey);
         JLabel iconLabel = new JLabel(icon);
