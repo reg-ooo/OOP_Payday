@@ -21,16 +21,24 @@ public class MainFrame extends JFrame {
     private CardLayout cardLayout;
     private static NavigationBar navBar;
     public static JPanel container;
+    private static String prevCard;
+    private static String currentCard;
+    private static MainFrame instance;
 
     public MainFrame(){
         setMainFrame();
         setupUI();
+        resetCards();
 
         mainFrame.setVisible(true);
     }
 
+    public static void resetCards() {
+        MainFrame.prevCard = null;
+        MainFrame.currentCard = "Launch";
+    }
+
     public void setMainFrame(){
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(420, 650);
         mainFrame.setLocationRelativeTo(null);
@@ -83,6 +91,9 @@ public class MainFrame extends JFrame {
     }
 
     private void handleNavBarClick(String result) {
+        prevCard = currentCard;
+        currentCard = result;
+
         switch (result) {
             case "Launch" -> slideContentTransition("Launch", -1);
             case "Profile" -> slideContentTransition("Profile", 1);
@@ -289,6 +300,7 @@ public class MainFrame extends JFrame {
 
     private void slideContentTransition(String targetCard, int direction) {
         // Show/hide nav bar based on page
+        System.out.println("prev " + prevCard + " target " + targetCard);
         boolean showNavBar = targetCard.equals("Launch") || targetCard.equals("Profile");
         navBar.setVisible(showNavBar);
 
@@ -298,8 +310,11 @@ public class MainFrame extends JFrame {
             navBar.setActiveButton(activeButton);
         }
 
-        // Use your existing animation on mainContentPanel only
-        AnimatedPageSwitcher.slideTransition(mainPanel, targetCard, direction);
+        //existing animation on mainContentPanel only
+
+        if(prevCard == null || !prevCard.equalsIgnoreCase(targetCard))
+
+            AnimatedPageSwitcher.slideTransition(mainPanel, targetCard, direction);
     }
 
     // General card switching method (for other pages)

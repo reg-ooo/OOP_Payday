@@ -190,5 +190,6 @@ public class UserManager {
         NPanel.getInstance().unloadComponents();
         TransactionPanel.getInstance().unloadComponents();
         MainFrame.navBarVisibility();
+        MainFrame.resetCards();
     }
 }
