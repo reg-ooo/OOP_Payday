@@ -109,7 +109,10 @@ public class CenterPanel extends JPanel {
                     onButtonClick.accept("CashIn");
                 } else if (text.equals("Rewards")) {
                     onButtonClick.accept("Rewards");
-                } else {
+                } else if (text.equals("Cash Out")) {
+                    onButtonClick.accept("CashOut");
+                }
+                else {
                     JOptionPane.showMessageDialog(centerPanel, text + " clicked!");
                 }
             }

@@ -15,7 +15,7 @@ public class QRPage extends JPanel {
     private final Consumer<String> onButtonClick;
     private final JLabel nameLabel = new JLabel("Placeholder text");
 
-    private QRPage(Consumer<String> onButtonClick) {
+    public QRPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setupUI();
     }

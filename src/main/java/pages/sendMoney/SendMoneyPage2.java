@@ -16,7 +16,7 @@ public class SendMoneyPage2 extends JPanel {
     private final SendMoneyPage2Factory factory;
 
     // Transaction data
-    private String recipientName = "JOHN DOE";
+    private String recipientName;
     private String phoneNumber;
     private String amount;
     private String currentBalance;
@@ -24,6 +24,13 @@ public class SendMoneyPage2 extends JPanel {
     public SendMoneyPage2(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         this.factory = new ConcreteSendMoneyPage2Factory(); // Use concrete factory
+
+        // Initialize all fields to prevent null values
+        this.recipientName = "Unknown Recipient";
+        this.phoneNumber = "";
+        this.amount = "";
+        this.currentBalance = "0.00";
+
         setupUI();
     }
 
@@ -66,7 +73,13 @@ public class SendMoneyPage2 extends JPanel {
     // UPDATE METHOD THAT RECEIVES FROM PAGE 1 ⚪
     // Example: "SendMoney3:09171234567:09171234567:100.00"
     public void updateTransactionData(String phoneNumber, String sendAmount) {
-        // Convert phone number to recipient name (you can customize this)
+        if (phoneNumber == null || phoneNumber.trim().isEmpty()) {
+            throw new IllegalArgumentException("Phone number cannot be null or empty");
+        }
+        if (sendAmount == null || sendAmount.trim().isEmpty()) {
+            throw new IllegalArgumentException("Amount cannot be null or empty");
+        }
+
         this.recipientName = phoneNumber;
         this.phoneNumber = phoneNumber;
         this.amount = sendAmount;
