@@ -42,20 +42,17 @@ public class RoundedBorder extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
 
-        // Enable antialiasing for smooth edges
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        // Create rounded rectangle for border only
         RoundRectangle2D roundedRect = new RoundRectangle2D.Float(
                 thickness/2, thickness/2,
                 getWidth() - thickness, getHeight() - thickness,
                 cornerRadius, cornerRadius
         );
 
-        // Draw border only (no fill)
-        g2d.setColor(backgroundColor); // Your border color
-        g2d.setStroke(new BasicStroke(thickness)); // Border thickness
-        g2d.draw(roundedRect); // Draw outline only
+        g2d.setColor(backgroundColor);
+        g2d.setStroke(new BasicStroke(thickness));
+        g2d.draw(roundedRect);
 
         g2d.dispose();
     }

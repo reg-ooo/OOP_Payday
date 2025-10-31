@@ -61,7 +61,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new SendMoneyPage3(this::handleSendMoney3Result), "SendMoney3");
 
         //CASH IN PAGES
-        mainPanel.add(CashInPage.getInstance(this::handleCashInResult), "CashIn");
+        mainPanel.add(new CashInPage(this::handleCashInResult), "CashIn");
         mainPanel.add(new BanksPage(this::handleCashInBanksResult), "CashInBanks");
         mainPanel.add(new StoresPage(this::handleCashInStoresResult), "CashInStores");
         mainPanel.add(new BanksPage2(this::handleCashInBanks2Result), "CashInBanks2");
@@ -76,8 +76,6 @@ public class MainFrame extends JFrame {
         container.add(mainPanel, BorderLayout.CENTER);
         container.add(navBar, BorderLayout.SOUTH);
 
-        // FIX: Start with Login page and hide nav bar
-        // Hide initially
         navBar.setVisible(false);
         cardLayout.show(mainPanel, "Login"); //
 
