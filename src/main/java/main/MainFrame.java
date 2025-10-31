@@ -74,7 +74,10 @@ public class MainFrame extends JFrame {
         mainPanel.add(new StoresPage(this::handleCashInStoresResult), "CashInStores");
         mainPanel.add(new BanksPage2(this::handleCashInBanks2Result), "CashInBanks2");
         mainPanel.add(new StoresPage2(this::handleCashInStores2Result), "CashInStores2");
-        mainPanel.add(new QRPage(this::handleCashInBanks2Result), "QRPage");
+
+        // QRPage is added here and uses the Banks2 handler.
+        // We must fix the Banks2 handler to route the Stores2 key.
+        mainPanel.add(QRPage.getInstance(this::handleCashInBanks2Result), "QRPage");
 
         //REWARDS PAGES
         mainPanel.add(new pages.RewardsPage(this::handleRewardsResult), "Rewards");
@@ -181,24 +184,51 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Handles results from BanksPage2, or the QRPage (when launched by BanksPage2).
+     */
     private void handleCashInBanks2Result(String result) {
+
+        // *** CRITICAL FIX: Forward "CashInStores2" to the correct handler ***
+        if (result.equals("CashInStores2")) {
+            handleCashInStores2Result(result);
+            return;
+        }
+
         if (result.equals("CashInBanks")) {
+            // Back from BanksPage2 to BanksPage
             slideContentTransition("CashInBanks", -1);
-        } else if (result.equals("CashIn")) {
-            slideContentTransition("CashIn", -1);
-        } else if (result.equals("CashInBanks2Next")) {
-            // Proceed to next step (not implemented), return to Launch for now
+        } else if (result.equals("QRPage")) {
+            // Next from BanksPage2 to QRPage
             slideContentTransition("QRPage", 1);
+        } else if (result.equals("CashInBanks2")) {
+            // Back from QRPage to BanksPage2
+            slideContentTransition("CashInBanks2", -1);
+        } else if (result.equals("Launch")) { // Handle 'Done' button from QRPage
+            slideContentTransition("Launch", -1);
+        } else {
+            // This is the line that was generating the "Unknown CashInBanks2 action: CashInStores2" error
+            System.out.println("Unknown CashInBanks2 action: " + result);
         }
     }
 
+    /**
+     * Handles results from StoresPage2, or the QRPage (when launched by StoresPage2).
+     */
     private void handleCashInStores2Result(String result) {
         if (result.equals("CashInStores")) {
+            // Back from StoresPage2 to StoresPage
             slideContentTransition("CashInStores", -1);
-        } else if (result.equals("CashIn")) {
-            slideContentTransition("CashIn", -1);
-        } else if (result.equals("CashInStores2Next")) {
+        } else if (result.equals("QRPage")) {
+            // Next from StoresPage2 to QRPage
             slideContentTransition("QRPage", 1);
+        } else if (result.equals("CashInStores2")) {
+            // *** This is the target for the Stores back button ***
+            slideContentTransition("CashInStores2", -1);
+        } else if (result.equals("Launch")) { // Handle 'Done' button from QRPage
+            slideContentTransition("Launch", -1);
+        } else {
+            System.out.println("Unknown CashInStores2 action: " + result);
         }
     }
 
