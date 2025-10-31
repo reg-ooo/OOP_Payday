@@ -15,10 +15,9 @@ import util.ThemeManager;
 
 
 public class CenterPanel extends JPanel {
-    private final JPanel sendMoneyWrapper,cashInWrapper, cashOutWrapper, requestMoneyWrapper, bankTransferWrapper, buyCryptoWrapper;
+    // UPDATED: Renamed field from bankTransferWrapper to payBillsWrapper for clarity
+    private final JPanel sendMoneyWrapper, cashInWrapper, cashOutWrapper, requestMoneyWrapper, payBillsWrapper, buyCryptoWrapper;
     private final Consumer<String> onButtonClick;
-
-//    public JPanel centerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 220), null, new FlowLayout(FlowLayout.CENTER, 0, 15));
 
     public JPanel centerPanel = new PanelBuilder()
             .setPreferredSize(new Dimension(420, 220))
@@ -37,7 +36,6 @@ public class CenterPanel extends JPanel {
         this.onButtonClick = onButtonClick;
 
         //BUTTON PANELS
-//        JPanel buttonPanel = PanelFactory.getInstance().createPanel(null, null, new GridLayout(2, 3, 25, 10));
         JPanel buttonPanel = new PanelBuilder()
                 .setLayout(new GridLayout(2,3,25,10))
                 .build();
@@ -45,12 +43,15 @@ public class CenterPanel extends JPanel {
             buttons.add(new RoundedBorder(25, ThemeManager.getInstance().getVBlue(), 2));
         }
 
-        //Style Buttons WITH WRAPPER (ANG STYLE METHOD GINA COPY AND PASTE YUNG SAME BUTTON DESIGN)
+        //Style Buttons WITH WRAPPER
         sendMoneyWrapper = styleButton(buttons.get(0), "Send Money", ImageLoader.getInstance().getImage("sendMoney"));
         cashInWrapper = styleButton(buttons.get(1), "Cash In", ImageLoader.getInstance().getImage("cashIn"));
         cashOutWrapper = styleButton(buttons.get(2), "Cash Out", ImageLoader.getInstance().getImage("cashOut"));
         requestMoneyWrapper = styleButton(buttons.get(3), "Rewards", ImageLoader.getInstance().getImage("requestMoney"));
-        bankTransferWrapper = styleButton(buttons.get(4), "Bank Transfer", ImageLoader.getInstance().getImage("bankTransfer"));
+
+        // --- MAJOR CHANGE HERE: Bank Transfer -> Pay Bills ---
+        payBillsWrapper = styleButton(buttons.get(4), "Pay Bills", ImageLoader.getInstance().getImage("PayBills"));
+
         buyCryptoWrapper = styleButton(buttons.get(5), "Buy Crypto", ImageLoader.getInstance().getImage("buyCrypto"));
 
         //ADD BUTTONS
@@ -62,7 +63,6 @@ public class CenterPanel extends JPanel {
 
     private JPanel styleButton(RoundedBorder button, String text, ImageIcon image) {
         //WRAPPER PANEL
-//        JPanel wrapperPanel = PanelFactory.getInstance().createPanel(new Dimension(95, 90), null, new BorderLayout());
         JPanel wrapperPanel = new PanelBuilder()
                 .setPreferredSize(new Dimension(95, 90))
                 .setLayout(new BorderLayout())
@@ -111,6 +111,9 @@ public class CenterPanel extends JPanel {
                     onButtonClick.accept("Rewards");
                 } else if (text.equals("Cash Out")) {
                     onButtonClick.accept("CashOut");
+                } else if (text.equals("Pay Bills")) {
+                    // NEW: Action for the "Pay Bills" feature
+                    onButtonClick.accept("PayBills");
                 }
                 else {
                     JOptionPane.showMessageDialog(centerPanel, text + " clicked!");
@@ -129,7 +132,7 @@ public class CenterPanel extends JPanel {
         buttonPanel.add(cashInWrapper);
         buttonPanel.add(cashOutWrapper);
         buttonPanel.add(requestMoneyWrapper);
-        buttonPanel.add(bankTransferWrapper);
+        buttonPanel.add(payBillsWrapper); // UPDATED: Use the renamed wrapper
         buttonPanel.add(buyCryptoWrapper);
     }
 

@@ -85,7 +85,7 @@ public class QRPage extends JPanel {
 
         JLabel backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        backLabel.setForeground(themeManager.getDBlue());
+        backLabel.setForeground(themeManager.getDeepBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
             @Override

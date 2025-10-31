@@ -46,8 +46,6 @@ public class ImageLoader {
         images.put("amount", resizeImage("icons/sendMoney/amount.png", 60, 60));
         images.put("successMoney", resizeImage("icons/sendMoney/successMoney.png", 60, 60));
 
-        //BANK LOGOS - Note: These are pre-loaded at 60x60 for backwards compatibility
-        // Use loadHighQualityImage() method for better quality when needed
         images.put("BDO", resizeImage("BDO.png", 60, 60));
         images.put("BPI", resizeImage("BPI.png", 60, 60));
         images.put("PNB", resizeImage("PNB.png", 60, 60));
@@ -57,6 +55,8 @@ public class ImageLoader {
         images.put("Shell Select", resizeImage("Shell.png", 60, 60));
         images.put("7-Eleven", resizeImage("Cliqq.png", 60, 60));
         images.put("FamilyMart", resizeImage("FamilyMart.png", 60, 60));
+        images.put("PayBills", resizeImage("PayBills.png", 60, 60));
+
     }
 
     public static ImageLoader getInstance() {

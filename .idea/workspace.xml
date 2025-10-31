@@ -5,19 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="Merge branch 'main' of https://github.com/reg-ooo/OOP_Payday&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;target/classes/data/SendMoney.class&#10;#&#9;target/classes/main/MainFrame.class&#10;#&#9;target/classes/pages/sendMoney/SendMoneyPage2.class">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/SendMoney.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/CenterPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInPage.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,8 +33,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Interface" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -47,12 +53,12 @@
     &quot;assignee&quot;: &quot;reg-ooo&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/reg-ooo/OOP_Payday.git",
-    "accountId": "6aa45a76-692a-4c6b-ad55-0141e7afdaa8"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday.git&quot;,
+    &quot;accountId&quot;: &quot;6aa45a76-692a-4c6b-ad55-0141e7afdaa8&quot;
   }
-}]]></component>
+}</component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -96,6 +102,9 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\regor\OneDrive\Documents\GitHub\OOP_Payday\src\main\java\Factory" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="pages.payBills" />
     </key>
   </component>
   <component name="RunManager">
@@ -153,7 +162,7 @@
       <workItem from="1761786070504" duration="2783000" />
       <workItem from="1761885403007" duration="4450000" />
       <workItem from="1761890940366" duration="5778000" />
-      <workItem from="1761903890205" duration="7183000" />
+      <workItem from="1761903890205" duration="10513000" />
     </task>
     <task id="LOCAL-00001" summary="branch test">
       <option name="closed" value="true" />

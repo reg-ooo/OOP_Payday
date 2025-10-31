@@ -11,6 +11,7 @@ import util.ImageLoader;
 
 public class BanksPage extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
+    private final FontLoader fontLoader = FontLoader.getInstance(); // Added FontLoader
     private final Consumer<String> onButtonClick;
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -21,40 +22,47 @@ public class BanksPage extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(ThemeManager.getWhite());
+        setBackground(themeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        // Header
+        // --- Header: Back Button ---
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(ThemeManager.getWhite());
+        headerPanel.setBackground(themeManager.getWhite());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
 
         JLabel backLabel = new JLabel("Back");
-        backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        backLabel.setForeground(ThemeManager.getDBlue());
+        backLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
+        backLabel.setForeground(themeManager.getDBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                // Navigate back to the main Cash In selection page
                 onButtonClick.accept("CashIn");
             }
         });
         headerPanel.add(backLabel, BorderLayout.WEST);
 
-        // Title
+        // --- Title Row (Matching BanksPage2 style) ---
+        // 1. Title Label
         JLabel titleLabel = new JLabel("Banks");
-        titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getVBlue());
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        // Use the deep blue color and bold font style from BanksPage2
+        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
+        titleLabel.setForeground(themeManager.getDeepBlue());
 
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.setBackground(ThemeManager.getWhite());
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
-        titlePanel.add(titleLabel);
+        // 2. Title Icon - SCALING SIZE 50 (Matching BanksPage2)
+        ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 50);
+        JLabel iconLabel = new JLabel(titleIcon);
 
-        // Content: 2x2 + 1 centered
+        JPanel titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+        titleRow.setBackground(themeManager.getWhite());
+        titleRow.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
+        titleRow.add(titleLabel);
+        titleRow.add(iconLabel); // Added icon for visual consistency
+
+        // --- Content: Bank Buttons ---
         JPanel contentPanel = new JPanel(new GridBagLayout());
-        contentPanel.setBackground(ThemeManager.getWhite());
+        contentPanel.setBackground(themeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.NONE;
@@ -77,20 +85,20 @@ public class BanksPage extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(createBankButton("Metrobank"), gbc);
 
-        // Footer
+        // --- Footer: Step Label ---
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        footerPanel.setBackground(ThemeManager.getWhite());
+        footerPanel.setBackground(themeManager.getWhite());
         footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
 
         JLabel stepLabel = new JLabel("Step 2 of 4");
-        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-        stepLabel.setForeground(ThemeManager.getDeepBlue());
+        stepLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
+        stepLabel.setForeground(themeManager.getDeepBlue());
         footerPanel.add(stepLabel);
 
-        // Center panel
+        // --- Assemble Page ---
         JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBackground(ThemeManager.getWhite());
-        centerPanel.add(titlePanel, BorderLayout.NORTH);
+        centerPanel.setBackground(themeManager.getWhite());
+        centerPanel.add(titleRow, BorderLayout.NORTH); // Use the new titleRow
         centerPanel.add(contentPanel, BorderLayout.CENTER);
         centerPanel.add(footerPanel, BorderLayout.SOUTH);
 
@@ -129,7 +137,7 @@ public class BanksPage extends JPanel {
         } else {
             // Fallback: show bank name if image not found
             JLabel textLabel = new JLabel(bankName, SwingConstants.CENTER);
-            textLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
+            textLabel.setFont(fontLoader.loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
             textLabel.setForeground(themeManager.getDeepBlue());
             button.add(textLabel, BorderLayout.CENTER);
         }
@@ -147,6 +155,7 @@ public class BanksPage extends JPanel {
             }
         });
 
+        // Navigation to BanksPage2
         button.addActionListener(e -> onButtonClick.accept("CashInBanks2:" + bankName));
         return button;
     }
