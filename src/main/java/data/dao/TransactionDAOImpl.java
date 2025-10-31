@@ -50,6 +50,20 @@ public class TransactionDAOImpl implements TransactionDAO {
         }
     }
 
+    public boolean checkForTransactions(){
+        String query = "SELECT COUNT(*) FROM Transactions WHERE userID = ?";
+        try (PreparedStatement pstmt = database.prepareStatement(query)){
+            pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()){
+                return rs.getInt(1) > 0;
+            }
+        }catch(Exception e){
+            System.out.println("Failed to check for transactions: " + e.getMessage());
+        }
+        return false;
+    }
+
     private String getReference(){
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");

@@ -53,7 +53,7 @@ public class MainFrame extends JFrame {
 
         //NAVBAR PAGES
         mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
-        mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
+        mainPanel.add(ProfilePage.getInstance(this::handleProfileResult), "Profile");
 
         //SEND MONEY PAGES
         mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
@@ -307,7 +307,7 @@ public class MainFrame extends JFrame {
         cardLayout.show(mainPanel, text);
     }
 
-    public static void loadNavBar(){
+    public static void navBarVisibility(){
         navBar.setVisible(UserInfo.getInstance().isLoggedIn());
     }
 }

@@ -1,5 +1,7 @@
 package pages;
 
+import data.UserManager;
+import data.model.UserInfo;
 import panels.GradientPanel;
 import util.FontLoader;
 import util.ThemeManager;
@@ -15,8 +17,25 @@ import java.util.function.Consumer;
 public class ProfilePage extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final FontLoader fontLoader = FontLoader.getInstance();
+    private final JPanel infoPanel;
+    private final JLabel nameLabel;
+    private final JLabel emailValueLabel = new JLabel();
+    private final JLabel birthdayValueLabel = new JLabel();
+    private final JLabel phoneValueLabel = new JLabel();
+    private static ProfilePage instance;
 
-    public ProfilePage(Consumer<String> onButtonClick) {
+    public static ProfilePage getInstance() {
+        return instance;
+    }
+
+    public static ProfilePage getInstance(Consumer<String> onButtonClick) {
+        if (instance == null) {
+            instance = new ProfilePage(onButtonClick);
+        }
+        return instance;
+    }
+
+    private ProfilePage(Consumer<String> onButtonClick) {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
@@ -65,14 +84,13 @@ public class ProfilePage extends JPanel {
         JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 0)); // 30px left margin
         namePanel.setOpaque(false);
 
-        JLabel nameLabel = new JLabel("Cyan Oger Sigurado"); // This will be dynamic
+        nameLabel = new JLabel("Cyan Oger Sigurado"); // This will be dynamic
         nameLabel.setFont(fontLoader.loadFont(Font.BOLD, 22f, "Quicksand-Bold"));
         nameLabel.setForeground(themeManager.getBlack());
 
         namePanel.add(nameLabel);
 
-        // Rest of your existing code remains the same...
-        JPanel infoPanel = new JPanel();
+        infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBackground(Color.WHITE);
         infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
@@ -84,9 +102,9 @@ public class ProfilePage extends JPanel {
         basicLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 
         infoPanel.add(basicLabel);
-        infoPanel.add(makeInfoRow("Age:", ""));
-        infoPanel.add(makeInfoRow("Address:", ""));
-        infoPanel.add(makeInfoRow("Phone Number:", ""));
+        infoPanel.add(makeInfoRow("Email:", emailValueLabel));
+        infoPanel.add(makeInfoRow("Birthday:", birthdayValueLabel));
+        infoPanel.add(makeInfoRow("Phone Number:", phoneValueLabel));
         infoPanel.add(new JSeparator());
 
         infoPanel.add(makeClickableRow("Change Account Details", onButtonClick, "ChangeDetails"));
@@ -104,23 +122,41 @@ public class ProfilePage extends JPanel {
     }
 
     // Create info rows
-    private JPanel makeInfoRow(String labelText, String valueText) {
-        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 3));
+    private JPanel makeInfoRow(String labelText, JLabel valueLabel) {
+        JPanel row = new JPanel(new BorderLayout());
         row.setOpaque(false);
+        row.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
 
         JLabel label = new JLabel(labelText);
-        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        label.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Bold"));
         label.setForeground(themeManager.getDBlue());
 
-        JLabel value = new JLabel(valueText);
-        value.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        value.setForeground(themeManager.getGray());
-        value.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        valueLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+        valueLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        valueLabel.setForeground(themeManager.getDBlue());
 
-        row.add(label);
-        row.add(value);
+        row.add(label, BorderLayout.WEST);
+        row.add(valueLabel, BorderLayout.CENTER);
+
         return row;
     }
+//    private JPanel makeInfoRow(String labelText, String valueText) {
+//        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 3));
+//        row.setOpaque(false);
+//
+//        JLabel label = new JLabel(labelText);
+//        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+//        label.setForeground(themeManager.getDBlue());
+//
+//        JLabel value = new JLabel(valueText);
+//        value.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+//        value.setForeground(themeManager.getGray());
+//        value.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
+//
+//        row.add(label);
+//        row.add(value);
+//        return row;
+//    }
 
     // Clickable rows (e.g., Change Password)
     private JPanel makeClickableRow(String text, Consumer<String> onClick, String command) {
@@ -158,7 +194,7 @@ public class ProfilePage extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(command.toLowerCase().equals("logout")){
-
+                    UserManager.getInstance().logoutAccount();
                 }
                 onClick.accept(command);
             }
@@ -216,5 +252,18 @@ public class ProfilePage extends JPanel {
         g2.dispose();
 
         return new ImageIcon(circular);
+    }
+
+    public void loadComponents(){
+        UserInfo user = UserInfo.getInstance();
+        String birthday = user.getBirthDate();
+        String formattedBirthday = birthday.substring(5, 7) + "/" + birthday.substring(8, 10) + "/" + birthday.substring(0, 4);
+        nameLabel.setText(user.getFullName());
+        emailValueLabel.setText(user.getEmail());
+        birthdayValueLabel.setText(formattedBirthday);
+        phoneValueLabel.setText(user.getPhoneNumber());
+
+        infoPanel.revalidate();
+        infoPanel.repaint();
     }
 }

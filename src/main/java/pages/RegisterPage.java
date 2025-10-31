@@ -5,14 +5,14 @@ import java.time.Month;
 import java.util.function.Consumer;
 
 import Factory.RegisterUIFactory;
-import data.Users;
+import data.UserManager;
 import util.FontLoader;
 import util.ThemeManager;
 
 public class RegisterPage extends JPanel {
     private static final FontLoader fontLoader = FontLoader.getInstance();
     private static final ThemeManager themeManager = ThemeManager.getInstance();
-    private Users user = Users.getInstance();
+    private UserManager user = UserManager.getInstance();
 
     private final JTextField usernameField = new JTextField();
     private final JTextField fullNameField = new JTextField();

@@ -82,14 +82,22 @@ public class TransactionPanel extends JPanel{
         transactionContentPanel.removeAll();
 
         TransactionDAOImpl userInfo = TransactionDAOImpl.getInstance();
-        String time = userInfo.getTransaction().getTransactionDate().substring(userInfo.getTransaction().getTransactionDate().indexOf(" "), userInfo.getTransaction().getTransactionDate().length() - 3);
-        String validatedTime = checkTime(time);
-        transactionContentPanel.add(createDateSection(userInfo.getTransaction().getTransactionDate().substring(0, userInfo.getTransaction().getTransactionDate().indexOf(" "))));
-        transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction().getTransactionType(), "₱" + userInfo.getTransaction().getAmount(), !userInfo.getTransaction().getTransactionType().equals("send")));
-        transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
-        transactionContainer.add(transactionRoundedPanel);
-        this.add(transactionContainer, BorderLayout.CENTER);
+        if(userInfo.checkForTransactions()) {
+            String time = userInfo.getTransaction().getTransactionDate().substring(userInfo.getTransaction().getTransactionDate().indexOf(" "), userInfo.getTransaction().getTransactionDate().length() - 3);
+            String validatedTime = checkTime(time);
+            transactionContentPanel.add(createDateSection(userInfo.getTransaction().getTransactionDate().substring(0, userInfo.getTransaction().getTransactionDate().indexOf(" "))));
+            transactionContentPanel.add(createTransactionItem(validatedTime, userInfo.getTransaction().getTransactionType(), "₱" + userInfo.getTransaction().getAmount(), !userInfo.getTransaction().getTransactionType().equals("send")));
+            transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
+            transactionContainer.add(transactionRoundedPanel);
+            this.add(transactionContainer, BorderLayout.CENTER);
 
+            repaint();
+            revalidate();
+        }
+    }
+
+    public void unloadComponents(){
+        transactionContentPanel.removeAll();
         repaint();
         revalidate();
     }
@@ -196,10 +204,12 @@ public class TransactionPanel extends JPanel{
     public String checkTime(String time){
         int hour = Integer.parseInt(time.substring(0, 3).trim());
         System.out.println(hour);
-        if(hour >= 12){
+        if(hour > 12){
             return hour - 12 + time.substring(3) + "PM";
         }
-        else{
+        if (hour == 12) {
+            return hour + time.substring(3) + "PM";
+        } else {
             return hour + time.substring(3) + "AM";
         }
     }

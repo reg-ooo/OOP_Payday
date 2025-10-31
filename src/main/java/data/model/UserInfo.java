@@ -38,7 +38,6 @@ public class UserInfo {
 
     public void logoutUser() {
         this.isLoggedIn = false;
-        this.currentUserId = 0;
         DatabaseProtectionProxy.getInstance().clearUserContext();
     }
 
@@ -46,20 +45,6 @@ public class UserInfo {
         return currentUserId;
     }
 
-    public Transaction getLatestTransaction() {
-        if (!isLoggedIn) {
-            throw new SecurityException("Please login first");
-        }
-
-        // Get wallet first, then get transaction
-        Wallet wallet = walletDAO.findByUserId(currentUserId);
-
-        if (wallet != null) {
-            return transactionDAO.getTransaction();
-        }
-
-        return null;
-    }
 
     public double getBalance() {
         if (!isLoggedIn) {
@@ -99,4 +84,5 @@ public class UserInfo {
     public boolean isLoggedIn() {
         return isLoggedIn;
     }
+
 }

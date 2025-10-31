@@ -2,15 +2,11 @@ package pages;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
 import Factory.LoginUIFactory;
-import components.*;
-import data.Users;
+import data.UserManager;
 import main.Payday;
-import panels.*;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -22,7 +18,7 @@ public class LoginPage extends JPanel {
     private final JTextField usernameField = new JTextField();
     private final JLabel[] pinDots = new JLabel[4];
     private final StringBuilder pinInput = new StringBuilder();
-    private final Users user = Users.getInstance();
+    private final UserManager user = UserManager.getInstance();
     private final Consumer<String> onButtonClick;
 
     public LoginPage(Consumer<String> onButtonClick) {

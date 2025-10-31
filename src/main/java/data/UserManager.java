@@ -1,6 +1,7 @@
 package data;
 
 import main.MainFrame;
+import pages.ProfilePage;
 import panels.*;
 import data.dao.*;
 import data.model.*;
@@ -8,21 +9,21 @@ import data.model.*;
 import javax.swing.*;
 import java.util.function.Consumer;
 
-public class Users {
-    private static Users instance;
+public class UserManager {
+    private static UserManager instance;
     private final UserDAO userDAO;
     private final WalletDAO walletDAO;
     private final UserInfo userInfo;
 
-    private Users() {
+    private UserManager() {
         this.userDAO = new UserDAOImpl();
         this.walletDAO = new WalletDAOImpl();
         this.userInfo = UserInfo.getInstance();
     }
 
-    public static Users getInstance() {
+    public static UserManager getInstance() {
         if (instance == null) {
-            instance = new Users();
+            instance = new UserManager();
         }
         return instance;
     }
@@ -114,6 +115,11 @@ public class Users {
         }
     }
 
+    public void logoutAccount() {
+        userInfo.logoutUser();
+        unloadComponents();
+    }
+
     private boolean validateUsername(String username) {
         if (username == null || username.length() < 4) {
             System.out.println("Username too short");
@@ -176,6 +182,13 @@ public class Users {
     public void loadComponents() {
         NPanel.getInstance().loadComponents();
         TransactionPanel.getInstance().loadComponents();
-        MainFrame.loadNavBar();
+        ProfilePage.getInstance().loadComponents();
+        MainFrame.navBarVisibility();
+    }
+
+    public void unloadComponents() {
+        NPanel.getInstance().unloadComponents();
+        TransactionPanel.getInstance().unloadComponents();
+        MainFrame.navBarVisibility();
     }
 }

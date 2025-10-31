@@ -1,7 +1,7 @@
 package data.dao;
 
 import data.DatabaseProtectionProxy;
-import data.Users;
+import data.UserManager;
 import data.model.*;
 
 import java.sql.PreparedStatement;
@@ -59,7 +59,7 @@ public class SendMoneyDAOImpl implements MakeTransactionDAO{
 
                 logTransaction(Integer.parseInt(sender), "Send Money", amount);
                 logTransaction(Integer.parseInt(receive), "Receive Money", amount);
-                Users.getInstance().loadComponents();
+                UserManager.getInstance().loadComponents();
                 System.out.println("Money sent!");
                 System.out.println(senderBalance);
                 System.out.println(receiverBalance);

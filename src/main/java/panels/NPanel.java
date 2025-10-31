@@ -103,6 +103,12 @@ public class NPanel extends JPanel {
         repaint();
     }
 
+    public void unloadComponents(){
+        amountText.setText(String.format("%s %.2f", "\u20B1", 0.00));
+        revalidate();
+        repaint();
+    }
+
     private void styleDarkModeButton(JButton button){
         balanceButton.setContentAreaFilled(false);
         balanceButton.setBorderPainted(false);
