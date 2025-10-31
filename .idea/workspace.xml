@@ -4,28 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="files">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/dao/TransactionDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/dao/TransactionDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/dao/TransactionDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/dao/TransactionDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/model/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/cashIn/ConcreteCashInPageFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/cashIn/ConcreteCashInPageFactory$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/cashIn/ConcreteCashInPageFactory$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/cashIn/ConcreteCashInPageFactory$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/cashIn/ConcreteCashInPageFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/cashIn/ConcreteCashInPageFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/Database.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Database.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/UserInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/Users.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/Users.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" afterDir="false" />
-    </list>
+    <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="dao complete" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -174,7 +153,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761788024351</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="dao complete">
+      <option name="closed" value="true" />
+      <created>1761838071260</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1761838071261</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -194,6 +181,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="branch test" />
     <MESSAGE value="files" />
-    <option name="LAST_COMMIT_MESSAGE" value="files" />
+    <MESSAGE value="dao complete" />
+    <option name="LAST_COMMIT_MESSAGE" value="dao complete" />
   </component>
 </project>
