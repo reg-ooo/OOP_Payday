@@ -2,6 +2,7 @@ package pages.cashIn;
 
 import util.ThemeManager;
 import util.FontLoader;
+import util.ImageLoader;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,38 +11,25 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 
 public class QRPage extends JPanel {
-    private static QRPage instance;
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
-    private final JLabel nameLabel = new JLabel("Placeholder text");
+    private final ImageLoader imageLoader = ImageLoader.getInstance();
 
-    private QRPage(Consumer<String> onButtonClick) {
+    public QRPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setupUI();
-    }
-
-    public static QRPage getInstance() {
-        return instance;
-    }
-
-    public static QRPage getInstance(Consumer<String> onButtonClick) {
-        if (instance == null) {
-            instance = new QRPage(onButtonClick);
-        }
-        return instance;
-    }
-
-    public void updateSelected(String selectedName) {
-        nameLabel.setText(selectedName);
     }
 
     private void setupUI() {
         setLayout(new BorderLayout());
         setBackground(themeManager.getWhite());
-        setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+        setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        // Header
+        JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(themeManager.getWhite());
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+
         JLabel backLabel = new JLabel("Back");
         backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
         backLabel.setForeground(themeManager.getDBlue());
@@ -52,54 +40,73 @@ public class QRPage extends JPanel {
                 onButtonClick.accept("CashInBanks");
             }
         });
-        headerPanel.add(backLabel);
+        headerPanel.add(backLabel, BorderLayout.WEST);
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setBackground(themeManager.getWhite());
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 0, 0)); // Add top padding to push down
+        GridBagConstraints gbc = new GridBagConstraints();
+
+        JPanel qrContainer = new JPanel();
+        qrContainer.setLayout(null);
+        qrContainer.setBackground(themeManager.getWhite());
+        qrContainer.setPreferredSize(new Dimension(400, 400));
+
+        ImageIcon qrIcon = imageLoader.loadAndScaleHighQuality("QR.png", 400);
+        if (qrIcon == null) {
+            qrIcon = imageLoader.getImage("QR");
+        }
+
+        if (qrIcon != null && qrIcon.getIconWidth() > 0) {
+            JLabel qrLabel = new JLabel(qrIcon);
+            qrLabel.setBounds(0, 0, 400, 400);
+            qrContainer.add(qrLabel);
+        }
 
         JPanel placeholderPanel = new JPanel();
-        placeholderPanel.setPreferredSize(new Dimension(100, 100));
-        placeholderPanel.setMaximumSize(new Dimension(100, 100));
+        placeholderPanel.setBounds(310, 10, 80, 80); // Top-right position with 10px margin from right
         placeholderPanel.setBorder(BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true));
         placeholderPanel.setBackground(themeManager.getWhite());
-        placeholderPanel.setLayout(new BorderLayout());
-        JLabel placeholderLabel = new JLabel("Placeholder image", SwingConstants.CENTER);
-        placeholderLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
-        placeholderLabel.setForeground(themeManager.getDeepBlue());
-        placeholderPanel.add(placeholderLabel, BorderLayout.CENTER);
+        qrContainer.add(placeholderPanel);
 
-        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 0));
-        infoPanel.setBackground(themeManager.getWhite());
-        infoPanel.add(placeholderPanel);
-        infoPanel.add(nameLabel);
-        nameLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-        nameLabel.setForeground(themeManager.getBlack());
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        centerPanel.add(qrContainer, gbc);
+
+        // Done button - using SendMoneyPage3 style
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(themeManager.getWhite());
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 10, 0));
 
         JButton doneButton = new JButton("Done");
-        doneButton.setBackground(themeManager.getDvBlue());
+        doneButton.setBackground(themeManager.getDeepBlue());
         doneButton.setForeground(Color.WHITE);
-        doneButton.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        doneButton.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         doneButton.setFocusPainted(false);
         doneButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        doneButton.setPreferredSize(new Dimension(300, 48));
-        doneButton.setMaximumSize(new Dimension(Integer.MAX_VALUE, 48));
-        doneButton.setBorderPainted(false);
-        doneButton.setContentAreaFilled(true);
+        doneButton.setPreferredSize(new Dimension(300, 50));
+        doneButton.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         doneButton.setOpaque(true);
         doneButton.addActionListener(e -> onButtonClick.accept("Launch"));
 
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBackground(themeManager.getWhite());
-        centerPanel.add(Box.createVerticalGlue());
-        centerPanel.add(infoPanel);
-        centerPanel.add(Box.createVerticalStrut(60));
-        centerPanel.add(doneButton);
-        centerPanel.add(Box.createVerticalGlue());
+        buttonPanel.add(doneButton);
 
-        JLabel stepLabel = new JLabel("Step 4 of 4", SwingConstants.CENTER);
-        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 15f, "Quicksand-Bold"));
+        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        footerPanel.setBackground(themeManager.getWhite());
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+
+        JLabel stepLabel = new JLabel("Step 4 of 4");
+        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         stepLabel.setForeground(themeManager.getDeepBlue());
+        footerPanel.add(stepLabel);
+
+        JPanel mainContent = new JPanel(new BorderLayout());
+        mainContent.setBackground(themeManager.getWhite());
+        mainContent.add(centerPanel, BorderLayout.CENTER);
+        mainContent.add(buttonPanel, BorderLayout.SOUTH);
 
         add(headerPanel, BorderLayout.NORTH);
-        add(centerPanel, BorderLayout.CENTER);
-        add(stepLabel, BorderLayout.SOUTH);
+        add(mainContent, BorderLayout.CENTER);
+        add(footerPanel, BorderLayout.SOUTH);
     }
 }

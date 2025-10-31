@@ -46,13 +46,17 @@ public class ImageLoader {
         images.put("amount", resizeImage("icons/sendMoney/amount.png", 60, 60));
         images.put("successMoney", resizeImage("icons/sendMoney/successMoney.png", 60, 60));
 
-        //BANK LOGOS
+        //BANK LOGOS - Note: These are pre-loaded at 60x60 for backwards compatibility
+        // Use loadHighQualityImage() method for better quality when needed
         images.put("BDO", resizeImage("BDO.png", 60, 60));
         images.put("BPI", resizeImage("BPI.png", 60, 60));
         images.put("PNB", resizeImage("PNB.png", 60, 60));
         images.put("QR", resizeImage("QR.png", 60, 60));
         images.put("Metrobank", resizeImage("Metrobank.png", 60, 60));
         images.put("UnionBank", resizeImage("UnionBank.png", 60, 60));
+        images.put("Shell Select", resizeImage("Shell.png", 60, 60));
+        images.put("7-Eleven", resizeImage("Cliqq.png", 60, 60));
+        images.put("FamilyMart", resizeImage("FamilyMart.png", 60, 60));
     }
 
     public static ImageLoader getInstance() {
@@ -65,7 +69,7 @@ public class ImageLoader {
     private ImageIcon resizeImage(String fileName, int width, int height) {
         Image sourceImage = null;
 
-        // 1) Try to load from classpath (resources folder or jar)
+
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         if (cl == null) {
             cl = ImageLoader.class.getClassLoader();
@@ -78,7 +82,7 @@ public class ImageLoader {
             }
         }
 
-        // 2) If not found, try file system relative path
+
         if (sourceImage == null) {
             ImageIcon fsIcon = new ImageIcon(fileName);
             if (fsIcon.getIconWidth() > 0) {
@@ -86,9 +90,8 @@ public class ImageLoader {
             }
         }
 
-        // 3) Fallback to a safe existing icon so UI never shows an empty spot
         if (sourceImage == null) {
-            // try cashIn.png as a generic placeholder
+
             URL fallbackUrl = (cl != null) ? cl.getResource("cashIn.png") : null;
             if (fallbackUrl != null) {
                 sourceImage = new ImageIcon(fallbackUrl).getImage();
@@ -100,7 +103,6 @@ public class ImageLoader {
             }
         }
 
-        // 4) As a last resort, create a transparent placeholder
         if (sourceImage == null) {
             sourceImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         }
@@ -109,8 +111,59 @@ public class ImageLoader {
         return new ImageIcon(resizedImage);
     }
 
-    // Method to get an image by key
     public ImageIcon getImage(String key) {
         return images.get(key);
+    }
+
+
+    public ImageIcon loadHighQualityImage(String fileName) {
+        Image sourceImage = null;
+
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        if (cl == null) {
+            cl = ImageLoader.class.getClassLoader();
+        }
+        URL resourceUrl = (cl != null) ? cl.getResource(fileName) : null;
+        if (resourceUrl != null) {
+            ImageIcon cpIcon = new ImageIcon(resourceUrl);
+            if (cpIcon.getIconWidth() > 0) {
+                return cpIcon;
+            }
+        }
+
+
+        ImageIcon fsIcon = new ImageIcon(fileName);
+        if (fsIcon.getIconWidth() > 0) {
+            return fsIcon;
+        }
+
+
+        return null;
+    }
+
+
+    public ImageIcon loadAndScaleHighQuality(String fileName, int targetSize) {
+        ImageIcon originalIcon = loadHighQualityImage(fileName);
+
+        if (originalIcon == null || originalIcon.getIconWidth() <= 0) {
+            return null;
+        }
+
+        int originalWidth = originalIcon.getIconWidth();
+        int originalHeight = originalIcon.getIconHeight();
+
+        int finalWidth, finalHeight;
+        if (originalWidth <= targetSize && originalHeight <= targetSize) {
+
+            return originalIcon;
+        } else {
+
+            double scale = Math.min((double) targetSize / originalWidth, (double) targetSize / originalHeight);
+            finalWidth = (int) (originalWidth * scale);
+            finalHeight = (int) (originalHeight * scale);
+        }
+
+        Image scaledImage = originalIcon.getImage().getScaledInstance(finalWidth, finalHeight, Image.SCALE_SMOOTH);
+        return new ImageIcon(scaledImage);
     }
 }

@@ -7,10 +7,12 @@ import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
 import util.ThemeManager;
 import util.FontLoader;
+import util.ImageLoader;
 
 public class BanksPage extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
+    private final ImageLoader imageLoader = ImageLoader.getInstance();
 
     public BanksPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
@@ -20,7 +22,7 @@ public class BanksPage extends JPanel {
     private void setupUI() {
         setLayout(new BorderLayout());
         setBackground(ThemeManager.getWhite());
-        setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Reduced side padding
+        setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -54,7 +56,7 @@ public class BanksPage extends JPanel {
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(ThemeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Reduced spacing
+        gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.NONE;
 
         // Row 1
@@ -75,10 +77,10 @@ public class BanksPage extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(createBankButton("Metrobank"), gbc);
 
-        // Footer — SMALLER
+        // Footer
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(ThemeManager.getWhite());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0)); // Reduced
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
 
         JLabel stepLabel = new JLabel("Step 2 of 4");
         stepLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
@@ -97,12 +99,11 @@ public class BanksPage extends JPanel {
     }
 
     private JButton createBankButton(String bankName) {
-        JButton button = new JButton(bankName);
-        button.setPreferredSize(new Dimension(120, 120));  // SMALLER
+        JButton button = new JButton();
+        button.setLayout(new BorderLayout());
+        button.setPreferredSize(new Dimension(120, 120));
         button.setMinimumSize(new Dimension(120, 120));
         button.setMaximumSize(new Dimension(120, 120));
-        button.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold")); // Smaller font
-        button.setForeground(themeManager.getDeepBlue());
         button.setBackground(themeManager.getWhite());
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -111,17 +112,38 @@ public class BanksPage extends JPanel {
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
 
+        // Load high quality image directly (not pre-scaled)
+        ImageIcon bankIcon = imageLoader.loadAndScaleHighQuality(bankName + ".png", 85);
+
+        // Fallback to pre-loaded image if high quality load fails
+        if (bankIcon == null) {
+            bankIcon = imageLoader.getImage(bankName);
+        }
+
+        // Check if we got a valid image
+        if (bankIcon != null && bankIcon.getIconWidth() > 0) {
+            JLabel imageLabel = new JLabel(bankIcon);
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+            button.add(imageLabel, BorderLayout.CENTER);
+        } else {
+            // Fallback: show bank name if image not found
+            JLabel textLabel = new JLabel(bankName, SwingConstants.CENTER);
+            textLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
+            textLabel.setForeground(themeManager.getDeepBlue());
+            button.add(textLabel, BorderLayout.CENTER);
+        }
+
+        // Hover effects
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(themeManager.getGradientLBlue());
-                button.setForeground(themeManager.getWhite());
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(themeManager.getWhite());
-                button.setForeground(themeManager.getDeepBlue());
             }
         });
 

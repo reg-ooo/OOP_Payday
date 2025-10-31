@@ -8,11 +8,7 @@ import java.awt.*;
 
 import data.model.UserInfo;
 import pages.*;
-import pages.cashIn.BanksPage;
-import pages.cashIn.CashInPage;
-import pages.cashIn.StoresPage;
-import pages.cashIn.BanksPage2;
-import pages.cashIn.StoresPage2;
+import pages.cashIn.*;
 import pages.sendMoney.SendMoneyPage;
 import pages.sendMoney.SendMoneyPage2;
 import pages.sendMoney.SendMoneyPage3;
@@ -54,25 +50,32 @@ public class MainFrame extends JFrame {
         // Add all pages
         mainPanel.add(new LoginPage(this::handleLoginResult), "Login");
         mainPanel.add(new RegisterPage(this::handleRegisterResult), "Register");
+
+        //NAVBAR PAGES
         mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
+        mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
+
+        //SEND MONEY PAGES
         mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
-        mainPanel.add(new pages.RewardsPage(this::handleRewardsResult), "Rewards");
         mainPanel.add(new SendMoneyPage2(this::handleSendMoney2Result), "SendMoney2");
         mainPanel.add(new SendMoneyPage3(this::handleSendMoney3Result), "SendMoney3");
-        mainPanel.add(CashInPage.getInstance(this::handleCashInResult), "CashIn");
+
+        //CASH IN PAGES
+        mainPanel.add(new CashInPage(this::handleCashInResult), "CashIn");
         mainPanel.add(new BanksPage(this::handleCashInBanksResult), "CashInBanks");
         mainPanel.add(new StoresPage(this::handleCashInStoresResult), "CashInStores");
         mainPanel.add(new BanksPage2(this::handleCashInBanks2Result), "CashInBanks2");
         mainPanel.add(new StoresPage2(this::handleCashInStores2Result), "CashInStores2");
-        mainPanel.add(new ProfilePage(this::handleProfileResult), "Profile");
+        mainPanel.add(new QRPage(this::handleCashInBanks2Result), "QRPage");
+
+        //REWARDS PAGES
+        mainPanel.add(new pages.RewardsPage(this::handleRewardsResult), "Rewards");
 
         // Main container
         container = new JPanel(new BorderLayout());
         container.add(mainPanel, BorderLayout.CENTER);
         container.add(navBar, BorderLayout.SOUTH);
 
-        // FIX: Start with Login page and hide nav bar
-        // Hide initially
         navBar.setVisible(false);
         cardLayout.show(mainPanel, "Login"); //
 
@@ -174,7 +177,7 @@ public class MainFrame extends JFrame {
             slideContentTransition("CashIn", -1);
         } else if (result.equals("CashInBanks2Next")) {
             // Proceed to next step (not implemented), return to Launch for now
-            slideContentTransition("Launch", -1);
+            slideContentTransition("QRPage", 1);
         }
     }
 
@@ -184,7 +187,7 @@ public class MainFrame extends JFrame {
         } else if (result.equals("CashIn")) {
             slideContentTransition("CashIn", -1);
         } else if (result.equals("CashInStores2Next")) {
-            slideContentTransition("Launch", -1);
+            slideContentTransition("QRPage", 1);
         }
     }
 
@@ -268,7 +271,8 @@ public class MainFrame extends JFrame {
     private void handleRewardsResult(String result) {
         if ("Launch".equals(result)) {
             slideContentTransition("Launch", -1);
-        } else {
+        }
+        else {
             System.out.println("Unknown Rewards action: " + result);
         }
     }
