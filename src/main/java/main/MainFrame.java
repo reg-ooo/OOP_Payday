@@ -6,7 +6,7 @@ import components.RoundedFrame;
 import javax.swing.*;
 import java.awt.*;
 
-import data.UserInfo;
+import data.model.UserInfo;
 import pages.*;
 import pages.cashIn.BanksPage;
 import pages.cashIn.CashInPage;

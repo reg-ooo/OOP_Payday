@@ -157,6 +157,9 @@ public class ProfilePage extends JPanel {
         row.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                if(command.toLowerCase().equals("logout")){
+
+                }
                 onClick.accept(command);
             }
 

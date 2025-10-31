@@ -1,7 +1,6 @@
 package data;
 
 import main.MainFrame;
-import pages.*;
 import panels.*;
 import data.dao.*;
 import data.model.*;
@@ -11,9 +10,9 @@ import java.util.function.Consumer;
 
 public class Users {
     private static Users instance;
-    private UserDAO userDAO;
-    private WalletDAO walletDAO;
-    private UserInfo userInfo;
+    private final UserDAO userDAO;
+    private final WalletDAO walletDAO;
+    private final UserInfo userInfo;
 
     private Users() {
         this.userDAO = new UserDAOImpl();
@@ -46,16 +45,15 @@ public class Users {
 
         try {
             // Create User entity
-            User user = new User();
-            user.setFullName(capitalizeFirstLetter(fullName));
-            user.setPhoneNumber(phoneNumber);
-            user.setEmail(email);
-            user.setPin(password);
-            user.setBirthDate(birthDate);
-            user.setUsername(username);
+            userInfo.setFullName(capitalizeFirstLetter(fullName));
+            userInfo.setPhoneNumber(phoneNumber);
+            userInfo.setEmail(email);
+            userInfo.setPin(password);
+            userInfo.setBirthDate(birthDate);
+            userInfo.setUsername(username);
 
             // Insert user using DAO
-            if (!userDAO.insert(user)) {
+            if (!userDAO.insert(userInfo)) {
                 return false;
             }
 
@@ -88,11 +86,12 @@ public class Users {
 
         try {
             // Use DAO to find user by username
-            User user = userDAO.findByUsername(username);
+            UserInfo user = userDAO.findByUsername(username);
 
             if (user != null) {
                 // Validate password
                 if (user.getPin().equals(password)) {
+
                     int userID = user.getUserID();
                     System.out.println("Login successful!");
 

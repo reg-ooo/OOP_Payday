@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import Factory.LabelFactory;
-import data.UserInfo;
+import data.model.UserInfo;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;

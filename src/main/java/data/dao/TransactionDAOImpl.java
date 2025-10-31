@@ -1,19 +1,22 @@
 package data.dao;
 
-import data.Database;
 import data.DatabaseService;
 import data.DatabaseProtectionProxy;
 import data.model.Transaction;
-import data.model.User;
+import data.model.UserInfo;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionDAOImpl implements TransactionDAO {
     private DatabaseService database;
     private static TransactionDAOImpl instance;
+    private static String referenceNum;
 
     public static TransactionDAOImpl getInstance() {
         if (instance == null) {
@@ -27,22 +30,35 @@ public class TransactionDAOImpl implements TransactionDAO {
     }
 
     @Override
-    public boolean insert(Transaction transaction) {
-        String query = "INSERT INTO Transactions(walletID, transactionType, amount, transactionDate) " +
-                "VALUES (?, ?, ?, ?)";
-
-        try (PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setInt(1, transaction.getWalletID());
-            pstmt.setString(2, transaction.getTransactionType());
-            pstmt.setDouble(3, transaction.getAmount());
-            pstmt.setString(4, transaction.getTransactionDate());
-
-            pstmt.executeUpdate();
-            return true;
-        } catch (Exception e) {
-            System.err.println("Error inserting transaction: " + e.getMessage());
-            return false;
+    public void insertTransaction(int walletID, String transactionType, double amount) {
+        String sql = "INSERT INTO Transactions(walletID, transactionType, referenceID, amount, userID) VALUES(?, ?, ?, ?, ?)";
+        DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
+        if(!transactionType.equals("Receive Money")) {
+            referenceNum = getReference();
         }
+        try (PreparedStatement stmt = database.prepareStatement(sql)) {
+            stmt.setInt(1, walletID);
+            stmt.setString(2, transactionType);
+            stmt.setString(3, referenceNum);
+            stmt.setDouble(4, amount);
+            stmt.setInt(5, UserInfo.getInstance().getCurrentUserId());
+            stmt.executeUpdate();
+            DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
+        } catch (SQLException e) {
+            DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
+            System.out.println("Failed to insert transaction: " + e.getMessage());
+        }
+    }
+
+    private String getReference(){
+        LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");
+        long milliseconds = System.currentTimeMillis() % 100000;
+        return currentDate.format(formatter) + String.format("%05d", milliseconds);
+    }
+
+    public String getReferenceNum(){
+        return referenceNum;
     }
 
     @Override
@@ -51,7 +67,7 @@ public class TransactionDAOImpl implements TransactionDAO {
                 "ORDER BY transactionID DESC LIMIT 1";
 
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setInt(1, User.getUserID());
+            pstmt.setInt(1, UserInfo.getInstance().getUserID());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -64,7 +80,7 @@ public class TransactionDAOImpl implements TransactionDAO {
     }
 
     @Override
-    public List<Transaction> findAllByWalletId(int walletID) {
+    public List<Transaction> getAllTransactions(int walletID) {
         List<Transaction> transactions = new ArrayList<>();
         String query = "SELECT * FROM Transactions WHERE walletID = ? " +
                 "ORDER BY transactionID DESC";

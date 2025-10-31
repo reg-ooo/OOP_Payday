@@ -6,7 +6,6 @@ import java.awt.*;
 import Factory.LabelFactory;
 import components.*;
 import data.TransactionList;
-import data.UserInfo;
 import data.dao.TransactionDAOImpl;
 import util.FontLoader;
 import util.ThemeManager;

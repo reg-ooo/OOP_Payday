@@ -8,8 +8,7 @@ import java.util.function.Consumer;
 
 import Factory.sendMoney.SendMoneyPage1Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
-import data.Database;
-import data.UserInfo;
+import data.model.UserInfo;
 import util.ThemeManager;
 
 public class SendMoneyPage extends JPanel {

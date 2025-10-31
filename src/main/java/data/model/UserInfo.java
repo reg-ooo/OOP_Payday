@@ -1,9 +1,17 @@
-package data;
+package data.model;
 
+import data.DatabaseProtectionProxy;
 import data.dao.*;
-import data.model.*;
 
 public class UserInfo {
+    private int userID;
+    private String fullName;
+    private String phoneNumber;
+    private String email;
+    private String pin;
+    private String birthDate;
+    private String username;
+
     private static UserInfo instance;
     private WalletDAO walletDAO;
     private TransactionDAO transactionDAO;
@@ -47,7 +55,6 @@ public class UserInfo {
         Wallet wallet = walletDAO.findByUserId(currentUserId);
 
         if (wallet != null) {
-            int walletID = wallet.getWalletID();
             return transactionDAO.getTransaction();
         }
 
@@ -67,6 +74,27 @@ public class UserInfo {
 
         return 0.0;
     }
+
+    public int getUserID() { return userID; }
+    public void setUserID(int userID) { this.userID = userID; }
+
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getPhoneNumber() { return phoneNumber; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getPin() { return pin; }
+    public void setPin(String pin) { this.pin = pin; }
+
+    public String getBirthDate() { return birthDate; }
+    public void setBirthDate(String birthDate) { this.birthDate = birthDate; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public boolean isLoggedIn() {
         return isLoggedIn;

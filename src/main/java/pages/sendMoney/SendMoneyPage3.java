@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
+import data.dao.TransactionDAOImpl;
 import util.ThemeManager;
 import Factory.sendMoney.SendMoneyPage3Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage3Factory;
@@ -55,7 +56,7 @@ public class SendMoneyPage3 extends JPanel {
         this.recipientName = recipient;
         this.phoneNumber = phone;
         this.amount = sendAmount;
-        this.referenceNo = factory.generateReferenceNumber(); // Use factory
+        this.referenceNo = TransactionDAOImpl.getInstance().getReferenceNum(); // Use factory
         this.dateTime = factory.getCurrentTimestamp(); // Use factory
         refreshUI();
     }

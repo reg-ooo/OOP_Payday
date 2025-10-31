@@ -4,7 +4,8 @@ import data.model.Transaction;
 import java.util.List;
 
 public interface TransactionDAO {
-    boolean insert(Transaction transaction);
+    void insertTransaction(int walletID, String transactionType, double amount);
     Transaction getTransaction();  // Returns null if not found
-    List<Transaction> findAllByWalletId(int walletID);  // Returns empty list if none found
+    List<Transaction> getAllTransactions(int walletID);  // Returns empty list if none found
+
 }

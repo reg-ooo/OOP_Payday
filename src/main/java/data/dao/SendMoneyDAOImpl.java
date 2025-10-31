@@ -1,14 +1,16 @@
-package data;
+package data.dao;
+
+import data.DatabaseProtectionProxy;
+import data.Users;
+import data.model.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-public class SendMoney{
+public class SendMoneyDAOImpl implements MakeTransactionDAO{
     UserInfo userInfo = UserInfo.getInstance();
     private DatabaseProtectionProxy database = DatabaseProtectionProxy.getInstance();
+    TransactionDAO transactionDAO = TransactionDAOImpl.getInstance();
 
     public void sendMoney(String receiver, double amount){
         System.out.println("receiver: " + receiver);
@@ -54,7 +56,9 @@ public class SendMoney{
                     DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
                     System.out.println("Failed to update balance: " + e.getMessage());
                 }
-                insertTransaction(Integer.parseInt(sender), "Send Money", amount);
+
+                logTransaction(Integer.parseInt(sender), "Send Money", amount);
+                logTransaction(Integer.parseInt(receive), "Receive Money", amount);
                 Users.getInstance().loadComponents();
                 System.out.println("Money sent!");
                 System.out.println(senderBalance);
@@ -65,28 +69,9 @@ public class SendMoney{
         }
     }
 
-    private void insertTransaction(int walletID, String transactionType, double amount) {
-        String sql = "INSERT INTO Transactions(walletID, transactionType, referenceID, amount, userID) VALUES(?, ?, ?, ?, ?)";
-        DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
-        try (PreparedStatement stmt = database.prepareStatement(sql)) {
-            stmt.setInt(1, walletID);
-            stmt.setString(2, transactionType);
-            stmt.setString(3, getReference());
-            stmt.setDouble(4, amount);
-            stmt.setInt(5, UserInfo.getInstance().getCurrentUserId());
-            stmt.executeUpdate();
-            DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
-        } catch (SQLException e) {
-            DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
-            System.out.println("Failed to insert transaction: " + e.getMessage());
-        }
-    }
-
-    private String getReference(){
-        LocalDate currentDate = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyy");
-        long milliseconds = System.currentTimeMillis() % 100000;
-        return currentDate.format(formatter) + String.format("%05d", milliseconds);
+    @Override
+    public void logTransaction(int user, String type, double amount){
+        transactionDAO.insertTransaction(user, type, amount);
     }
 
     private String getID(String number){

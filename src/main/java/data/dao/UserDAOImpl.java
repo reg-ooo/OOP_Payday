@@ -2,7 +2,8 @@ package data.dao;
 
 import data.DatabaseProtectionProxy;
 import data.DatabaseService;
-import data.model.User;
+import data.model.UserInfo;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -14,7 +15,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public boolean insert(User user) {
+    public boolean insert(UserInfo user) {
         String query = "INSERT INTO Users(fullName, phoneNumber, email, pin, birthDate, username) " +
                 "VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -35,7 +36,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User findByUsername(String username) {
+    public UserInfo findByUsername(String username) {
         String query = "SELECT * FROM Users WHERE username = ?";
 
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
@@ -52,7 +53,7 @@ public class UserDAOImpl implements UserDAO {
     }
 
     @Override
-    public User findById(int userID) {
+    public UserInfo findById(int userID) {
         String query = "SELECT * FROM Users WHERE userID = ?";
 
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
@@ -131,8 +132,8 @@ public class UserDAOImpl implements UserDAO {
         return -1;
     }
 
-    private User mapResultSetToUser(ResultSet rs) throws Exception {
-        User user = new User();
+    private UserInfo mapResultSetToUser(ResultSet rs) throws Exception {
+        UserInfo user = UserInfo.getInstance();
         user.setUserID(rs.getInt("userID"));
         user.setFullName(rs.getString("fullName"));
         user.setPhoneNumber(rs.getString("phoneNumber"));
