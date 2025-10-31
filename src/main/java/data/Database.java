@@ -13,7 +13,7 @@ public class Database implements DatabaseService {
     public static ResultSet rs;
     public static boolean connected;
     private Database(){
-
+// hello
     }
 
     public static Database getInstance() {

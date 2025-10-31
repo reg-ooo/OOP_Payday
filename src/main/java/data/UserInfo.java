@@ -1,17 +1,18 @@
 package data;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import data.dao.*;
+import data.model.*;
 
 public class UserInfo {
-    TransactionList trans;
     private static UserInfo instance;
-    private DatabaseService database;  // Use interface instead of direct Database
+    private WalletDAO walletDAO;
+    private TransactionDAO transactionDAO;
     private int currentUserId;
     private boolean isLoggedIn = false;
 
     private UserInfo() {
-        this.database = DatabaseProtectionProxy.getInstance();
+        this.walletDAO = new WalletDAOImpl();
+        this.transactionDAO = TransactionDAOImpl.getInstance();
     }
 
     public static UserInfo getInstance() {
@@ -21,15 +22,12 @@ public class UserInfo {
         return instance;
     }
 
-    // Call this when user logs in
     public void loginUser(int userId) {
         this.currentUserId = userId;
         this.isLoggedIn = true;
-        // Create protected database access for this user
         DatabaseProtectionProxy.getInstance().setUserContext(userId, true);
     }
 
-    // Call this when user logs out
     public void logoutUser() {
         this.isLoggedIn = false;
         this.currentUserId = 0;
@@ -40,47 +38,34 @@ public class UserInfo {
         return currentUserId;
     }
 
-    public TransactionList getTransaction() {
+    public Transaction getLatestTransaction() {
         if (!isLoggedIn) {
             throw new SecurityException("Please login first");
         }
 
-        String query = "SELECT * FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 1"  ;  // ✅ Filter by userID
-        try(PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setInt(1, currentUserId);
-            ResultSet rs = pstmt.executeQuery();  // ✅ Goes through proxy
-            if (rs.next()) {
-                trans = new TransactionList(
-                        rs.getString("transactionType"),
-                        rs.getDouble("amount"),
-                        rs.getString("transactionDate")
-                );
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Get wallet first, then get transaction
+        Wallet wallet = walletDAO.findByUserId(currentUserId);
+
+        if (wallet != null) {
+            int walletID = wallet.getWalletID();
+            return transactionDAO.getTransaction();
         }
 
-        return trans;
+        return null;
     }
 
-    public double getBalance() {  // No need for ID parameter - use logged-in user
+    public double getBalance() {
         if (!isLoggedIn) {
             throw new SecurityException("Please login first");
         }
 
-        double balance = 0;
-        String query = "SELECT balance FROM Wallets WHERE userID = ?";
+        Wallet wallet = walletDAO.findByUserId(currentUserId);
 
-        try (PreparedStatement pstmt = database.prepareStatement(query)){
-            pstmt.setInt(1, currentUserId);
-            ResultSet rs = pstmt.executeQuery();  // ✅ Goes through proxy
-            if (rs.next()) {
-                balance = rs.getDouble("balance");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (wallet != null) {
+            return wallet.getBalance();
         }
-        return balance;
+
+        return 0.0;
     }
 
     public boolean isLoggedIn() {
