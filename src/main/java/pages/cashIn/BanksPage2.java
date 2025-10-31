@@ -131,7 +131,7 @@ public class BanksPage2 extends JPanel {
 
         // Step label
         JLabel stepLabel = new JLabel("Step 3 of 4", SwingConstants.CENTER);
-        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 15f, "Quicksand-Regular"));
+        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
         stepLabel.setForeground(themeManager.getDeepBlue());
 
         add(headerPanel, BorderLayout.NORTH);

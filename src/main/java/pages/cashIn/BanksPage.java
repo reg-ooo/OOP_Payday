@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
-
 import util.ThemeManager;
 import util.FontLoader;
 
@@ -21,12 +20,12 @@ public class BanksPage extends JPanel {
     private void setupUI() {
         setLayout(new BorderLayout());
         setBackground(ThemeManager.getWhite());
-        setBorder(BorderFactory.createEmptyBorder(20, 40, 40, 40));
+        setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30)); // Reduced side padding
 
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(ThemeManager.getWhite());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
 
         JLabel backLabel = new JLabel("Back");
         backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
@@ -40,7 +39,7 @@ public class BanksPage extends JPanel {
         });
         headerPanel.add(backLabel, BorderLayout.WEST);
 
-        // Title (BLUE)
+        // Title
         JLabel titleLabel = new JLabel("Banks");
         titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
         titleLabel.setForeground(ThemeManager.getVBlue());
@@ -48,14 +47,14 @@ public class BanksPage extends JPanel {
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.setBackground(ThemeManager.getWhite());
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 30, 0));
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
         titlePanel.add(titleLabel);
 
         // Content: 2x2 + 1 centered
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(ThemeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15);
+        gbc.insets = new Insets(10, 10, 10, 10); // Reduced spacing
         gbc.fill = GridBagConstraints.NONE;
 
         // Row 1
@@ -76,12 +75,13 @@ public class BanksPage extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(createBankButton("Metrobank"), gbc);
 
-        // Footer
+        // Footer — SMALLER
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(ThemeManager.getWhite());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0)); // Reduced
+
         JLabel stepLabel = new JLabel("Step 2 of 4");
-        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         stepLabel.setForeground(ThemeManager.getDeepBlue());
         footerPanel.add(stepLabel);
 
@@ -98,16 +98,14 @@ public class BanksPage extends JPanel {
 
     private JButton createBankButton(String bankName) {
         JButton button = new JButton(bankName);
-        button.setPreferredSize(new Dimension(140, 140));
-        button.setMinimumSize(new Dimension(140, 140));
-        button.setMaximumSize(new Dimension(140, 140));
-
-        button.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        button.setPreferredSize(new Dimension(120, 120));  // SMALLER
+        button.setMinimumSize(new Dimension(120, 120));
+        button.setMaximumSize(new Dimension(120, 120));
+        button.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold")); // Smaller font
         button.setForeground(themeManager.getDeepBlue());
         button.setBackground(themeManager.getWhite());
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
