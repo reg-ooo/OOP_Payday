@@ -181,6 +181,7 @@ public class UserManager {
 
     public void loadComponents() {
         NPanel.getInstance().loadComponents();
+        // FIX: Use parameterless getInstance()
         TransactionPanel.getInstance().loadComponents();
         ProfilePage.getInstance().loadComponents();
         MainFrame.navBarVisibility();
@@ -188,6 +189,7 @@ public class UserManager {
 
     public void unloadComponents() {
         NPanel.getInstance().unloadComponents();
+        // FIX: Use parameterless getInstance()
         TransactionPanel.getInstance().unloadComponents();
         MainFrame.navBarVisibility();
         MainFrame.resetCards();

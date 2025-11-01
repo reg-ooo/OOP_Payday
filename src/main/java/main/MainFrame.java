@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.Consumer;
 
 import data.model.UserInfo;
 import pages.*;
@@ -40,9 +41,10 @@ public class MainFrame extends JFrame {
     private static String currentCard;
     private static MainFrame instance;
 
-    // --- FIX: Added reference pages for data access in handlers ---
+    // --- Added reference pages for data access and handlers ---
     private final QRPage qrPage = QRPage.getInstance(this::handleCashInBanks2Result);
     private final CashInReceiptPage cashInReceiptPage = CashInReceiptPage.getInstance(this::handleCashInResult);
+    private final TransactionHistoryPage transactionHistoryPage = TransactionHistoryPage.getInstance(this::handleTransactionHistoryResult);
     // --- END FIX ---
 
     public MainFrame(){
@@ -72,7 +74,6 @@ public class MainFrame extends JFrame {
         mainPanel = new JPanel(cardLayout);
         mainPanel.setBackground(ThemeManager.getWhite());
 
-        // FIX: Make sure NavigationBar has the right constructor
         navBar = new NavigationBar(this::handleNavBarClick);
 
         // Add all pages
@@ -82,6 +83,8 @@ public class MainFrame extends JFrame {
         //NAVBAR PAGES
         mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
         mainPanel.add(ProfilePage.getInstance(this::handleProfileResult), "Profile");
+        mainPanel.add(transactionHistoryPage, "TransactionHistory");
+
 
         //SEND MONEY PAGES
         mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
@@ -94,12 +97,10 @@ public class MainFrame extends JFrame {
         mainPanel.add(new StoresPage(this::handleCashInStoresResult), "CashInStores");
         mainPanel.add(new BanksPage2(this::handleCashInBanks2Result), "CashInBanks2");
         mainPanel.add(new StoresPage2(this::handleCashInStores2Result), "CashInStores2");
-        mainPanel.add(cashInReceiptPage, "CashInReceipt");
 
         // QRPage uses the instance created above
         mainPanel.add(qrPage, "QRPage");
 
-        // FIX: Added the CashInReceiptPage
         mainPanel.add(cashInReceiptPage, "CashInReceipt");
 
         //CASH OUT PAGES
@@ -129,12 +130,12 @@ public class MainFrame extends JFrame {
         container.add(navBar, BorderLayout.SOUTH);
 
         navBar.setVisible(false);
-        cardLayout.show(mainPanel, "Login"); //
+        cardLayout.show(mainPanel, "Login");
 
         mainFrame.setContentPane(container);
     }
 
-    // --- FIX: Utility methods for receipt generation ---
+    // --- Utility methods for receipt generation ---
     private String generateReferenceNumber(String entity) {
         String prefix = entity.toUpperCase().contains("BANK") ? "BANK" : "CASH";
         return prefix + "-" + System.currentTimeMillis() % 100000;
@@ -146,10 +147,11 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * FIX: Dedicated handler for the CashInReceipt flow.
+     * Dedicated handler for the CashInReceipt flow.
      */
     private void handleCashInReceiptHandler() {
         // 1. Get the data stored in QRPage (Relies on public fields in QRPage.java)
+        // NOTE: These fields must exist in QRPage.java (e.g., public String currentEntityName;)
         String entityName = qrPage.currentEntityName;
         String accountRef = qrPage.currentAccountRef;
         String amount = qrPage.currentAmount;
@@ -158,7 +160,8 @@ public class MainFrame extends JFrame {
         String referenceNo = generateReferenceNumber(entityName);
         String timestamp = getCurrentTimestamp();
 
-        // 3. Update the receipt page with all the details (Relies on 5 arguments in CashInReceiptPage.java)
+        // 3. Update the receipt page with all the details
+        // NOTE: CashInReceiptPage.updateReceiptDetails must accept 5 arguments
         cashInReceiptPage.updateReceiptDetails(
                 entityName,
                 accountRef,
@@ -170,7 +173,7 @@ public class MainFrame extends JFrame {
         // 4. Switch the view to the receipt page
         slideContentTransition("CashInReceipt", 1);
     }
-    // --- END FIX ---
+    // --- END Utility methods ---
 
 
     private void handleNavBarClick(String result) {
@@ -202,23 +205,20 @@ public class MainFrame extends JFrame {
     private void handleLaunchResult(String result) {
         switch (result) {
             case "SendMoney" -> {
-                // Refresh balance before showing SendMoneyPage
                 Component[] components = mainPanel.getComponents();
                 for (Component comp : components) {
-                    if (comp instanceof SendMoneyPage) {
-                        SendMoneyPage sendMoneyPage = (SendMoneyPage) comp;
-                        sendMoneyPage.refreshBalance(); // Refresh the balance
+                    if (comp instanceof SendMoneyPage sendMoneyPage) {
+                        sendMoneyPage.refreshBalance();
                         break;
                     }
                 }
                 slideContentTransition("SendMoney", 1);
             }
             case "CashOut" ->  {
-                //CLEAR AMOUNT FIELD
                 Component[] components = mainPanel.getComponents();
                 for (Component comp : components) {
-                    if (comp instanceof CashOutPage) {
-                        ((CashOutPage) comp).clearAmountField();
+                    if (comp instanceof CashOutPage cashOutPage) {
+                        cashOutPage.clearAmountField();
                         break;
                     }
                 }
@@ -230,6 +230,7 @@ public class MainFrame extends JFrame {
             case "BuyLoad" -> slideContentTransition("BuyLoad", 1);
             case "Rewards" -> slideContentTransition("Rewards", 1);
             case "Profile" -> slideContentTransition("Profile", 1);
+            case "TransactionHistory" -> slideContentTransition("TransactionHistory", 1); // ADDED: Routing from LaunchPage
             default -> System.out.println("Unknown action: " + result);
         }
     }
@@ -239,13 +240,8 @@ public class MainFrame extends JFrame {
             case "Launch" -> slideContentTransition("Launch", -1);
             case "CashInBanks" -> slideContentTransition("CashInBanks", 1);
             case "CashInStores" -> slideContentTransition("CashInStores", 1);
-            // FIX: Back from Receipt Page (Done button)
             case "CashInReceipt" -> slideContentTransition("Launch", -1);
-
-            //  CRITICAL FIX: Add handler for New Cash-In button from receipt
             case "CashInPage" -> slideContentTransition("CashIn", -1);
-            //  END CRITICAL FIX
-
             default -> System.out.println("Unknown Cash In action: " + result);
         }
     }
@@ -253,7 +249,6 @@ public class MainFrame extends JFrame {
     private void handleCashInBanksResult(String result) {
         if (result.startsWith("CashInBanks2:")) {
             String bankName = result.substring("CashInBanks2:".length());
-            // Pass selected bank to BanksPage2 and navigate
             for (Component comp : mainPanel.getComponents()) {
                 if (comp instanceof BanksPage2 page2) {
                     page2.updateSelected(bankName);
@@ -290,32 +285,25 @@ public class MainFrame extends JFrame {
      */
     private void handleCashInBanks2Result(String result) {
 
-        // FIX: Handle the final CashInReceipt action first
         if (result.equals("CashInReceipt")) {
             handleCashInReceiptHandler();
             return;
         }
-        // END FIX
 
-        // *** CRITICAL FIX: Forward "CashInStores2" to the correct handler ***
         if (result.equals("CashInStores2")) {
             handleCashInStores2Result(result);
             return;
         }
 
         if (result.equals("CashInBanks")) {
-            // Back from BanksPage2 to BanksPage
             slideContentTransition("CashInBanks", -1);
         } else if (result.equals("QRPage")) {
-            // Next from BanksPage2 to QRPage
             slideContentTransition("QRPage", 1);
         } else if (result.equals("CashInBanks2")) {
-            // Back from QRPage to BanksPage2
             slideContentTransition("CashInBanks2", -1);
-        } else if (result.equals("Launch")) { // Handle 'Done' button from QRPage
+        } else if (result.equals("Launch")) {
             slideContentTransition("Launch", -1);
         } else {
-            // This is the line that was generating the "Unknown CashInBanks2 action: CashInStores2" error
             System.out.println("Unknown CashInBanks2 action: " + result);
         }
     }
@@ -325,26 +313,30 @@ public class MainFrame extends JFrame {
      */
     private void handleCashInStores2Result(String result) {
 
-        // FIX: Handle the final CashInReceipt action first
         if (result.equals("CashInReceipt")) {
             handleCashInReceiptHandler();
             return;
         }
-        // END FIX
 
         if (result.equals("CashInStores")) {
-            // Back from StoresPage2 to StoresPage
             slideContentTransition("CashInStores", -1);
         } else if (result.equals("QRPage")) {
-            // Next from StoresPage2 to QRPage
             slideContentTransition("QRPage", 1);
         } else if (result.equals("CashInStores2")) {
-            // *** This is the target for the Stores back button ***
             slideContentTransition("CashInStores2", -1);
-        } else if (result.equals("Launch")) { // Handle 'Done' button from QRPage
+        } else if (result.equals("Launch")) {
             slideContentTransition("Launch", -1);
         } else {
             System.out.println("Unknown CashInStores2 action: " + result);
+        }
+    }
+
+    // ADDED: Handler for TransactionHistoryPage
+    private void handleTransactionHistoryResult(String result) {
+        if (result.equals("Launch")) {
+            slideContentTransition("Launch", -1);
+        } else {
+            System.out.println("Unknown TransactionHistory action: " + result);
         }
     }
 
@@ -359,17 +351,13 @@ public class MainFrame extends JFrame {
             slideContentTransition("PayBills2", 1);
         }
         else if (result.startsWith("PayBills2:")) {
-            // Extract provider and category from result string "PayBills2:Electricity:Meralco"
             String[] parts = result.split(":");
             if (parts.length >= 3) {
                 String category = parts[1];
                 String provider = parts[2];
 
-                // Find the PayBills2 instance and update it with the selected provider
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof PayBills2) {
-                        PayBills2 payBills2 = (PayBills2) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof PayBills2 payBills2) {
                         payBills2.setSelectedProvider(provider, category);
                         break;
                     }
@@ -378,17 +366,13 @@ public class MainFrame extends JFrame {
             slideContentTransition("PayBills2", 1);
         }
         else if (result.startsWith("PayBills2Back:")) {
-            // Extract provider and category from result string "PayBills2Back:Electricity:Meralco"
             String[] parts = result.split(":");
             if (parts.length >= 3) {
                 String category = parts[1];
                 String provider = parts[2];
 
-                // Find the PayBills2 instance and update it with the selected provider
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof PayBills2) {
-                        PayBills2 payBills2 = (PayBills2) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof PayBills2 payBills2) {
                         payBills2.setSelectedProvider(provider, category);
                         break;
                     }
@@ -397,7 +381,6 @@ public class MainFrame extends JFrame {
             slideContentTransition("PayBills2", -1);
         }
         else if (result.startsWith("PayBills3:")) {
-            // Extract data from result string "PayBills3:Electricity:Meralco:1000.00:123456789"
             String[] parts = result.split(":");
             if (parts.length >= 5) {
                 String category = parts[1];
@@ -405,11 +388,8 @@ public class MainFrame extends JFrame {
                 String amount = parts[3];
                 String account = parts[4];
 
-                // Find the PayBills3 instance and update it with the transaction data
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof PayBills3) {
-                        PayBills3 payBills3 = (PayBills3) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof PayBills3 payBills3) {
                         payBills3.updateTransactionData(category, provider, amount, account);
                         break;
                     }
@@ -418,7 +398,6 @@ public class MainFrame extends JFrame {
             slideContentTransition("PayBills3", 1);
         }
         else if (result.startsWith("PayBillsReceipt:")) {
-            // Extract data from result string "PayBillsReceipt:Electricity:Meralco:1000.00:123456789"
             String[] parts = result.split(":");
             if (parts.length >= 5) {
                 String category = parts[1];
@@ -426,11 +405,8 @@ public class MainFrame extends JFrame {
                 String amount = parts[3];
                 String account = parts[4];
 
-                // Find the PayBillsReceiptPage instance and update it with the transaction data
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof PayBillsReceiptPage) {
-                        PayBillsReceiptPage payBillsReceiptPage = (PayBillsReceiptPage) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof PayBillsReceiptPage payBillsReceiptPage) {
                         payBillsReceiptPage.updateTransactionData(category, provider, amount, account);
                         break;
                     }
@@ -451,14 +427,10 @@ public class MainFrame extends JFrame {
             slideContentTransition("BuyLoad", -1);
         }
         else if (result.startsWith("BuyLoad2:")) {
-            // Extract network from result string "BuyLoad2:Smart"
             String network = result.substring("BuyLoad2:".length());
 
-            // Find the BuyLoadPage2 instance and update it with the selected network
-            Component[] components = mainPanel.getComponents();
-            for (Component comp : components) {
-                if (comp instanceof BuyLoadPage2) {
-                    BuyLoadPage2 buyLoadPage2 = (BuyLoadPage2) comp;
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof BuyLoadPage2 buyLoadPage2) {
                     buyLoadPage2.setSelectedNetwork(network);
                     break;
                 }
@@ -466,14 +438,10 @@ public class MainFrame extends JFrame {
             slideContentTransition("BuyLoad2", 1);
         }
         else if (result.startsWith("BuyLoad2Back:")) {
-            // Extract network from result string "BuyLoad2Back:Smart"
             String network = result.substring("BuyLoad2Back:".length());
 
-            // Find the BuyLoadPage2 instance and update it with the selected network
-            Component[] components = mainPanel.getComponents();
-            for (Component comp : components) {
-                if (comp instanceof BuyLoadPage2) {
-                    BuyLoadPage2 buyLoadPage2 = (BuyLoadPage2) comp;
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof BuyLoadPage2 buyLoadPage2) {
                     buyLoadPage2.setSelectedNetwork(network);
                     break;
                 }
@@ -481,18 +449,14 @@ public class MainFrame extends JFrame {
             slideContentTransition("BuyLoad2", -1);
         }
         else if (result.startsWith("BuyLoad3:")) {
-            // Extract data from result string "BuyLoad3:Smart:100.00:09171234567"
             String[] parts = result.split(":");
             if (parts.length >= 4) {
                 String network = parts[1];
                 String amount = parts[2];
                 String phone = parts[3];
 
-                // Find the BuyLoadPage3 instance and update it with the transaction data
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof BuyLoadPage3) {
-                        BuyLoadPage3 buyLoadPage3 = (BuyLoadPage3) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof BuyLoadPage3 buyLoadPage3) {
                         buyLoadPage3.updateTransactionData(network, amount, phone);
                         break;
                     }
@@ -501,18 +465,14 @@ public class MainFrame extends JFrame {
             slideContentTransition("BuyLoad3", 1);
         }
         else if (result.startsWith("BuyLoadReceipt:")) {
-            // Extract data from result string "BuyLoadReceipt:Smart:100.00:09171234567"
             String[] parts = result.split(":");
             if (parts.length >= 4) {
                 String network = parts[1];
                 String amount = parts[2];
                 String phone = parts[3];
 
-                // Find the BuyLoadReceiptPage instance and update it with the transaction data
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof BuyLoadReceiptPage) {
-                        BuyLoadReceiptPage buyLoadReceiptPage = (BuyLoadReceiptPage) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof BuyLoadReceiptPage buyLoadReceiptPage) {
                         buyLoadReceiptPage.updateTransactionData(network, amount, phone);
                         break;
                     }
@@ -532,24 +492,18 @@ public class MainFrame extends JFrame {
         else if (result.equals("CashOut")) {
             slideContentTransition("CashOut", -1);
 
-            //CLEAR AMOUNT FIELD
-            Component[] components = mainPanel.getComponents();
-            for (Component comp : components) {
-                if (comp instanceof CashOutPage) {
-                    ((CashOutPage) comp).clearAmountField();
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof CashOutPage cashOutPage) {
+                    cashOutPage.clearAmountField();
                     break;
                 }
             }
         }
         else if (result.startsWith("CashOut2:")) {
-            // Extract amount from result string "CashOut2:100.00"
             String amount = result.substring("CashOut2:".length());
 
-            // Find the CashOutPage2 instance and update it with the amount
-            Component[] components = mainPanel.getComponents();
-            for (Component comp : components) {
-                if (comp instanceof CashOutPage2) {
-                    CashOutPage2 cashOutPage2 = (CashOutPage2) comp;
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof CashOutPage2 cashOutPage2) {
                     cashOutPage2.updateTransactionData(amount, "Cash Out");
                     break;
                 }
@@ -557,15 +511,11 @@ public class MainFrame extends JFrame {
             slideContentTransition("CashOut2", 1);
         }
         else if (result.startsWith("CashOutSuccess:")) {
-            // Extract amount from result string "CashOutSuccess:100.00"
             String amount = result.substring("CashOutSuccess:".length());
             String service = "Cash Out";
 
-            // Update CashOutSuccessPage with the transaction data
-            Component[] components = mainPanel.getComponents();
-            for (Component comp : components) {
-                if (comp instanceof CashOutReceiptPage) {
-                    CashOutReceiptPage successPage = (CashOutReceiptPage) comp;
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof CashOutReceiptPage successPage) {
                     successPage.updateTransactionData(amount, service);
                     break;
                 }
@@ -577,9 +527,8 @@ public class MainFrame extends JFrame {
     private void handleSendMoneyResult(String result) {
         if (result.startsWith("SendMoney2")) {
             String phoneNumber = "";
-            String amount = "100.00"; // Default
+            String amount = "100.00";
 
-            // Extract phone and amount from result string
             if (result.contains(":")) {
                 String[] parts = result.split(":");
                 if (parts.length > 2) {
@@ -588,11 +537,8 @@ public class MainFrame extends JFrame {
                 }
             }
 
-            // Update SendMoneyPage2 with both values
-            Component[] components = mainPanel.getComponents();
-            for (Component comp : components) {
-                if (comp instanceof SendMoneyPage2) {
-                    SendMoneyPage2 sendMoneyPage2 = (SendMoneyPage2) comp;
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof SendMoneyPage2 sendMoneyPage2) {
                     sendMoneyPage2.updateTransactionData(phoneNumber, amount);
                     break;
                 }
@@ -613,7 +559,6 @@ public class MainFrame extends JFrame {
             String phoneNumber = "";
             String amount = "0.00";
 
-            // Extract data from result string
             if (result.contains(":")) {
                 String[] parts = result.split(":");
                 if (parts.length > 3) {
@@ -623,11 +568,8 @@ public class MainFrame extends JFrame {
                 }
             }
 
-            // Update SendMoneyPage3 with just the essential data
-            Component[] components = mainPanel.getComponents();
-            for (Component comp : components) {
-                if (comp instanceof SendMoneyPage3) {
-                    SendMoneyPage3 sendMoneyPage3 = (SendMoneyPage3) comp;
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof SendMoneyPage3 sendMoneyPage3) {
                     sendMoneyPage3.updateTransactionData(recipientName, phoneNumber, amount);
                     break;
                 }
@@ -660,11 +602,8 @@ public class MainFrame extends JFrame {
                 int requiredPoints = Integer.parseInt(parts[3]);
                 String rewardText = parts[4];
 
-                // Update RewardsPage2 with data
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof RewardsPage2) {
-                        RewardsPage2 rewardsPage2 = (RewardsPage2) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof RewardsPage2 rewardsPage2) {
                         rewardsPage2.updateRewardData(phoneNumber, availablePoints, requiredPoints, rewardText);
                         break;
                     }
@@ -691,25 +630,19 @@ public class MainFrame extends JFrame {
     }
 
     private void slideContentTransition(String targetCard, int direction) {
-        // Show/hide nav bar based on page
         System.out.println("prev " + prevCard + " target " + targetCard);
         boolean showNavBar = targetCard.equals("Launch") || targetCard.equals("Profile");
         navBar.setVisible(showNavBar);
 
-        // Update nav bar active state
         if (showNavBar) {
             String activeButton = targetCard.equals("Launch") ? "Home" : "Profile";
             navBar.setActiveButton(activeButton);
         }
 
-        //existing animation on mainContentPanel only
-
         if(prevCard == null || !prevCard.equalsIgnoreCase(targetCard))
-
             AnimatedPageSwitcher.slideTransition(mainPanel, targetCard, direction);
     }
 
-    // General card switching method (for other pages)
     private void changeCard(String text){
         cardLayout.show(mainPanel, text);
     }
@@ -725,11 +658,8 @@ public class MainFrame extends JFrame {
                 int pointsCost = Integer.parseInt(parts[1]);
                 String rewardText = parts[2];
 
-                // Update RewardsPage points
-                Component[] components = mainPanel.getComponents();
-                for (Component comp : components) {
-                    if (comp instanceof RewardsPage) {
-                        RewardsPage rewardsPage = (RewardsPage) comp;
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof RewardsPage rewardsPage) {
                         rewardsPage.updatePoints(rewardsPage.getCurrentPoints() - pointsCost);
                         break;
                     }

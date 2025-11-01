@@ -2,6 +2,9 @@ package panels;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 import Factory.LabelFactory;
 import components.*;
@@ -20,12 +23,29 @@ public class TransactionPanel extends JPanel{
     private final JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
 
     private static TransactionPanel instance;
+    private final Consumer<String> onSeeAllClick; // New field for the handler
 
-    public static TransactionPanel getInstance() {
+    // 1. PRIMARY GETTER (Used by LaunchPage to set the click handler)
+    public static TransactionPanel getInstance(Consumer<String> onSeeAllClick) {
         if (instance == null) {
-            instance = new TransactionPanel();
+            instance = new TransactionPanel(onSeeAllClick);
         }
         return instance;
+    }
+
+    // 2. UTILITY GETTER (Used by UserManager, etc. - FIXES COMPILATION ERROR)
+    public static TransactionPanel getInstance() {
+        if (instance == null) {
+            // Create with null handler for utility use
+            instance = new TransactionPanel(null);
+        }
+        return instance;
+    }
+
+    // Private constructor accepts the handler (used by both getInstance methods)
+    private TransactionPanel(Consumer<String> onSeeAllClick) {
+        this.onSeeAllClick = onSeeAllClick;
+        initComponents();
     }
 
     private final JPanel transactionContentPanel = new PanelBuilder()
@@ -35,22 +55,17 @@ public class TransactionPanel extends JPanel{
             .build();
 
 
-    private TransactionPanel() {
-        initComponents();
-    }
-
     private void initComponents(){
         ThemeManager.getInstance();
         this.setOpaque(true);
         this.setBackground(ThemeManager.getWhite());
 
-        // TRANSACTION HEADER PANEL (with "Transaction History" and "See all")
-// TRANSACTION ROUNDED PANEL - Main container;
+        // TRANSACTION ROUNDED PANEL - Main container;
         transactionRoundedPanel.setLayout(new BorderLayout());
         transactionRoundedPanel.setPreferredSize(new Dimension(380, 150));
         transactionRoundedPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
-// TRANSACTION HEADER PANEL (with "Transaction History" and "See all")
+        // TRANSACTION HEADER PANEL (with "Transaction History" and "See all")
         JPanel transactionHeaderPanel = new PanelBuilder()
                 .setPreferredSize(new Dimension(364, 35))
                 .setLayout(new BorderLayout())
@@ -58,16 +73,29 @@ public class TransactionPanel extends JPanel{
                 .build();
 
         seeAllLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // --- NEW CLICK LISTENER ---
+        seeAllLabel.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (onSeeAllClick != null) {
+                    // Send the key for the new page
+                    onSeeAllClick.accept("TransactionHistory");
+                }
+            }
+        });
+        // --- END NEW CLICK LISTENER ---
+
         transactionHeaderPanel.add(transactionLabel, BorderLayout.WEST);
         transactionHeaderPanel.add(seeAllLabel, BorderLayout.EAST);
 
-// Create transaction history content panel
+        // Create transaction history content panel
         transactionContentPanel.setLayout(new BoxLayout(transactionContentPanel, BoxLayout.Y_AXIS));
-// Add header and content to the rounded panel
+        // Add header and content to the rounded panel
         transactionRoundedPanel.add(transactionHeaderPanel, BorderLayout.NORTH);
         transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
 
-// Transaction container wrapper
+        // Transaction container wrapper
         transactionContainer = new RoundedBorder(15, ThemeManager.getVBlue(), 2);
         transactionContainer.setLayout(new FlowLayout());
         transactionContainer.setOpaque(false);
