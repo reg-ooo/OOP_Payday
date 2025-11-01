@@ -3,6 +3,7 @@ package pages.payBills;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import Factory.sendMoney.SendMoneyPage1Factory;
 import components.RoundedBorder;
+import data.CommandTemplateMethod.PayBillsCommand;
 import panels.GradientPanel;
 import panels.RoundedPanel;
 import util.FontLoader;
@@ -193,6 +194,8 @@ public class PayBills3 extends JPanel {
                 onButtonClick.accept("LoginRequired");
                 return;
             }
+            PayBillsCommand PBC = new PayBillsCommand(Double.parseDouble(selectedAmount));
+            PBC.execute();
             // Process bill payment - pass the data to success page
             onButtonClick.accept("PayBillsReceipt:" + selectedCategory + ":" + selectedProvider + ":" + selectedAmount + ":" + selectedAccount);
         });

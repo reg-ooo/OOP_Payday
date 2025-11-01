@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TransactionDAOImpl implements TransactionDAO {
-    private DatabaseService database;
+    private final DatabaseService database;
     private static TransactionDAOImpl instance;
     private static String referenceNum;
 
