@@ -5,9 +5,11 @@ import util.FontLoader;
 import util.ImageLoader;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI; // Import for custom UI
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D; // Import for drawing rounded shapes
 import java.util.function.Consumer;
 
 public class CashInPage extends JPanel {
@@ -98,6 +100,56 @@ public class CashInPage extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Custom ButtonUI to draw a rounded, bordered button.
+     * This class is now nested directly within CashInPage for better encapsulation.
+     */
+    private class RoundedButtonUI extends BasicButtonUI {
+        private final int ARC_SIZE = 30; // Radius for the rounded corners
+        private final Color BORDER_COLOR = themeManager.getDeepBlue();
+        private final int BORDER_THICKNESS = 3;
+
+        @Override
+        protected void installDefaults(AbstractButton b) {
+            super.installDefaults(b);
+            b.setOpaque(false); // Crucial for custom painting
+            b.setBorder(BorderFactory.createEmptyBorder()); // Remove default border
+        }
+
+        @Override
+        public void paint(Graphics g, JComponent c) {
+            AbstractButton b = (AbstractButton) c;
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+
+
+            int width = b.getWidth();
+            int height = b.getHeight();
+
+            // 1. Fill the button area with the background color (including hover color)
+            g2.setColor(b.getBackground());
+            g2.fill(new RoundRectangle2D.Float(0, 0, width, height, ARC_SIZE, ARC_SIZE));
+
+            // 2. Draw the deep blue rounded border
+            g2.setColor(BORDER_COLOR);
+            g2.setStroke(new BasicStroke(BORDER_THICKNESS));
+            g2.draw(new RoundRectangle2D.Float(
+                    (float)BORDER_THICKNESS / 2,
+                    (float)BORDER_THICKNESS / 2,
+                    width - BORDER_THICKNESS,
+                    height - BORDER_THICKNESS,
+                    ARC_SIZE,
+                    ARC_SIZE
+            ));
+
+            // Must call super.paint() last to draw the button's content (text and icon)
+            super.paint(g2, c);
+            g2.dispose();
+        }
+    }
+
+
     private JPanel createCashInOption(String imageName, String labelText, String action) {
         JPanel optionPanel = new JPanel();
         optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.Y_AXIS));
@@ -106,17 +158,17 @@ public class CashInPage extends JPanel {
 
         // Create button with image
         JButton button = new JButton();
+        button.setUI(new RoundedButtonUI()); // APPLY THE CUSTOM ROUNDED UI HERE
+
         button.setLayout(new BorderLayout());
         button.setPreferredSize(new Dimension(160, 160));
         button.setMinimumSize(new Dimension(160, 160));
         button.setMaximumSize(new Dimension(160, 160));
-        button.setBackground(themeManager.getWhite());
+        button.setBackground(themeManager.getWhite()); // Default background for painting
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        ));
+
+        // Removed the old border setting as it's now handled by RoundedButtonUI
 
         // Load and scale image to fit bigger button
         ImageIcon icon = imageLoader.loadAndScaleHighQuality(imageName + ".png", 110);
@@ -137,12 +189,12 @@ public class CashInPage extends JPanel {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(themeManager.getGradientLBlue());
+                button.setBackground(themeManager.getGradientLBlue()); // Changes the background color for paint()
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                button.setBackground(themeManager.getWhite());
+                button.setBackground(themeManager.getWhite()); // Restores the default background color for paint()
             }
         });
 

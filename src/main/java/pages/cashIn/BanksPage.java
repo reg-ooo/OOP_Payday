@@ -1,9 +1,11 @@
 package pages.cashIn;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonUI; // Added Import
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D; // Added Import
 import java.util.function.Consumer;
 import util.ThemeManager;
 import util.FontLoader;
@@ -11,7 +13,7 @@ import util.ImageLoader;
 
 public class BanksPage extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
-    private final FontLoader fontLoader = FontLoader.getInstance(); // Added FontLoader
+    private final FontLoader fontLoader = FontLoader.getInstance();
     private final Consumer<String> onButtonClick;
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
@@ -19,6 +21,54 @@ public class BanksPage extends JPanel {
         this.onButtonClick = onButtonClick;
         setupUI();
     }
+
+    // --- Custom Rounded Button UI ---
+    // Matches the one used in CashInPage.java for the Banks and Stores buttons
+    private class RoundedButtonUI extends BasicButtonUI {
+        private final int ARC_SIZE = 30; // Radius for the rounded corners
+        private final Color BORDER_COLOR = themeManager.getDeepBlue();
+        private final int BORDER_THICKNESS = 3;
+
+        @Override
+        protected void installDefaults(AbstractButton b) {
+            super.installDefaults(b);
+            b.setOpaque(false); // Crucial for custom painting
+            b.setBorder(BorderFactory.createEmptyBorder()); // Remove default border
+        }
+
+        @Override
+        public void paint(Graphics g, JComponent c) {
+            AbstractButton b = (AbstractButton) c;
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+
+
+            int width = b.getWidth();
+            int height = b.getHeight();
+
+            // 1. Fill the button area with the background color (including hover color)
+            g2.setColor(b.getBackground());
+            g2.fill(new RoundRectangle2D.Float(0, 0, width, height, ARC_SIZE, ARC_SIZE));
+
+            // 2. Draw the deep blue rounded border
+            g2.setColor(BORDER_COLOR);
+            g2.setStroke(new BasicStroke(BORDER_THICKNESS));
+            g2.draw(new RoundRectangle2D.Float(
+                    (float)BORDER_THICKNESS / 2,
+                    (float)BORDER_THICKNESS / 2,
+                    width - BORDER_THICKNESS,
+                    height - BORDER_THICKNESS,
+                    ARC_SIZE,
+                    ARC_SIZE
+            ));
+
+            // Must call super.paint() last to draw the button's content (icon/text)
+            super.paint(g2, c);
+            g2.dispose();
+        }
+    }
+    // --------------------------------
 
     private void setupUI() {
         setLayout(new BorderLayout());
@@ -108,17 +158,22 @@ public class BanksPage extends JPanel {
 
     private JButton createBankButton(String bankName) {
         JButton button = new JButton();
+
+        // --- ADD THE ROUNDED UI HERE ---
+        button.setUI(new RoundedButtonUI());
+        // -------------------------------
+
         button.setLayout(new BorderLayout());
         button.setPreferredSize(new Dimension(120, 120));
         button.setMinimumSize(new Dimension(120, 120));
         button.setMaximumSize(new Dimension(120, 120));
-        button.setBackground(themeManager.getWhite());
+        button.setBackground(themeManager.getWhite()); // Default background for the UI to paint
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+
+        // --- REMOVE MANUAL BORDER ---
+        // button.setBorder(BorderFactory.createCompoundBorder(...));
+        // The border is now handled by RoundedButtonUI
 
         // Load high quality image directly (not pre-scaled)
         ImageIcon bankIcon = imageLoader.loadAndScaleHighQuality(bankName + ".png", 85);
@@ -142,7 +197,7 @@ public class BanksPage extends JPanel {
             button.add(textLabel, BorderLayout.CENTER);
         }
 
-        // Hover effects
+        // Hover effects (The UI uses button.getBackground() for coloring)
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -156,6 +211,7 @@ public class BanksPage extends JPanel {
         });
 
         // Navigation to BanksPage2
+        // Assuming the BankPage2 expects the key "CashInBanks2:BankName"
         button.addActionListener(e -> onButtonClick.accept("CashInBanks2:" + bankName));
         return button;
     }

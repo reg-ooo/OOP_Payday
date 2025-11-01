@@ -16,6 +16,8 @@ import pages.cashIn.*;
 import pages.cashOut.CashOutPage;
 import pages.cashOut.CashOutPage2;
 import pages.cashOut.CashOutReceiptPage;
+import pages.rewards.RewardsPage;
+import pages.rewards.RewardsPage2;
 import pages.sendMoney.SendMoneyPage;
 import pages.sendMoney.SendMoneyPage2;
 import pages.sendMoney.SendMoneyPage3;
@@ -98,7 +100,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new BuyLoadReceiptPage(this::handleBuyLoadResult), "BuyLoadReceipt");
 
         //REWARDS PAGES
-        mainPanel.add(new pages.RewardsPage(this::handleRewardsResult), "Rewards");
+        mainPanel.add(new RewardsPage(this::handleRewardsResult), "Rewards");
         mainPanel.add(new RewardsPage2(this::handleRewards2Result), "Rewards2");
 
         // Main container

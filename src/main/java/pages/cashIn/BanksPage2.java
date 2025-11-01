@@ -7,9 +7,12 @@ import util.ImageLoader;
 import data.model.UserInfo;
 
 import javax.swing.*;
+import javax.swing.border.AbstractBorder; // Added Import
+import javax.swing.plaf.basic.BasicButtonUI; // Added Import
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D; // Added Import
 import java.util.function.Consumer;
 
 public class BanksPage2 extends JPanel {
@@ -29,12 +32,96 @@ public class BanksPage2 extends JPanel {
     private final String accountPlaceholder = "Enter number";
     private final String defaultAmountPlaceholder = "0.00";
     private final int FIELD_HEIGHT = 45;
-
+    private final int FIELD_ARC = 15; // Radius for input fields
 
     public BanksPage2(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setupUI();
     }
+
+    // --- Custom UI Classes ---
+
+    /**
+     * Custom ButtonUI to draw a rounded button for the "Next" button.
+     */
+    private class RoundedButtonUI extends BasicButtonUI {
+        private final int ARC_SIZE = 15; // Radius for the rounded corners (Smaller for Next button)
+
+        @Override
+        protected void installDefaults(AbstractButton b) {
+            super.installDefaults(b);
+            b.setOpaque(false);
+            b.setBorder(BorderFactory.createEmptyBorder());
+        }
+
+        @Override
+        public void paint(Graphics g, JComponent c) {
+            AbstractButton b = (AbstractButton) c;
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int width = b.getWidth();
+            int height = b.getHeight();
+
+            // Fill the button area with the background color (handles VBlue and hover LBlue)
+            g2.setColor(b.getBackground());
+            g2.fill(new RoundRectangle2D.Float(0, 0, width, height, ARC_SIZE, ARC_SIZE));
+
+            // Draw content (text)
+            super.paint(g2, c);
+            g2.dispose();
+        }
+    }
+
+    /**
+     * Custom Border for rounded JTextFields.
+     */
+    private class RoundedBorder extends AbstractBorder {
+        private final Color color;
+        private final int thickness = 1;
+        private final int radius;
+        private final int padding = 15; // Horizontal padding inside the border
+
+        RoundedBorder(Color color, int radius) {
+            this.color = color;
+            this.radius = radius;
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(color);
+            g2.setStroke(new BasicStroke(thickness));
+
+            // Draw the rounded rectangle border
+            g2.draw(new RoundRectangle2D.Float(
+                    x + (float)thickness / 2,
+                    y + (float)thickness / 2,
+                    width - thickness,
+                    height - thickness,
+                    radius,
+                    radius
+            ));
+            g2.dispose();
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            // Adjust insets to accommodate the rounded border and add padding
+            return new Insets(thickness, padding, thickness, padding);
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c, Insets insets) {
+            insets.left = insets.right = padding;
+            insets.top = insets.bottom = thickness;
+            return insets;
+        }
+    }
+
+    // --- End Custom UI Classes ---
 
     public void updateSelected(String bankName) {
         this.selectedBankName = bankName;
@@ -96,19 +183,14 @@ public class BanksPage2 extends JPanel {
         contentPanel.setMaximumSize(new Dimension(500, Integer.MAX_VALUE));
         contentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Title and Bank Info setup
+        // Title and Bank Info setup (Same as before)
         JPanel titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         titleRow.setBackground(themeManager.getWhite());
-
-        // 1. Title Label
         JLabel titleLabel = new JLabel("Banks");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
         titleLabel.setForeground(themeManager.getDeepBlue());
-
-        // 2. Title Icon - SCALING SIZE 50
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 50);
         JLabel iconLabel = new JLabel(titleIcon);
-
         titleRow.add(titleLabel);
         titleRow.add(iconLabel);
 
@@ -122,6 +204,8 @@ public class BanksPage2 extends JPanel {
         imagePlaceholder.setPreferredSize(new Dimension(100, 100));
         imagePlaceholder.setMinimumSize(new Dimension(100, 100));
         imagePlaceholder.setMaximumSize(new Dimension(100, 100));
+        // Note: Image placeholder border is kept square for consistency with the provided code,
+        // but if you want this rounded, let me know!
         imagePlaceholder.setBorder(BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true));
         imagePlaceholder.setBackground(themeManager.getWhite());
         imagePlaceholder.setLayout(new BorderLayout());
@@ -145,83 +229,71 @@ public class BanksPage2 extends JPanel {
         bankInfoPanel.add(Box.createVerticalStrut(10));
         // End Title and Bank Info setup
 
-        // Form panel
+        // Form panel (Same as before)
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(themeManager.getWhite());
         formPanel.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, Integer.MAX_VALUE));
         formPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Cash In section
+        // Cash In section (Same as before)
         JPanel cashInSection = new JPanel();
         cashInSection.setLayout(new BoxLayout(cashInSection, BoxLayout.Y_AXIS));
         cashInSection.setBackground(themeManager.getWhite());
         cashInSection.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, 80));
         cashInSection.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JLabel cashInLabel = new JLabel("Cash In:");
         cashInLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         cashInLabel.setForeground(themeManager.getDeepBlue());
         cashInLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        // Apply SendPage Account field logic
-        JPanel accountPanel = setupAccountField(accountField);
+        JPanel accountPanel = setupAccountField(accountField); // Uses updated method
         accountPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         cashInSection.add(cashInLabel);
         cashInSection.add(Box.createVerticalStrut(2));
         cashInSection.add(accountPanel);
 
-        // Amount section
+        // Amount section (Same as before)
         JPanel amountSection = new JPanel();
         amountSection.setLayout(new BoxLayout(amountSection, BoxLayout.Y_AXIS));
         amountSection.setBackground(themeManager.getWhite());
         amountSection.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, 80));
         amountSection.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JLabel amountLabel = new JLabel("Enter desired amount");
         amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         amountLabel.setForeground(themeManager.getDeepBlue());
         amountLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        // Apply SendPage Amount field logic
-        JPanel amountPanel = setupAmountField(amountField);
+        JPanel amountPanel = setupAmountField(amountField); // Uses updated method
         amountPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
         amountSection.add(amountLabel);
         amountSection.add(Box.createVerticalStrut(2));
         amountSection.add(amountPanel);
 
-        // Balance section
+        // Balance section (Same as before)
         JPanel balancePanelContainer = new JPanel();
         balancePanelContainer.setLayout(new BoxLayout(balancePanelContainer, BoxLayout.X_AXIS));
         balancePanelContainer.setBackground(themeManager.getWhite());
         balancePanelContainer.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, 30));
         balancePanelContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JLabel balanceHint = new JLabel("Available balance: PHP");
         balanceHint.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         balanceHint.setForeground(Color.DARK_GRAY);
-
-        JLabel actualBalanceLabel = new JLabel("0.00"); // Placeholder
+        JLabel actualBalanceLabel = new JLabel("0.00");
         actualBalanceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         actualBalanceLabel.setForeground(Color.DARK_GRAY);
-
         balancePanelContainer.add(Box.createHorizontalGlue());
         balancePanelContainer.add(balanceHint);
         balancePanelContainer.add(Box.createHorizontalStrut(5));
         balancePanelContainer.add(actualBalanceLabel);
 
-        // Next button and Disclaimer
+        // Next button and Disclaimer (Same as before)
         JPanel nextButtonPanel = createSmallerNextButtonPanel();
         nextButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JLabel disclaimer = new JLabel("Please check details before confirming");
         disclaimer.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         disclaimer.setForeground(Color.DARK_GRAY);
         disclaimer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Build form panel
+        // Build form panel (Same as before)
         formPanel.add(Box.createVerticalStrut(15));
         formPanel.add(cashInSection);
         formPanel.add(Box.createVerticalStrut(10));
@@ -234,7 +306,7 @@ public class BanksPage2 extends JPanel {
         formPanel.add(disclaimer);
         formPanel.add(Box.createVerticalGlue());
 
-        // Build main content panel
+        // Build main content panel (Same as before)
         contentPanel.add(Box.createVerticalStrut(10));
         contentPanel.add(titleRow);
         contentPanel.add(Box.createVerticalStrut(20));
@@ -243,7 +315,7 @@ public class BanksPage2 extends JPanel {
         contentPanel.add(formPanel);
         contentPanel.add(Box.createVerticalGlue());
 
-        // Add content panel to center
+        // Add content panel to center (Same as before)
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -252,7 +324,7 @@ public class BanksPage2 extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         centerPanel.add(contentPanel, gbc);
 
-        // Step label
+        // Step label (Same as before)
         JLabel stepLabel = new JLabel("Step 3 of 4", SwingConstants.CENTER);
         stepLabel.setFont(fontLoader.loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
         stepLabel.setForeground(themeManager.getDeepBlue());
@@ -263,8 +335,7 @@ public class BanksPage2 extends JPanel {
     }
 
     /**
-     * Sets up the account field with SendPage style (Center placeholder, Left typing)
-     * and returns the containing panel for proper sizing.
+     * Sets up the account field, now with a rounded border.
      */
     private JPanel setupAccountField(JTextField field) {
         final String placeholder = accountPlaceholder;
@@ -279,10 +350,9 @@ public class BanksPage2 extends JPanel {
         Color normalBorder = themeManager.getGray();
         Color activeBorder = themeManager.getDBlue();
 
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(normalBorder, 1),
-                BorderFactory.createEmptyBorder(10, 15, 10, 15)
-        ));
+        // --- Apply the custom RoundedBorder ---
+        field.setBorder(new RoundedBorder(normalBorder, FIELD_ARC));
+        // -------------------------------------
 
         // Placeholder Logic
         field.setText(placeholder);
@@ -297,10 +367,9 @@ public class BanksPage2 extends JPanel {
                     field.setForeground(themeManager.getDBlue());
                     field.setHorizontalAlignment(JTextField.LEFT);
                 }
-                field.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(activeBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                // --- Update border to active color ---
+                field.setBorder(new RoundedBorder(activeBorder, FIELD_ARC));
+                // -------------------------------------
             }
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -309,10 +378,9 @@ public class BanksPage2 extends JPanel {
                     field.setForeground(themeManager.getLightGray());
                     field.setHorizontalAlignment(JTextField.CENTER);
                 }
-                field.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(normalBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                // --- Update border back to normal color ---
+                field.setBorder(new RoundedBorder(normalBorder, FIELD_ARC));
+                // ------------------------------------------
             }
         });
         field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
@@ -342,8 +410,7 @@ public class BanksPage2 extends JPanel {
     }
 
     /**
-     * Sets up the amount field with SendPage style (Peso sign, placeholder)
-     * and returns the containing panel for proper sizing.
+     * Sets up the amount field, now with a rounded border.
      */
     private JPanel setupAmountField(JTextField field) {
         final String placeholder = defaultAmountPlaceholder;
@@ -358,16 +425,16 @@ public class BanksPage2 extends JPanel {
         Color normalBorder = themeManager.getGray();
         Color activeBorder = themeManager.getDBlue();
 
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(normalBorder, 1),
-                BorderFactory.createEmptyBorder(10, 15, 10, 15)
-        ));
+        // --- Apply the custom RoundedBorder ---
+        field.setBorder(new RoundedBorder(normalBorder, FIELD_ARC));
+        // -------------------------------------
 
         // Placeholder Logic
         field.setText("₱ " + placeholder);
         field.setForeground(themeManager.getLightGray());
         field.setHorizontalAlignment(JTextField.CENTER);
 
+        // ... (Key and Focus Listener logic for amount field remains the same)
         field.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
@@ -428,10 +495,9 @@ public class BanksPage2 extends JPanel {
                     field.setHorizontalAlignment(JTextField.LEFT);
                     field.setCaretPosition(2);
                 }
-                field.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(activeBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                // --- Update border to active color ---
+                field.setBorder(new RoundedBorder(activeBorder, FIELD_ARC));
+                // -------------------------------------
             }
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -450,10 +516,9 @@ public class BanksPage2 extends JPanel {
                         field.setText("₱ " + formatted);
                     } catch (NumberFormatException e) {}
                 }
-                field.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(normalBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                // --- Update border back to normal color ---
+                field.setBorder(new RoundedBorder(normalBorder, FIELD_ARC));
+                // ------------------------------------------
             }
         });
 
@@ -496,9 +561,14 @@ public class BanksPage2 extends JPanel {
         buttonPanel.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, BUTTON_HEIGHT));
 
         JButton nextButton = new JButton("Next");
+        // --- APPLY THE CUSTOM ROUNDED BUTTON UI HERE ---
+        nextButton.setUI(new RoundedButtonUI());
+        // -----------------------------------------------
+
         nextButton.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
         nextButton.setBackground(themeManager.getVBlue());
         nextButton.setForeground(themeManager.getWhite());
+        // Remove manual border/padding logic, the UI handles the shape/fill
         nextButton.setBorder(BorderFactory.createEmptyBorder(10, 40, 10, 40));
         nextButton.setFocusPainted(false);
         nextButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -517,17 +587,11 @@ public class BanksPage2 extends JPanel {
             }
         });
 
-        // --- CORRECT NAVIGATION LOGIC ---
         nextButton.addActionListener(e -> {
-            // 1. Get the QRPage instance
-            QRPage qrPage = QRPage.getInstance(onButtonClick);
-            // 2. Update the QRPage with the selected entity info and source page key
-            // true indicates it is a Bank
-            qrPage.updateSelectedEntity(selectedBankName, true, "CashInBanks2");
-            // 3. Navigate to QRPage
-            onButtonClick.accept("QRPage"); // <--- Sends the correct key
+
+            onButtonClick.accept("QRPage");
         });
-        // --------------------------------
+
 
         buttonPanel.add(nextButton);
         return buttonPanel;

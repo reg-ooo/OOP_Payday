@@ -1,4 +1,4 @@
-package pages;
+package pages.rewards;
 
 import java.awt.BorderLayout;
 import java.awt.BasicStroke;
@@ -83,7 +83,6 @@ public class RewardsPage extends JPanel {
         this.setBackground(ThemeManager.getWhite());
         this.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
 
-        // Create header panel with back button and points counter
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(ThemeManager.getWhite());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
