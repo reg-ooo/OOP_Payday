@@ -171,14 +171,9 @@ public class BanksPage extends JPanel {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // --- REMOVE MANUAL BORDER ---
-        // button.setBorder(BorderFactory.createCompoundBorder(...));
-        // The border is now handled by RoundedButtonUI
-
-        // Load high quality image directly (not pre-scaled)
         ImageIcon bankIcon = imageLoader.loadAndScaleHighQuality(bankName + ".png", 85);
 
-        // Fallback to pre-loaded image if high quality load fails
+
         if (bankIcon == null) {
             bankIcon = imageLoader.getImage(bankName);
         }

@@ -172,5 +172,7 @@ public class ImageLoader {
 
         Image scaledImage = originalIcon.getImage().getScaledInstance(finalWidth, finalHeight, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImage);
+
+
     }
 }

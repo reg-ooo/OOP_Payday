@@ -14,4 +14,5 @@ public interface ReceiptFactory {
     JPanel createReceiptFooterPanel();
     JPanel createNextButtonPanel(Consumer<String> onButtonClick, Runnable action);
     void updateButtonText(JPanel buttonPanel, String newText);
+
 }

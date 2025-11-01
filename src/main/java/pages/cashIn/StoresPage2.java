@@ -22,11 +22,11 @@ public class StoresPage2 extends JPanel {
     private JLabel storeNameLabel;
     private String selectedStoreName = "";
 
-    // Store the default placeholder text - Matches BanksPage2
+    // Store the default placeholder text
     private final String defaultAccountPlaceholder = "Enter number";
     private final String defaultAmountPlaceholder = "0.00";
 
-    // Component Dimensions (Matching BanksPage2)
+    // Component Dimensions
     private final int MAX_COMPONENT_WIDTH = 300;
     private final int FIELD_HEIGHT = 45;
 
@@ -60,12 +60,12 @@ public class StoresPage2 extends JPanel {
             }
         }
 
-        // 2. Reset the account/reference field content to the default placeholder state (GENERIC)
+        // 2. Reset the account/reference field content
         accountField.setText(defaultAccountPlaceholder);
         accountField.setForeground(themeManager.getLightGray());
         accountField.setHorizontalAlignment(JTextField.CENTER);
 
-        // 3. Reset the amount field content to its initial placeholder state
+        // 3. Reset the amount field content
         amountField.setText("₱ " + defaultAmountPlaceholder);
         amountField.setForeground(themeManager.getLightGray());
         amountField.setHorizontalAlignment(JTextField.CENTER);
@@ -111,14 +111,14 @@ public class StoresPage2 extends JPanel {
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
         titleLabel.setForeground(themeManager.getDeepBlue());
 
-        // 2. Title Icon - SCALING SIZE 60
+        // 2. Title Icon
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("Stores.png", 60);
         JLabel iconLabel = new JLabel(titleIcon);
 
         titleRow.add(titleLabel);
         titleRow.add(iconLabel);
 
-        // Store Info Panel (Image and Name)
+        // Store Info Panel
         JPanel storeInfoPanel = new JPanel();
         storeInfoPanel.setLayout(new BoxLayout(storeInfoPanel, BoxLayout.Y_AXIS));
         storeInfoPanel.setBackground(themeManager.getWhite());
@@ -266,8 +266,7 @@ public class StoresPage2 extends JPanel {
     }
 
     /**
-     * Sets up the account field with SendPage style (Center placeholder, Left typing)
-     * and returns the containing panel for proper sizing.
+     * Sets up the account field.
      */
     private JPanel setupAccountField(JTextField field) {
         final String placeholder = defaultAccountPlaceholder;
@@ -292,7 +291,7 @@ public class StoresPage2 extends JPanel {
         field.setForeground(themeManager.getLightGray());
         field.setHorizontalAlignment(JTextField.CENTER);
 
-        // Add Focus Listener (Generic placeholder)
+        // Add Focus Listener
         field.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -320,7 +319,7 @@ public class StoresPage2 extends JPanel {
             }
         });
 
-        // Add Document Listener (Generic placeholder)
+        // Add Document Listener
         field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
             public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
             public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
@@ -348,8 +347,7 @@ public class StoresPage2 extends JPanel {
     }
 
     /**
-     * Sets up the amount field with SendPage style (Peso sign, placeholder)
-     * and returns the containing panel for proper sizing.
+     * Sets up the amount field.
      */
     private JPanel setupAmountField(JTextField field) {
         final String placeholder = defaultAmountPlaceholder; // "0.00"
@@ -494,6 +492,7 @@ public class StoresPage2 extends JPanel {
 
     /**
      * Creates a styled JPanel wrapper for the Next button with reduced height and width.
+     * Includes the fixed navigation and data passing logic.
      */
     private JPanel createSmallerNextButtonPanel() {
         final int BUTTON_HEIGHT = 45;
@@ -526,17 +525,57 @@ public class StoresPage2 extends JPanel {
             }
         });
 
-        // --- CORRECTED NAVIGATION LOGIC ---
+        // --- CORRECTED NAVIGATION AND DATA PASSING LOGIC ---
         nextButton.addActionListener(e -> {
-            // 1. Get the QRPage instance
-            QRPage qrPage = QRPage.getInstance(onButtonClick);
-            // 2. Update the QRPage with the selected entity info and source page key
-            // false indicates it is a Store
-            qrPage.updateSelectedEntity(selectedStoreName, false, "CashInStores2");
-            // 3. Navigate to QRPage
-            onButtonClick.accept("QRPage"); // <--- Sends the correct key
+            // 1. Validation and Data Extraction
+            String accountRef = accountField.getText().trim();
+            // Remove the Peso sign and trim whitespace
+            String amountText = amountField.getText().replace("₱", "").trim();
+
+            // Check if a store was selected
+            if (selectedStoreName.isEmpty() || selectedStoreName.equals("Select a Store")) {
+                JOptionPane.showMessageDialog(this, "Please select a store first.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if account/reference number is valid
+            if (accountRef.isEmpty() || accountRef.equals(defaultAccountPlaceholder)) {
+                JOptionPane.showMessageDialog(this, "Please enter your account number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Check if amount is valid
+            if (amountText.isEmpty() || amountText.equals(defaultAmountPlaceholder) || amountText.equals("0") || amountText.equals("0.00")) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Attempt to parse amount to ensure it's a number
+            try {
+                double amountValue = Double.parseDouble(amountText.replace(",", ""));
+                // Format amount to ensure it's always two decimal places (e.g., 50.00)
+                String finalAmount = String.format("%,.2f", amountValue);
+
+                // 2. Get the QRPage instance
+                QRPage qrPage = QRPage.getInstance(onButtonClick);
+
+                // 3. Update the QRPage with ALL the required info
+                // entityName, isBank (false), accountRef, amount, sourcePageKey
+                qrPage.updateSelectedEntity(
+                        selectedStoreName,
+                        false, // isBank = false for Store
+                        accountRef,
+                        finalAmount,
+                        "CashInStores2" // Key to return to the previous page (this page)
+                );
+
+                // 4. Navigate to QRPage
+                onButtonClick.accept("QRPage");
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            }
         });
-        // --------------------------------
 
         buttonPanel.add(nextButton);
         return buttonPanel;

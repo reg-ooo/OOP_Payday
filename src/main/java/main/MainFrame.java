@@ -5,6 +5,8 @@ import components.RoundedFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import data.model.UserInfo;
 import pages.*;
@@ -33,6 +35,11 @@ public class MainFrame extends JFrame {
     private static String prevCard;
     private static String currentCard;
     private static MainFrame instance;
+
+    // --- FIX: Added reference pages for data access in handlers ---
+    private final QRPage qrPage = QRPage.getInstance(this::handleCashInBanks2Result);
+    private final CashInReceiptPage cashInReceiptPage = CashInReceiptPage.getInstance(this::handleCashInResult);
+    // --- END FIX ---
 
     public MainFrame(){
         setMainFrame();
@@ -84,9 +91,11 @@ public class MainFrame extends JFrame {
         mainPanel.add(new BanksPage2(this::handleCashInBanks2Result), "CashInBanks2");
         mainPanel.add(new StoresPage2(this::handleCashInStores2Result), "CashInStores2");
 
-        // QRPage is added here and uses the Banks2 handler.
-        // We must fix the Banks2 handler to route the Stores2 key.
-        mainPanel.add(QRPage.getInstance(this::handleCashInBanks2Result), "QRPage");
+        // QRPage uses the instance created above
+        mainPanel.add(qrPage, "QRPage");
+
+        // FIX: Added the CashInReceiptPage
+        mainPanel.add(cashInReceiptPage, "CashInReceipt");
 
         //CASH OUT PAGES
         mainPanel.add(new CashOutPage(this::handleCashOutResult), "CashOut");
@@ -113,6 +122,45 @@ public class MainFrame extends JFrame {
 
         mainFrame.setContentPane(container);
     }
+
+    // --- FIX: Utility methods for receipt generation ---
+    private String generateReferenceNumber(String entity) {
+        String prefix = entity.toUpperCase().contains("BANK") ? "BANK" : "CASH";
+        return prefix + "-" + System.currentTimeMillis() % 100000;
+    }
+
+    private String getCurrentTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy, hh:mm a");
+        return sdf.format(new Date());
+    }
+
+    /**
+     * FIX: Dedicated handler for the CashInReceipt flow.
+     */
+    private void handleCashInReceiptHandler() {
+        // 1. Get the data stored in QRPage (Relies on public fields in QRPage.java)
+        String entityName = qrPage.currentEntityName;
+        String accountRef = qrPage.currentAccountRef;
+        String amount = qrPage.currentAmount;
+
+        // 2. Generate final receipt details
+        String referenceNo = generateReferenceNumber(entityName);
+        String timestamp = getCurrentTimestamp();
+
+        // 3. Update the receipt page with all the details (Relies on 5 arguments in CashInReceiptPage.java)
+        cashInReceiptPage.updateReceiptDetails(
+                entityName,
+                accountRef,
+                amount,
+                referenceNo,
+                timestamp
+        );
+
+        // 4. Switch the view to the receipt page
+        slideContentTransition("CashInReceipt", 1);
+    }
+    // --- END FIX ---
+
 
     private void handleNavBarClick(String result) {
         prevCard = currentCard;
@@ -179,6 +227,8 @@ public class MainFrame extends JFrame {
             case "Launch" -> slideContentTransition("Launch", -1);
             case "CashInBanks" -> slideContentTransition("CashInBanks", 1);
             case "CashInStores" -> slideContentTransition("CashInStores", 1);
+            // FIX: Back from Receipt Page (Done button)
+            case "CashInReceipt" -> slideContentTransition("Launch", -1);
             default -> System.out.println("Unknown Cash In action: " + result);
         }
     }
@@ -223,6 +273,13 @@ public class MainFrame extends JFrame {
      */
     private void handleCashInBanks2Result(String result) {
 
+        // FIX: Handle the final CashInReceipt action first
+        if (result.equals("CashInReceipt")) {
+            handleCashInReceiptHandler();
+            return;
+        }
+        // END FIX
+
         // *** CRITICAL FIX: Forward "CashInStores2" to the correct handler ***
         if (result.equals("CashInStores2")) {
             handleCashInStores2Result(result);
@@ -250,6 +307,14 @@ public class MainFrame extends JFrame {
      * Handles results from StoresPage2, or the QRPage (when launched by StoresPage2).
      */
     private void handleCashInStores2Result(String result) {
+
+        // FIX: Handle the final CashInReceipt action first
+        if (result.equals("CashInReceipt")) {
+            handleCashInReceiptHandler();
+            return;
+        }
+        // END FIX
+
         if (result.equals("CashInStores")) {
             // Back from StoresPage2 to StoresPage
             slideContentTransition("CashInStores", -1);
@@ -540,9 +605,6 @@ public class MainFrame extends JFrame {
     public static void navBarVisibility(){
         navBar.setVisible(UserInfo.getInstance().isLoggedIn());
     }
-
-    // In setupUI() method, add RewardsPage2 after RewardsPage:
-
 
     private void handleRewards2Result(String result) {
         if (result.startsWith("ConfirmRedemption:")) {

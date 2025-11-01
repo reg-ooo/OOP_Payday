@@ -3,34 +3,42 @@ package pages.cashIn;
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
-
+import components.RoundedButton;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class QRPage extends JPanel {
     private static QRPage instance;
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final FontLoader fontLoader = FontLoader.getInstance();
-    private final Consumer<String> onButtonClick;
     private final ImageLoader imageLoader = ImageLoader.getInstance();
+    private final Consumer<String> onButtonClick;
 
-    private JLabel selectedEntityImageLabel; // For bank/store logo
-    private JLabel entityTypeLabel;          // "Bank Name:" or "Store Name:"
-    private JLabel selectedEntityNameLabel;  // The actual name (BPI, FamilyMart, etc.)
-    private String currentEntityName = "";
-    private String sourcePage = "CashInBanks2"; // Default back navigation target (can be overwritten)
+    // --- DATA FIELDS TO STORE INCOMING TRANSACTION DETAILS ---
+    // FIX CONFIRMED: These fields are PUBLIC to allow MainFrame to read the data
+    public String currentEntityName = "";
+    public String currentAccountRef = "";
+    public String currentAmount = "0.00";
 
-    public QRPage(Consumer<String> onButtonClick) {
+    // REMOVED: boolean currentIsBank is redundant for data transfer to receipt
+    // private boolean currentIsBank = false;
+
+    private String sourcePageKey = "";
+
+    // --- UI COMPONENTS FOR DYNAMIC DISPLAY ---
+    private JLabel entityNameLabel;
+    private JLabel accountRefLabel;
+    private JLabel amountLabel;
+    private JLabel referenceNoLabel;
+
+    // Singleton pattern constructor
+    private QRPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setupUI();
-        // NOTE: No call to updateSelectedEntity here. Initial state is set in setupUI.
-    }
-
-    public static QRPage getInstance() {
-        return instance;
     }
 
     public static QRPage getInstance(Consumer<String> onButtonClick) {
@@ -41,174 +49,240 @@ public class QRPage extends JPanel {
     }
 
     /**
-     * Updates the UI with the selected entity's information and sets the source page.
-     * This must be called before navigating to this page.
-     * @param entityName The name of the bank or store.
-     * @param isBank True if the entity is a bank, false if a store.
-     * @param sourcePageKey The key for the page to return to (e.g., "CashInBanks2" or "CashInStores2").
+     * Updates the UI and stores transaction data from the previous page (BanksPage2/StoresPage2).
+     * FIX: The method signature is correct (5 arguments) to match the calls from BanksPage2/StoresPage2.
      */
-    public void updateSelectedEntity(String entityName, boolean isBank, String sourcePageKey) {
+    public void updateSelectedEntity(
+            String entityName,
+            boolean isBank, // Retained for UI logic, but not stored in a field
+            String accountRef,
+            String amount,
+            String sourcePageKey)
+    {
+        // 1. Store the data
         this.currentEntityName = entityName;
-        this.sourcePage = sourcePageKey;
+        this.currentAccountRef = accountRef;
+        this.currentAmount = amount;
+        this.sourcePageKey = sourcePageKey;
 
-        // 1. Update Entity Type Label
-        entityTypeLabel.setText(isBank ? "Bank Name:" : "Store Name:");
-
-        // 2. Update Entity Name Label
-        selectedEntityNameLabel.setText(entityName);
-
-        // 3. Update Entity Image
-        if (selectedEntityImageLabel != null) {
-            ImageIcon entityIcon = imageLoader.loadAndScaleHighQuality(entityName + ".png", 85);
-            if (entityIcon == null || entityIcon.getIconWidth() <= 0) {
-                // Fallback to text if image not found
-                selectedEntityImageLabel.setIcon(null);
-                selectedEntityImageLabel.setText("<html><center>" + entityName + "</center></html>");
-                selectedEntityImageLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-                selectedEntityImageLabel.setForeground(themeManager.getDeepBlue());
-            } else {
-                selectedEntityImageLabel.setIcon(entityIcon);
-                selectedEntityImageLabel.setText("");
-            }
+        // 2. Update UI
+        if (entityNameLabel != null) {
+            String type = isBank ? "Bank" : "Store";
+            entityNameLabel.setText("Cash In via " + type + ": " + entityName);
         }
+        if (accountRefLabel != null) {
+            accountRefLabel.setText("Ref/Account: " + currentAccountRef);
+        }
+        if (referenceNoLabel != null) {
+            referenceNoLabel.setText("Ref. No.: "); // Placeholder
+        }
+        if (amountLabel != null) {
+            amountLabel.setText("Amount: ₱ " + currentAmount);
+        }
+
+        revalidate();
+        repaint();
     }
 
     private void setupUI() {
         setLayout(new BorderLayout());
         setBackground(themeManager.getWhite());
-        setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
 
-        // Header (Back button)
-        JPanel headerPanel = new JPanel(new BorderLayout());
+        // Header Panel with Back Button
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         headerPanel.setBackground(themeManager.getWhite());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
-
         JLabel backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
         backLabel.setForeground(themeManager.getDeepBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // FIX: Ensure back button uses the stored sourcePageKey
+        // This is necessary because the backLabel is initialized once,
+        // but the sourcePageKey is set dynamically in updateSelectedEntity.
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // FIX: Uses the dynamic sourcePage set by BanksPage2 or StoresPage2
-                onButtonClick.accept(sourcePage);
+                // Use the stored sourcePageKey
+                if (sourcePageKey != null && !sourcePageKey.isEmpty()) {
+                    onButtonClick.accept(sourcePageKey);
+                } else {
+                    onButtonClick.accept("CashInPage"); // Fallback
+                }
             }
         });
-        headerPanel.add(backLabel, BorderLayout.WEST);
+        headerPanel.add(backLabel);
 
-        // Center Panel Setup (GridBagLayout for centering)
+        // Center Panel
         JPanel centerPanel = new JPanel(new GridBagLayout());
         centerPanel.setBackground(themeManager.getWhite());
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+
+        // Main Content Panel (BoxLayout)
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(themeManager.getWhite());
+        contentPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Title
+        JLabel titleLabel = new JLabel("Scan QR Code");
+        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
+        titleLabel.setForeground(themeManager.getDeepBlue());
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // QR Code Placeholder
+        JPanel qrPanel = createQRPlaceholder();
+        qrPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Transaction Details
+        JPanel detailPanel = createDetailPanel();
+        detailPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Confirm Button
+        JButton confirmButton = createConfirmButton();
+        confirmButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Build Content
+        contentPanel.add(Box.createVerticalStrut(20));
+        contentPanel.add(titleLabel);
+        contentPanel.add(Box.createVerticalStrut(30));
+        contentPanel.add(qrPanel);
+        contentPanel.add(Box.createVerticalStrut(30));
+        contentPanel.add(detailPanel);
+        contentPanel.add(Box.createVerticalStrut(30));
+        contentPanel.add(confirmButton);
+        contentPanel.add(Box.createVerticalGlue());
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 0, 10, 0); // Spacing between components
         gbc.gridx = 0;
-
-        // 1. Entity Information Panel (Image + Name)
-        JPanel entityInfoPanel = new JPanel();
-        entityInfoPanel.setLayout(new BoxLayout(entityInfoPanel, BoxLayout.Y_AXIS));
-        entityInfoPanel.setBackground(themeManager.getWhite());
-        entityInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Entity Image (Placeholder container)
-        JPanel imagePlaceholder = new JPanel();
-        imagePlaceholder.setPreferredSize(new Dimension(90, 90));
-        imagePlaceholder.setMinimumSize(new Dimension(90, 90));
-        imagePlaceholder.setMaximumSize(new Dimension(90, 90));
-        imagePlaceholder.setBorder(BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true));
-        imagePlaceholder.setBackground(themeManager.getWhite());
-        imagePlaceholder.setLayout(new BorderLayout());
-        imagePlaceholder.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Initial placeholder text for image/logo
-        selectedEntityImageLabel = new JLabel("Logo", SwingConstants.CENTER);
-        selectedEntityImageLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-        selectedEntityImageLabel.setForeground(themeManager.getDeepBlue());
-        selectedEntityImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        imagePlaceholder.add(selectedEntityImageLabel, BorderLayout.CENTER);
-
-
-        entityInfoPanel.add(imagePlaceholder);
-        entityInfoPanel.add(Box.createVerticalStrut(10));
-
         gbc.gridy = 0;
-        centerPanel.add(entityInfoPanel, gbc);
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        centerPanel.add(contentPanel, gbc);
 
-        // 2. QR Code (320x320)
-        JPanel qrContainer = new JPanel();
-        qrContainer.setBackground(themeManager.getWhite());
-        qrContainer.setPreferredSize(new Dimension(320, 320));
-        qrContainer.setMaximumSize(new Dimension(320, 320));
-        qrContainer.setLayout(new BorderLayout());
-
-        ImageIcon qrIcon = imageLoader.loadAndScaleHighQuality("QR.png", 320);
-        if (qrIcon != null && qrIcon.getIconWidth() > 0) {
-            JLabel qrLabel = new JLabel(qrIcon);
-            qrLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            qrContainer.add(qrLabel, BorderLayout.CENTER);
-        } else {
-            qrContainer.add(new JLabel("QR Code Placeholder", SwingConstants.CENTER), BorderLayout.CENTER);
-        }
-
-        gbc.gridy = 1;
-        centerPanel.add(qrContainer, gbc);
-
-        // 3. Entity Name Labels (BELOW QR)
-        JPanel nameLabelsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
-        nameLabelsPanel.setBackground(themeManager.getWhite());
-
-        entityTypeLabel = new JLabel("Entity Name:");
-        entityTypeLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        entityTypeLabel.setForeground(themeManager.getDeepBlue());
-
-        // Initial placeholder text for name
-        selectedEntityNameLabel = new JLabel("Select an Entity");
-        selectedEntityNameLabel.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-        selectedEntityNameLabel.setForeground(themeManager.getDBlue());
-
-        nameLabelsPanel.add(entityTypeLabel);
-        nameLabelsPanel.add(selectedEntityNameLabel);
-
-        gbc.gridy = 2;
-        centerPanel.add(nameLabelsPanel, gbc);
-
-
-        // Done Button
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(themeManager.getWhite());
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 10, 0));
-
-        JButton doneButton = new JButton("Done");
-        doneButton.setBackground(themeManager.getDeepBlue());
-        doneButton.setForeground(Color.WHITE);
-        doneButton.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        doneButton.setFocusPainted(false);
-        doneButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        doneButton.setPreferredSize(new Dimension(300, 50));
-        doneButton.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
-        doneButton.setOpaque(true);
-        doneButton.addActionListener(e -> onButtonClick.accept("Launch"));
-
-        buttonPanel.add(doneButton);
-
-        // Footer
-        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        footerPanel.setBackground(themeManager.getWhite());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-
-        JLabel stepLabel = new JLabel("Step 4 of 4");
-        stepLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
+        // Step label
+        JLabel stepLabel = new JLabel("Step 4 of 4", SwingConstants.CENTER);
+        stepLabel.setFont(fontLoader.loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
         stepLabel.setForeground(themeManager.getDeepBlue());
-        footerPanel.add(stepLabel);
-
-        // Main content
-        JPanel mainContent = new JPanel(new BorderLayout());
-        mainContent.setBackground(themeManager.getWhite());
-        mainContent.add(centerPanel, BorderLayout.CENTER);
-        mainContent.add(buttonPanel, BorderLayout.SOUTH);
 
         add(headerPanel, BorderLayout.NORTH);
-        add(mainContent, BorderLayout.CENTER);
-        add(footerPanel, BorderLayout.SOUTH);
+        add(centerPanel, BorderLayout.CENTER);
+        add(stepLabel, BorderLayout.SOUTH);
+    }
+
+    /**
+     * Creates a sharply scaled ImageIcon using the preferred Graphics2D rendering hints.
+     */
+    private ImageIcon createSharpQRCodeIcon(ImageIcon sourceIcon, int targetSize) {
+        if (sourceIcon == null || sourceIcon.getImage() == null) {
+            return null;
+        }
+
+        Image img = sourceIcon.getImage();
+
+        // Use a BufferedImage for controlled, high-quality rendering
+        BufferedImage bufferedImage = new BufferedImage(targetSize, targetSize, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = bufferedImage.createGraphics();
+
+        // Use NEAREST_NEIGHBOR for sharp, non-blurry scaling of blocky images (QR code)
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+        g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+
+        g2.drawImage(img, 0, 0, targetSize, targetSize, null);
+        g2.dispose();
+
+        return new ImageIcon(bufferedImage);
+    }
+
+    private JPanel createQRPlaceholder() {
+        JPanel panel = new JPanel(new BorderLayout());
+        final int QR_SIZE = 200;
+        panel.setPreferredSize(new Dimension(QR_SIZE, QR_SIZE));
+        panel.setMaximumSize(new Dimension(QR_SIZE, QR_SIZE));
+        panel.setBackground(themeManager.getWhite());
+
+        // Assuming imageLoader.loadAndScaleHighQuality is used to retrieve the source image
+        ImageIcon sourceIcon = imageLoader.loadAndScaleHighQuality("QR.png", 5000);
+
+        if (sourceIcon == null) {
+            sourceIcon = imageLoader.getImage("QR");
+        }
+
+        // Scale the image using the high-quality, sharp method
+        ImageIcon sharpIcon = createSharpQRCodeIcon(sourceIcon, QR_SIZE);
+
+        if (sharpIcon != null) {
+            JLabel qrLabel = new JLabel(sharpIcon, SwingConstants.CENTER);
+            panel.add(qrLabel, BorderLayout.CENTER);
+            panel.setBorder(BorderFactory.createEmptyBorder());
+        } else {
+            // Fallback if image not found
+            JLabel qrText = new JLabel("QR Image Not Found", SwingConstants.CENTER);
+            qrText.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+            qrText.setForeground(Color.DARK_GRAY);
+            panel.add(qrText, BorderLayout.CENTER);
+            panel.setBorder(BorderFactory.createLineBorder(themeManager.getDeepBlue(), 2));
+        }
+
+        return panel;
+    }
+
+    private JPanel createDetailPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(themeManager.getWhite());
+        panel.setMaximumSize(new Dimension(300, 150));
+
+        // Entity Name
+        entityNameLabel = new JLabel("Cash In to: ");
+        entityNameLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        entityNameLabel.setForeground(themeManager.getDeepBlue());
+        entityNameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Account/Reference
+        accountRefLabel = new JLabel("Ref/Account: ");
+        accountRefLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        accountRefLabel.setForeground(Color.DARK_GRAY);
+        accountRefLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Reference Number Placeholder
+        referenceNoLabel = new JLabel("Ref. No.: ");
+        referenceNoLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        referenceNoLabel.setForeground(Color.DARK_GRAY);
+        referenceNoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Amount
+        amountLabel = new JLabel("Amount: ₱ 0.00");
+        amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        amountLabel.setForeground(themeManager.getVBlue());
+        amountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        panel.add(entityNameLabel);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(accountRefLabel);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(referenceNoLabel);
+        panel.add(Box.createVerticalStrut(10));
+        panel.add(amountLabel);
+
+        return panel;
+    }
+
+    private JButton createConfirmButton() {
+        final int ARC_SIZE = 15;
+        JButton button = new RoundedButton("Confirm Transaction", ARC_SIZE, themeManager.getVBlue());
+
+        button.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        button.setForeground(themeManager.getWhite());
+        button.setPreferredSize(new Dimension(300, 45));
+        button.setMaximumSize(new Dimension(300, 45));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        button.addActionListener(e -> {
+            // FIX: This sends the correct action to MainFrame to trigger the receipt handler
+            onButtonClick.accept("CashInReceipt");
+        });
+
+        return button;
     }
 }
