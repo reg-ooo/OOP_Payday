@@ -53,6 +53,43 @@ public class ImageLoader {
         images.put("amount", resizeImage("icons/sendMoney/amount.png", 60, 60));
         images.put("successMoney", resizeImage("icons/sendMoney/successMoney.png", 60, 60));
 
+        //=================================PAY BILLS ICONS==========================================================//
+//Electricity
+        images.put("Meralco", resizeImage("icons/payBillsImages/Electricity/Meralco.png", 75, 65));
+        images.put("Visayan Electric", resizeImage("icons/payBillsImages/Electricity/Visayan Electric.png", 75, 60));
+        images.put("Davao Light", resizeImage("icons/payBillsImages/Electricity/Davao Light.png", 75, 60));
+        images.put("Aboitiz Power", resizeImage("icons/payBillsImages/Electricity/Aboitiz Power.png", 100, 60));
+        images.put("NGCP", resizeImage("icons/payBillsImages/Electricity/NGCP.png", 75, 60));
+
+//Water
+        images.put("Maynilad", resizeImage("icons/payBillsImages/Water/Maynilad.png", 75, 55));
+        images.put("Manila Water", resizeImage("icons/payBillsImages/Water/Manila Water.png", 75, 50));
+        images.put("Laguna Water", resizeImage("icons/payBillsImages/Water/Laguna Water.png", 75, 50));
+        images.put("Cebu Water", resizeImage("icons/payBillsImages/Water/Cebu Water.png", 75, 50));
+        images.put("Prime Water", resizeImage("icons/payBillsImages/Water/Prime Water.png", 75, 50));
+
+//Internet
+        images.put("PLDT", resizeImage("icons/payBillsImages/Internet/PLDT.png", 75, 55));
+        images.put("Globe Telecom", resizeImage("icons/payBillsImages/Internet/Globe Telecom.png", 75, 50));
+        images.put("Converge ICT", resizeImage("icons/payBillsImages/Internet/Converge ICT.png", 75, 50));
+        images.put("DITO Telecommunity", resizeImage("icons/payBillsImages/Internet/DITO Telecommunity.png", 75, 50));
+        images.put("Sky Cable", resizeImage("icons/payBillsImages/Internet/Sky Cable.png", 75, 60));
+
+//Healthcare
+        images.put("Davao Doctors Hospital", resizeImage("icons/payBillsImages/Healthcare/Davao Doctors Hospital.png", 75, 55));
+        images.put("Brokenshire Hospital", resizeImage("icons/payBillsImages/Healthcare/Brokenshire Hospital.png", 75, 50));
+        images.put("Davao Adventist Hospital", resizeImage("icons/payBillsImages/Healthcare/Davao Adventist Hospital.png", 75, 50));
+        images.put("Southern Philippines Medical Center", resizeImage("icons/payBillsImages/Healthcare/Southern Philippines Medical Center.png", 75, 50));
+        images.put("San Pedro Hospital", resizeImage("icons/payBillsImages/Healthcare/San Pedro Hospital.png", 75, 50));
+
+//Schools
+        images.put("Ateneo de Davao University", resizeImage("icons/payBillsImages/Schools/Ateneo de Davao University.png", 75, 55));
+        images.put("UP Mindanao", resizeImage("icons/payBillsImages/Schools/UP Mindanao.png", 75, 50));
+        images.put("University of Mindanao", resizeImage("icons/payBillsImages/Schools/University of Mindanao.png", 75, 50));
+        images.put("Mapua Malayan Colleges Mindanao", resizeImage("icons/payBillsImages/Schools/Mapua Malayan Colleges Mindanao.png", 75, 50));
+        images.put("TESDA", resizeImage("icons/payBillsImages/Schools/TESDA.png", 75, 50));
+
+        //CASH IN ICONS
         images.put("BDO", resizeImage("BDO.png", 60, 60));
         images.put("BPI", resizeImage("BPI.png", 60, 60));
         images.put("PNB", resizeImage("PNB.png", 60, 60));
@@ -71,6 +108,23 @@ public class ImageLoader {
             instance = new ImageLoader();
         }
         return instance;
+    }
+
+    public ImageIcon getIcon(String imagePath, int width, int height) {
+        // First, check if the image is already in the cache with the exact key
+        if (images.containsKey(imagePath)) {
+            return images.get(imagePath);
+        }
+
+        // If not found in cache, try to load and resize the image
+        ImageIcon icon = resizeImage(imagePath, width, height);
+
+        // Cache the loaded image for future use
+        if (icon != null && icon.getIconWidth() > 0) {
+            images.put(imagePath, icon);
+        }
+
+        return icon;
     }
 
     private ImageIcon resizeImage(String fileName, int width, int height) {

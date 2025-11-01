@@ -18,6 +18,10 @@ import pages.cashIn.*;
 import pages.cashOut.CashOutPage;
 import pages.cashOut.CashOutPage2;
 import pages.cashOut.CashOutReceiptPage;
+import pages.payBills.PayBills;
+import pages.payBills.PayBills2;
+import pages.payBills.PayBills3;
+import pages.payBills.PayBillsReceiptPage;
 import pages.rewards.RewardsPage;
 import pages.rewards.RewardsPage2;
 import pages.sendMoney.SendMoneyPage;
@@ -90,6 +94,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new StoresPage(this::handleCashInStoresResult), "CashInStores");
         mainPanel.add(new BanksPage2(this::handleCashInBanks2Result), "CashInBanks2");
         mainPanel.add(new StoresPage2(this::handleCashInStores2Result), "CashInStores2");
+        mainPanel.add(cashInReceiptPage, "CashInReceipt");
 
         // QRPage uses the instance created above
         mainPanel.add(qrPage, "QRPage");
@@ -111,6 +116,12 @@ public class MainFrame extends JFrame {
         //REWARDS PAGES
         mainPanel.add(new RewardsPage(this::handleRewardsResult), "Rewards");
         mainPanel.add(new RewardsPage2(this::handleRewards2Result), "Rewards2");
+
+        //PAY BILLS PAGES
+        mainPanel.add(new PayBills(this::handlePayBillsResult), "PayBills");
+        mainPanel.add(new PayBills2(this::handlePayBillsResult), "PayBills2");
+        mainPanel.add(new PayBills3(this::handlePayBillsResult), "PayBills3");
+        mainPanel.add(new PayBillsReceiptPage(this::handlePayBillsResult), "PayBillsReceipt");
 
         // Main container
         container = new JPanel(new BorderLayout());
@@ -214,6 +225,7 @@ public class MainFrame extends JFrame {
 
                 slideContentTransition("CashOut", 1);
             }
+            case "PayBills" -> slideContentTransition("PayBills", 1);
             case "CashIn" -> slideContentTransition("CashIn", 1);
             case "BuyLoad" -> slideContentTransition("BuyLoad", 1);
             case "Rewards" -> slideContentTransition("Rewards", 1);
@@ -229,6 +241,11 @@ public class MainFrame extends JFrame {
             case "CashInStores" -> slideContentTransition("CashInStores", 1);
             // FIX: Back from Receipt Page (Done button)
             case "CashInReceipt" -> slideContentTransition("Launch", -1);
+
+            //  CRITICAL FIX: Add handler for New Cash-In button from receipt
+            case "CashInPage" -> slideContentTransition("CashIn", -1);
+            //  END CRITICAL FIX
+
             default -> System.out.println("Unknown Cash In action: " + result);
         }
     }
@@ -328,6 +345,101 @@ public class MainFrame extends JFrame {
             slideContentTransition("Launch", -1);
         } else {
             System.out.println("Unknown CashInStores2 action: " + result);
+        }
+    }
+
+    private void handlePayBillsResult(String result) {
+        if (result.equals("Launch")) {
+            slideContentTransition("Launch", -1);
+        }
+        else if (result.equals("PayBills")) {
+            slideContentTransition("PayBills", -1);
+        }
+        else if (result.equals("PayBills2")) {
+            slideContentTransition("PayBills2", 1);
+        }
+        else if (result.startsWith("PayBills2:")) {
+            // Extract provider and category from result string "PayBills2:Electricity:Meralco"
+            String[] parts = result.split(":");
+            if (parts.length >= 3) {
+                String category = parts[1];
+                String provider = parts[2];
+
+                // Find the PayBills2 instance and update it with the selected provider
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof PayBills2) {
+                        PayBills2 payBills2 = (PayBills2) comp;
+                        payBills2.setSelectedProvider(provider, category);
+                        break;
+                    }
+                }
+            }
+            slideContentTransition("PayBills2", 1);
+        }
+        else if (result.startsWith("PayBills2Back:")) {
+            // Extract provider and category from result string "PayBills2Back:Electricity:Meralco"
+            String[] parts = result.split(":");
+            if (parts.length >= 3) {
+                String category = parts[1];
+                String provider = parts[2];
+
+                // Find the PayBills2 instance and update it with the selected provider
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof PayBills2) {
+                        PayBills2 payBills2 = (PayBills2) comp;
+                        payBills2.setSelectedProvider(provider, category);
+                        break;
+                    }
+                }
+            }
+            slideContentTransition("PayBills2", -1);
+        }
+        else if (result.startsWith("PayBills3:")) {
+            // Extract data from result string "PayBills3:Electricity:Meralco:1000.00:123456789"
+            String[] parts = result.split(":");
+            if (parts.length >= 5) {
+                String category = parts[1];
+                String provider = parts[2];
+                String amount = parts[3];
+                String account = parts[4];
+
+                // Find the PayBills3 instance and update it with the transaction data
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof PayBills3) {
+                        PayBills3 payBills3 = (PayBills3) comp;
+                        payBills3.updateTransactionData(category, provider, amount, account);
+                        break;
+                    }
+                }
+            }
+            slideContentTransition("PayBills3", 1);
+        }
+        else if (result.startsWith("PayBillsReceipt:")) {
+            // Extract data from result string "PayBillsReceipt:Electricity:Meralco:1000.00:123456789"
+            String[] parts = result.split(":");
+            if (parts.length >= 5) {
+                String category = parts[1];
+                String provider = parts[2];
+                String amount = parts[3];
+                String account = parts[4];
+
+                // Find the PayBillsReceiptPage instance and update it with the transaction data
+                Component[] components = mainPanel.getComponents();
+                for (Component comp : components) {
+                    if (comp instanceof PayBillsReceiptPage) {
+                        PayBillsReceiptPage payBillsReceiptPage = (PayBillsReceiptPage) comp;
+                        payBillsReceiptPage.updateTransactionData(category, provider, amount, account);
+                        break;
+                    }
+                }
+            }
+            slideContentTransition("PayBillsReceipt", 1);
+        }
+        else if (result.startsWith("PayBillsSuccess")) {
+            slideContentTransition("Launch", -1);
         }
     }
 
