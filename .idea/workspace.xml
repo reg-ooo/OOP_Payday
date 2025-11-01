@@ -5,7 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="Merge branch 'main' of https://github.com/reg-ooo/OOP_Payday&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;target/classes/data/SendMoney.class&#10;#&#9;target/classes/main/MainFrame.class&#10;#&#9;target/classes/pages/sendMoney/SendMoneyPage2.class">
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/TransactionHistoryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/TransactionHistoryPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +151,7 @@
       <workItem from="1761885403007" duration="4450000" />
       <workItem from="1761890940366" duration="5778000" />
       <workItem from="1761903890205" duration="10513000" />
-      <workItem from="1762011593045" duration="1687000" />
+      <workItem from="1762011593045" duration="2602000" />
     </task>
     <task id="LOCAL-00001" summary="branch test">
       <option name="closed" value="true" />

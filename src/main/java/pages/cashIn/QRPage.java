@@ -254,7 +254,7 @@ public class QRPage extends JPanel {
         // Amount
         amountLabel = new JLabel("Amount: ₱ 0.00");
         amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        amountLabel.setForeground(themeManager.getVBlue());
+        amountLabel.setForeground(themeManager.getDeepBlue());
         amountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(entityNameLabel);
