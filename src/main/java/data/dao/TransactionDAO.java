@@ -7,5 +7,4 @@ public interface TransactionDAO {
     void insertTransaction(int walletID, String transactionType, double amount);
     Transaction getTransaction();  // Returns null if not found
     List<Transaction> getAllTransactions(int walletID);  // Returns empty list if none found
-
 }

@@ -85,7 +85,7 @@ public class TransactionDAOImpl implements TransactionDAO {
                 "ORDER BY transactionID DESC LIMIT 1";
 
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setInt(1, UserInfo.getInstance().getUserID());
+            pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {

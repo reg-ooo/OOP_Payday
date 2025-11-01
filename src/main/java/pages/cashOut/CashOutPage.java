@@ -72,7 +72,6 @@ public class CashOutPage extends JPanel {
 
         mainPanel.add(headerPanel);
 
-
         mainPanel.add(Box.createVerticalStrut(30));
 
         // ===== AVAILABLE BALANCE CARD =====
@@ -144,33 +143,8 @@ public class CashOutPage extends JPanel {
                 JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            try {
-                double amount = Double.parseDouble(enteredAmount);
-                double currentBalance = UserInfo.getInstance().getBalance();
-
-                if (amount > currentBalance) {
-                    JOptionPane.showMessageDialog(this,
-                            "Insufficient balance!\nAvailable: PHP " + String.format("%.2f", currentBalance) +
-                                    "\nRequested: PHP " + String.format("%.2f", amount),
-                            "Insufficient Balance",
-                            JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
-                if (amount <= 0) {
-                    JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-
                 // If user is logged in and amount is valid, proceed to next step
                 onButtonClick.accept("CashOut2:" + enteredAmount);
-
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error checking balance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            }
         });
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(buttonPanel);

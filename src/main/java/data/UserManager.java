@@ -93,7 +93,7 @@ public class UserManager {
                 // Validate password
                 if (user.getPin().equals(password)) {
 
-                    int userID = user.getUserID();
+                    int userID = user.getCurrentUserId();
                     System.out.println("Login successful!");
 
                     // Login user
