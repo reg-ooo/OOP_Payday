@@ -5,9 +5,8 @@ import java.awt.*;
 import java.util.function.Consumer;
 import Factory.sendMoney.SendMoneyPage2Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage2Factory;
-import data.dao.SendMoneyDAOImpl;
+import data.CommandTemplateMethod.SendMoneyCommand;
 import data.model.UserInfo;
-import data.UserManager;
 import util.ThemeManager;
 
 public class SendMoneyPage2 extends JPanel {
@@ -106,12 +105,10 @@ public class SendMoneyPage2 extends JPanel {
     // Example: "SendMoney3:09171234567:09171234567:100.00"
     private void handleConfirm(String destination) {
         // Pass phone number, amount, and recipient name to SendMoneyPage3
-        SendMoneyDAOImpl sendMoney = new SendMoneyDAOImpl();
-        if(UserManager.getInstance().revalidateUser()) {
-            sendMoney.sendMoney(phoneNumber, Double.parseDouble(amount));
+        SendMoneyCommand sendMoney = new SendMoneyCommand(phoneNumber, Double.parseDouble(amount));
+            sendMoney.execute();
             SendMoneyPage.getInstance().clearForm();
             onButtonClick.accept("SendMoney3:" + recipientName + ":" + phoneNumber + ":" + amount);
-        }
     }
 
     private void handleBack(String destination) {

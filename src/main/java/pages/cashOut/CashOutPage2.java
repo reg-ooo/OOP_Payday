@@ -3,6 +3,7 @@ package pages.cashOut;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import Factory.sendMoney.SendMoneyPage1Factory;
 import components.RoundedBorder;
+import data.CommandTemplateMethod.CashOutCommand;
 import panels.GradientPanel;
 import panels.RoundedPanel;
 import util.FontLoader;
@@ -174,12 +175,14 @@ public class CashOutPage2 extends JPanel {
 
         // ===== CONFIRM BUTTON =====
         JPanel buttonPanel = factory.createNextButtonPanel(onButtonClick, () -> {
-            if (!isUserLoggedIn()) {
+            if (!UserInfo.getInstance().isLoggedIn()) {
                 onButtonClick.accept("LoginRequired");
                 return;
             }
             // Process cash out - pass the current amount to success page
             String currentAmount = getCurrentAmount();
+            CashOutCommand COM = new CashOutCommand(Double.parseDouble(currentAmount));
+            COM.execute();
             onButtonClick.accept("CashOutSuccess:" + currentAmount);
         });
 
@@ -333,15 +336,6 @@ public class CashOutPage2 extends JPanel {
     /**
      * Checks if user is logged in (same logic as SendMoneyPage)
      */
-    private boolean isUserLoggedIn() {
-        try {
-            UserInfo userInfo = UserInfo.getInstance();
-            userInfo.getBalance(); // Try to access protected method
-            return true;
-        } catch (SecurityException e) {
-            return false;
-        }
-    }
 
     /**
      * Public method to refresh the balance display

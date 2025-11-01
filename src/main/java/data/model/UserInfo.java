@@ -13,14 +13,13 @@ public class UserInfo {
     private String username;
 
     private static UserInfo instance;
-    private WalletDAO walletDAO;
-    private TransactionDAO transactionDAO;
+    private final WalletDAO walletDAO;
     private int currentUserId;
     private boolean isLoggedIn = false;
 
     private UserInfo() {
         this.walletDAO = new WalletDAOImpl();
-        this.transactionDAO = TransactionDAOImpl.getInstance();
+        TransactionDAO transactionDAO = TransactionDAOImpl.getInstance();
     }
 
     public static UserInfo getInstance() {
@@ -29,7 +28,6 @@ public class UserInfo {
         }
         return instance;
     }
-
 
     public void loginUser(int userId) {
         this.currentUserId = userId;
@@ -41,11 +39,6 @@ public class UserInfo {
         this.isLoggedIn = false;
         DatabaseProtectionProxy.getInstance().clearUserContext();
     }
-
-    public int getCurrentUserId() {
-        return currentUserId;
-    }
-
 
     public double getBalance() {
         if (!isLoggedIn) {
@@ -61,7 +54,9 @@ public class UserInfo {
         return 0.0;
     }
 
-    public int getUserID() { return userID; }
+    public int getCurrentUserId() {
+        return userID;
+    }
     public void setUserID(int userID) { this.userID = userID; }
 
     public String getFullName() { return fullName; }
@@ -85,5 +80,4 @@ public class UserInfo {
     public boolean isLoggedIn() {
         return isLoggedIn;
     }
-
 }
