@@ -3,7 +3,6 @@ package pages;
 import panels.RoundedPanel;
 import util.FontLoader;
 import util.ThemeManager;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -14,6 +13,7 @@ import java.util.Locale;
 import java.util.function.Consumer;
 
 public class TransactionHistoryPage extends RoundedPanel {
+
     private static TransactionHistoryPage instance;
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final FontLoader fontLoader = FontLoader.getInstance();
@@ -45,7 +45,7 @@ public class TransactionHistoryPage extends RoundedPanel {
         backButtonPanel.setOpaque(false);
         backButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        JLabel backLabel = new JLabel("Back");
+        JLabel backLabel = new JLabel("Back"); // Retained original "Back" text
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
         backLabel.setForeground(themeManager.getDBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -81,7 +81,6 @@ public class TransactionHistoryPage extends RoundedPanel {
         historyListPanel.setLayout(new BoxLayout(historyListPanel, BoxLayout.Y_AXIS));
         historyListPanel.setOpaque(false);
         historyListPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-
 
 
         // Group 1: Today
@@ -127,8 +126,6 @@ public class TransactionHistoryPage extends RoundedPanel {
         scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
-        // --- SCROLL SPEED FIX ---
-        // Increase the unit increment for faster scrolling
         scrollPane.getVerticalScrollBar().setUnitIncrement(20);
 
         add(scrollPane, BorderLayout.CENTER);
@@ -171,55 +168,51 @@ public class TransactionHistoryPage extends RoundedPanel {
 
 
     private JPanel createTransactionCard(String date, String description, String time, String amount, boolean isPositive) {
+
         // Use a simple RoundedPanel for the card background
         RoundedPanel card = new RoundedPanel(15, themeManager.getSBlue());
-        card.setLayout(new BorderLayout(0, 5)); // BorderLayout for structure
-        card.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-        card.setAlignmentX(Component.CENTER_ALIGNMENT);
-        card.setMaximumSize(new Dimension(350, 100));
-        card.setMinimumSize(new Dimension(350, 100));
-        card.setPreferredSize(new Dimension(350, 100));
+
+        // Use BorderLayout with a small horizontal gap
+        card.setLayout(new BorderLayout(5, 0));
+        card.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15)); // Increased padding for desired height
+
+        // *** FIX 1: Restore the original working width (350) to prevent cut-off. ***
+        final int TOTAL_WIDTH = 350;
+        final int CARD_HEIGHT = 80;
+        card.setMaximumSize(new Dimension(TOTAL_WIDTH, CARD_HEIGHT));
+        card.setMinimumSize(new Dimension(TOTAL_WIDTH, CARD_HEIGHT));
+        card.setPreferredSize(new Dimension(TOTAL_WIDTH, CARD_HEIGHT));
 
 
         JPanel descriptionTimePanel = new JPanel(new BorderLayout());
         descriptionTimePanel.setOpaque(false);
 
-        // Inner panel for stacked content
         JPanel stackedPanel = new JPanel();
         stackedPanel.setOpaque(false);
         stackedPanel.setLayout(new BoxLayout(stackedPanel, BoxLayout.Y_AXIS));
         stackedPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // 1. Description Label (Top line)
         JLabel descLabel = new JLabel(description);
         descLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
         descLabel.setForeground(themeManager.getDBlue());
         descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // 2. Date Label (Second line, MM-DD format)
-        String monthDay = date.split("-")[1] + "-" + date.split("-")[2]; // e.g., "11-01"
-        JLabel dateLabel = new JLabel(monthDay);
-        dateLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        dateLabel.setForeground(themeManager.getDBlue());
-        dateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        // 3. Time Label (Third line)
-        JLabel timeLabel = new JLabel(time);
-        timeLabel.setFont(fontLoader.loadFont(Font.PLAIN, 13f, "Quicksand-Regular"));
-        timeLabel.setForeground(themeManager.getBlack());
-        timeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        String monthDay = date.split("-")[1] + "-" + date.split("-")[2];
+        JLabel dateTimeLabel = new JLabel(monthDay + " | " + time);
+        dateTimeLabel.setFont(fontLoader.loadFont(Font.PLAIN, 13f, "Quicksand-Regular"));
+        dateTimeLabel.setForeground(themeManager.getBlack());
+        dateTimeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         stackedPanel.add(descLabel);
-        stackedPanel.add(dateLabel);
-        stackedPanel.add(timeLabel);
+        stackedPanel.add(Box.createVerticalStrut(2));
+        stackedPanel.add(dateTimeLabel);
 
         descriptionTimePanel.add(stackedPanel, BorderLayout.WEST);
 
         card.add(descriptionTimePanel, BorderLayout.CENTER);
 
         JLabel amountLabel = new JLabel(amount);
-
-        amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Regular"));
         amountLabel.setForeground(isPositive ? themeManager.getGreen() : themeManager.getRed());
         amountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
@@ -227,4 +220,5 @@ public class TransactionHistoryPage extends RoundedPanel {
 
         return card;
     }
+
 }

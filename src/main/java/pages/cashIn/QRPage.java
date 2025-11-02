@@ -279,7 +279,7 @@ public class QRPage extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addActionListener(e -> {
-            // FIX: This sends the correct action to MainFrame to trigger the receipt handler
+
             onButtonClick.accept("CashInReceipt");
         });
 
