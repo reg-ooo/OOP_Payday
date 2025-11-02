@@ -584,35 +584,21 @@ public class StoresPage2 extends JPanel {
                 return;
             }
 
-            // Attempt to parse amount to ensure it's a number
             try {
                 double amountValue = Double.parseDouble(amountText.replace(",", ""));
-                // Format amount to ensure it's always two decimal places (e.g., 50.00)
+
                 String finalAmount = String.format("%,.2f", amountValue);
 
-                // 2. Get the QRPage instance
-                // NOTE: QRPage must be accessible here, assuming it exists in the package structure.
-                // Since QRPage implementation is not provided, we rely on the original logic structure.
-                // Assuming a proper factory or method exists to get QRPage.
-                // For this implementation, the original logic for getting QRPage is assumed to be correct
-                // but needs the QRPage class defined elsewhere. We'll keep the call as is.
-
-                // Using a placeholder/mock QRPage if the actual class is not available
-                // For a proper solution, QRPage should be provided or created via a Factory.
-                // Based on the previous logic, a static getInstance is used:
                 QRPage qrPage = QRPage.getInstance(onButtonClick);
 
-                // 3. Update the QRPage with ALL the required info
-                // entityName, isBank (false), accountRef, amount, sourcePageKey
                 qrPage.updateSelectedEntity(
                         selectedStoreName,
-                        false, // isBank = false for Store
+                        false,
                         accountRef,
                         finalAmount,
-                        "CashInStores2" // Key to return to the previous page (this page)
+                        "CashInStores2"
                 );
 
-                // 4. Navigate to QRPage
                 onButtonClick.accept("QRPage");
 
             } catch (NumberFormatException ex) {

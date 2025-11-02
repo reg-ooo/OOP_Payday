@@ -1,18 +1,25 @@
 package Factory.cashIn;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 
 public interface CashInPageFactory {
 
-    // Header components
+    // 1. Header Components
     JLabel createBackLabel(Runnable onBackClick);
-    JLabel createTitleLabel();
 
-    // Option buttons
-    JButton createOptionButton(String text, Runnable onClickAction);
+    // Creates the complete Title Row (Title Text + Icon)
+    JPanel createTitleRow(String titleText, String iconName, int iconSize);
 
-    // Panel creators
+    // 2. Option Button Components (Handles all complex styling, images, and layout)
+    JPanel createCashInOptionPanel(
+            String imageName,
+            String labelText,
+            ActionListener actionListener
+    );
+
+    // 3. Panel Assemblers
     JPanel createHeaderPanel(JLabel backLabel);
-    JPanel createContentPanel(JButton banksButton, JButton physicalStoresButton);
-    JPanel createCenterPanel(JLabel titleLabel, JPanel contentPanel);
+    JPanel createContentPanel(JPanel banksOption, JPanel storesOption); // Holds the option panels
+    JPanel createFooterPanel(String stepText);
 }
