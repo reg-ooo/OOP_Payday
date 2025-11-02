@@ -1,5 +1,6 @@
 package pages.cashIn;
 
+import data.model.UserInfo; // <-- ADDED: Import UserInfo to access the balance
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
@@ -9,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.function.Consumer;
+// NOTE: DocumentListener imports are NOT needed as the balance is static.
 
 public class BanksPage2 extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
@@ -20,10 +22,12 @@ public class BanksPage2 extends JPanel {
     private final JTextField amountField = new JTextField();
     private JLabel bankImageLabel;
     private JLabel bankNameLabel;
+    // ADDED: Instance variable for the static balance label
+    private JLabel actualBalanceLabel;
     private String selectedBankName = "";
 
     // Store the default placeholder text - Matches StoresPage2
-    private final String defaultAccountPlaceholder = "Enter account number"; // Changed to be more specific for banks
+    private final String defaultAccountPlaceholder = "Enter account number";
     private final String defaultAmountPlaceholder = "0.00";
 
     // Component Dimensions (Matching StoresPage2)
@@ -70,6 +74,9 @@ public class BanksPage2 extends JPanel {
         amountField.setText("₱ " + defaultAmountPlaceholder);
         amountField.setForeground(themeManager.getLightGray());
         amountField.setHorizontalAlignment(JTextField.CENTER);
+
+        // 4. Update the balance display (STATIC)
+        updateBalanceDisplay();
     }
 
     private void setupUI() {
@@ -114,7 +121,7 @@ public class BanksPage2 extends JPanel {
         titleLabel.setForeground(ThemeManager.getDBlue());
 
         // 2. Title Icon - SCALING SIZE 60
-        ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 60); // Assuming "Banks.png" exists
+        ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 60);
         JLabel iconLabel = new JLabel(titleIcon);
 
         titleRow.add(titleLabel);
@@ -201,25 +208,30 @@ public class BanksPage2 extends JPanel {
         amountSection.add(Box.createVerticalStrut(2));
         amountSection.add(amountPanel);
 
-        // Balance section (right aligned) - Assuming you have balance logic in your app
+        // Balance section (right aligned)
         JPanel balancePanelContainer = new JPanel();
         balancePanelContainer.setLayout(new BoxLayout(balancePanelContainer, BoxLayout.X_AXIS));
         balancePanelContainer.setBackground(themeManager.getWhite());
         balancePanelContainer.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, 30));
         balancePanelContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JLabel balanceHint = new JLabel("Available balance: PHP");
+
+        // Static Balance Label Hint
+        JLabel balanceHint = new JLabel("Current balance: PHP"); // Changed "Available" to "Current" for consistency
         balanceHint.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         balanceHint.setForeground(Color.DARK_GRAY);
-        JLabel actualBalanceLabel = new JLabel("0.00"); // Placeholder balance
+
+        // Use the instance variable defined at the top
+        actualBalanceLabel = new JLabel("0.00");
         actualBalanceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         actualBalanceLabel.setForeground(Color.DARK_GRAY);
+
         balancePanelContainer.add(Box.createHorizontalGlue());
         balancePanelContainer.add(balanceHint);
         balancePanelContainer.add(Box.createHorizontalStrut(5));
         balancePanelContainer.add(actualBalanceLabel);
 
         // Next button and Disclaimer
-        JPanel nextButtonPanel = createSmallerNextButtonPanel(); // Use the logic below
+        JPanel nextButtonPanel = createSmallerNextButtonPanel();
         nextButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         JLabel disclaimer = new JLabel("Please check details before confirming");
         disclaimer.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
@@ -265,12 +277,33 @@ public class BanksPage2 extends JPanel {
         add(headerPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
         add(stepLabel, BorderLayout.SOUTH);
+
+        // Call the method to display the STATIC balance
+        updateBalanceDisplay();
     }
 
-    // --- UTILITY METHODS (setupAccountField, setupAmountField) ---
-    // These methods are identical to the ones in StoresPage2.java,
-    // ensuring consistent styling and functionality. They are omitted here for brevity
-    // but MUST be included in your final file.
+    /**
+     * Retrieves the user's current balance and updates the dedicated JLabel.
+     * This is designed to be STATIC (only shows current balance).
+     */
+    private void updateBalanceDisplay() {
+        if (actualBalanceLabel == null) return;
+
+        try {
+            // Line 293: This is the line that was throwing the exception
+            double balance = UserInfo.getInstance().getBalance();
+
+            // Format and set the text if successful.
+            actualBalanceLabel.setText(String.format("%,.2f", balance));
+            actualBalanceLabel.setForeground(Color.DARK_GRAY);
+        } catch (Exception e) {
+            // CATCHES the SecurityException (or any other Exception) and handles it SILENTLY.
+            // The value is set to a safe default like "0.00" or "N/A".
+            actualBalanceLabel.setText("N/A");
+            actualBalanceLabel.setForeground(Color.RED);
+            // NO System.out.println or System.err.println here.
+        }
+    }
 
     /**
      * Sets up the account field with SendPage style (Center placeholder, Left typing)

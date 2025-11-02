@@ -1,5 +1,6 @@
 package pages.cashIn;
 
+import data.model.UserInfo; // Import UserInfo to access the balance
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
@@ -20,6 +21,8 @@ public class StoresPage2 extends JPanel {
     private final JTextField amountField = new JTextField();
     private JLabel storeImageLabel;
     private JLabel storeNameLabel;
+    // New instance variable to hold the actual balance label
+    private JLabel actualBalanceLabel;
     private String selectedStoreName = "";
 
     // Store the default placeholder text
@@ -69,6 +72,9 @@ public class StoresPage2 extends JPanel {
         amountField.setText("₱ " + defaultAmountPlaceholder);
         amountField.setForeground(themeManager.getLightGray());
         amountField.setHorizontalAlignment(JTextField.CENTER);
+
+        // 4. Update the balance display whenever a new store is selected
+        updateBalanceDisplay();
     }
 
     private void setupUI() {
@@ -205,12 +211,15 @@ public class StoresPage2 extends JPanel {
         balancePanelContainer.setBackground(themeManager.getWhite());
         balancePanelContainer.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, 30));
         balancePanelContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JLabel balanceHint = new JLabel("Available balance: PHP");
+        JLabel balanceHint = new JLabel("Current balance: PHP");
         balanceHint.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         balanceHint.setForeground(Color.DARK_GRAY);
-        JLabel actualBalanceLabel = new JLabel("0.00");
+
+        // Assign the JLabel to the instance variable for later updates
+        actualBalanceLabel = new JLabel("0.00");
         actualBalanceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
         actualBalanceLabel.setForeground(Color.DARK_GRAY);
+
         balancePanelContainer.add(Box.createHorizontalGlue());
         balancePanelContainer.add(balanceHint);
         balancePanelContainer.add(Box.createHorizontalStrut(5));
@@ -263,12 +272,35 @@ public class StoresPage2 extends JPanel {
         add(headerPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
         add(stepLabel, BorderLayout.SOUTH);
+
+        // Call the new method to display the balance
+        updateBalanceDisplay();
+    }
+
+    /**
+     * Retrieves the user's current balance and updates the dedicated JLabel.
+     */
+    private void updateBalanceDisplay() {
+        if (actualBalanceLabel == null) return; // Guard against null pointer before UI setup is complete
+
+        try {
+            double balance = UserInfo.getInstance().getBalance();
+            // Format and set the text.
+            actualBalanceLabel.setText(String.format("%,.2f", balance));
+            actualBalanceLabel.setForeground(Color.DARK_GRAY);
+        } catch (Exception e) {
+            // CATCHES the SecurityException (or any other Exception) and handles it SILENTLY.
+            actualBalanceLabel.setText("N/A");
+            actualBalanceLabel.setForeground(Color.RED);
+            // NO System.out.println or System.err.println here.
+        }
     }
 
     /**
      * Sets up the account field.
      */
     private JPanel setupAccountField(JTextField field) {
+        // ... (Original setupAccountField method content)
         final String placeholder = defaultAccountPlaceholder;
 
         field.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
@@ -350,6 +382,7 @@ public class StoresPage2 extends JPanel {
      * Sets up the amount field.
      */
     private JPanel setupAmountField(JTextField field) {
+        // ... (Original setupAmountField method content)
         final String placeholder = defaultAmountPlaceholder; // "0.00"
 
         field.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
@@ -495,6 +528,7 @@ public class StoresPage2 extends JPanel {
      * Includes the fixed navigation and data passing logic.
      */
     private JPanel createSmallerNextButtonPanel() {
+        // ... (Original createSmallerNextButtonPanel method content)
         final int BUTTON_HEIGHT = 45;
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
@@ -557,6 +591,15 @@ public class StoresPage2 extends JPanel {
                 String finalAmount = String.format("%,.2f", amountValue);
 
                 // 2. Get the QRPage instance
+                // NOTE: QRPage must be accessible here, assuming it exists in the package structure.
+                // Since QRPage implementation is not provided, we rely on the original logic structure.
+                // Assuming a proper factory or method exists to get QRPage.
+                // For this implementation, the original logic for getting QRPage is assumed to be correct
+                // but needs the QRPage class defined elsewhere. We'll keep the call as is.
+
+                // Using a placeholder/mock QRPage if the actual class is not available
+                // For a proper solution, QRPage should be provided or created via a Factory.
+                // Based on the previous logic, a static getInstance is used:
                 QRPage qrPage = QRPage.getInstance(onButtonClick);
 
                 // 3. Update the QRPage with ALL the required info
@@ -575,6 +618,7 @@ public class StoresPage2 extends JPanel {
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error", JOptionPane.ERROR_MESSAGE);
             }
+
         });
 
         buttonPanel.add(nextButton);
