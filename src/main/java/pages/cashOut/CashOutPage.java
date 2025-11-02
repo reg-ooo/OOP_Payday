@@ -129,7 +129,6 @@ public class CashOutPage extends JPanel {
 
         mainPanel.add(Box.createVerticalStrut(10));
 
-
         // ===== NEXT BUTTON =====
         JPanel buttonPanel = factory.createNextButtonPanel(onButtonClick, () -> {
             // Handle next action - check if user is logged in first
@@ -140,10 +139,20 @@ public class CashOutPage extends JPanel {
 
             // Validate amount
             String enteredAmount = getEnteredAmount();
+            double currentBalance = UserInfo.getInstance().getBalance();
+            double amount = Double.parseDouble(enteredAmount);
+
             if (enteredAmount.isEmpty() || enteredAmount.equals("0.00")) {
                 DialogManager.showEmptyAmountDialog(this, "Please enter amount");
                 return;
             }
+
+            // Check if amount exceeds balance
+            if (amount > currentBalance) {
+                DialogManager.showInsuffBalanceDialog(this, "Insufficient Balance");
+                return;
+            }
+
                 // If user is logged in and amount is valid, proceed to next step
                 onButtonClick.accept("CashOut2:" + enteredAmount);
         });
