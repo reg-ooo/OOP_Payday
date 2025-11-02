@@ -93,12 +93,10 @@ public class BanksPage extends JPanel {
         });
         headerPanel.add(backLabel, BorderLayout.WEST);
 
-        // --- Title Row (Matching BanksPage2 style) ---
-        // 1. Title Label
         JLabel titleLabel = new JLabel("Banks");
         // Use the deep blue color and bold font style from BanksPage2
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(themeManager.getDeepBlue());
+        titleLabel.setForeground(ThemeManager.getDBlue());
 
         // 2. Title Icon - SCALING SIZE 50 (Matching BanksPage2)
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 50);

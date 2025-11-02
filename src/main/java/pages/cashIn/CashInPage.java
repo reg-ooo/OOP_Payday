@@ -44,18 +44,24 @@ public class CashInPage extends JPanel {
         });
         headerPanel.add(backLabel, BorderLayout.WEST);
 
-        // Title
         JLabel titleLabel = new JLabel("Cash In");
         titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getDeepBlue());
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setForeground(ThemeManager.getDBlue());
+
+        ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("icons/sendMoney/availableBalance.png", 65);
+        JLabel iconLabel = new JLabel(titleIcon);
+
+        JPanel titleContentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px horizontal gap
+        titleContentPanel.setBackground(ThemeManager.getWhite());
+
+        titleContentPanel.add(titleLabel);
+        titleContentPanel.add(iconLabel);
 
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         titlePanel.setBackground(ThemeManager.getWhite());
         titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 40, 0));
-        titlePanel.add(titleLabel);
+        titlePanel.add(titleContentPanel);
 
-        // Content Panel
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(ThemeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -100,10 +106,6 @@ public class CashInPage extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Custom ButtonUI to draw a rounded, bordered button.
-     * This class is now nested directly within CashInPage for better encapsulation.
-     */
     private class RoundedButtonUI extends BasicButtonUI {
         private final int ARC_SIZE = 30; // Radius for the rounded corners
         private final Color BORDER_COLOR = themeManager.getDeepBlue();
@@ -167,8 +169,6 @@ public class CashInPage extends JPanel {
         button.setBackground(themeManager.getWhite()); // Default background for painting
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Removed the old border setting as it's now handled by RoundedButtonUI
 
         // Load and scale image to fit bigger button
         ImageIcon icon = imageLoader.loadAndScaleHighQuality(imageName + ".png", 110);

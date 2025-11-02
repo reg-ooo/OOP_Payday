@@ -93,13 +93,10 @@ public class StoresPage extends JPanel {
         });
         headerPanel.add(backLabel, BorderLayout.WEST);
 
-        // --- Title Row (Matching StoresPage2 style) ---
-        // 1. Title Label
         JLabel titleLabel = new JLabel("Stores");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(themeManager.getDeepBlue());
+        titleLabel.setForeground(ThemeManager.getDBlue());
 
-        // 2. Title Icon - SCALING SIZE 60 (Matching StoresPage2)
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("Stores.png", 60);
         JLabel iconLabel = new JLabel(titleIcon);
 
@@ -109,7 +106,6 @@ public class StoresPage extends JPanel {
         titleRow.add(titleLabel);
         titleRow.add(iconLabel);
 
-        // --- Content: Store Buttons ---
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(themeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();

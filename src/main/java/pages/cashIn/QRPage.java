@@ -254,7 +254,7 @@ public class QRPage extends JPanel {
         // Amount
         amountLabel = new JLabel("Amount: ₱ 0.00");
         amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        amountLabel.setForeground(themeManager.getVBlue());
+        amountLabel.setForeground(themeManager.getDeepBlue());
         amountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(entityNameLabel);
@@ -279,7 +279,7 @@ public class QRPage extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addActionListener(e -> {
-            // FIX: This sends the correct action to MainFrame to trigger the receipt handler
+
             onButtonClick.accept("CashInReceipt");
         });
 
