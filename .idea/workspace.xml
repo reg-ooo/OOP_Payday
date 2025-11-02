@@ -5,10 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="Merge branch 'main' of https://github.com/reg-ooo/OOP_Payday&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml&#10;#&#9;target/classes/data/SendMoney.class&#10;#&#9;target/classes/main/MainFrame.class&#10;#&#9;target/classes/pages/sendMoney/SendMoneyPage2.class">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/TransactionHistoryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/TransactionHistoryPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyBaseFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyBaseFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage1Factory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/sendMoney/ConcreteSendMoneyPage1Factory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/CommandTemplateMethod/TransactionCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/CommandTemplateMethod/TransactionCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyBaseFactory$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyBaseFactory$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyBaseFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyBaseFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/CommandTemplateMethod/TransactionCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/CommandTemplateMethod/TransactionCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/UserManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/TransactionHistoryPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/TransactionHistoryPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage3$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage3$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills3$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills3$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

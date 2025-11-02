@@ -6,15 +6,15 @@ import data.UserManager;
 public abstract class TransactionCommand {
 
     // Template method - defines the transaction workflow (FINAL - cannot be overridden)
-    public final void execute() {
+    public final boolean execute() {
         if (!validateUser()) {
             System.out.println("User validation failed");
-            return;
+            return false;
         }
 
         if (!checkBalance()) {
             System.out.println("Insufficient balance or invalid amount");
-            return;
+            return false;
         }
 
         performTransaction();
@@ -22,6 +22,7 @@ public abstract class TransactionCommand {
         refreshUI();
 
         System.out.println("Transaction completed successfully!");
+        return true;
     }
 
     // Common step - all transactions validate user the same way

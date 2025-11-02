@@ -4,6 +4,7 @@ import Factory.cashIn.CashInPageFactory;
 import Factory.cashIn.ConcreteCashInPageFactory;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import data.model.UserInfo;
+import util.DialogManager;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -111,12 +112,12 @@ public class PayBills2 extends JPanel {
             double currentBalance = UserInfo.getInstance().getBalance();
 
             if (accountNumber.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter an account number", "Error", JOptionPane.ERROR_MESSAGE);
+                DialogManager.showEmptyAccountDialog(this, "Please enter number");
                 return;
             }
 
             if (amount.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter an amount", "Error", JOptionPane.ERROR_MESSAGE);
+                DialogManager.showEmptyAmountDialog(this, "Please enter amount");
                 return;
             }
 
@@ -126,7 +127,7 @@ public class PayBills2 extends JPanel {
                     JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 } else if (amountValue > currentBalance) {
-                    JOptionPane.showMessageDialog(this, "Insufficient Balance", "Error", JOptionPane.ERROR_MESSAGE);
+                    DialogManager.showInsuffBalanceDialog(this, "Insufficient Balance");
                     return;
                 }
 

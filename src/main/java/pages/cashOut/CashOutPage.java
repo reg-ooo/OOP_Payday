@@ -4,6 +4,7 @@ import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import Factory.sendMoney.SendMoneyPage1Factory;
 import data.model.UserInfo;
 import panels.GradientPanel;
+import util.DialogManager;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -140,7 +141,7 @@ public class CashOutPage extends JPanel {
             // Validate amount
             String enteredAmount = getEnteredAmount();
             if (enteredAmount.isEmpty() || enteredAmount.equals("0.00")) {
-                JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
+                DialogManager.showEmptyAmountDialog(this, "Please enter amount");
                 return;
             }
                 // If user is logged in and amount is valid, proceed to next step
@@ -174,8 +175,8 @@ public class CashOutPage extends JPanel {
     // In CashOutPage1 class
     public void clearAmountField() {
         if (amountField != null) {
-            amountField.setText("₱");
-            amountField.setForeground(Color.GRAY);
+            amountField.setText("₱ 0.00");
+            amountField.setForeground(themeManager.getGray());
             amountField.setCaretPosition(1);
 
             // Trigger the balance update to show original balance

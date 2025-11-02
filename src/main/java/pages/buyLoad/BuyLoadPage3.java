@@ -6,6 +6,7 @@ import components.RoundedBorder;
 import data.CommandTemplateMethod.BuyLoadCommand;
 import panels.GradientPanel;
 import panels.RoundedPanel;
+import util.DialogManager;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -192,8 +193,15 @@ public class BuyLoadPage3 extends JPanel {
             }
             // Process load purchase - pass the data to success page
             BuyLoadCommand BLC = new BuyLoadCommand(Double.parseDouble(selectedAmount));
-            BLC.execute();
-            onButtonClick.accept("BuyLoadReceipt:" + selectedNetwork + ":" + selectedAmount + ":" + selectedPhone);
+            boolean success = BLC.execute();
+            if (success) {
+                DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
+                    // This callback runs ONLY when user clicks OK
+                    onButtonClick.accept("BuyLoadReceipt:" + selectedNetwork + ":" + selectedAmount + ":" + selectedPhone);
+                });
+            } else {
+                DialogManager.showErrorDialog(this, "Transaction Failed!");
+            }
         });
 
         // Change button text to "Confirm"

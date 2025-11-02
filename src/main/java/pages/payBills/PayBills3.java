@@ -6,6 +6,7 @@ import components.RoundedBorder;
 import data.CommandTemplateMethod.PayBillsCommand;
 import panels.GradientPanel;
 import panels.RoundedPanel;
+import util.DialogManager;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -195,9 +196,15 @@ public class PayBills3 extends JPanel {
                 return;
             }
             PayBillsCommand PBC = new PayBillsCommand(Double.parseDouble(selectedAmount));
-            PBC.execute();
-            // Process bill payment - pass the data to success page
-            onButtonClick.accept("PayBillsReceipt:" + selectedCategory + ":" + selectedProvider + ":" + selectedAmount + ":" + selectedAccount);
+            boolean success = PBC.execute();
+            if (success) {
+                DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
+                    // Process bill payment - pass the data to success page
+                    onButtonClick.accept("PayBillsReceipt:" + selectedCategory + ":" + selectedProvider + ":" + selectedAmount + ":" + selectedAccount);
+                });
+            } else {
+                DialogManager.showErrorDialog(this, "Transaction Failed!");
+            }
         });
 
         // Change button text to "Confirm"

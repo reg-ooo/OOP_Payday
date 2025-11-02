@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import Factory.sendMoney.SendMoneyPage1Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import data.model.UserInfo;
+import util.DialogManager;
 import util.ThemeManager;
 
 public class SendMoneyPage extends JPanel {
@@ -89,8 +90,8 @@ public class SendMoneyPage extends JPanel {
     }
 
     public void clearForm(){
-        phoneField.setText("");
-        amountField.setText("");
+        phoneField.setText("Enter number");
+        amountField.setText("₱ 0.00");
         revalidate();
         repaint();
     }
@@ -101,13 +102,13 @@ public class SendMoneyPage extends JPanel {
 
         // Validate phone number
         if (enteredPhone.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter a phone number", "Error", JOptionPane.ERROR_MESSAGE);
+            DialogManager.showEmptyAccountDialog(this, "Please enter number");
             return;
         }
 
         // Validate amount
         if (enteredAmount.isEmpty() || enteredAmount.equals("0.00")) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
+            DialogManager.showEmptyAmountDialog(this, "Please enter amount");
             return;
         }
 
@@ -120,11 +121,7 @@ public class SendMoneyPage extends JPanel {
 
             // Check if amount exceeds balance
             if (amount > currentBalance) {
-                JOptionPane.showMessageDialog(this,
-                        "Insufficient balance!\nAvailable: PHP " + String.format("%.2f", currentBalance) +
-                                "\nRequested: PHP " + String.format("%.2f", amount),
-                        "Insufficient Balance",
-                        JOptionPane.ERROR_MESSAGE);
+                DialogManager.showInsuffBalanceDialog(this, "Insufficient Balance");
                 return;
             }
 
