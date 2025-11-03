@@ -1,8 +1,12 @@
 package pages.rewards;
 
 import components.RoundedBorder;
+import data.CommandTemplateMethod.RewardsCommand;
 import panels.GradientPanel;
 import panels.RoundedPanel;
+import data.dao.RewardsDAOImpl;
+import data.model.UserInfo;
+import util.DialogManager;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -16,15 +20,29 @@ import java.util.function.Consumer;
 
 public class Rewards3 extends JPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
+    private final Consumer<String> onButtonClick;
+    private final RewardsDAOImpl rewardsDAO;
 
     private JLabel balanceAmount;
+    private JLabel categoryValue;
+    private JLabel rewardValue;
+    private JLabel pointsValue;
     private String selectedCategory;
     private String selectedReward;
     private int selectedPoints;
 
     public Rewards3(Consumer<String> onButtonClick) {
+        this.onButtonClick = onButtonClick;
+        this.rewardsDAO = RewardsDAOImpl.getInstance();
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
+
+        // Initialize UI
+        setupUI();
+    }
+
+    private void setupUI() {
+        removeAll();
 
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
@@ -75,7 +93,7 @@ public class Rewards3 extends JPanel {
 
         // Points amount
         balanceAmount = new JLabel();
-        updatePointsDisplay("500");
+        updatePointsDisplay();
         balanceAmount.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 32f, "Quicksand-Regular"));
         balanceAmount.setForeground(Color.WHITE);
         balanceAmount.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
@@ -115,21 +133,24 @@ public class Rewards3 extends JPanel {
         detailsContentPanel.add(Box.createVerticalStrut(15));
 
         // Category
-        JPanel categoryPanel = createDetailRow("Category:", "Select Category", "category");
+        JPanel categoryPanel = createDetailRow("Category:", selectedCategory != null ? selectedCategory : "Select Category", "category");
+        categoryValue = (JLabel) ((JPanel) categoryPanel.getComponent(1)).getComponent(0);
         categoryPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsContentPanel.add(categoryPanel);
 
         detailsContentPanel.add(Box.createVerticalStrut(10));
 
         // Reward
-        JPanel rewardPanel = createDetailRow("Reward:", "Select Reward", "reward");
+        JPanel rewardPanel = createDetailRow("Reward:", selectedReward != null ? selectedReward : "Select Reward", "reward");
+        rewardValue = (JLabel) ((JPanel) rewardPanel.getComponent(1)).getComponent(0);
         rewardPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsContentPanel.add(rewardPanel);
 
         detailsContentPanel.add(Box.createVerticalStrut(10));
 
         // Points Required
-        JPanel pointsPanel = createDetailRow("Points Required:", "0", "points");
+        JPanel pointsPanel = createDetailRow("Points Required:", selectedPoints > 0 ? String.valueOf(selectedPoints) + "pts" : "0", "points");
+        pointsValue = (JLabel) ((JPanel) pointsPanel.getComponent(1)).getComponent(0);
         pointsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsContentPanel.add(pointsPanel);
 
@@ -158,7 +179,7 @@ public class Rewards3 extends JPanel {
         cancelButton.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         cancelButton.setForeground(ThemeManager.getDBlue());
         cancelButton.setBackground(Color.WHITE);
-        cancelButton.setBorder(BorderFactory.createLineBorder(ThemeManager.getDBlue(), 2));
+        cancelButton.setBorder(BorderFactory.createLineBorder(ThemeManager.getPBlue(), 2));
         cancelButton.setPreferredSize(new Dimension(130, 40));
         cancelButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         cancelButton.addActionListener(
@@ -168,12 +189,33 @@ public class Rewards3 extends JPanel {
         JButton redeemButton = new JButton("Redeem");
         redeemButton.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         redeemButton.setForeground(Color.WHITE);
-        redeemButton.setBackground(ThemeManager.getPBlue());
+        redeemButton.setBackground(ThemeManager.getDvBlue());
         redeemButton.setPreferredSize(new Dimension(130, 40));
         redeemButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         redeemButton.addActionListener(e -> {
-            // Execute the reward redemption
-            onButtonClick.accept("RewardsReceipt:" + selectedCategory + ":" + selectedReward + ":" + selectedPoints);
+
+            // Check if user has enough points first
+            int currentPoints = getCurrentPoints();
+
+            if (currentPoints >= selectedPoints) {
+                // Create and execute RewardsCommand
+                RewardsCommand RC = new RewardsCommand(selectedPoints);
+                boolean success = RC.execute(); // This will subtract the points if checkBalance passes
+
+                if (success) {
+                    DialogManager.showSuccessDialog(this, "Rewards Claimed!");
+
+                    // Update the points display to show the new balance
+                    updatePointsDisplay();
+
+                    onButtonClick.accept("RewardsReceipt:" + selectedCategory + ":" + selectedReward + ":" + selectedPoints);
+                } else {
+                    DialogManager.showErrorDialog(this, "Redeem Failed!");
+                }
+            } else {
+                DialogManager.showErrorDialog(this,
+                        "Insufficient points! You need " + (selectedPoints - currentPoints) + " more points.");
+            }
         });
 
         buttonPanel.add(cancelButton);
@@ -188,12 +230,35 @@ public class Rewards3 extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         add(scrollPane, BorderLayout.CENTER);
+
+        revalidate();
+        repaint();
     }
 
     public void setRedemptionDetails(String category, String reward, int points) {
         this.selectedCategory = category;
         this.selectedReward = reward;
         this.selectedPoints = points;
+
+        // Update the UI with the new values
+        refreshUI();
+    }
+
+    private void refreshUI() {
+        // Update all the labels with current values
+        if (categoryValue != null) {
+            categoryValue.setText(selectedCategory != null ? selectedCategory : "Select Category");
+        }
+        if (rewardValue != null) {
+            rewardValue.setText(selectedReward != null ? selectedReward : "Select Reward");
+        }
+        if (pointsValue != null) {
+            pointsValue.setText(selectedPoints > 0 ? String.valueOf(selectedPoints) : "0");
+        }
+        updatePointsDisplay();
+
+        revalidate();
+        repaint();
     }
 
     private JPanel createDetailRow(String labelText, String value, String type) {
@@ -206,18 +271,23 @@ public class Rewards3 extends JPanel {
         label.setForeground(ThemeManager.getDBlue());
         label.setPreferredSize(new Dimension(130, 20));
 
+        JPanel valuePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        valuePanel.setBackground(Color.WHITE);
+        valuePanel.setOpaque(false);
+
         JLabel valueLabel = new JLabel(value);
         valueLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
         valueLabel.setForeground(ThemeManager.getBlack());
+        valuePanel.add(valueLabel);
 
         row.add(label, BorderLayout.WEST);
-        row.add(valueLabel, BorderLayout.CENTER);
+        row.add(valuePanel, BorderLayout.CENTER);
 
         return row;
     }
 
     private JLabel createBackLabel(Runnable onClickAction) {
-        JLabel backLabel = new JLabel("← Back");
+        JLabel backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
         backLabel.setForeground(ThemeManager.getPBlue());
         backLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -232,9 +302,16 @@ public class Rewards3 extends JPanel {
         return backLabel;
     }
 
-    private void updatePointsDisplay(String value) {
+    // Method to get current points from database
+    public int getCurrentPoints() {
+        double points = rewardsDAO.getRewardsPoints();
+        return (int) Math.round(points); // Convert to int for display
+    }
+
+    private void updatePointsDisplay() {
         if (balanceAmount != null) {
-            balanceAmount.setText(value + " points");
+            int currentPoints = UserInfo.getInstance().isLoggedIn() ? getCurrentPoints() : 0;
+            balanceAmount.setText(currentPoints + " points");
         }
     }
 

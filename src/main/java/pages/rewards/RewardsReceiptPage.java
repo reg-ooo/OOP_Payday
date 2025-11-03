@@ -13,13 +13,29 @@ import java.util.function.Consumer;
 
 public class RewardsReceiptPage extends JPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
+    private final Consumer<String> onButtonClick;
     private String selectedCategory;
     private String selectedReward;
     private int pointsUsed;
 
+    // Reference to UI components
+    private JLabel categoryValue;
+    private JLabel rewardValue;
+    private JLabel pointsValue;
+    private JLabel dateValue;
+    private JLabel referenceLabel;
+
     public RewardsReceiptPage(Consumer<String> onButtonClick) {
+        this.onButtonClick = onButtonClick;
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
+
+        // Initialize UI
+        setupUI();
+    }
+
+    private void setupUI() {
+        removeAll();
 
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
@@ -34,17 +50,12 @@ public class RewardsReceiptPage extends JPanel {
         successPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         successPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel successIcon = new JLabel("✓");
-        successIcon.setFont(new Font("Arial", Font.BOLD, 48));
-        successIcon.setForeground(ThemeManager.getGreen());
-
         JLabel successTitle = new JLabel("Reward Redeemed!");
         successTitle.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
         successTitle.setForeground(ThemeManager.getDBlue());
 
         JPanel titlePanel = new JPanel(new BorderLayout());
         titlePanel.setBackground(Color.WHITE);
-        titlePanel.add(successIcon, BorderLayout.WEST);
         titlePanel.add(successTitle, BorderLayout.CENTER);
 
         successPanel.add(titlePanel);
@@ -88,31 +99,69 @@ public class RewardsReceiptPage extends JPanel {
 
         receiptContentPanel.add(Box.createVerticalStrut(10));
 
-        // Category
-        JPanel categoryRow = createReceiptRow("Category:", selectedCategory);
-        categoryRow.setAlignmentX(Component.LEFT_ALIGNMENT);
-        receiptContentPanel.add(categoryRow);
+        // Create a grid panel for proper table-like alignment
+        JPanel detailsGrid = new JPanel();
+        detailsGrid.setLayout(new GridLayout(4, 2, 10, 8)); // 4 rows, 2 columns, with gaps
+        detailsGrid.setBackground(Color.WHITE);
+        detailsGrid.setMaximumSize(new Dimension(300, 120));
 
-        receiptContentPanel.add(Box.createVerticalStrut(8));
+        // Category row
+        JLabel categoryLabel = new JLabel("Category:");
+        categoryLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        categoryLabel.setForeground(ThemeManager.getDBlue());
+        categoryLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
-        // Reward
-        JPanel rewardRow = createReceiptRow("Reward:", selectedReward);
-        rewardRow.setAlignmentX(Component.LEFT_ALIGNMENT);
-        receiptContentPanel.add(rewardRow);
+        categoryValue = new JLabel(selectedCategory != null ? selectedCategory : "Loading...");
+        categoryValue.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
+        categoryValue.setForeground(ThemeManager.getBlack());
+        categoryValue.setHorizontalAlignment(SwingConstants.LEFT);
 
-        receiptContentPanel.add(Box.createVerticalStrut(8));
+        detailsGrid.add(categoryLabel);
+        detailsGrid.add(categoryValue);
 
-        // Points Used
-        JPanel pointsRow = createReceiptRow("Points Used:", String.valueOf(pointsUsed));
-        pointsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
-        receiptContentPanel.add(pointsRow);
+        // Reward row
+        JLabel rewardLabel = new JLabel("Reward:");
+        rewardLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        rewardLabel.setForeground(ThemeManager.getDBlue());
+        rewardLabel.setHorizontalAlignment(SwingConstants.LEFT);
 
-        receiptContentPanel.add(Box.createVerticalStrut(8));
+        rewardValue = new JLabel(selectedReward != null ? selectedReward : "Loading...");
+        rewardValue.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
+        rewardValue.setForeground(ThemeManager.getBlack());
+        rewardValue.setHorizontalAlignment(SwingConstants.LEFT);
 
-        // Date & Time
-        JPanel dateRow = createReceiptRow("Date & Time:", getCurrentDateTime());
-        dateRow.setAlignmentX(Component.LEFT_ALIGNMENT);
-        receiptContentPanel.add(dateRow);
+        detailsGrid.add(rewardLabel);
+        detailsGrid.add(rewardValue);
+
+        // Points Used row
+        JLabel pointsLabel = new JLabel("Points Used:");
+        pointsLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        pointsLabel.setForeground(ThemeManager.getDBlue());
+        pointsLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+        pointsValue = new JLabel(pointsUsed > 0 ? String.valueOf(pointsUsed) : "0");
+        pointsValue.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
+        pointsValue.setForeground(ThemeManager.getBlack());
+        pointsValue.setHorizontalAlignment(SwingConstants.LEFT);
+
+        detailsGrid.add(pointsLabel);
+        detailsGrid.add(pointsValue);
+
+        // Date & Time row
+        JLabel dateLabel = new JLabel("Date & Time:");
+        dateLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        dateLabel.setForeground(ThemeManager.getDBlue());
+        dateLabel.setHorizontalAlignment(SwingConstants.LEFT);
+
+        dateValue = new JLabel(getCurrentDateTime());
+        dateValue.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
+        dateValue.setForeground(ThemeManager.getBlack());
+        dateValue.setHorizontalAlignment(SwingConstants.LEFT);
+
+        detailsGrid.add(dateLabel);
+        detailsGrid.add(dateValue);
+
+        receiptContentPanel.add(detailsGrid);
 
         receiptContentPanel.add(Box.createVerticalStrut(10));
 
@@ -124,9 +173,9 @@ public class RewardsReceiptPage extends JPanel {
         receiptContentPanel.add(Box.createVerticalStrut(10));
 
         // Reference ID
-        JLabel referenceLabel = new JLabel("Reference ID: RWD" + System.currentTimeMillis() % 1000000);
-        referenceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        referenceLabel.setForeground(ThemeManager.getGray());
+        referenceLabel = new JLabel("Reference ID: RWD" + (System.currentTimeMillis() % 1000000));
+        referenceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        referenceLabel.setForeground(ThemeManager.getBlack());
         referenceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         receiptContentPanel.add(referenceLabel);
 
@@ -147,7 +196,7 @@ public class RewardsReceiptPage extends JPanel {
         JButton homeButton = new JButton("Back to Home");
         homeButton.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         homeButton.setForeground(Color.WHITE);
-        homeButton.setBackground(ThemeManager.getPBlue());
+        homeButton.setBackground(ThemeManager.getDvBlue());
         homeButton.setPreferredSize(new Dimension(200, 40));
         homeButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         homeButton.addActionListener(e -> onButtonClick.accept("Launch"));
@@ -163,37 +212,44 @@ public class RewardsReceiptPage extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         add(scrollPane, BorderLayout.CENTER);
+
+        revalidate();
+        repaint();
     }
 
     public void setReceiptDetails(String category, String reward, int points) {
         this.selectedCategory = category;
         this.selectedReward = reward;
         this.pointsUsed = points;
+
+        // Refresh UI with new values
+        refreshUI();
     }
 
-    private JPanel createReceiptRow(String labelText, String value) {
-        JPanel row = new JPanel(new BorderLayout());
-        row.setBackground(Color.WHITE);
-        row.setOpaque(false);
+    private void refreshUI() {
+        // Update all labels with current values
+        if (categoryValue != null) {
+            categoryValue.setText(selectedCategory != null ? selectedCategory : "N/A");
+        }
+        if (rewardValue != null) {
+            rewardValue.setText(selectedReward != null ? selectedReward : "N/A");
+        }
+        if (pointsValue != null) {
+            pointsValue.setText(String.valueOf(pointsUsed));
+        }
+        if (dateValue != null) {
+            dateValue.setText(getCurrentDateTime());
+        }
+        if (referenceLabel != null) {
+            referenceLabel.setText("Reference ID: RWD" + (System.currentTimeMillis() % 1000000));
+        }
 
-        JLabel label = new JLabel(labelText);
-        label.setFont(fontLoader.loadFont(Font.BOLD, 13f, "Quicksand-Regular"));
-        label.setForeground(ThemeManager.getDBlue());
-        label.setPreferredSize(new Dimension(100, 20));
-
-        JLabel valueLabel = new JLabel(value);
-        valueLabel.setFont(fontLoader.loadFont(Font.PLAIN, 13f, "Quicksand-Regular"));
-        valueLabel.setForeground(ThemeManager.getBlack());
-        valueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-
-        row.add(label, BorderLayout.WEST);
-        row.add(valueLabel, BorderLayout.CENTER);
-
-        return row;
+        revalidate();
+        repaint();
     }
 
     private String getCurrentDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy HH:mm");
         return dateFormat.format(new Date());
     }
 }

@@ -591,16 +591,17 @@ public class MainFrame extends JFrame {
     }
 
     private void handleRewardsResult(String result) {
-        // Handle Rewards2 navigation: Rewards2:category:reward
+        // Handle Rewards2 navigation: Rewards2:category:rewardDescription:points
         if (result.startsWith("Rewards2:")) {
-            String[] parts = result.split(":");
-            if (parts.length >= 3) {
+            String[] parts = result.split(":", 4);
+            if (parts.length >= 4) {
                 String category = parts[1];
-                String reward = parts[2];
+                String rewardDescription = parts[2];
+                int pointsCost = Integer.parseInt(parts[3]);
 
                 for (Component comp : mainPanel.getComponents()) {
                     if (comp instanceof Rewards2 rewards2) {
-                        rewards2.setSelectedReward(reward, category);
+                        rewards2.setSelectedReward(rewardDescription, category, pointsCost);
                         break;
                     }
                 }

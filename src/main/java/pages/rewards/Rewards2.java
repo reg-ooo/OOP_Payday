@@ -2,34 +2,45 @@ package pages.rewards;
 
 import Factory.cashIn.CashInPageFactory;
 import Factory.cashIn.ConcreteCashInPageFactory;
+import data.dao.RewardsDAOImpl;
+import data.model.UserInfo;
 import util.FontLoader;
 import util.ThemeManager;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.geom.RoundRectangle2D;
 import java.util.function.Consumer;
 
 public class Rewards2 extends JPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
+    private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
     private String selectedReward;
     private String selectedCategory;
     private final CashInPageFactory factory;
+    private final RewardsDAOImpl rewardsDAO;
+    private int pointsCost = 0;
 
     private JLabel balanceLabel;
-    private JTextField pointsField;
+    private JButton proceedButton;
+    private JLabel pointsDifferenceLabel;
+    private JProgressBar pointsProgressBar;
 
     public Rewards2(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         this.factory = new ConcreteCashInPageFactory();
-        setBackground(Color.WHITE);
+        this.rewardsDAO = RewardsDAOImpl.getInstance();
+        setBackground(themeManager.getWhite());
         setLayout(new BorderLayout());
     }
 
-    public void setSelectedReward(String reward, String category) {
+    public void setSelectedReward(String reward, String category, int pointsCost) {
         this.selectedReward = reward;
         this.selectedCategory = category;
-        // Refresh UI with the selected reward
+        this.pointsCost = pointsCost;
+
         removeAll();
         setupUI();
         revalidate();
@@ -40,163 +51,342 @@ public class Rewards2 extends JPanel {
         // Main content panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBackground(themeManager.getWhite());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
         // ===== BACK BUTTON =====
         JPanel backPanel = factory.createHeaderPanel(
                 factory.createBackLabel(() -> onButtonClick.accept("RewardsBack")));
-        backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        backPanel.setBackground(themeManager.getWhite());
         mainPanel.add(backPanel);
 
-        mainPanel.add(Box.createVerticalStrut(10));
+        mainPanel.add(Box.createVerticalStrut(20));
 
         // ===== MAIN TITLE SECTION =====
-        JPanel mainTitlePanel = new JPanel();
-        mainTitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        mainTitlePanel.setBackground(Color.WHITE);
-        mainTitlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
-        mainTitlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         JLabel mainTitleLabel = new JLabel("Redeem Reward");
-        mainTitleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 28f, "Quicksand-Bold"));
+        mainTitleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
         mainTitleLabel.setForeground(ThemeManager.getDBlue());
-
-        mainTitlePanel.add(mainTitleLabel);
-
-        mainPanel.add(mainTitlePanel);
-
-        mainPanel.add(Box.createVerticalStrut(25));
-
-        // ===== REWARD TITLE SECTION =====
-        JPanel rewardTitlePanel = new JPanel();
-        rewardTitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        rewardTitlePanel.setBackground(Color.WHITE);
-        rewardTitlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
-        rewardTitlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel rewardEmojiLabel = new JLabel(getCategoryEmoji(selectedCategory));
-        rewardEmojiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 24));
-
-        JLabel rewardTitleLabel = new JLabel(selectedReward);
-        rewardTitleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"));
-        rewardTitleLabel.setForeground(ThemeManager.getDBlue());
-
-        rewardTitlePanel.add(rewardTitleLabel);
-        rewardTitlePanel.add(rewardEmojiLabel);
-
-        mainPanel.add(rewardTitlePanel);
-
-        mainPanel.add(Box.createVerticalStrut(20));
-
-        // ===== CURRENT POINTS DISPLAY =====
-        JPanel pointsDisplayPanel = new JPanel();
-        pointsDisplayPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        pointsDisplayPanel.setBackground(Color.WHITE);
-        pointsDisplayPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-
-        JLabel currentPointsLabel = new JLabel("Current Points: ");
-        currentPointsLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        currentPointsLabel.setForeground(ThemeManager.getDBlue());
-
-        balanceLabel = new JLabel("0");
-        balanceLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        balanceLabel.setForeground(ThemeManager.getGreen());
-
-        pointsDisplayPanel.add(currentPointsLabel);
-        pointsDisplayPanel.add(balanceLabel);
-
-        mainPanel.add(pointsDisplayPanel);
-
-        mainPanel.add(Box.createVerticalStrut(20));
-
-        // ===== POINTS REQUIRED SECTION =====
-        JPanel inputPanel = new JPanel();
-        inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        inputPanel.setBackground(Color.WHITE);
-        inputPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-        inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        JLabel inputLabel = new JLabel("Points Required: ");
-        inputLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-        inputLabel.setForeground(ThemeManager.getDBlue());
-
-        pointsField = new JTextField(15);
-        pointsField.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        pointsField.setText(extractPoints(selectedReward));
-        pointsField.setEditable(false);
-        pointsField.setBackground(new Color(240, 240, 240));
-
-        inputPanel.add(inputLabel);
-        inputPanel.add(pointsField);
-
-        mainPanel.add(inputPanel);
+        mainTitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(mainTitleLabel);
 
         mainPanel.add(Box.createVerticalStrut(30));
 
-        // ===== PROCEED BUTTON =====
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        buttonPanel.setBackground(Color.WHITE);
-        buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        // ===== REWARD PREVIEW CARD =====
+        JPanel rewardCard = createRewardPreviewCard();
+        rewardCard.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(rewardCard);
 
-        JButton proceedButton = new JButton("Proceed");
-        proceedButton.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        proceedButton.setForeground(Color.WHITE);
-        proceedButton.setBackground(ThemeManager.getPBlue());
-        proceedButton.setPreferredSize(new Dimension(200, 40));
-        proceedButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        proceedButton.addActionListener(e -> {
-            int pointsRequired = Integer.parseInt(extractPoints(selectedReward));
-            onButtonClick.accept("Rewards3:" + selectedCategory + ":" + selectedReward + ":" + pointsRequired);
-        });
+        mainPanel.add(Box.createVerticalStrut(25));
 
-        buttonPanel.add(proceedButton);
+        // ===== REWARD DETAILS SECTION =====
+        JPanel detailsPanel = createRewardDetailsPanel();
+        detailsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(detailsPanel);
 
+        mainPanel.add(Box.createVerticalStrut(20));
+
+        // ===== POINTS COMPARISON SECTION =====
+        JPanel comparisonPanel = createPointsComparisonPanel();
+        comparisonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainPanel.add(comparisonPanel);
+
+        mainPanel.add(Box.createVerticalStrut(25));
+
+
+        // ===== ACTION BUTTONS =====
+        JPanel buttonPanel = createActionButtonsPanel();
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(buttonPanel);
 
         mainPanel.add(Box.createVerticalGlue());
 
         JScrollPane scrollPane = new JScrollPane(mainPanel);
+
+        // Completely hide both scroll bars
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        // Remove the border
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
+
+        // Optional: Enable mouse wheel scrolling even when scroll bars are hidden
+        scrollPane.setWheelScrollingEnabled(true);
 
         add(scrollPane, BorderLayout.CENTER);
 
-        // Update balance display
         updateBalanceDisplay();
     }
 
-    private String extractPoints(String reward) {
-        // Extract the numeric value from reward string like "₱50 GCash Voucher"
-        String[] parts = reward.split(" ");
-        if (parts.length > 0) {
-            return parts[0].replace("₱", "");
+    private JPanel createRewardPreviewCard() {
+        JPanel card = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Updated gradient: DvBlue to VBlue
+                GradientPaint gradient = new GradientPaint(
+                        0, 0, ThemeManager.getVBlue(),
+                        getWidth(), getHeight(), ThemeManager.getPBlue()
+                );
+                g2.setPaint(gradient);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+
+                g2.dispose();
+            }
+        };
+        card.setLayout(new BorderLayout(20, 20));
+        card.setPreferredSize(new Dimension(320, 140));
+        card.setMaximumSize(new Dimension(320, 140));
+        card.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+        card.setOpaque(false);
+
+        // Left: Emoji/Icon
+        JLabel emojiLabel = new JLabel(getCategoryEmoji(selectedCategory));
+        emojiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 48));
+        emojiLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        emojiLabel.setPreferredSize(new Dimension(80, 80));
+        emojiLabel.setForeground(themeManager.getWhite()); // Add this line
+
+        // Center: Reward Info
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setOpaque(false);
+
+        JLabel rewardLabel = new JLabel(selectedReward);
+        rewardLabel.setFont(fontLoader.loadFont(Font.BOLD, 15f, "Quicksand-Bold"));
+        rewardLabel.setForeground(Color.WHITE);
+        rewardLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel categoryLabel = new JLabel(selectedCategory);
+        categoryLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        categoryLabel.setForeground(themeManager.getWhite());
+        categoryLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // Points badge
+        JLabel pointsBadge = new JLabel(pointsCost + " pts");
+        pointsBadge.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        pointsBadge.setForeground(themeManager.getGold()); // Gold color for points
+        pointsBadge.setAlignmentX(Component.LEFT_ALIGNMENT);
+        pointsBadge.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
+
+        infoPanel.add(rewardLabel);
+        infoPanel.add(Box.createVerticalStrut(5));
+        infoPanel.add(categoryLabel);
+        infoPanel.add(pointsBadge);
+
+        card.add(emojiLabel, BorderLayout.WEST);
+        card.add(infoPanel, BorderLayout.CENTER);
+
+        return card;
+    }
+
+    private JPanel createRewardDetailsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 1, 10, 10));
+        panel.setBackground(themeManager.getWhite());
+        panel.setMaximumSize(new Dimension(320, 120));
+
+        // Current Points Card
+        JPanel currentPointsCard = createDetailCard("Current Balance",
+                String.valueOf(getCurrentPoints()) + " pts", ThemeManager.getGreen(), "💰");
+
+        // Required Points Card
+        JPanel requiredPointsCard = createDetailCard("Required Points",
+                String.valueOf(pointsCost) + " pts", ThemeManager.getVBlue(), "🎯");
+
+        panel.add(currentPointsCard);
+        panel.add(requiredPointsCard);
+
+        return panel;
+    }
+
+    private JPanel createDetailCard(String title, String value, Color color, String emoji) {
+        JPanel card = new JPanel();
+        card.setLayout(new BorderLayout(10, 5));
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(ThemeManager.getVBlue(), 2),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        card.setPreferredSize(new Dimension(150, 80));
+
+        JLabel emojiLabel = new JLabel(emoji);
+        emojiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
+        titleLabel.setForeground(ThemeManager.getPBlue());
+
+        JLabel valueLabel = new JLabel(value);
+        valueLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
+        valueLabel.setForeground(color);
+
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.setBackground(Color.WHITE);
+        leftPanel.add(emojiLabel, BorderLayout.NORTH);
+
+        JPanel rightPanel = new JPanel();
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.setBackground(Color.WHITE);
+        rightPanel.add(titleLabel);
+        rightPanel.add(Box.createVerticalStrut(5));
+        rightPanel.add(valueLabel);
+
+        card.add(leftPanel, BorderLayout.WEST);
+        card.add(rightPanel, BorderLayout.CENTER);
+
+        return card;
+    }
+
+    private JPanel createPointsComparisonPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(themeManager.getWhite());
+        panel.setMaximumSize(new Dimension(320, 80));
+
+        int currentPoints = getCurrentPoints();
+        int difference = currentPoints - pointsCost;
+
+        // Points difference indicator
+        pointsDifferenceLabel = new JLabel();
+        pointsDifferenceLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        pointsDifferenceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Advice message
+        JLabel adviceLabel = new JLabel();
+        adviceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
+        adviceLabel.setForeground(ThemeManager.getDGray());
+        adviceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        if (difference >= 0) {
+            pointsDifferenceLabel.setText("✓ You have " + difference + " points remaining");
+            pointsDifferenceLabel.setForeground(ThemeManager.getGreen());
+            adviceLabel.setText("You can redeem this reward!");
+        } else {
+            pointsDifferenceLabel.setText("✗ You need " + Math.abs(difference) + " more points");
+            pointsDifferenceLabel.setForeground(ThemeManager.getRed());
+            adviceLabel.setText("Earn more points to redeem this reward");
         }
-        return "0";
+
+        panel.add(pointsDifferenceLabel);
+        panel.add(Box.createVerticalStrut(5));
+        panel.add(adviceLabel);
+
+        return panel;
+    }
+
+    private JPanel createActionButtonsPanel() {
+        JPanel panel = new JPanel();
+        panel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0));
+        panel.setBackground(themeManager.getWhite());
+        panel.setMaximumSize(new Dimension(400, 80));
+
+        // Cancel Button
+        JButton cancelButton = createStyledButton("Cancel", ThemeManager.getDGray(),
+                () -> onButtonClick.accept("RewardsBack"));
+        cancelButton.setForeground(Color.WHITE);
+
+        // Proceed Button
+        proceedButton = createStyledButton("Redeem Now", ThemeManager.getDvBlue(),
+                () -> onButtonClick.accept("Rewards3:" + selectedCategory + ":" + selectedReward + ":" + pointsCost));
+
+        panel.add(cancelButton);
+        panel.add(proceedButton);
+
+        return panel;
+    }
+
+    private JButton createStyledButton(String text, Color bgColor, Runnable action) {
+        JButton button = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                if (getModel().isPressed()) {
+                    g2.setColor(bgColor.darker());
+                } else if (getModel().isRollover()) {
+                    g2.setColor(bgColor.brighter());
+                } else {
+                    g2.setColor(bgColor);
+                }
+
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+                g2.dispose();
+
+                super.paintComponent(g);
+            }
+        };
+
+        button.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
+        button.setForeground(Color.WHITE);
+        button.setPreferredSize(new Dimension(140, 45));
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+
+        button.addActionListener(e -> action.run());
+
+        return button;
     }
 
     private String getCategoryEmoji(String category) {
-        switch (category) {
-            case "Vouchers":
-                return "🎟️";
-            case "Load":
-                return "📱";
-            case "Donation":
-                return "❤️";
-            default:
-                return "🎁";
+        int points = pointsCost;
+
+        if (points <= 50) {
+            return "🎁";
+        } else if (points <= 100) {
+            return "🎀";
+        } else if (points <= 200) {
+            return "🎊";
+        } else {
+            return "🏆";
         }
     }
 
-    private void updateBalanceDisplay(String value) {
-        if (balanceLabel != null) {
-            balanceLabel.setText(value + " pts");
-        }
+    public int getCurrentPoints() {
+        double points = rewardsDAO.getRewardsPoints();
+        return (int) Math.round(points);
     }
 
     private void updateBalanceDisplay() {
-        // In a real scenario, fetch from UserInfo
-        updateBalanceDisplay("500");
+        int currentPoints = UserInfo.getInstance().isLoggedIn() ? getCurrentPoints() : 0;
+
+        // Update points comparison
+        if (pointsDifferenceLabel != null) {
+            int difference = currentPoints - pointsCost;
+            if (difference >= 0) {
+                pointsDifferenceLabel.setText("You have " + difference + " points remaining");
+                pointsDifferenceLabel.setForeground(ThemeManager.getGreen());
+            } else {
+                pointsDifferenceLabel.setText("You need " + Math.abs(difference) + " more points");
+                pointsDifferenceLabel.setForeground(ThemeManager.getRed());
+            }
+        }
+
+        // Update progress bar
+        if (pointsProgressBar != null) {
+            int progress = (int) ((double) currentPoints / pointsCost * 100);
+            pointsProgressBar.setValue(Math.min(progress, 100));
+
+            // Update progress bar color
+            if (progress >= 100) {
+                pointsProgressBar.setForeground(ThemeManager.getGreen());
+            } else if (progress >= 50) {
+                pointsProgressBar.setForeground(ThemeManager.getVBlue());
+            } else {
+                pointsProgressBar.setForeground(ThemeManager.getRed());
+            }
+        }
+
+        // Update button state
+        if (proceedButton != null) {
+            boolean canAfford = currentPoints >= pointsCost;
+            proceedButton.setEnabled(canAfford);
+            proceedButton.setBackground(canAfford ? ThemeManager.getDvBlue() : ThemeManager.getDGray());
+        }
     }
 }

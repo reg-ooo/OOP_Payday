@@ -45,13 +45,13 @@ public class RewardsDAOImpl implements RewardsDAO{
     public void subtractReward(double rewardAmount) {
         String query = "UPDATE Rewards SET rewardsPoints = rewardsPoints - ? WHERE rewardsID = ?";
         try(PreparedStatement pstmt = database.prepareStatement(query)){
-            double calculatedReward = calculateReward(rewardAmount);
+            // Remove calculateReward() - use rewardAmount directly
             int userId = UserInfo.getInstance().getCurrentUserId();
 
-            pstmt.setDouble(1, calculatedReward);
+            pstmt.setDouble(1, rewardAmount); // Use the actual points amount
             pstmt.setInt(2, userId);
 
-            System.out.println("Reward: " + calculatedReward + ", UserID: " + userId);
+            System.out.println("Subtracting Reward Points: " + rewardAmount + ", UserID: " + userId);
             int rowsUpdated = pstmt.executeUpdate();
             System.out.println("Rows updated: " + rowsUpdated);
         }catch(Exception e){

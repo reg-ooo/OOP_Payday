@@ -419,13 +419,18 @@ public class StoresPage2 extends JPanel {
                 return;
             }
 
+            if (accountRef.length() != 11 || amountText.length() > 11) {
+                DialogManager.showEmptyAccountDialog(this, "Must Be 11 Digits");
+                return;
+            }
+
             if (accountRef.isEmpty() || accountRef.equals(defaultAccountPlaceholder)) {
-                JOptionPane.showMessageDialog(this, "Please enter your reference number.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                DialogManager.showEmptyAccountDialog(this, "Please enter number");
                 return;
             }
 
             if (amountText.isEmpty() || amountText.equals(defaultAmountPlaceholder) || amountText.equals("0") || amountText.equals("0.00")) {
-                JOptionPane.showMessageDialog(this, "Please enter a valid amount.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                DialogManager.showEmptyAmountDialog(this, "Please enter amount");
                 return;
             }
 

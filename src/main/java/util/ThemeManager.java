@@ -28,6 +28,7 @@ public class ThemeManager {
     private static final Color gradientLBlue = new Color(100, 180, 255);
     private static final Color red = new Color(255, 0 ,0);
     private static final Color green = new Color(0, 128, 0);
+    private static final Color gold = new Color(255, 215, 0);
 
     private static final Color transparent = new Color(0,0,0,0);
 
@@ -151,6 +152,8 @@ public class ThemeManager {
     public static Color getDvBlue() {
         return dvBlue;
     }
+
+    public static Color getGold() {return gold;}
 
     public static Color getTransparent() {
         return transparent;
