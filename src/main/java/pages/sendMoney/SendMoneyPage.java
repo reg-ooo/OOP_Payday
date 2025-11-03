@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 
 import Factory.sendMoney.SendMoneyPage1Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
+import data.CommandTemplateMethod.SendMoneyCommand;
 import data.model.UserInfo;
 import util.DialogManager;
 import util.ThemeManager;
@@ -100,6 +101,7 @@ public class SendMoneyPage extends JPanel {
         String enteredAmount = getEnteredAmount();
         String enteredPhone = getEnteredPhoneNumber();
 
+
         // Validate phone number
         if (enteredPhone.isEmpty()) {
             DialogManager.showEmptyAccountDialog(this, "Please enter number");
@@ -144,6 +146,11 @@ public class SendMoneyPage extends JPanel {
             JOptionPane.showMessageDialog(this, "Error checking balance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+            SendMoneyCommand SMC = new SendMoneyCommand(getEnteredPhoneNumber(), Double.parseDouble(getEnteredAmount()));
+            if(SMC.sendToOwnNumber()) {
+                DialogManager.showErrorDialog(this, "Cannot send money to your own number");
+                return;
+            }
             onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
     }
 
