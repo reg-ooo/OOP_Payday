@@ -5,25 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/data/CommandTemplateMethod/CashInCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/components/customDialog/CustomSuccessDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/components/customDialog/CustomSuccessDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/DialogManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/DialogManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

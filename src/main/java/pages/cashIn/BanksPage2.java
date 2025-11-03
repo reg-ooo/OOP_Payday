@@ -1,5 +1,6 @@
 package pages.cashIn;
 
+import data.CommandTemplateMethod.CashInCommand;
 import data.model.UserInfo; // <-- ADDED: Import UserInfo to access the balance
 import util.ThemeManager;
 import util.FontLoader;
