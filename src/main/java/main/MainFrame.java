@@ -24,7 +24,9 @@ import pages.payBills.PayBills2;
 import pages.payBills.PayBills3;
 import pages.payBills.PayBillsReceiptPage;
 import pages.rewards.RewardsPage;
-import pages.rewards.RewardsPage2;
+import pages.rewards.Rewards2;
+import pages.rewards.Rewards3;
+import pages.rewards.RewardsReceiptPage;
 import pages.sendMoney.SendMoneyPage;
 import pages.sendMoney.SendMoneyPage2;
 import pages.sendMoney.SendMoneyPage3;
@@ -44,10 +46,11 @@ public class MainFrame extends JFrame {
     // --- Added reference pages for data access and handlers ---
     private final QRPage qrPage = QRPage.getInstance(this::handleCashInBanks2Result);
     private final CashInReceiptPage cashInReceiptPage = CashInReceiptPage.getInstance(this::handleCashInResult);
-    private final TransactionHistoryPage transactionHistoryPage = TransactionHistoryPage.getInstance(this::handleTransactionHistoryResult);
+    private final TransactionHistoryPage transactionHistoryPage = TransactionHistoryPage
+            .getInstance(this::handleTransactionHistoryResult);
     // --- END FIX ---
 
-    public MainFrame(){
+    public MainFrame() {
         setMainFrame();
         setupUI();
         resetCards();
@@ -60,7 +63,7 @@ public class MainFrame extends JFrame {
         MainFrame.currentCard = "Launch";
     }
 
-    public void setMainFrame(){
+    public void setMainFrame() {
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(420, 650);
         mainFrame.setLocationRelativeTo(null);
@@ -69,7 +72,7 @@ public class MainFrame extends JFrame {
         mainFrame.setUndecorated(true);
     }
 
-    private void setupUI(){
+    private void setupUI() {
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
         mainPanel.setBackground(ThemeManager.getWhite());
@@ -80,18 +83,17 @@ public class MainFrame extends JFrame {
         mainPanel.add(new LoginPage(this::handleLoginResult), "Login");
         mainPanel.add(new RegisterPage(this::handleRegisterResult), "Register");
 
-        //NAVBAR PAGES
+        // NAVBAR PAGES
         mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
         mainPanel.add(ProfilePage.getInstance(this::handleProfileResult), "Profile");
         mainPanel.add(transactionHistoryPage, "TransactionHistory");
 
-
-        //SEND MONEY PAGES
+        // SEND MONEY PAGES
         mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
         mainPanel.add(new SendMoneyPage2(this::handleSendMoney2Result), "SendMoney2");
         mainPanel.add(new SendMoneyPage3(this::handleSendMoney3Result), "SendMoney3");
 
-        //CASH IN PAGES
+        // CASH IN PAGES
         mainPanel.add(new CashInPage(this::handleCashInResult), "CashIn");
         mainPanel.add(new BanksPage(this::handleCashInBanksResult), "CashInBanks");
         mainPanel.add(new StoresPage(this::handleCashInStoresResult), "CashInStores");
@@ -103,22 +105,24 @@ public class MainFrame extends JFrame {
 
         mainPanel.add(cashInReceiptPage, "CashInReceipt");
 
-        //CASH OUT PAGES
+        // CASH OUT PAGES
         mainPanel.add(new CashOutPage(this::handleCashOutResult), "CashOut");
         mainPanel.add(new CashOutPage2(this::handleCashOutResult), "CashOut2");
         mainPanel.add(new CashOutReceiptPage(this::handleCashOutResult), "CashOutSuccess");
 
-        //BUY LOAD PAGES
+        // BUY LOAD PAGES
         mainPanel.add(new BuyLoadPage(this::handleBuyLoadResult), "BuyLoad");
         mainPanel.add(new BuyLoadPage2(this::handleBuyLoadResult), "BuyLoad2");
         mainPanel.add(new BuyLoadPage3(this::handleBuyLoadResult), "BuyLoad3");
         mainPanel.add(new BuyLoadReceiptPage(this::handleBuyLoadResult), "BuyLoadReceipt");
 
-        //REWARDS PAGES
+        // REWARDS PAGES
         mainPanel.add(new RewardsPage(this::handleRewardsResult), "Rewards");
-        mainPanel.add(new RewardsPage2(this::handleRewards2Result), "Rewards2");
+        mainPanel.add(new Rewards2(this::handleRewardsResult), "Rewards2");
+        mainPanel.add(new Rewards3(this::handleRewardsResult), "Rewards3");
+        mainPanel.add(new RewardsReceiptPage(this::handleRewardsResult), "RewardsReceipt");
 
-        //PAY BILLS PAGES
+        // PAY BILLS PAGES
         mainPanel.add(new PayBills(this::handlePayBillsResult), "PayBills");
         mainPanel.add(new PayBills2(this::handlePayBillsResult), "PayBills2");
         mainPanel.add(new PayBills3(this::handlePayBillsResult), "PayBills3");
@@ -155,7 +159,8 @@ public class MainFrame extends JFrame {
      */
     private void handleCashInReceiptHandler() {
         // 1. Get the data stored in QRPage (Relies on public fields in QRPage.java)
-        // NOTE: These fields must exist in QRPage.java (e.g., public String currentEntityName;)
+        // NOTE: These fields must exist in QRPage.java (e.g., public String
+        // currentEntityName;)
         String entityName = qrPage.currentEntityName;
         String accountRef = qrPage.currentAccountRef;
         String amount = qrPage.currentAmount;
@@ -171,14 +176,12 @@ public class MainFrame extends JFrame {
                 accountRef,
                 amount,
                 referenceNo,
-                timestamp
-        );
+                timestamp);
 
         // 4. Switch the view to the receipt page
         slideContentTransition("CashInReceipt", 1);
     }
     // --- END Utility methods ---
-
 
     private void handleNavBarClick(String result) {
         prevCard = currentCard;
@@ -219,7 +222,7 @@ public class MainFrame extends JFrame {
                 }
                 slideContentTransition("SendMoney", 1);
             }
-            case "CashOut" ->  {
+            case "CashOut" -> {
                 Component[] components = mainPanel.getComponents();
                 for (Component comp : components) {
                     if (comp instanceof CashOutPage cashOutPage) {
@@ -235,7 +238,8 @@ public class MainFrame extends JFrame {
             case "BuyLoad" -> slideContentTransition("BuyLoad", 1);
             case "Rewards" -> slideContentTransition("Rewards", 1);
             case "Profile" -> slideContentTransition("Profile", 1);
-            case "TransactionHistory" -> slideContentTransition("TransactionHistory", 1); // ADDED: Routing from LaunchPage
+            case "TransactionHistory" -> slideContentTransition("TransactionHistory", 1); // ADDED: Routing from
+                                                                                          // LaunchPage
             default -> System.out.println("Unknown action: " + result);
         }
     }
@@ -314,7 +318,8 @@ public class MainFrame extends JFrame {
     }
 
     /**
-     * Handles results from StoresPage2, or the QRPage (when launched by StoresPage2).
+     * Handles results from StoresPage2, or the QRPage (when launched by
+     * StoresPage2).
      */
     private void handleCashInStores2Result(String result) {
 
@@ -348,14 +353,11 @@ public class MainFrame extends JFrame {
     private void handlePayBillsResult(String result) {
         if (result.equals("Launch")) {
             slideContentTransition("Launch", -1);
-        }
-        else if (result.equals("PayBills")) {
+        } else if (result.equals("PayBills")) {
             slideContentTransition("PayBills", -1);
-        }
-        else if (result.equals("PayBills2")) {
+        } else if (result.equals("PayBills2")) {
             slideContentTransition("PayBills2", 1);
-        }
-        else if (result.startsWith("PayBills2:")) {
+        } else if (result.startsWith("PayBills2:")) {
             String[] parts = result.split(":");
             if (parts.length >= 3) {
                 String category = parts[1];
@@ -369,8 +371,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("PayBills2", 1);
-        }
-        else if (result.startsWith("PayBills2Back:")) {
+        } else if (result.startsWith("PayBills2Back:")) {
             String[] parts = result.split(":");
             if (parts.length >= 3) {
                 String category = parts[1];
@@ -384,8 +385,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("PayBills2", -1);
-        }
-        else if (result.startsWith("PayBills3:")) {
+        } else if (result.startsWith("PayBills3:")) {
             String[] parts = result.split(":");
             if (parts.length >= 5) {
                 String category = parts[1];
@@ -401,8 +401,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("PayBills3", 1);
-        }
-        else if (result.startsWith("PayBillsReceipt:")) {
+        } else if (result.startsWith("PayBillsReceipt:")) {
             String[] parts = result.split(":");
             if (parts.length >= 5) {
                 String category = parts[1];
@@ -418,8 +417,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("PayBillsReceipt", 1);
-        }
-        else if (result.startsWith("PayBillsSuccess")) {
+        } else if (result.startsWith("PayBillsSuccess")) {
             slideContentTransition("Launch", -1);
         }
     }
@@ -427,11 +425,9 @@ public class MainFrame extends JFrame {
     private void handleBuyLoadResult(String result) {
         if (result.equals("Launch")) {
             slideContentTransition("Launch", -1);
-        }
-        else if (result.equals("BuyLoad")) {
+        } else if (result.equals("BuyLoad")) {
             slideContentTransition("BuyLoad", -1);
-        }
-        else if (result.startsWith("BuyLoad2:")) {
+        } else if (result.startsWith("BuyLoad2:")) {
             String network = result.substring("BuyLoad2:".length());
 
             for (Component comp : mainPanel.getComponents()) {
@@ -441,8 +437,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("BuyLoad2", 1);
-        }
-        else if (result.startsWith("BuyLoad2Back:")) {
+        } else if (result.startsWith("BuyLoad2Back:")) {
             String network = result.substring("BuyLoad2Back:".length());
 
             for (Component comp : mainPanel.getComponents()) {
@@ -452,8 +447,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("BuyLoad2", -1);
-        }
-        else if (result.startsWith("BuyLoad3:")) {
+        } else if (result.startsWith("BuyLoad3:")) {
             String[] parts = result.split(":");
             if (parts.length >= 4) {
                 String network = parts[1];
@@ -468,8 +462,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("BuyLoad3", 1);
-        }
-        else if (result.startsWith("BuyLoadReceipt:")) {
+        } else if (result.startsWith("BuyLoadReceipt:")) {
             String[] parts = result.split(":");
             if (parts.length >= 4) {
                 String network = parts[1];
@@ -484,8 +477,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("BuyLoadReceipt", 1);
-        }
-        else if (result.startsWith("BuyLoadSuccess")) {
+        } else if (result.startsWith("BuyLoadSuccess")) {
             slideContentTransition("Launch", -1);
         }
     }
@@ -493,8 +485,7 @@ public class MainFrame extends JFrame {
     private void handleCashOutResult(String result) {
         if (result.startsWith("Launch")) {
             slideContentTransition("Launch", -1);
-        }
-        else if (result.equals("CashOut")) {
+        } else if (result.equals("CashOut")) {
             slideContentTransition("CashOut", -1);
 
             for (Component comp : mainPanel.getComponents()) {
@@ -503,8 +494,7 @@ public class MainFrame extends JFrame {
                     break;
                 }
             }
-        }
-        else if (result.startsWith("CashOut2:")) {
+        } else if (result.startsWith("CashOut2:")) {
             String amount = result.substring("CashOut2:".length());
 
             for (Component comp : mainPanel.getComponents()) {
@@ -514,8 +504,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("CashOut2", 1);
-        }
-        else if (result.startsWith("CashOutSuccess:")) {
+        } else if (result.startsWith("CashOutSuccess:")) {
             String amount = result.substring("CashOutSuccess:".length());
             String service = "Cash Out";
 
@@ -549,11 +538,9 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("SendMoney2", 1);
-        }
-        else if (result.equals("Launch")) {
+        } else if (result.equals("Launch")) {
             slideContentTransition("Launch", -1);
-        }
-        else {
+        } else {
             System.out.println("Unknown action: " + result);
         }
     }
@@ -580,8 +567,7 @@ public class MainFrame extends JFrame {
                 }
             }
             slideContentTransition("SendMoney3", 1);
-        }
-        else if (result.equals("SendMoney")) {
+        } else if (result.equals("SendMoney")) {
             slideContentTransition("SendMoney", -1);
 
             for (Component comp : mainPanel.getComponents()) {
@@ -590,8 +576,7 @@ public class MainFrame extends JFrame {
                     break;
                 }
             }
-        }
-        else {
+        } else {
             System.out.println("Unknown action: " + result);
         }
     }
@@ -606,27 +591,64 @@ public class MainFrame extends JFrame {
     }
 
     private void handleRewardsResult(String result) {
+        // Handle Rewards2 navigation: Rewards2:category:reward
         if (result.startsWith("Rewards2:")) {
             String[] parts = result.split(":");
-            if (parts.length > 4) {
-                String phoneNumber = parts[1];
-                int availablePoints = Integer.parseInt(parts[2]);
-                int requiredPoints = Integer.parseInt(parts[3]);
-                String rewardText = parts[4];
+            if (parts.length >= 3) {
+                String category = parts[1];
+                String reward = parts[2];
 
                 for (Component comp : mainPanel.getComponents()) {
-                    if (comp instanceof RewardsPage2 rewardsPage2) {
-                        rewardsPage2.updateRewardData(phoneNumber, availablePoints, requiredPoints, rewardText);
+                    if (comp instanceof Rewards2 rewards2) {
+                        rewards2.setSelectedReward(reward, category);
                         break;
                     }
                 }
                 slideContentTransition("Rewards2", 1);
             }
         }
+        // Handle Rewards3 navigation: Rewards3:category:reward:points
+        else if (result.startsWith("Rewards3:")) {
+            String[] parts = result.split(":");
+            if (parts.length >= 4) {
+                String category = parts[1];
+                String reward = parts[2];
+                int points = Integer.parseInt(parts[3]);
+
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof Rewards3 rewards3) {
+                        rewards3.setRedemptionDetails(category, reward, points);
+                        break;
+                    }
+                }
+                slideContentTransition("Rewards3", 1);
+            }
+        }
+        // Handle RewardsReceipt navigation: RewardsReceipt:category:reward:points
+        else if (result.startsWith("RewardsReceipt:")) {
+            String[] parts = result.split(":");
+            if (parts.length >= 4) {
+                String category = parts[1];
+                String reward = parts[2];
+                int points = Integer.parseInt(parts[3]);
+
+                for (Component comp : mainPanel.getComponents()) {
+                    if (comp instanceof RewardsReceiptPage receiptPage) {
+                        receiptPage.setReceiptDetails(category, reward, points);
+                        break;
+                    }
+                }
+                slideContentTransition("RewardsReceipt", 1);
+            }
+        }
+        // Handle Rewards2 back: Rewards2Back:category:reward
+        else if (result.startsWith("Rewards2Back:")) {
+            slideContentTransition("Rewards2", -1);
+        }
+        // Return to Launch
         else if ("Launch".equals(result)) {
             slideContentTransition("Launch", -1);
-        }
-        else {
+        } else {
             System.out.println("Unknown Rewards action: " + result);
         }
     }
@@ -651,39 +673,15 @@ public class MainFrame extends JFrame {
             navBar.setActiveButton(activeButton);
         }
 
-        if(prevCard == null || !prevCard.equalsIgnoreCase(targetCard))
+        if (prevCard == null || !prevCard.equalsIgnoreCase(targetCard))
             AnimatedPageSwitcher.slideTransition(mainPanel, targetCard, direction);
     }
 
-    private void changeCard(String text){
+    private void changeCard(String text) {
         cardLayout.show(mainPanel, text);
     }
 
-    public static void navBarVisibility(){
+    public static void navBarVisibility() {
         navBar.setVisible(UserInfo.getInstance().isLoggedIn());
-    }
-
-    private void handleRewards2Result(String result) {
-        if (result.startsWith("ConfirmRedemption:")) {
-            String[] parts = result.split(":");
-            if (parts.length > 2) {
-                int pointsCost = Integer.parseInt(parts[1]);
-                String rewardText = parts[2];
-
-                for (Component comp : mainPanel.getComponents()) {
-                    if (comp instanceof RewardsPage rewardsPage) {
-                        rewardsPage.updatePoints(rewardsPage.getCurrentPoints() - pointsCost);
-                        break;
-                    }
-                }
-            }
-            slideContentTransition("Launch", -1);
-        }
-        else if (result.equals("Rewards")) {
-            slideContentTransition("Rewards", -1);
-        }
-        else {
-            System.out.println("Unknown Rewards2 action: " + result);
-        }
     }
 }
