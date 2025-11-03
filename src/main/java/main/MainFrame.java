@@ -117,7 +117,7 @@ public class MainFrame extends JFrame {
         mainPanel.add(new BuyLoadReceiptPage(this::handleBuyLoadResult), "BuyLoadReceipt");
 
         // REWARDS PAGES
-        mainPanel.add(new RewardsPage(this::handleRewardsResult), "Rewards");
+        mainPanel.add(RewardsPage.getInstance(this::handleRewardsResult), "Rewards");
         mainPanel.add(new Rewards2(this::handleRewardsResult), "Rewards2");
         mainPanel.add(new Rewards3(this::handleRewardsResult), "Rewards3");
         mainPanel.add(new RewardsReceiptPage(this::handleRewardsResult), "RewardsReceipt");

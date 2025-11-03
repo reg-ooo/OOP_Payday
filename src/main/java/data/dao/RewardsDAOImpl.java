@@ -5,6 +5,7 @@ import data.DatabaseService;
 import data.model.UserInfo;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class RewardsDAOImpl implements RewardsDAO{
     private final DatabaseService database;
@@ -72,7 +73,7 @@ public class RewardsDAOImpl implements RewardsDAO{
         try(PreparedStatement pstmt = database.prepareStatement(query)){
             int userId = UserInfo.getInstance().getCurrentUserId();
             pstmt.setInt(1, userId);
-            var rs = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             if(rs.next()){
                 rewardsPoints = rs.getDouble("rewardsPoints");
             }

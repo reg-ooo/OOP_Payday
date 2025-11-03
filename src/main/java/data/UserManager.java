@@ -3,6 +3,7 @@ package data;
 import components.customDialog.PinEntryDialog;
 import main.MainFrame;
 import pages.ProfilePage;
+import pages.rewards.RewardsPage;
 import panels.*;
 import data.dao.*;
 import data.model.*;
@@ -226,7 +227,9 @@ public class UserManager {
         // FIX: Use parameterless getInstance()
         TransactionPanel.getInstance().loadComponents();
         ProfilePage.getInstance().loadComponents();
+        RewardsPage.getInstance().loadComponents();
         MainFrame.navBarVisibility();
+
     }
 
     public void unloadComponents() {

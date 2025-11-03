@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import data.dao.RewardsDAOImpl;
+import data.model.UserInfo;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -37,6 +38,7 @@ public class RewardsPage extends JPanel {
     private final Consumer<String> onButtonClick;
     private final RewardsDAOImpl rewardsDAO;
     private JLabel pointsLabel;
+
 
     public RewardsPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
@@ -69,6 +71,10 @@ public class RewardsPage extends JPanel {
         }
         // Refresh the UI to update card states based on new points
         refreshUI();
+    }
+
+    public void updateRedeemColors(){
+
     }
 
     // Method to add points (for when user completes transactions)
@@ -124,7 +130,7 @@ public class RewardsPage extends JPanel {
         JPanel pointsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
         pointsPanel.setBackground(ThemeManager.getWhite());
 
-        int currentPoints = getCurrentPoints();
+        int currentPoints = UserInfo.getInstance().isLoggedIn() ? getCurrentPoints() : 0;
         pointsLabel = new JLabel("Points: " + currentPoints);
         pointsLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16.0F, "Quicksand-Bold"));
         pointsLabel.setForeground(ThemeManager.getDBlue());
@@ -177,9 +183,9 @@ public class RewardsPage extends JPanel {
         final int NOTCH_RADIUS = 10;
         final float SEPARATOR_RATIO = 0.30f;
 
-        int currentPoints = getCurrentPoints();
+        int currentPoints = (UserInfo.getInstance().isLoggedIn()) ? getCurrentPoints() : 0;
         boolean canRedeem = currentPoints >= requiredPoints;
-        Color cardColor = canRedeem ? ThemeManager.getDvBlue() : Color.LIGHT_GRAY;
+        Color cardColor =  ThemeManager.getDvBlue();
 
         JPanel card = new JPanel() {
             @Override
@@ -246,7 +252,7 @@ public class RewardsPage extends JPanel {
         card.setBackground(cardColor);
         card.setPreferredSize(new Dimension(500, 120));
         card.setMaximumSize(new Dimension(500, 120));
-        card.setCursor(canRedeem ? new Cursor(Cursor.HAND_CURSOR) : new Cursor(Cursor.DEFAULT_CURSOR));
+//        card.setCursor(canRedeem ? new Cursor(Cursor.HAND_CURSOR) : new Cursor(Cursor.DEFAULT_CURSOR));
 
         if (canRedeem) {
             card.addMouseListener(new MouseAdapter() {
@@ -297,5 +303,12 @@ public class RewardsPage extends JPanel {
             String result = "Rewards2:" + phoneNumber + ":" + getCurrentPoints() + ":" + pointsCost + ":" + reward;
             this.onButtonClick.accept(result);
         }
+    }
+
+    public void loadComponents(){
+
+        updatePointsDisplay();
+        this.revalidate();
+        this.repaint();
     }
 }
