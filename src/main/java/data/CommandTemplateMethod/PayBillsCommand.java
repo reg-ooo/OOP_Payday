@@ -1,6 +1,7 @@
 package data.CommandTemplateMethod;
 
 import data.DatabaseProtectionProxy;
+import data.dao.RewardsDAOImpl;
 import data.dao.TransactionDAO;
 import data.dao.TransactionDAOImpl;
 import data.dao.WalletDAOImpl;
@@ -25,8 +26,7 @@ public class PayBillsCommand extends TransactionCommand{
     protected void performTransaction() {
         double newBalance = UserInfo.getInstance().getBalance() - amount;
         walletDAO.updateBalance(UserInfo.getInstance().getCurrentUserId(), newBalance);
-        RewardsCommand RC = new RewardsCommand(amount);
-        RC.execute();
+        RewardsDAOImpl.getInstance().addReward(amount);
     }
 
     @Override

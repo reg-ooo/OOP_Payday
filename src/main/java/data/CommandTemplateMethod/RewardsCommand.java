@@ -13,12 +13,12 @@ public class RewardsCommand extends TransactionCommand{
 
     @Override
     protected boolean checkBalance() {
-        return true;
+        return RewardsDAO.getRewardsPoints() >= amount;
     }
 
     @Override
     protected void performTransaction() {
-        RewardsDAO.updateReward(amount);
+        RewardsDAO.subtractReward(amount);
     }
 
     @Override
