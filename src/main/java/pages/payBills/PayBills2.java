@@ -246,7 +246,7 @@ public class PayBills2 extends JPanel {
     // HELPER METHODS
     private String getEnteredAccountNumber() {
         String text = accountField.getText();
-        return text.equals("Enter account number") ? "" : text;
+        return text.equals("Enter number") ? "" : text;
     }
 
     private String getEnteredAmount() {

@@ -45,7 +45,7 @@ public class Rewards2 extends JPanel {
 
         // ===== BACK BUTTON =====
         JPanel backPanel = factory.createHeaderPanel(
-                factory.createBackLabel(() -> onButtonClick.accept("Rewards")));
+                factory.createBackLabel(() -> onButtonClick.accept("RewardsBack")));
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         mainPanel.add(backPanel);
 

@@ -2,6 +2,7 @@ package pages.cashIn;
 
 import data.CommandTemplateMethod.CashInCommand;
 import data.model.UserInfo;
+import util.DialogManager;
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
@@ -420,18 +421,26 @@ public class BanksPage2 extends JPanel {
 
             try {
                 double amountValue = Double.parseDouble(amountText);
-                String finalAmount = String.format("%,.2f", amountValue);
 
-                QRPage qrPage = QRPage.getInstance(onButtonClick);
-                qrPage.updateSelectedEntity(
-                        selectedBankName,
-                        true, // isBank = true
-                        accountRef,
-                        finalAmount,
-                        "CashInBanks2"
-                );
+                CashInCommand CIM = new CashInCommand(amountValue);
+                boolean success = CIM.execute();
 
-                onButtonClick.accept("QRPage");
+                if (success) {
+                    String finalAmount = String.format("%,.2f", amountValue);
+
+                    QRPage qrPage = QRPage.getInstance(onButtonClick);
+                    qrPage.updateSelectedEntity(
+                            selectedBankName,
+                            true, // isBank = true
+                            accountRef,
+                            finalAmount,
+                            "CashInBanks2"
+                    );
+
+                    onButtonClick.accept("QRPage");
+                } else {
+                    DialogManager.showErrorDialog(this, "Cash In Failed!");
+                }
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error", JOptionPane.ERROR_MESSAGE);
