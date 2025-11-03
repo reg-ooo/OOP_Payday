@@ -290,7 +290,7 @@ public class RewardsPage extends JPanel {
     private void redeemReward(int pointsCost, String reward) {
         if (this.userPoints >= pointsCost) {
 
-            String phoneNumber = "0912pakyo"; // You can get this from UserInfo
+            String phoneNumber = "0912";
             String result = "Rewards2:" + phoneNumber + ":" + this.userPoints + ":" + pointsCost + ":" + reward;
             this.onButtonClick.accept(result);
         }
