@@ -1,15 +1,16 @@
 package pages.cashIn;
 
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI; // Added Import
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.RoundRectangle2D; // Added Import
-import java.util.function.Consumer;
+import Factory.cashIn.CashInFormFactory;
+import Factory.cashIn.ConcreteCashInFormFactory;
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 public class BanksPage extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
@@ -17,65 +18,19 @@ public class BanksPage extends JPanel {
     private final Consumer<String> onButtonClick;
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
+    private final CashInFormFactory factory = new ConcreteCashInFormFactory();
+
     public BanksPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setupUI();
     }
-
-    // --- Custom Rounded Button UI ---
-    // Matches the one used in CashInPage.java for the Banks and Stores buttons
-    private class RoundedButtonUI extends BasicButtonUI {
-        private final int ARC_SIZE = 30; // Radius for the rounded corners
-        private final Color BORDER_COLOR = themeManager.getDeepBlue();
-        private final int BORDER_THICKNESS = 3;
-
-        @Override
-        protected void installDefaults(AbstractButton b) {
-            super.installDefaults(b);
-            b.setOpaque(false); // Crucial for custom painting
-            b.setBorder(BorderFactory.createEmptyBorder()); // Remove default border
-        }
-
-        @Override
-        public void paint(Graphics g, JComponent c) {
-            AbstractButton b = (AbstractButton) c;
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-
-
-            int width = b.getWidth();
-            int height = b.getHeight();
-
-            // 1. Fill the button area with the background color (including hover color)
-            g2.setColor(b.getBackground());
-            g2.fill(new RoundRectangle2D.Float(0, 0, width, height, ARC_SIZE, ARC_SIZE));
-
-            // 2. Draw the deep blue rounded border
-            g2.setColor(BORDER_COLOR);
-            g2.setStroke(new BasicStroke(BORDER_THICKNESS));
-            g2.draw(new RoundRectangle2D.Float(
-                    (float)BORDER_THICKNESS / 2,
-                    (float)BORDER_THICKNESS / 2,
-                    width - BORDER_THICKNESS,
-                    height - BORDER_THICKNESS,
-                    ARC_SIZE,
-                    ARC_SIZE
-            ));
-
-            // Must call super.paint() last to draw the button's content (icon/text)
-            super.paint(g2, c);
-            g2.dispose();
-        }
-    }
-    // --------------------------------
 
     private void setupUI() {
         setLayout(new BorderLayout());
         setBackground(themeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        // --- Header: Back Button ---
+        // --- Header: Back Button (Manual, matching StoresPage style) ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(themeManager.getWhite());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
@@ -87,18 +42,16 @@ public class BanksPage extends JPanel {
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Navigate back to the main Cash In selection page
-                onButtonClick.accept("CashIn");
+                onButtonClick.accept("CashIn"); // Navigate back
             }
         });
         headerPanel.add(backLabel, BorderLayout.WEST);
 
+        // --- Title Row (Manual, matching StoresPage style) ---
         JLabel titleLabel = new JLabel("Banks");
-        // Use the deep blue color and bold font style from BanksPage2
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
         titleLabel.setForeground(ThemeManager.getDBlue());
 
-        // 2. Title Icon - SCALING SIZE 50 (Matching BanksPage2)
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 50);
         JLabel iconLabel = new JLabel(titleIcon);
 
@@ -106,34 +59,38 @@ public class BanksPage extends JPanel {
         titleRow.setBackground(themeManager.getWhite());
         titleRow.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
         titleRow.add(titleLabel);
-        titleRow.add(iconLabel); // Added icon for visual consistency
+        titleRow.add(iconLabel);
 
-        // --- Content: Bank Buttons ---
+        // --- Content: Bank Buttons (USING FACTORY's createSmallerSelectionButton) ---
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(themeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.NONE;
 
-        // Row 1
+        String nextKeyPrefix = "CashInBanks2";
+
+        // Row 1: Two buttons side by side
         gbc.gridx = 0; gbc.gridy = 0;
-        contentPanel.add(createBankButton("BPI"), gbc);
-        gbc.gridx = 1;
-        contentPanel.add(createBankButton("BDO"), gbc);
+        contentPanel.add(factory.createSmallerSelectionButton("BPI", onButtonClick, nextKeyPrefix), gbc);
 
-        // Row 2
+        gbc.gridx = 1;
+        contentPanel.add(factory.createSmallerSelectionButton("BDO", onButtonClick, nextKeyPrefix), gbc);
+
+        // Row 2: Two buttons side by side
         gbc.gridx = 0; gbc.gridy = 1;
-        contentPanel.add(createBankButton("UnionBank"), gbc);
-        gbc.gridx = 1;
-        contentPanel.add(createBankButton("PNB"), gbc);
+        contentPanel.add(factory.createSmallerSelectionButton("UnionBank", onButtonClick, nextKeyPrefix), gbc);
 
-        // Row 3: Metrobank centered
+        gbc.gridx = 1;
+        contentPanel.add(factory.createSmallerSelectionButton("PNB", onButtonClick, nextKeyPrefix), gbc);
+
+        // Row 3: One button centered
         gbc.gridx = 0; gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(createBankButton("Metrobank"), gbc);
+        contentPanel.add(factory.createSmallerSelectionButton("Metrobank", onButtonClick, nextKeyPrefix), gbc);
 
-        // --- Footer: Step Label ---
+        // --- Footer: Step Label (Manual, matching StoresPage style) ---
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(themeManager.getWhite());
         footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
@@ -146,66 +103,11 @@ public class BanksPage extends JPanel {
         // --- Assemble Page ---
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(themeManager.getWhite());
-        centerPanel.add(titleRow, BorderLayout.NORTH); // Use the new titleRow
+        centerPanel.add(titleRow, BorderLayout.NORTH);
         centerPanel.add(contentPanel, BorderLayout.CENTER);
         centerPanel.add(footerPanel, BorderLayout.SOUTH);
 
         add(headerPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
-    }
-
-    private JButton createBankButton(String bankName) {
-        JButton button = new JButton();
-
-        // --- ADD THE ROUNDED UI HERE ---
-        button.setUI(new RoundedButtonUI());
-        // -------------------------------
-
-        button.setLayout(new BorderLayout());
-        button.setPreferredSize(new Dimension(120, 120));
-        button.setMinimumSize(new Dimension(120, 120));
-        button.setMaximumSize(new Dimension(120, 120));
-        button.setBackground(themeManager.getWhite()); // Default background for the UI to paint
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        ImageIcon bankIcon = imageLoader.loadAndScaleHighQuality(bankName + ".png", 85);
-
-
-        if (bankIcon == null) {
-            bankIcon = imageLoader.getImage(bankName);
-        }
-
-        // Check if we got a valid image
-        if (bankIcon != null && bankIcon.getIconWidth() > 0) {
-            JLabel imageLabel = new JLabel(bankIcon);
-            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
-            button.add(imageLabel, BorderLayout.CENTER);
-        } else {
-            // Fallback: show bank name if image not found
-            JLabel textLabel = new JLabel(bankName, SwingConstants.CENTER);
-            textLabel.setFont(fontLoader.loadFont(Font.BOLD, 12f, "Quicksand-Bold"));
-            textLabel.setForeground(themeManager.getDeepBlue());
-            button.add(textLabel, BorderLayout.CENTER);
-        }
-
-        // Hover effects (The UI uses button.getBackground() for coloring)
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(themeManager.getGradientLBlue());
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(themeManager.getWhite());
-            }
-        });
-
-        // Navigation to BanksPage2
-        // Assuming the BankPage2 expects the key "CashInBanks2:BankName"
-        button.addActionListener(e -> onButtonClick.accept("CashInBanks2:" + bankName));
-        return button;
     }
 }
