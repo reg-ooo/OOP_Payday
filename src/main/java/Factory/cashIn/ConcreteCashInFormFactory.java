@@ -12,22 +12,14 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.util.function.Consumer;
 
-// Assuming CashInFormFactory interface includes all method signatures below,
-// including 'createSelectionButton'
-
 public class ConcreteCashInFormFactory implements CashInFormFactory {
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
-    // Matching constants from original BanksPage2/StoresPage2
     private final int MAX_COMPONENT_WIDTH = 300;
     private final int FIELD_HEIGHT = 45;
 
-
-    /**
-     * Inner class to provide the custom rounded border and painting for selection buttons.
-     */
     private class RoundedButtonUI extends BasicButtonUI {
         private final int ARC_SIZE = 30;
         private final Color BORDER_COLOR = themeManager.getDeepBlue();

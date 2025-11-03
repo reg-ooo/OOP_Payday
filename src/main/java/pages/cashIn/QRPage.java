@@ -165,7 +165,6 @@ public class QRPage extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         centerPanel.add(contentPanel, gbc);
 
-        // ⭐ FACTORY USAGE: Step label
         JLabel stepLabel = factory.createStepLabel("Step 4 of 4");
 
         add(headerPanel, BorderLayout.NORTH);
@@ -173,7 +172,6 @@ public class QRPage extends JPanel {
         add(stepLabel, BorderLayout.SOUTH);
     }
 
-    // This method remains a private helper as it is specific to QR code rendering.
     private ImageIcon createSharpQRCodeIcon(ImageIcon sourceIcon, int targetSize) {
         if (sourceIcon == null || sourceIcon.getImage() == null) {
             return null;
