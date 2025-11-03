@@ -641,6 +641,9 @@ public class MainFrame extends JFrame {
                 slideContentTransition("RewardsReceipt", 1);
             }
         }
+        else if (result.startsWith("RewardsBack")) {
+            slideContentTransition("Rewards", -1);
+        }
         // Handle Rewards2 back: Rewards2Back:category:reward
         else if (result.startsWith("Rewards2Back:")) {
             slideContentTransition("Rewards2", -1);

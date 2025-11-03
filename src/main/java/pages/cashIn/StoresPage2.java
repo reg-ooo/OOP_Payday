@@ -1,6 +1,8 @@
 package pages.cashIn;
 
+import data.CommandTemplateMethod.CashInCommand;
 import data.model.UserInfo;
+import util.DialogManager;
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
@@ -383,6 +385,7 @@ public class StoresPage2 extends JPanel {
      */
     private JPanel createSmallerNextButtonPanel() {
         // 1. USE FACTORY TO CREATE THE STYLED BUTTON
+
         JButton nextButton = factory.createActionButton("Next");
 
         final int BUTTON_HEIGHT = FIELD_HEIGHT;
@@ -428,20 +431,30 @@ public class StoresPage2 extends JPanel {
 
             try {
                 double amountValue = Double.parseDouble(amountText);
-                String finalAmount = String.format("%,.2f", amountValue);
 
-                // Prepare and navigate to QRPage
-                QRPage qrPage = QRPage.getInstance(onButtonClick);
+                CashInCommand CIM = new CashInCommand(amountValue);
+                boolean success = CIM.execute();
 
-                qrPage.updateSelectedEntity(
-                        selectedStoreName,
-                        false,
-                        accountRef,
-                        finalAmount,
-                        "CashInStores2"
-                );
+                if (success) {
 
-                onButtonClick.accept("QRPage");
+                    String finalAmount = String.format("%,.2f", amountValue);
+
+                    // Prepare and navigate to QRPage
+                    QRPage qrPage = QRPage.getInstance(onButtonClick);
+
+                    qrPage.updateSelectedEntity(
+                            selectedStoreName,
+                            false,
+                            accountRef,
+                            finalAmount,
+                            "CashInStores2"
+                    );
+
+                    DialogManager.showSuccessDialog(this, "Cash In Successful!");
+                    onButtonClick.accept("QRPage");
+                } else {
+                    DialogManager.showErrorDialog(this, "Cash In Failed!");
+                }
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error", JOptionPane.ERROR_MESSAGE);
