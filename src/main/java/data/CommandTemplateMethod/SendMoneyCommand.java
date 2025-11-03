@@ -26,6 +26,14 @@ public class SendMoneyCommand extends TransactionCommand {
         this.amount = amount;
     }
 
+
+    public boolean sendToOwnNumber() {
+
+        receiverId = getID(receiver);
+        System.out.println(receiverId);
+        return receiverId != null && receiverId.equals(String.valueOf(UserInfo.getInstance().getCurrentUserId()));
+    }
+
     @Override
     protected boolean checkBalance() {
         System.out.println("receiver: " + receiver);
@@ -65,6 +73,7 @@ public class SendMoneyCommand extends TransactionCommand {
 
     @Override
     protected void performTransaction() {
+
         double newSenderBalance = senderBalance - amount;
         double newReceiverBalance = receiverBalance + amount;
 
@@ -103,4 +112,6 @@ public class SendMoneyCommand extends TransactionCommand {
         }
         return null;
     }
+
+
 }

@@ -39,7 +39,7 @@ public class UserManager {
     public boolean addUser(String fullName, String phoneNumber, String email,
                            String password, String birthDate, String username) {
 
-        DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
+        DatabaseProtectionProxy.getInstance().setSystemContext();
 
         // Validate input
         if (!isValidNumber(phoneNumber)) {
@@ -94,7 +94,7 @@ public class UserManager {
     }
 
     public void loginAccount(String username, String password, Consumer<String> onButtonClick) {
-        DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
+        DatabaseProtectionProxy.getInstance().setSystemContext();
 
         try {
             // Use DAO to find user by username
