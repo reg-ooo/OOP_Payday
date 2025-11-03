@@ -106,6 +106,12 @@ public class SendMoneyPage extends JPanel {
             return;
         }
 
+        // Check if exactly 11 digits
+        if (enteredPhone.length() != 11) {
+            DialogManager.showEmptyAccountDialog(this, "Must Be 11 Digits");
+            return;
+        }
+
         // Validate amount
         if (enteredAmount.isEmpty() || enteredAmount.equals("0.00")) {
             DialogManager.showEmptyAmountDialog(this, "Please enter amount");

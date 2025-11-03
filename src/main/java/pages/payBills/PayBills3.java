@@ -198,10 +198,8 @@ public class PayBills3 extends JPanel {
             PayBillsCommand PBC = new PayBillsCommand(Double.parseDouble(selectedAmount));
             boolean success = PBC.execute();
             if (success) {
-                DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
-                    // Process bill payment - pass the data to success page
-                    onButtonClick.accept("PayBillsReceipt:" + selectedCategory + ":" + selectedProvider + ":" + selectedAmount + ":" + selectedAccount);
-                });
+                DialogManager.showSuccessDialog(this, "Transaction Successful!");
+                onButtonClick.accept("PayBillsReceipt:" + selectedCategory + ":" + selectedProvider + ":" + selectedAmount + ":" + selectedAccount);
             } else {
                 DialogManager.showErrorDialog(this, "Transaction Failed!");
             }

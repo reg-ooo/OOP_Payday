@@ -186,10 +186,8 @@ public class CashOutPage2 extends JPanel {
             CashOutCommand COM = new CashOutCommand(Double.parseDouble(currentAmount));
             boolean success = COM.execute();
             if (success) {
-                DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
-                    // This callback runs ONLY when user clicks OK
-                    onButtonClick.accept("CashOutSuccess:" + currentAmount);
-                });
+                DialogManager.showSuccessDialog(this, "Transaction Successful!");
+                onButtonClick.accept("CashOutSuccess:" + currentAmount);
             } else {
                 DialogManager.showErrorDialog(this, "Transaction Failed!");
             }

@@ -437,8 +437,8 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                 }
 
                 // Prevent multiple leading zeros
-                // Allow "0917..." but prevent "00917..." or "000917..."
-                if (currentLength >= 1 && actualText.charAt(0) == '0' && c == '0') {
+// Only block zero if we're trying to add it at position 1 and we already have a zero at position 0
+                if (currentLength == 1 && actualText.charAt(0) == '0' && c == '0') {
                     e.consume();
                     return;
                 }

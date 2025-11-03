@@ -8,9 +8,9 @@ import java.awt.*;
 
 public class DialogManager {
     // New method with callback
-    public static void showSuccessDialog(Component parent, String message, Runnable onOkClicked) {
+    public static void showSuccessDialog(Component parent, String message) {
         Window parentWindow = SwingUtilities.getWindowAncestor(parent);
-        CustomSuccessDialog dialog = new CustomSuccessDialog((Frame) parentWindow, message, onOkClicked);
+        CustomSuccessDialog dialog = new CustomSuccessDialog((Frame) parentWindow, message);
         dialog.setVisible(true);
     }
 

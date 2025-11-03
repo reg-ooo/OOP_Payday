@@ -112,11 +112,9 @@ public class SendMoneyPage2 extends JPanel {
 
         if (success) {
             // Show dialog and ONLY navigate when user clicks OK
-            DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
-                // This callback runs ONLY when user clicks OK
+                DialogManager.showSuccessDialog(this, "Transaction Successful!");
                 SendMoneyPage.getInstance().clearForm();
                 onButtonClick.accept("SendMoney3:" + recipientName + ":" + phoneNumber + ":" + amount);
-            });
         } else {
             DialogManager.showErrorDialog(this, "Transaction Failed!");
         }

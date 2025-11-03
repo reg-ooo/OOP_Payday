@@ -6,9 +6,8 @@ import java.awt.*;
 
 public class CustomSuccessDialog extends CustomBaseDialog {
 
-    public CustomSuccessDialog(Frame parent, String message, Runnable onOkClicked) {
+    public CustomSuccessDialog(Frame parent, String message) {
         super(parent, "Success", true, true);
-        this.onOkClicked = onOkClicked;
         initializeUI(message);
     }
 

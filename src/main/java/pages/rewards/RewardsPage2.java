@@ -67,7 +67,7 @@ public class RewardsPage2 extends JPanel {
         this.add(Box.createVerticalStrut(23));
 
         // ADD CONFIRM PAYMENT TITLE HERE
-        JLabel confirmTitle = new JLabel("Confirm Payment");
+        JLabel confirmTitle = new JLabel("Confirm Reward Claim");
         confirmTitle.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
         confirmTitle.setForeground(ThemeManager.getDBlue());
         confirmTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
