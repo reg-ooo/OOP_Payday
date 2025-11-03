@@ -64,6 +64,46 @@ public class ConcreteSendMoneyBaseFactory implements SendMoneyBaseFactory {
         return buttonPanel;
     }
 
+    public JButton createActionButton(String text, Runnable action) {
+        RoundedButton button = new RoundedButton(text, 15, themeManager.getVBlue());
+        button.setPreferredSize(new Dimension(150, 35));
+        button.setMaximumSize(new Dimension(150, 35));
+        button.setForeground(themeManager.getWhite());
+        button.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+
+        Color normalBg = themeManager.getVBlue();
+        Color hoverBg = themeManager.getGradientLBlue();
+        Color normalText = themeManager.getWhite();
+        Color hoverText = themeManager.getWhite();
+
+        final int animationSteps = 10;
+        final int animationDelay = 15;
+
+        final javax.swing.Timer[] timer = new javax.swing.Timer[1];
+        final boolean[] isHovered = {false};
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                isHovered[0] = true;
+                if (timer[0] != null && timer[0].isRunning()) timer[0].stop();
+                timer[0] = createColorFadeTimer(button, normalBg, hoverBg, normalText, hoverText, animationSteps, animationDelay, isHovered, true);
+                timer[0].start();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                isHovered[0] = false;
+                if (timer[0] != null && timer[0].isRunning()) timer[0].stop();
+                timer[0] = createColorFadeTimer(button, hoverBg, normalBg, hoverText, normalText, animationSteps, animationDelay, isHovered, false);
+                timer[0].start();
+            }
+        });
+
+        button.addActionListener(e -> action.run());
+        return button;
+    }
+
     private static javax.swing.Timer createColorFadeTimer(
             JButton button, Color startBg, Color endBg,
             Color startText, Color endText,

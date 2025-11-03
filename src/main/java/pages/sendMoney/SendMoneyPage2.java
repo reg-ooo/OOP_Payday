@@ -6,7 +6,9 @@ import java.util.function.Consumer;
 import Factory.sendMoney.SendMoneyPage2Factory;
 import Factory.sendMoney.ConcreteSendMoneyPage2Factory;
 import data.CommandTemplateMethod.SendMoneyCommand;
+import data.UserManager;
 import data.model.UserInfo;
+import util.DialogManager;
 import util.ThemeManager;
 
 public class SendMoneyPage2 extends JPanel {
@@ -23,6 +25,7 @@ public class SendMoneyPage2 extends JPanel {
     public SendMoneyPage2(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         this.factory = new ConcreteSendMoneyPage2Factory(); // Use concrete factory
+        UserManager.getInstance().setDefaultParentComponent(this);
 
         // Initialize all fields to prevent null values
         this.recipientName = "Unknown Recipient";
@@ -104,11 +107,19 @@ public class SendMoneyPage2 extends JPanel {
     //METHOD THAT NAVIGATES TO PAGE 3 (RECEIPT) ⚪
     // Example: "SendMoney3:09171234567:09171234567:100.00"
     private void handleConfirm(String destination) {
-        // Pass phone number, amount, and recipient name to SendMoneyPage3
         SendMoneyCommand sendMoney = new SendMoneyCommand(phoneNumber, Double.parseDouble(amount));
-            sendMoney.execute();
-            SendMoneyPage.getInstance().clearForm();
-            onButtonClick.accept("SendMoney3:" + recipientName + ":" + phoneNumber + ":" + amount);
+        boolean success = sendMoney.execute();
+
+        if (success) {
+            // Show dialog and ONLY navigate when user clicks OK
+            DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
+                // This callback runs ONLY when user clicks OK
+                SendMoneyPage.getInstance().clearForm();
+                onButtonClick.accept("SendMoney3:" + recipientName + ":" + phoneNumber + ":" + amount);
+            });
+        } else {
+            DialogManager.showErrorDialog(this, "Transaction Failed!");
+        }
     }
 
     private void handleBack(String destination) {

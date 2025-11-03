@@ -135,6 +135,10 @@ public class MainFrame extends JFrame {
         mainFrame.setContentPane(container);
     }
 
+    public static void hideNavBarForDialog() {
+        navBar.setVisible(false);
+    }
+
     // --- Utility methods for receipt generation ---
     private String generateReferenceNumber(String entity) {
         String prefix = entity.toUpperCase().contains("BANK") ? "BANK" : "CASH";
@@ -209,6 +213,7 @@ public class MainFrame extends JFrame {
                 for (Component comp : components) {
                     if (comp instanceof SendMoneyPage sendMoneyPage) {
                         sendMoneyPage.refreshBalance();
+                        sendMoneyPage.clearForm();
                         break;
                     }
                 }
@@ -578,6 +583,13 @@ public class MainFrame extends JFrame {
         }
         else if (result.equals("SendMoney")) {
             slideContentTransition("SendMoney", -1);
+
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof SendMoneyPage sendMoneyPage) {
+                    sendMoneyPage.clearForm();
+                    break;
+                }
+            }
         }
         else {
             System.out.println("Unknown action: " + result);

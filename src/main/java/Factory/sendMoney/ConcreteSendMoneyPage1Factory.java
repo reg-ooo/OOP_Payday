@@ -184,24 +184,56 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         textField.setForeground(themeManager.getLightGray());
         textField.setHorizontalAlignment(JTextField.CENTER);
 
-        // Add key listener to prevent deleting peso sign AND placeholder
+        // Add caret listener to enforce position
+        textField.addCaretListener(e -> {
+            String currentText = textField.getText();
+            String fullPlaceholder = "₱ " + placeholder;
+
+            // If we're in placeholder state, don't allow any caret movement
+            if (currentText.equals(fullPlaceholder)) {
+                setSafeCaretPosition(textField, 0);
+                return;
+            }
+
+            // Only prevent caret from being placed BEFORE "₱ ", allow free movement after
+            int caretPos = textField.getCaretPosition();
+            if (caretPos < 2) {
+                setSafeCaretPosition(textField, 2);
+            }
+        });
+
         textField.addKeyListener(new java.awt.event.KeyAdapter() {
             @Override
             public void keyPressed(java.awt.event.KeyEvent e) {
                 String currentText = textField.getText();
                 String fullPlaceholder = "₱ " + placeholder;
 
-                // If we're in placeholder state, prevent ANY editing
+                // Block ALL keys when in placeholder state
                 if (currentText.equals(fullPlaceholder)) {
-                    e.consume(); // Block all keys when showing placeholder
+                    e.consume();
                     return;
                 }
 
                 // Prevent backspace/delete if it would remove the peso sign
+                String numberPart = currentText.replace("₱ ", "").replace("₱", "").trim();
                 if ((e.getKeyCode() == java.awt.event.KeyEvent.VK_BACK_SPACE ||
                         e.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE) &&
-                        currentText.length() <= 2) { // "₱ " is 2 characters
-                    e.consume(); // Prevent the key event
+                        numberPart.isEmpty()) {
+                    e.consume();
+                }
+
+                // Prevent selection and deletion of peso sign using mouse or keyboard
+                int selectionStart = textField.getSelectionStart();
+                int selectionEnd = textField.getSelectionEnd();
+
+                // If selection includes the peso sign, block the action
+                if (selectionStart < 2 || selectionEnd < 2) {
+                    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_BACK_SPACE ||
+                            e.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE ||
+                            e.getKeyCode() == java.awt.event.KeyEvent.VK_CUT ||
+                            e.getKeyCode() == java.awt.event.KeyEvent.VK_X) {
+                        e.consume();
+                    }
                 }
             }
 
@@ -210,38 +242,34 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                 String currentText = textField.getText();
                 String fullPlaceholder = "₱ " + placeholder;
 
-                // Block any typing if we're still in placeholder state
+                // Block all typing when in placeholder state
                 if (currentText.equals(fullPlaceholder)) {
-                    e.consume(); // Block all character input
+                    e.consume();
                     return;
                 }
 
                 char c = e.getKeyChar();
+                String numberPart = currentText.replace("₱ ", "").replace("₱", "").trim();
 
                 // Allow only digits (0-9) and decimal point
                 if (!Character.isDigit(c) && c != '.') {
-                    e.consume(); // Block non-numeric characters
+                    e.consume();
                     return;
                 }
 
-                // Get the actual number part (without peso sign)
-                String numberPart = currentText.replace("₱ ", "").replace("₱", "").trim();
-
                 // Prevent leading zeros (except for "0." pattern)
                 if (numberPart.isEmpty() && c == '0') {
-                    // Allow single zero but not multiple zeros
-                    // This will allow "0" but not "00", "01", etc.
+                    // Allow single zero
                 } else if (numberPart.equals("0") && c != '.') {
                     // If current text is just "0" and user types another digit, replace it
-                    // This prevents "01", "02", etc.
                     textField.setText("₱ " + c);
-                    e.consume(); // Consume the original key event since we manually set text
+                    e.consume();
                     return;
                 }
 
                 // Prevent multiple decimal points
                 if (c == '.' && numberPart.contains(".")) {
-                    e.consume(); // Block second decimal point
+                    e.consume();
                     return;
                 }
 
@@ -250,9 +278,17 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                     int decimalIndex = numberPart.indexOf(".");
                     int decimalPlaces = numberPart.length() - decimalIndex - 1;
                     if (decimalPlaces >= 2 && Character.isDigit(c)) {
-                        e.consume(); // Block if already has 2 decimal places
+                        e.consume();
                         return;
                     }
+                }
+
+                // Max 13 digits for whole number part (including decimal)
+                String potentialNewText = numberPart + c;
+                String wholePart = potentialNewText.contains(".") ?
+                        potentialNewText.substring(0, potentialNewText.indexOf(".")) : potentialNewText;
+                if (wholePart.length() > 13) {
+                    e.consume();
                 }
             }
         });
@@ -264,11 +300,13 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                 String fullPlaceholder = "₱ " + placeholder;
 
                 if (currentText.equals(fullPlaceholder)) {
-                    // Clear the placeholder but KEEP the peso sign
                     textField.setText("₱ ");
                     textField.setForeground(themeManager.getDBlue());
                     textField.setHorizontalAlignment(JTextField.LEFT);
-                    textField.setCaretPosition(2); // Position cursor after "₱ "
+                    setSafeCaretPosition(textField, 2); // Force cursor after "₱ "
+                } else {
+                    // When field gains focus, set caret to the END of the text, not stuck at position 2
+                    setSafeCaretPosition(textField, textField.getText().length());
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(activeBorder, 1),
@@ -284,17 +322,23 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                     textField.setForeground(themeManager.getLightGray());
                     textField.setHorizontalAlignment(JTextField.CENTER);
                 } else {
-                    // Format the number to remove any unnecessary leading zeros
+                    // Format the number properly
                     try {
                         double value = Double.parseDouble(currentText);
+                        // Limit to 2 decimal places
                         String formatted = String.format("%.2f", value);
                         // Remove trailing .00 if whole number
                         if (formatted.endsWith(".00")) {
                             formatted = formatted.substring(0, formatted.length() - 3);
                         }
                         textField.setText("₱ " + formatted);
-                    } catch (NumberFormatException e) {
-                        // Keep as is if parsing fails
+                        textField.setForeground(themeManager.getDBlue());
+                        textField.setHorizontalAlignment(JTextField.LEFT);
+                    } catch (NumberFormatException ex) {
+                        // If parsing fails, revert to placeholder
+                        textField.setText("₱ " + placeholder);
+                        textField.setForeground(themeManager.getLightGray());
+                        textField.setHorizontalAlignment(JTextField.CENTER);
                     }
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
@@ -318,11 +362,44 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                     textField.setHorizontalAlignment(JTextField.LEFT);
                     textField.setForeground(themeManager.getDBlue());
                 }
+
+                // REMOVED the caret position enforcement here - let user move caret freely
+                // Only prevent going before position 2, which is handled by caret listener
+            }
+        });
+
+        // Add mouse listener to prevent selection of peso sign
+        textField.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mousePressed(java.awt.event.MouseEvent e) {
+                String currentText = textField.getText();
+                if (!currentText.equals("₱ " + placeholder)) {
+                    // If user clicks before position 2, move caret to position 2
+                    int clickPos = textField.viewToModel2D(e.getPoint());
+                    if (clickPos < 2) {
+                        setSafeCaretPosition(textField, 2);
+                    }
+                    // If user clicks anywhere else, allow normal caret positioning
+                }
             }
         });
     }
 
-    //PAGE1
+    // Add this helper method outside the main method
+    private static void setSafeCaretPosition(JTextField textField, int position) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                String currentText = textField.getText();
+                int maxPosition = currentText.length();
+                int safePosition = Math.min(position, maxPosition);
+                textField.setCaretPosition(safePosition);
+            } catch (Exception ex) {
+                // Ignore caret position errors
+            }
+        });
+    }
+
+    //PAGE1 - For phone number field (max 11 digits, no letters, ONE leading zero allowed)
     private static void addCenterPlaceholderLeftTyping(JTextField textField, String placeholder) {
         Color normalBorder = themeManager.getGray();
         Color activeBorder = themeManager.getDBlue();
@@ -331,6 +408,63 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         textField.setForeground(themeManager.getLightGray());
         textField.setHorizontalAlignment(JTextField.CENTER);
 
+        textField.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent e) {
+                char c = e.getKeyChar();
+                String currentText = textField.getText();
+
+                // Block if still in placeholder state
+                if (currentText.equals(placeholder)) {
+                    e.consume();
+                    return;
+                }
+
+                // Allow only digits (0-9)
+                if (!Character.isDigit(c)) {
+                    e.consume();
+                    return;
+                }
+
+                // Get current digit count (excluding placeholder)
+                String actualText = currentText.replace(placeholder, "").trim();
+                int currentLength = actualText.length();
+
+                // Max 11 digits for phone number
+                if (currentLength >= 11) {
+                    e.consume();
+                    return;
+                }
+
+                // Prevent multiple leading zeros
+                // Allow "0917..." but prevent "00917..." or "000917..."
+                if (currentLength >= 1 && actualText.charAt(0) == '0' && c == '0') {
+                    e.consume();
+                    return;
+                }
+            }
+
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent e) {
+                String currentText = textField.getText();
+
+                // Block all editing keys when in placeholder state
+                if (currentText.equals(placeholder)) {
+                    e.consume();
+                    return;
+                }
+
+                // Allow backspace and delete only if we have text beyond placeholder
+                if ((e.getKeyCode() == java.awt.event.KeyEvent.VK_BACK_SPACE ||
+                        e.getKeyCode() == java.awt.event.KeyEvent.VK_DELETE)) {
+                    String actualText = currentText.replace(placeholder, "").trim();
+                    if (actualText.isEmpty()) {
+                        e.consume();
+                    }
+                }
+            }
+        });
+
         textField.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -338,6 +472,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                     textField.setText("");
                     textField.setForeground(themeManager.getDBlue());
                     textField.setHorizontalAlignment(JTextField.LEFT);
+                    textField.setCaretPosition(0);
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(activeBorder, 1),
@@ -347,10 +482,19 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
 
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
-                if (textField.getText().isEmpty()) {
+                String currentText = textField.getText().trim();
+                if (currentText.isEmpty()) {
                     textField.setText(placeholder);
                     textField.setForeground(themeManager.getLightGray());
                     textField.setHorizontalAlignment(JTextField.CENTER);
+                } else {
+                    // Ensure we don't exceed 11 digits
+                    if (currentText.length() > 11) {
+                        currentText = currentText.substring(0, 11);
+                        textField.setText(currentText);
+                    }
+                    textField.setForeground(themeManager.getDBlue());
+                    textField.setHorizontalAlignment(JTextField.LEFT);
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(normalBorder, 1),

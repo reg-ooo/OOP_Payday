@@ -1,5 +1,6 @@
 package data;
 
+import components.customDialog.PinEntryDialog;
 import main.MainFrame;
 import pages.ProfilePage;
 import panels.*;
@@ -7,6 +8,11 @@ import data.dao.*;
 import data.model.*;
 
 import javax.swing.*;
+import java.awt.*;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
 public class UserManager {
@@ -14,6 +20,7 @@ public class UserManager {
     private final UserDAO userDAO;
     private final WalletDAO walletDAO;
     private final UserInfo userInfo;
+    private Component defaultParentComponent;
 
     private UserManager() {
         this.userDAO = new UserDAOImpl();
@@ -134,18 +141,46 @@ public class UserManager {
         return true;
     }
 
+    public void setDefaultParentComponent(Component component) {
+        this.defaultParentComponent = component;
+    }
+
     public boolean revalidateUser() {
         if (!userInfo.isLoggedIn()) {
             return false;
         }
 
-        String pin = JOptionPane.showInputDialog(null, "Please enter your pin: ");
+        String pin = showPinEntryDialog(defaultParentComponent);
         if (pin == null || pin.isEmpty()) {
             return false;
         }
 
-        // Use DAO to validate PIN
         return userDAO.validatePin(userInfo.getCurrentUserId(), pin);
+    }
+
+    private String showPinEntryDialog(Component parentComponent) {
+        try {
+            if (parentComponent == null) {
+                throw new IllegalArgumentException("Parent component is null");
+            }
+
+            Frame parentFrame = (Frame) SwingUtilities.getWindowAncestor(parentComponent);
+            PinEntryDialog pinDialog = new PinEntryDialog(parentFrame);
+            CompletableFuture<String> pinFuture = pinDialog.getPinAsync();
+
+            // Use get() with timeout and handle cancellation
+            return pinFuture.get(10, TimeUnit.SECONDS); // 10 second timeout
+
+        } catch (TimeoutException e) {
+            System.out.println("PIN entry timed out");
+            return null;
+        } catch (CancellationException e) {
+            System.out.println("PIN entry cancelled by user");
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String capitalizeFirstLetter(String name) {

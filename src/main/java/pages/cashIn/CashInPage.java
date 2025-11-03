@@ -1,24 +1,25 @@
 package pages.cashIn;
 
+import Factory.cashIn.CashInPageFactory; // Import the Factory interface
+import Factory.cashIn.ConcreteCashInPageFactory; // Import the concrete factory
+
 import util.ThemeManager;
-import util.FontLoader;
-import util.ImageLoader;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicButtonUI; // Import for custom UI
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.RoundRectangle2D; // Import for drawing rounded shapes
 import java.util.function.Consumer;
 
 public class CashInPage extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
-    private final ImageLoader imageLoader = ImageLoader.getInstance();
+
+    // ADDED: Factory instance
+    private final CashInPageFactory factory;
 
     public CashInPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
+        // Instantiate the concrete factory
+        this.factory = new ConcreteCashInPageFactory();
         setupUI();
     }
 
@@ -27,67 +28,38 @@ public class CashInPage extends JPanel {
         setBackground(ThemeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        // Header
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(ThemeManager.getWhite());
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+        // 1. Header (uses factory for back button and panel)
+        JLabel backLabel = factory.createBackLabel(() -> onButtonClick.accept("Launch"));
+        JPanel headerPanel = factory.createHeaderPanel(backLabel);
 
-        JLabel backLabel = new JLabel("Back");
-        backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        backLabel.setForeground(ThemeManager.getDeepBlue());
-        backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        backLabel.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                onButtonClick.accept("Launch");
-            }
-        });
-        headerPanel.add(backLabel, BorderLayout.WEST);
+        // 2. Title (uses factory to create the titled row)
+        JPanel titlePanel = factory.createTitleRow(
+                "Cash In",
+                "icons/sendMoney/availableBalance", // Icon name without .png
+                65
+        );
 
-        JLabel titleLabel = new JLabel("Cash In");
-        titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getDBlue());
+        // 3. Option Buttons (uses factory to create complex button panels)
+        JPanel banksOptionPanel = factory.createCashInOptionPanel(
+                "bankTransfer",
+                "Banks",
+                e -> onButtonClick.accept("CashInBanks")
+        );
 
-        ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("icons/sendMoney/availableBalance.png", 65);
-        JLabel iconLabel = new JLabel(titleIcon);
+        JPanel storesOptionPanel = factory.createCashInOptionPanel(
+                "Stores",
+                "Stores",
+                e -> onButtonClick.accept("CashInStores")
+        );
 
-        JPanel titleContentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px horizontal gap
-        titleContentPanel.setBackground(ThemeManager.getWhite());
+        // 4. Content Panel (uses factory to lay out buttons in GridBag)
+        JPanel contentPanel = factory.createContentPanel(banksOptionPanel, storesOptionPanel);
 
-        titleContentPanel.add(titleLabel);
-        titleContentPanel.add(iconLabel);
+        // 5. Footer (uses factory for step label)
+        JPanel footerPanel = factory.createFooterPanel("Step 1 of 4");
 
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        titlePanel.setBackground(ThemeManager.getWhite());
-        titlePanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 40, 0));
-        titlePanel.add(titleContentPanel);
 
-        JPanel contentPanel = new JPanel(new GridBagLayout());
-        contentPanel.setBackground(ThemeManager.getWhite());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15);
-        gbc.fill = GridBagConstraints.NONE;
-
-        // Banks button with label
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        contentPanel.add(createCashInOption("bankTransfer", "Banks", "CashInBanks"), gbc);
-
-        // Stores button with label
-        gbc.gridx = 1;
-        contentPanel.add(createCashInOption("Stores", "Stores", "CashInStores"), gbc);
-
-        // Footer
-        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        footerPanel.setBackground(ThemeManager.getWhite());
-        footerPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
-
-        JLabel stepLabel = new JLabel("Step 1 of 4");
-        stepLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-        stepLabel.setForeground(ThemeManager.getDeepBlue());
-        footerPanel.add(stepLabel);
-
-        // Center panel with vertical glue to push content up
+        // Final Assembly
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(ThemeManager.getWhite());
 
@@ -106,112 +78,6 @@ public class CashInPage extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
-    private class RoundedButtonUI extends BasicButtonUI {
-        private final int ARC_SIZE = 30; // Radius for the rounded corners
-        private final Color BORDER_COLOR = themeManager.getDeepBlue();
-        private final int BORDER_THICKNESS = 3;
-
-        @Override
-        protected void installDefaults(AbstractButton b) {
-            super.installDefaults(b);
-            b.setOpaque(false); // Crucial for custom painting
-            b.setBorder(BorderFactory.createEmptyBorder()); // Remove default border
-        }
-
-        @Override
-        public void paint(Graphics g, JComponent c) {
-            AbstractButton b = (AbstractButton) c;
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-            g2.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
-
-
-            int width = b.getWidth();
-            int height = b.getHeight();
-
-            // 1. Fill the button area with the background color (including hover color)
-            g2.setColor(b.getBackground());
-            g2.fill(new RoundRectangle2D.Float(0, 0, width, height, ARC_SIZE, ARC_SIZE));
-
-            // 2. Draw the deep blue rounded border
-            g2.setColor(BORDER_COLOR);
-            g2.setStroke(new BasicStroke(BORDER_THICKNESS));
-            g2.draw(new RoundRectangle2D.Float(
-                    (float)BORDER_THICKNESS / 2,
-                    (float)BORDER_THICKNESS / 2,
-                    width - BORDER_THICKNESS,
-                    height - BORDER_THICKNESS,
-                    ARC_SIZE,
-                    ARC_SIZE
-            ));
-
-            // Must call super.paint() last to draw the button's content (text and icon)
-            super.paint(g2, c);
-            g2.dispose();
-        }
-    }
-
-
-    private JPanel createCashInOption(String imageName, String labelText, String action) {
-        JPanel optionPanel = new JPanel();
-        optionPanel.setLayout(new BoxLayout(optionPanel, BoxLayout.Y_AXIS));
-        optionPanel.setBackground(themeManager.getWhite());
-        optionPanel.setOpaque(false);
-
-        // Create button with image
-        JButton button = new JButton();
-        button.setUI(new RoundedButtonUI()); // APPLY THE CUSTOM ROUNDED UI HERE
-
-        button.setLayout(new BorderLayout());
-        button.setPreferredSize(new Dimension(160, 160));
-        button.setMinimumSize(new Dimension(160, 160));
-        button.setMaximumSize(new Dimension(160, 160));
-        button.setBackground(themeManager.getWhite()); // Default background for painting
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Load and scale image to fit bigger button
-        ImageIcon icon = imageLoader.loadAndScaleHighQuality(imageName + ".png", 110);
-
-        // Fallback to pre-loaded image if high quality load fails
-        if (icon == null) {
-            icon = imageLoader.getImage(imageName);
-        }
-
-        if (icon != null && icon.getIconWidth() > 0) {
-            JLabel imageLabel = new JLabel(icon);
-            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
-            button.add(imageLabel, BorderLayout.CENTER);
-        }
-
-        // Hover effects
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(themeManager.getGradientLBlue()); // Changes the background color for paint()
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(themeManager.getWhite()); // Restores the default background color for paint()
-            }
-        });
-
-        button.addActionListener(e -> onButtonClick.accept(action));
-
-        // Label below button
-        JLabel label = new JLabel(labelText);
-        label.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        label.setForeground(themeManager.getDeepBlue());
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        optionPanel.add(button);
-        optionPanel.add(Box.createVerticalStrut(10));
-        optionPanel.add(label);
-
-        return optionPanel;
-    }
+    // REMOVED: createCashInOption method (moved to factory)
+    // REMOVED: RoundedButtonUI class (moved to factory)
 }

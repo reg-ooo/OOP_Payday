@@ -4,8 +4,10 @@ import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import Factory.sendMoney.SendMoneyPage1Factory;
 import components.RoundedBorder;
 import data.CommandTemplateMethod.CashOutCommand;
+import pages.sendMoney.SendMoneyPage;
 import panels.GradientPanel;
 import panels.RoundedPanel;
+import util.DialogManager;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -182,8 +184,15 @@ public class CashOutPage2 extends JPanel {
             // Process cash out - pass the current amount to success page
             String currentAmount = getCurrentAmount();
             CashOutCommand COM = new CashOutCommand(Double.parseDouble(currentAmount));
-            COM.execute();
-            onButtonClick.accept("CashOutSuccess:" + currentAmount);
+            boolean success = COM.execute();
+            if (success) {
+                DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
+                    // This callback runs ONLY when user clicks OK
+                    onButtonClick.accept("CashOutSuccess:" + currentAmount);
+                });
+            } else {
+                DialogManager.showErrorDialog(this, "Transaction Failed!");
+            }
         });
 
         // Change button text to "Confirm"

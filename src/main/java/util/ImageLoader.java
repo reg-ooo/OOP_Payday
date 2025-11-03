@@ -30,6 +30,13 @@ public class ImageLoader {
         images.put("darkModeOff", resizeImage("darkModeOff.png", 50, 50));
         images.put("bigDarkModeOff", resizeImage("darkModeOn.png", 55, 55));
 
+        //DIALOG ICONS
+        images.put("checkIcon", resizeImage("icons/dialog/checkIcon.png", 50, 50));
+        images.put("errorIcon", resizeImage("icons/dialog/errorIcon.png", 55, 55));
+        images.put("insuffBalanceIcon", resizeImage("icons/dialog/insufficientBalance.png", 75, 70));
+        images.put("emptyAccountIcon", resizeImage("icons/dialog/emptyAccount.png", 55, 55));
+        images.put("emptyAmountIcon", resizeImage("icons/dialog/emptyAmount.png", 75, 70));
+
         //PROFILE ICONS
         images.put("edit", resizeImage("icons/profile/edit.png", 30, 30));
         images.put("editHover", resizeImage("icons/profile/edit_hover.png", 30, 30));

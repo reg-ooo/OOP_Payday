@@ -4,6 +4,7 @@ import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import Factory.sendMoney.SendMoneyPage1Factory;
 import data.model.UserInfo;
 import panels.GradientPanel;
+import util.DialogManager;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -128,7 +129,6 @@ public class CashOutPage extends JPanel {
 
         mainPanel.add(Box.createVerticalStrut(10));
 
-
         // ===== NEXT BUTTON =====
         JPanel buttonPanel = factory.createNextButtonPanel(onButtonClick, () -> {
             // Handle next action - check if user is logged in first
@@ -139,10 +139,20 @@ public class CashOutPage extends JPanel {
 
             // Validate amount
             String enteredAmount = getEnteredAmount();
+            double currentBalance = UserInfo.getInstance().getBalance();
+            double amount = Double.parseDouble(enteredAmount);
+
             if (enteredAmount.isEmpty() || enteredAmount.equals("0.00")) {
-                JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
+                DialogManager.showEmptyAmountDialog(this, "Please enter amount");
                 return;
             }
+
+            // Check if amount exceeds balance
+            if (amount > currentBalance) {
+                DialogManager.showInsuffBalanceDialog(this, "Insufficient Balance");
+                return;
+            }
+
                 // If user is logged in and amount is valid, proceed to next step
                 onButtonClick.accept("CashOut2:" + enteredAmount);
         });
@@ -174,8 +184,8 @@ public class CashOutPage extends JPanel {
     // In CashOutPage1 class
     public void clearAmountField() {
         if (amountField != null) {
-            amountField.setText("₱");
-            amountField.setForeground(Color.GRAY);
+            amountField.setText("₱ 0.00");
+            amountField.setForeground(themeManager.getGray());
             amountField.setCaretPosition(1);
 
             // Trigger the balance update to show original balance
