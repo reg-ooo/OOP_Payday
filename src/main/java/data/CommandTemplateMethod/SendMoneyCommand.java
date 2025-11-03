@@ -3,6 +3,7 @@ package data.CommandTemplateMethod;
 import data.DatabaseProtectionProxy;
 import data.dao.TransactionDAO;
 import data.dao.TransactionDAOImpl;
+import data.dao.WalletDAO;
 import data.dao.WalletDAOImpl;
 import data.model.*;
 
@@ -12,7 +13,7 @@ import java.sql.ResultSet;
 public class SendMoneyCommand extends TransactionCommand {
     private final DatabaseProtectionProxy database = DatabaseProtectionProxy.getInstance();
     private final TransactionDAO transactionDAO = TransactionDAOImpl.getInstance();
-    private final WalletDAOImpl walletDAO = WalletDAOImpl.getInstance();
+    private final WalletDAO walletDAO = WalletDAOImpl.getInstance();
 
     private final String receiver;
     private final double amount;
@@ -25,7 +26,6 @@ public class SendMoneyCommand extends TransactionCommand {
         this.receiver = receiver;
         this.amount = amount;
     }
-
 
     public boolean sendToOwnNumber() {
 

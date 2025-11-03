@@ -25,6 +25,8 @@ public class PayBillsCommand extends TransactionCommand{
     protected void performTransaction() {
         double newBalance = UserInfo.getInstance().getBalance() - amount;
         walletDAO.updateBalance(UserInfo.getInstance().getCurrentUserId(), newBalance);
+        RewardsCommand RC = new RewardsCommand(amount);
+        RC.execute();
     }
 
     @Override
