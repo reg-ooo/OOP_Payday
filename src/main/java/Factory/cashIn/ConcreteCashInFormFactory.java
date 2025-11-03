@@ -17,7 +17,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
-    private final int MAX_COMPONENT_WIDTH = 300;
+    private final int MAX_COMPONENT_WIDTH = 350;
     private final int FIELD_HEIGHT = 45;
 
     private class RoundedButtonUI extends BasicButtonUI {
@@ -61,17 +61,32 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         }
     }
 
-    /**
-     * Factory method to create the standard rounded selection button for Banks/Stores.
-     */
+    @Override
+    public int getMaxComponentWidth() {
+        return MAX_COMPONENT_WIDTH;
+    }
+
+    @Override
+    public int getFieldHeight() {
+        return FIELD_HEIGHT;
+    }
+
+    @Override
+    public JPanel createCashInOptionPanel(String imageName, String labelText, java.awt.event.ActionListener actionListener) {
+        // Placeholder implementation
+        return new JPanel();
+    }
+
+    @Override
+    public JPanel createContentPanel(JPanel banksOption, JPanel storesOption) {
+        // Placeholder implementation
+        return new JPanel();
+    }
+
     @Override
     public JButton createSelectionButton(String name, Consumer<String> onButtonClick, String nextKeyPrefix) {
         JButton button = new JButton();
-
-        // 1. Apply the custom UI
         button.setUI(new RoundedButtonUI());
-
-        // 2. Apply common styling and layout
         button.setLayout(new BorderLayout());
         button.setPreferredSize(new Dimension(140, 140));
         button.setMinimumSize(new Dimension(140, 140));
@@ -80,11 +95,8 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // 3. Load Icon or Text Fallback
         ImageIcon icon = imageLoader.loadAndScaleHighQuality(name + ".png", 100);
-        if (icon == null) {
-            icon = imageLoader.getImage(name);
-        }
+        if (icon == null) { icon = imageLoader.getImage(name); }
 
         if (icon != null && icon.getIconWidth() > 0) {
             JLabel imageLabel = new JLabel(icon);
@@ -98,36 +110,58 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
             button.add(textLabel, BorderLayout.CENTER);
         }
 
-        // 4. Add Mouse Listener (Hover effect)
         button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(themeManager.getGradientLBlue());
-            }
-
+            public void mouseEntered(MouseEvent e) { button.setBackground(themeManager.getGradientLBlue()); }
             @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(themeManager.getWhite());
-            }
+            public void mouseExited(MouseEvent e) { button.setBackground(themeManager.getWhite()); }
         });
-
-        // 5. Add Action Listener (Navigation)
         button.addActionListener(e -> onButtonClick.accept(nextKeyPrefix + ":" + name));
-
         return button;
     }
 
-    // --- 🔑 Implementations for BanksPage2/StoresPage2 (Form Components) 🔑 ---
-
     @Override
-    public int getMaxComponentWidth() {
-        return MAX_COMPONENT_WIDTH;
+    public JButton createSmallerSelectionButton(String name, Consumer<String> onButtonClick, String nextKeyPrefix) {
+        JButton button = new JButton();
+        button.setUI(new RoundedButtonUI());
+        button.setLayout(new BorderLayout());
+
+        button.setPreferredSize(new Dimension(120, 120));
+        button.setMinimumSize(new Dimension(120, 120));
+        button.setMaximumSize(new Dimension(120, 120));
+        button.setBackground(themeManager.getWhite());
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        ImageIcon icon = imageLoader.loadAndScaleHighQuality(name + ".png", 60);
+        if (icon == null) { icon = imageLoader.getImage(name); }
+
+        if (icon != null && icon.getIconWidth() > 0) {
+            JLabel imageLabel = new JLabel(icon);
+            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            imageLabel.setVerticalAlignment(SwingConstants.CENTER);
+            button.add(imageLabel, BorderLayout.CENTER);
+        } else {
+            // ⭐ SMALLER FONT
+            JLabel textLabel = new JLabel("<html><center>" + name + "</center></html>", SwingConstants.CENTER);
+            textLabel.setFont(fontLoader.loadFont(Font.BOLD, 10f, "Quicksand-Bold"));
+            textLabel.setForeground(themeManager.getDeepBlue());
+            button.add(textLabel, BorderLayout.CENTER);
+        }
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) { button.setBackground(themeManager.getGradientLBlue()); }
+            @Override
+            public void mouseExited(MouseEvent e) { button.setBackground(themeManager.getWhite()); }
+        });
+        button.addActionListener(e -> onButtonClick.accept(nextKeyPrefix + ":" + name));
+        return button;
     }
 
-    @Override
-    public int getFieldHeight() {
-        return FIELD_HEIGHT;
-    }
+    // =========================================================================
+    // III. Form Page Components (StoresPage2/BanksPage2)
+    // =========================================================================
 
     @Override
     public JPanel createHeaderPanel(Consumer<String> onButtonClick, String backPageKey) {
@@ -139,9 +173,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                onButtonClick.accept(backPageKey);
-            }
+            public void mouseClicked(MouseEvent e) { onButtonClick.accept(backPageKey); }
         });
         headerPanel.add(backLabel);
         return headerPanel;
@@ -151,17 +183,31 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     public JPanel createTitleRow(String title, String iconName, int iconSize) {
         JPanel titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         titleRow.setBackground(themeManager.getWhite());
-
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
         titleLabel.setForeground(ThemeManager.getDBlue());
-
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality(iconName, iconSize);
         JLabel iconLabel = new JLabel(titleIcon);
-
         titleRow.add(titleLabel);
         titleRow.add(iconLabel);
         return titleRow;
+    }
+
+    @Override
+    public JPanel createFooterPanel(String stepText) {
+        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        footerPanel.setBackground(themeManager.getWhite());
+        footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
+        footerPanel.add(createStepLabel(stepText));
+        return footerPanel;
+    }
+
+    @Override
+    public JLabel createStepLabel(String text) {
+        JLabel stepLabel = new JLabel(text, SwingConstants.CENTER);
+        stepLabel.setFont(fontLoader.loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
+        stepLabel.setForeground(themeManager.getDeepBlue());
+        return stepLabel;
     }
 
     @Override
@@ -266,14 +312,6 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         button.setMinimumSize(new Dimension(MAX_COMPONENT_WIDTH, FIELD_HEIGHT));
 
         return button;
-    }
-
-    @Override
-    public JLabel createStepLabel(String text) {
-        JLabel stepLabel = new JLabel(text, SwingConstants.CENTER);
-        stepLabel.setFont(fontLoader.loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
-        stepLabel.setForeground(themeManager.getDeepBlue());
-        return stepLabel;
     }
 
     @Override

@@ -5,10 +5,9 @@ import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
 
-// 🔑 ESSENTIAL FACTORY IMPORTS 🔑
 import Factory.cashIn.CashInFormFactory;
 import Factory.cashIn.ConcreteCashInFormFactory;
-import pages.cashIn.QRPage; // Assuming QRPage is in the same pages.cashIn package
+import pages.cashIn.QRPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,9 +43,6 @@ public class StoresPage2 extends JPanel {
         setupUI();
     }
 
-    /**
-     * Updates the UI based on the store selected from StoresPage.
-     */
     public void updateSelected(String storeName) {
         this.selectedStoreName = storeName;
 

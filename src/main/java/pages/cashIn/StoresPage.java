@@ -4,7 +4,6 @@ import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
 
-// 🔑 REQUIRED FACTORY IMPORTS
 import Factory.cashIn.CashInFormFactory;
 import Factory.cashIn.ConcreteCashInFormFactory;
 
@@ -20,7 +19,6 @@ public class StoresPage extends JPanel {
     private final Consumer<String> onButtonClick;
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
-    // ⭐ FACTORY INSTANCE: Use the factory to create styled components
     private final CashInFormFactory factory = new ConcreteCashInFormFactory();
 
     public StoresPage(Consumer<String> onButtonClick) {
