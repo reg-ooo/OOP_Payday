@@ -116,6 +116,11 @@ public class PayBills2 extends JPanel {
                 return;
             }
 
+            if (accountNumber.length() < 11) {
+                DialogManager.showEmptyAccountDialog(this, "Must Be 11 Digits");
+                return;
+            }
+
             if (amount.isEmpty()) {
                 DialogManager.showEmptyAmountDialog(this, "Please enter amount");
                 return;

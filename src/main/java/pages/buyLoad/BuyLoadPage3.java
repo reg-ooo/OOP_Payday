@@ -195,10 +195,8 @@ public class BuyLoadPage3 extends JPanel {
             BuyLoadCommand BLC = new BuyLoadCommand(Double.parseDouble(selectedAmount));
             boolean success = BLC.execute();
             if (success) {
-                DialogManager.showSuccessDialog(this, "Transaction Successful!", () -> {
-                    // This callback runs ONLY when user clicks OK
-                    onButtonClick.accept("BuyLoadReceipt:" + selectedNetwork + ":" + selectedAmount + ":" + selectedPhone);
-                });
+                DialogManager.showSuccessDialog(this, "Transaction Successful!");
+                onButtonClick.accept("BuyLoadReceipt:" + selectedNetwork + ":" + selectedAmount + ":" + selectedPhone);
             } else {
                 DialogManager.showErrorDialog(this, "Transaction Failed!");
             }

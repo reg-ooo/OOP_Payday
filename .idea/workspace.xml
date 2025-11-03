@@ -4,39 +4,26 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="NEW VERSION&#10;ERROR HANDLING&#10;MPIN&#10;5 NEW DIALOG PANELS">
+    <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsPage2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/receipt/BuyLoadReceiptFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/receipt/BuyLoadReceiptFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/receipt/CashInReceiptFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/receipt/CashInReceiptFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/receipt/CashOutReceiptFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/receipt/CashOutReceiptFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/receipt/PayBillsReceiptFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/receipt/PayBillsReceiptFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyBaseFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyBaseFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage1Factory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage3Factory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/sendMoney/ConcreteSendMoneyPage3Factory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/components/DecimalNumPad.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/DecimalNumPad.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/components/NumPad.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/NumPad.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/components/customDialog/CustomBaseDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/customDialog/CustomBaseDialog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/components/customDialog/CustomErrorDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/customDialog/CustomErrorDialog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/components/customDialog/PinEntryDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/customDialog/PinEntryDialog.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/UserManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/LoginPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInReceiptPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInReceiptPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutPage2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage2$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage2$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage2$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsPage2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/components/customDialog/CustomSuccessDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/components/customDialog/CustomSuccessDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/buyLoad/BuyLoadPage3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/sendMoney/SendMoneyPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/DialogManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/DialogManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/buyLoad/BuyLoadPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/sendMoney/SendMoneyPage.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,8 +55,8 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday.git&quot;,
-    &quot;accountId&quot;: &quot;fe1d59f3-e850-4205-9e10-09ea83a6d5f8&quot;
+    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday&quot;,
+    &quot;accountId&quot;: &quot;ddb72bb0-e265-4938-8c6e-4e20f69a2e75&quot;
   }
 }</component>
   <component name="ProblemsViewState">
@@ -180,8 +167,7 @@
       <workItem from="1762011593045" duration="2821000" />
       <workItem from="1762048005341" duration="2069000" />
       <workItem from="1762086342478" duration="394000" />
-      <workItem from="1762164705953" duration="778000" />
-      <workItem from="1762166664586" duration="1559000" />
+      <workItem from="1762156108513" duration="2963000" />
     </task>
     <task id="LOCAL-00001" summary="branch test">
       <option name="closed" value="true" />

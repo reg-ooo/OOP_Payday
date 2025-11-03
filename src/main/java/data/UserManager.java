@@ -6,6 +6,7 @@ import pages.ProfilePage;
 import panels.*;
 import data.dao.*;
 import data.model.*;
+import util.DialogManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -43,11 +44,13 @@ public class UserManager {
         // Validate input
         if (!isValidNumber(phoneNumber)) {
             System.out.println("Invalid phone number");
+            DialogManager.showErrorDialog(defaultParentComponent, "Invalid phone number!");
             return false;
         }
 
         if (!validateUsername(username)) {
             System.out.println("Invalid username");
+            DialogManager.showErrorDialog(defaultParentComponent, "Invalid username!");
             return false;
         }
 
@@ -79,6 +82,7 @@ public class UserManager {
 
             if (walletDAO.insert(wallet)) {
                 System.out.println("User added successfully!");
+                DialogManager.showSuccessDialog(defaultParentComponent, "User added successfully!");
                 return true;
             }
 
@@ -102,6 +106,7 @@ public class UserManager {
 
                     int userID = user.getCurrentUserId();
                     System.out.println("Login successful!");
+                    DialogManager.showSuccessDialog(defaultParentComponent, "Login successful!");
 
                     // Login user
                     userInfo.loginUser(userID);
@@ -113,9 +118,11 @@ public class UserManager {
                     onButtonClick.accept("success");
                 } else {
                     System.out.println("Login failed! Incorrect password");
+                    DialogManager.showErrorDialog(defaultParentComponent, "Incorrect password!");
                 }
             } else {
                 System.out.println("Login failed! User not found");
+                DialogManager.showErrorDialog(defaultParentComponent, "User not found!");
             }
         } catch (Exception e) {
             System.out.println("Login Error: " + e.getMessage());
