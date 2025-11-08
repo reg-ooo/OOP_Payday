@@ -1,5 +1,7 @@
 package pages;
 
+import data.dao.TransactionDAOImpl;
+import data.model.Transaction;
 import panels.RoundedPanel;
 import util.FontLoader;
 import util.ThemeManager;
@@ -8,9 +10,12 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.time.Month;
+import java.time.LocalDate;
 
 public class TransactionHistoryPage extends RoundedPanel {
 
@@ -18,6 +23,15 @@ public class TransactionHistoryPage extends RoundedPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final Consumer<String> onButtonClick; // Handler for back/exit
+    JPanel historyListPanel;
+
+    public static TransactionHistoryPage getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("TransactionHistoryPage must be initialized with getInstance(Consumer<String>) first");
+        }
+        return instance;
+
+    }
 
     public static TransactionHistoryPage getInstance(Consumer<String> onButtonClick) {
         if (instance == null) {
@@ -76,36 +90,37 @@ public class TransactionHistoryPage extends RoundedPanel {
         add(topContainer, BorderLayout.NORTH);
 
 
+
+
         // --- MAIN CONTENT (SCROLLABLE) ---
-        JPanel historyListPanel = new JPanel();
+        historyListPanel = new JPanel();
         historyListPanel.setLayout(new BoxLayout(historyListPanel, BoxLayout.Y_AXIS));
         historyListPanel.setOpaque(false);
         historyListPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
 
-
-        // Group 1: Today
-        addTransactionGroup(historyListPanel, "2025-11-01"); // Use the date for separation logic
-        historyListPanel.add(createTransactionCard("2025-11-01", "Send Money", "10:38PM", "₱100.0", false));
-        historyListPanel.add(Box.createVerticalStrut(15));
-
-        // Group 2: Previous Date (Formatted to "Oct 30")
-        addTransactionGroup(historyListPanel, "2025-10-30");
-        historyListPanel.add(createTransactionCard("2025-10-30", "Cash In (BPI)", "09:00AM", "₱500.0", true));
-        historyListPanel.add(Box.createVerticalStrut(15));
-        historyListPanel.add(createTransactionCard("2025-10-30", "Buy Load (Smart)", "07:15AM", "₱50.0", false));
-        historyListPanel.add(Box.createVerticalStrut(15));
-
-        // Group 3: Even Older Date (Formatted to "Oct 29")
-        addTransactionGroup(historyListPanel, "2025-10-29");
-        historyListPanel.add(createTransactionCard("2025-10-29", "Cash Out", "03:45PM", "₱2000.0", false));
-        historyListPanel.add(Box.createVerticalStrut(15));
-        historyListPanel.add(createTransactionCard("2025-10-29", "Cash In (Store)", "11:20AM", "₱1000.0", true));
-        historyListPanel.add(Box.createVerticalStrut(15));
-
-        addTransactionGroup(historyListPanel, "2025-10-28");
-        historyListPanel.add(createTransactionCard("2025-10-28", "Send Money", "04:00PM", "₱50.0", false));
-        historyListPanel.add(Box.createVerticalStrut(15));
-
+//        System.out.println("hello");
+//        // Group 1: Today
+//        addTransactionGroup(historyListPanel, "2025-11-01"); // Use the date for separation logic
+//        historyListPanel.add(createTransactionCard("2025-11-01", "Send Money", "10:38PM", "₱100.0", false));
+//        historyListPanel.add(Box.createVerticalStrut(15));
+//
+//        // Group 2: Previous Date (Formatted to "Oct 30")
+//        addTransactionGroup(historyListPanel, "2025-10-30");
+//        historyListPanel.add(createTransactionCard("2025-10-30", "Cash In (BPI)", "09:00AM", "₱500.0", true));
+//        historyListPanel.add(Box.createVerticalStrut(15));
+//        historyListPanel.add(createTransactionCard("2025-10-30", "Buy Load (Smart)", "07:15AM", "₱50.0", false));
+//        historyListPanel.add(Box.createVerticalStrut(15));
+//
+//        // Group 3: Even Older Date (Formatted to "Oct 29")
+//        addTransactionGroup(historyListPanel, "2025-10-29");
+//        historyListPanel.add(createTransactionCard("2025-10-29", "Cash Out", "03:45PM", "₱2000.0", false));
+//        historyListPanel.add(Box.createVerticalStrut(15));
+//        historyListPanel.add(createTransactionCard("2025-10-29", "Cash In (Store)", "11:20AM", "₱1000.0", true));
+//        historyListPanel.add(Box.createVerticalStrut(15));
+//
+//        addTransactionGroup(historyListPanel, "2025-10-28");
+//        historyListPanel.add(createTransactionCard("2025-10-28", "Send Money", "04:00PM", "₱50.0", false));
+//        historyListPanel.add(Box.createVerticalStrut(15));
 
         // Wrapper panel to center the historyListPanel horizontally
         JPanel centerWrapperPanel = new JPanel(new GridBagLayout());
@@ -116,7 +131,6 @@ public class TransactionHistoryPage extends RoundedPanel {
         gbc.weightx = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         centerWrapperPanel.add(historyListPanel, gbc);
-
 
         // Wrap in a scroll pane (Scrollable, but invisible scrollbar)
         JScrollPane scrollPane = new JScrollPane(centerWrapperPanel);
@@ -131,12 +145,11 @@ public class TransactionHistoryPage extends RoundedPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-
     private void addTransactionGroup(JPanel listPanel, String dateString) {
         listPanel.add(Box.createVerticalStrut(5));
 
         String labelText;
-        String todayDateString = "2025-11-01";
+        String todayDateString = LocalDate.now().toString();
 
         if (dateString.equals(todayDateString)) {
             labelText = "Today";
@@ -197,8 +210,7 @@ public class TransactionHistoryPage extends RoundedPanel {
         descLabel.setForeground(themeManager.getDBlue());
         descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        String monthDay = date.split("-")[1] + "-" + date.split("-")[2];
-        JLabel dateTimeLabel = new JLabel(monthDay + " | " + time);
+        JLabel dateTimeLabel = new JLabel(date + " | " + time);
         dateTimeLabel.setFont(fontLoader.loadFont(Font.PLAIN, 13f, "Quicksand-Regular"));
         dateTimeLabel.setForeground(themeManager.getBlack());
         dateTimeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -221,4 +233,34 @@ public class TransactionHistoryPage extends RoundedPanel {
         return card;
     }
 
+    public void loadComponents(){
+        historyListPanel.removeAll();
+
+        ArrayList<Transaction> transactionsList = TransactionDAOImpl.getInstance().getAllTransactions();
+        ArrayList<String> dateList = TransactionDAOImpl.getInstance().getDistinctDates();
+        for(String date : dateList) {
+            System.out.println(date);
+            int dateString = Integer.parseInt(date.substring(5,7));
+            String monthName = Month.of(dateString).name();
+
+            addTransactionGroup(historyListPanel, date);
+            for (Transaction transaction : transactionsList) {
+                System.out.println(transaction.getTransactionDate());
+                if(transaction.getTransactionDate().substring(0,10).equals(date)) {
+                    historyListPanel.add(createTransactionCard(transaction.getTransactionDate().substring(5,10),
+                                    transaction.getTransactionType(),
+                                    transaction.getTime(),
+                                    String.valueOf(transaction.getAmount()),
+                                    TransactionDAOImpl.getInstance().gainMoney(transaction)
+                            )
+                    );
+//                    System.out.println(transaction.getTransactionDate() + " " + transaction.getTransactionType() + " " + transaction.getAmount() + " " + TransactionDAOImpl.getInstance().gainMoney(transaction));
+                    historyListPanel.add(Box.createVerticalStrut(15));
+                }
+            }
+        }
+
+        historyListPanel.revalidate();
+        historyListPanel.repaint();
+    }
 }

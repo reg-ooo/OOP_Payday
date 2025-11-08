@@ -3,6 +3,7 @@ package data;
 import components.customDialog.PinEntryDialog;
 import main.MainFrame;
 import pages.ProfilePage;
+import pages.TransactionHistoryPage;
 import pages.rewards.RewardsPage;
 import panels.*;
 import data.dao.*;
@@ -229,7 +230,7 @@ public class UserManager {
         ProfilePage.getInstance().loadComponents();
         RewardsPage.getInstance().loadComponents();
         MainFrame.navBarVisibility();
-
+        TransactionHistoryPage.getInstance().loadComponents();
     }
 
     public void unloadComponents() {

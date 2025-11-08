@@ -99,13 +99,13 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     // Gets all the transactions for a given wallet
     @Override
-    public List<Transaction> getAllTransactions(int walletID) {
-        List<Transaction> transactions = new ArrayList<>();
-        String query = "SELECT * FROM Transactions WHERE walletID = ? " +
-                "ORDER BY transactionID DESC";
+    public ArrayList<Transaction> getAllTransactions() {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        String query = "SELECT * FROM Transactions WHERE userID = ? ORDER BY transactionID DESC LIMIT 8";
 
-        try (PreparedStatement pstmt = database.prepareStatement(query)) {
-            pstmt.setInt(1, walletID);
+        try {
+            PreparedStatement pstmt = database.prepareStatement(query);
+            pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -115,6 +115,28 @@ public class TransactionDAOImpl implements TransactionDAO {
             System.err.println("Error finding transactions: " + e.getMessage());
         }
         return transactions;
+    }
+
+    public ArrayList<String> getDistinctDates(){
+        ArrayList<String> dates = new ArrayList<>();
+        String query = "SELECT transactionDate FROM Transactions WHERE userID = ? ORDER BY transactionID DESC LIMIT 8";
+        try{
+            PreparedStatement pstmt = database.prepareStatement(query);
+            pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                dates.add(rs.getString(1).substring(0, 10));
+            }
+        }catch(Exception e){
+            System.err.println("Error finding distinct dates: " + e.getMessage());
+        }
+        ArrayList<String> distinctDates = new ArrayList<>();
+        for(String date : dates){
+            if(!distinctDates.contains(date)){
+                distinctDates.add(date);
+            }
+        }
+        return distinctDates;
     }
 
     // Returns the transactions data taken from the resultset

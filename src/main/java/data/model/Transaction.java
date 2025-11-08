@@ -29,4 +29,21 @@ public class Transaction {
 
     public String getTransactionDate() { return transactionDate; }
     public void setTransactionDate(String transactionDate) { this.transactionDate = transactionDate; }
+
+    public String getTime(){
+        return checkTime(this.transactionDate.substring(11, 16));
+    }
+
+    private String checkTime(String time){
+        int hour = Integer.parseInt(time.substring(0,2).trim());
+        System.out.println(hour);
+        if(hour > 12){
+            return hour - 12 +  ":" + time.substring(3) + "PM";
+        }
+        if (hour == 12) {
+            return hour + ":" + time.substring(3) + "PM";
+        } else {
+            return hour +  ":" + time.substring(3) + "AM";
+        }
+    }
 }
