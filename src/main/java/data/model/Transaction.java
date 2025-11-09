@@ -1,5 +1,8 @@
 package data.model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class Transaction {
     private int transactionID;
     private int walletID;
@@ -30,6 +33,8 @@ public class Transaction {
 
     public String getTransactionDate() { return transactionDate; }
     public void setTransactionDate(String transactionDate) { this.transactionDate = transactionDate; }
+    public String getFormattedDate() { return formatDateString(transactionDate.substring(0,10)); }
+
 
     public String getReferenceID() { return referenceID; } // Add getter
     public void setReferenceID(String referenceID) { this.referenceID = referenceID; } // Add setter
@@ -48,6 +53,21 @@ public class Transaction {
             return hour + ":" + time.substring(3) + "PM";
         } else {
             return hour +  ":" + time.substring(3) + "AM";
+        }
+    }
+
+    private static String formatDateString(String dateString) {
+        try {
+            // Parse the input string in yyyy-mm-dd format
+            LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
+
+            // Format to "MonthName dd, yyyy" (e.g., "January 15, 2025")
+            DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MMMM dd, yyyy");
+            return date.format(outputFormatter);
+        } catch (Exception e) {
+            // Handle invalid date format
+            System.err.println("Invalid date format. Please use yyyy-mm-dd format.");
+            return dateString;
         }
     }
 }

@@ -68,10 +68,12 @@ public class StoresPage2 extends JPanel {
             }
         }
 
-        // 2. Reset the account/reference field content
-        accountField.setText(defaultAccountPlaceholder);
-        accountField.setForeground(themeManager.getLightGray());
-        accountField.setHorizontalAlignment(JTextField.CENTER);
+        // 2. Reset the account field content
+        accountField.setText(UserInfo.getInstance().getPhoneNumber());
+        accountField.setForeground(themeManager.getBlack());
+        accountField.setHorizontalAlignment(JTextField.LEFT);
+        accountField.setEditable(false);
+        accountField.setFocusable(false);
 
         // 3. Reset the amount field content
         amountField.setText("₱ " + defaultAmountPlaceholder);
@@ -437,29 +439,18 @@ public class StoresPage2 extends JPanel {
             try {
                 double amountValue = Double.parseDouble(amountText);
 
-                CashInCommand CIM = new CashInCommand(amountValue);
-                boolean success = CIM.execute();
+                String finalAmount = String.format("%,.2f", amountValue);
 
-                if (success) {
+                QRPage qrPage = QRPage.getInstance(onButtonClick);
+                qrPage.updateSelectedEntity(
+                        selectedStoreName,
+                        false, // isBank = true
+                        accountRef,
+                        finalAmount,
+                        "StoresPage2"
+                );
 
-                    String finalAmount = String.format("%,.2f", amountValue);
-
-                    // Prepare and navigate to QRPage
-                    QRPage qrPage = QRPage.getInstance(onButtonClick);
-
-                    qrPage.updateSelectedEntity(
-                            selectedStoreName,
-                            false,
-                            accountRef,
-                            finalAmount,
-                            "CashInStores2"
-                    );
-
-                    DialogManager.showSuccessDialog(this, "Cash In Successful!");
-                    onButtonClick.accept("QRPage");
-                } else {
-                    DialogManager.showErrorDialog(this, "Cash In Failed!");
-                }
+                onButtonClick.accept("QRPage");
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error", JOptionPane.ERROR_MESSAGE);
