@@ -33,7 +33,7 @@ public class StoresPage2 extends JPanel {
     private JLabel actualBalanceLabel;
     private String selectedStoreName = "";
 
-    private final String defaultAccountPlaceholder = "Enter number";
+
     private final String defaultAmountPlaceholder = "0.00";
 
     // Component Dimensions (Retrieved from factory constants)
@@ -69,9 +69,12 @@ public class StoresPage2 extends JPanel {
         }
 
         // 2. Reset the account/reference field content
-        accountField.setText(defaultAccountPlaceholder);
-        accountField.setForeground(themeManager.getLightGray());
-        accountField.setHorizontalAlignment(JTextField.CENTER);
+        accountField.setText(UserInfo.getInstance().getPhoneNumber());
+        accountField.setForeground(themeManager.getBlack());
+        accountField.setHorizontalAlignment(JTextField.LEFT);
+        accountField.setEditable(false);
+        accountField.setFocusable(false);
+
 
         // 3. Reset the amount field content
         amountField.setText("₱ " + defaultAmountPlaceholder);
@@ -198,7 +201,7 @@ public class StoresPage2 extends JPanel {
      * Sets up the account/reference field with listeners.
      */
     private JPanel setupAccountField(JTextField field) {
-        final String placeholder = defaultAccountPlaceholder;
+        final String placeholder = UserInfo.getInstance().getPhoneNumber();
         Color normalBorder = themeManager.getGray();
         Color activeBorder = themeManager.getDBlue();
 
@@ -424,7 +427,7 @@ public class StoresPage2 extends JPanel {
                 return;
             }
 
-            if (accountRef.isEmpty() || accountRef.equals(defaultAccountPlaceholder)) {
+            if (accountRef.isEmpty() || accountRef.equals(UserInfo.getInstance().getPhoneNumber())) {
                 DialogManager.showEmptyAccountDialog(this, "Please enter number");
                 return;
             }

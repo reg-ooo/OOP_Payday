@@ -6,42 +6,23 @@
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/data_source_mapping.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/data_source_mapping.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/appLogo.png" beforeDir="false" afterPath="$PROJECT_DIR$/appLogo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/LoginUIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/LoginUIFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/RegisterUIFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/UserManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/UserManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/dao/TransactionDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/dao/TransactionDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/dao/UserDAOImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/dao/UserDAOImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/data/model/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/model/Transaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/RegisterPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/TransactionHistoryPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/transaction/TransactionHistoryPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsReceiptPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/rewards/RewardsReceiptPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/TransactionPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/LoginUIFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/LoginUIFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/RegisterUIFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/UserManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/UserManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/dao/TransactionDAOImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/dao/TransactionDAOImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/data/model/Transaction.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/model/Transaction.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/RegisterPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/TransactionHistoryPage$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/TransactionHistoryPage.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsReceiptPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/rewards/RewardsReceiptPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/TransactionPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,14 +52,14 @@
     &quot;assignee&quot;: &quot;reg-ooo&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/reg-ooo/OOP_Payday.git&quot;,
-    &quot;accountId&quot;: &quot;fe1d59f3-e850-4205-9e10-09ea83a6d5f8&quot;
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/reg-ooo/OOP_Payday.git",
+    "accountId": "6aa45a76-692a-4c6b-ad55-0141e7afdaa8"
   }
-}</component>
+}]]></component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Security Analysis" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -90,7 +71,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Payday.executor": "Debug",
+    "Application.Payday.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -149,8 +130,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26199.169" />
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-IU-252.26199.169" />
       </set>
     </attachedChunks>
   </component>
@@ -188,6 +169,7 @@
       <workItem from="1762156108513" duration="2963000" />
       <workItem from="1762177174583" duration="917000" />
       <workItem from="1762607594354" duration="9122000" />
+      <workItem from="1762693263700" duration="700000" />
     </task>
     <task id="LOCAL-00001" summary="branch test">
       <option name="closed" value="true" />

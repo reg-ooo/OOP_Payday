@@ -31,7 +31,7 @@ public class BanksPage2 extends JPanel {
     private JLabel actualBalanceLabel;
     private String selectedBankName = "";
 
-    private final String defaultAccountPlaceholder = "Enter account number";
+    private final String defaultAccountPlaceholder = UserInfo.getInstance().getPhoneNumber();
     private final String defaultAmountPlaceholder = "0.00";
 
     // Component Dimensions (Retrieved from factory constants)
@@ -69,9 +69,11 @@ public class BanksPage2 extends JPanel {
         }
 
         // 2. Reset the account field content
-        accountField.setText(defaultAccountPlaceholder);
-        accountField.setForeground(themeManager.getLightGray());
-        accountField.setHorizontalAlignment(JTextField.CENTER);
+        accountField.setText(UserInfo.getInstance().getPhoneNumber());
+        accountField.setEditable(false);
+        accountField.setFocusable(false);
+        accountField.setForeground(themeManager.getBlack());
+        accountField.setHorizontalAlignment(JTextField.LEFT);
 
         // 3. Reset the amount field content
         amountField.setText("₱ " + defaultAmountPlaceholder);
