@@ -1,12 +1,16 @@
 package Factory;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicComboBoxUI;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Calendar;
 import java.util.function.Consumer;
 
+import Factory.sendMoney.ConcreteSendMoneyBaseFactory;
+import data.model.UserInfo;
+import util.DialogManager;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -26,188 +30,214 @@ public class RegisterUIFactory {
             JPasswordField pinField,
             Consumer<String> onButtonClick) {
 
-        mainContainer.setLayout(new GridBagLayout());
+        mainContainer.setLayout(new BoxLayout(mainContainer, BoxLayout.Y_AXIS));
         mainContainer.setBackground(themeManager.getWhite());
-        mainContainer.setPreferredSize(new Dimension(350, 650));
-        mainContainer.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 15, 10, 15);
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainContainer.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // Title
         JLabel titleLabel = new JLabel("Create Account");
-        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Regular"));
+        titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
         titleLabel.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
-        mainContainer.add(titleLabel, gbc);
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainContainer.add(titleLabel);
 
-        // Spacer after title
-        JPanel spacer0 = new JPanel();
-        spacer0.setBackground(themeManager.getWhite());
-        spacer0.setPreferredSize(new Dimension(0, 5));
-        gbc.gridy = 1; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainContainer.add(spacer0, gbc);
+        mainContainer.add(Box.createVerticalStrut(30));
 
         // Username
-        addLabelAndFieldToContainer(mainContainer, "Username", usernameField, gbc, 2);
-
-        // Spacer
-        JPanel spacer1 = new JPanel();
-        spacer1.setBackground(themeManager.getWhite());
-        spacer1.setPreferredSize(new Dimension(0, 5));
-        gbc.gridy = 3; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainContainer.add(spacer1, gbc);
+        mainContainer.add(createFieldPanel("Username", usernameField));
+        mainContainer.add(Box.createVerticalStrut(15));
 
         // Full Name
-        addLabelAndFieldToContainer(mainContainer, "Full Name", fullNameField, gbc, 4);
-
-        // Spacer
-        JPanel spacer2 = new JPanel();
-        spacer2.setBackground(themeManager.getWhite());
-        spacer2.setPreferredSize(new Dimension(0, 5));
-        gbc.gridy = 5; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainContainer.add(spacer2, gbc);
+        mainContainer.add(createFieldPanel("Full Name", fullNameField));
+        mainContainer.add(Box.createVerticalStrut(15));
 
         // Birthday
-        addBirthdayToContainer(mainContainer, monthCombo, dayCombo, yearCombo, gbc, 6);
-
-        // Spacer
-        JPanel spacer3 = new JPanel();
-        spacer3.setBackground(themeManager.getWhite());
-        spacer3.setPreferredSize(new Dimension(0, 5));
-        gbc.gridy = 7; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainContainer.add(spacer3, gbc);
+        mainContainer.add(createBirthdayPanel("Birthday", monthCombo, dayCombo, yearCombo));
+        mainContainer.add(Box.createVerticalStrut(15));
 
         // Phone
-        addPhoneToContainer(mainContainer, phoneField, gbc, 8);
-
-        // Spacer
-        JPanel spacer4 = new JPanel();
-        spacer4.setBackground(themeManager.getWhite());
-        spacer4.setPreferredSize(new Dimension(0, 5));
-        gbc.gridy = 9; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainContainer.add(spacer4, gbc);
+        mainContainer.add(createFieldPanel("Phone", phoneField));
+        mainContainer.add(Box.createVerticalStrut(15));
 
         // Email
-        addLabelAndFieldToContainer(mainContainer, "Email", emailField, gbc, 10);
-
-        // Spacer
-        JPanel spacer5 = new JPanel();
-        spacer5.setBackground(themeManager.getWhite());
-        spacer5.setPreferredSize(new Dimension(0, 5));
-        gbc.gridy = 11; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainContainer.add(spacer5, gbc);
+        mainContainer.add(createFieldPanel("Email", emailField));
+        mainContainer.add(Box.createVerticalStrut(15));
 
         // PIN
-        addLabelAndFieldToContainer(mainContainer, "PIN", pinField, gbc, 12);
+        mainContainer.add(createFieldPanel("PIN", pinField));
+        mainContainer.add(Box.createVerticalStrut(30));
 
-        // Create Button
-        JPanel buttonPanel = createButtonPanel(onButtonClick);
-        gbc.gridx = 0; gbc.gridy = 13; gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.CENTER;
-        mainContainer.add(buttonPanel, gbc);
+        // ===== NEXT BUTTON =====
+        ConcreteSendMoneyBaseFactory buttonFactory = new ConcreteSendMoneyBaseFactory();
+        JPanel buttonPanel = buttonFactory.createNextButtonPanel(onButtonClick, () -> {
+
+            // If user is logged in and amount is valid, proceed to next step
+            onButtonClick.accept("success");
+        });
+        // Find and modify the button label
+        Component[] components = buttonPanel.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JButton) {
+                JButton button = (JButton) comp;
+                button.setText("Create Account"); // Change the text
+            }
+        }
+        buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainContainer.add(buttonPanel);
+
+        mainContainer.add(Box.createVerticalStrut(20));
 
         // Login Link
         JPanel loginLinkPanel = createLoginLinkPanel(onButtonClick);
-        gbc.gridy = 14;
-        gbc.anchor = GridBagConstraints.CENTER;
-        mainContainer.add(loginLinkPanel, gbc);
+        loginLinkPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        mainContainer.add(loginLinkPanel);
     }
 
-    private static void addLabelAndFieldToContainer(JPanel container, String labelText, JComponent field, GridBagConstraints gbc, int row) {
-        gbc.insets = new Insets(10, 15, 10, 15);
-        gbc.anchor = GridBagConstraints.WEST;
+    private static JPanel createFieldPanel(String labelText, JComponent field) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(themeManager.getWhite());
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT); // Changed to CENTER
+        panel.setMaximumSize(new Dimension(280, 60)); // Reduced width
 
+        // Label
         JLabel label = new JLabel(labelText);
-        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
+        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         label.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        container.add(label, gbc);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(label);
 
+        panel.add(Box.createVerticalStrut(5));
+
+        // Field
+        styleField(field);
+        field.setAlignmentX(Component.LEFT_ALIGNMENT);
+        field.setMaximumSize(new Dimension(280, 40)); // Reduced width
+        panel.add(field);
+
+        return panel;
+    }
+
+    private static JPanel createBirthdayPanel(String labelText, JComboBox<String> monthCombo, JComboBox<Integer> dayCombo, JComboBox<Integer> yearCombo) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        panel.setBackground(themeManager.getWhite());
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setMaximumSize(new Dimension(280, 80));
+
+        // Label
+        JLabel label = new JLabel(labelText);
+        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
+        label.setForeground(themeManager.getDBlue());
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(label);
+
+        panel.add(Box.createVerticalStrut(5));
+
+        // Date combo boxes
+        JPanel datePanel = new JPanel();
+        datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.X_AXIS));
+        datePanel.setBackground(themeManager.getWhite());
+        datePanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        datePanel.setMaximumSize(new Dimension(280, 40));
+
+        // Style combo boxes
+        styleComboBox(monthCombo, 85);
+        styleComboBox(dayCombo, 75);
+        styleComboBox(yearCombo, 105);
+
+        // Set initial values and validate
+        monthCombo.setSelectedIndex(0); // January
+        yearCombo.setSelectedIndex(0);  // Current year
+
+        // Initialize days based on initial month/year
+        updateDaysForMonth(monthCombo, dayCombo, yearCombo);
+
+        // Add date validation
+        monthCombo.addActionListener(e -> updateDaysForMonth(monthCombo, dayCombo, yearCombo));
+        yearCombo.addActionListener(e -> updateDaysForMonth(monthCombo, dayCombo, yearCombo));
+
+        datePanel.add(monthCombo);
+        datePanel.add(Box.createHorizontalStrut(5));
+        datePanel.add(dayCombo);
+        datePanel.add(Box.createHorizontalStrut(5));
+        datePanel.add(yearCombo);
+
+        panel.add(datePanel);
+
+        return panel;
+    }
+
+    private static void styleField(JComponent field) {
+        field.setPreferredSize(new Dimension(280, 40)); // Reduced width
+        field.setMaximumSize(new Dimension(280, 40));   // Reduced width
+        field.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
+        field.setBackground(themeManager.getWhite());
         field.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(themeManager.getLightGray(), 1),
-                BorderFactory.createEmptyBorder(1, 2, 1, 2)));
-        field.setPreferredSize(new Dimension(90, 25));
-        field.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        container.add(field, gbc);
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)));
     }
 
-    private static void addBirthdayToContainer(JPanel container, JComboBox<String> monthCombo, JComboBox<Integer> dayCombo, JComboBox<Integer> yearCombo, GridBagConstraints gbc, int row) {
-        gbc.insets = new Insets(10, 15, 10, 15);
-
-        JLabel label = new JLabel("Birthday");
-        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-        label.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        container.add(label, gbc);
-
-        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        datePanel.setBackground(themeManager.getWhite());
-        monthCombo.setPreferredSize(new Dimension(100, 25));
-        dayCombo.setPreferredSize(new Dimension(50, 25));
-        yearCombo.setPreferredSize(new Dimension(70, 25));
-        monthCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        dayCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        yearCombo.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        datePanel.add(monthCombo);
-        datePanel.add(dayCombo);
-        datePanel.add(yearCombo);
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        container.add(datePanel, gbc);
-    }
-
-    private static void addPhoneToContainer(JPanel container, JTextField phoneField, GridBagConstraints gbc, int row) {
-        gbc.insets = new Insets(10, 15, 10, 15);
-
-        JLabel label = new JLabel("Phone");
-        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-        label.setForeground(themeManager.getDBlue());
-        gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE;
-        container.add(label, gbc);
-
-        phoneField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getLightGray(), 1),
-                BorderFactory.createEmptyBorder(1, 2, 1, 2)));
-        phoneField.setPreferredSize(new Dimension(90, 25));
-        phoneField.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
-        container.add(phoneField, gbc);
-    }
-
-    private static JPanel createButtonPanel(Consumer<String> onButtonClick) {
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBackground(themeManager.getVBlue());
-        buttonPanel.setPreferredSize(new Dimension(120, 35));
-
-        GridBagConstraints buttonGbc = new GridBagConstraints();
-        buttonGbc.insets = new Insets(0, 0, 0, 0);
-        buttonGbc.anchor = GridBagConstraints.CENTER;
-
-        JLabel buttonLabel = new JLabel("Create");
-        buttonLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-        buttonLabel.setForeground(themeManager.getWhite());
-        buttonPanel.add(buttonLabel, buttonGbc);
-
-        buttonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+    private static void styleComboBox(JComboBox<?> comboBox, int width) {
+        DefaultListCellRenderer customRenderer = new DefaultListCellRenderer() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                onButtonClick.accept("success");
+            public Component getListCellRendererComponent(JList<?> list, Object value,
+                                                          int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(
+                        list, value, index, false, false
+                );
+                label.setFont(fontLoader.loadFont(Font.PLAIN, 13f, "Quicksand-Regular")); // Smaller font
+                label.setBorder(BorderFactory.createEmptyBorder(5, 6, 5, 6)); // Less padding
+                label.setBackground(themeManager.getWhite());
+                label.setForeground(themeManager.getDBlue());
+                label.setOpaque(true);
+                return label;
+            }
+        };
+
+        comboBox.setRenderer(customRenderer);
+
+        comboBox.setUI(new javax.swing.plaf.basic.BasicComboBoxUI() {
+            @Override
+            protected JButton createArrowButton() {
+                JButton button = new JButton("▼");
+                button.setFont(new Font("Arial", Font.PLAIN, 8)); // Smaller arrow
+                button.setBackground(themeManager.getWhite());
+                button.setForeground(themeManager.getDBlue());
+                button.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2)); // Less padding
+                button.setFocusable(false);
+                button.setPreferredSize(new Dimension(20, 40)); // Constrain arrow button width
+                return button;
+            }
+
+            @Override
+            public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+            }
+
+            @Override
+            protected ListCellRenderer createRenderer() {
+                return customRenderer;
             }
         });
-        buttonPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-        return buttonPanel;
+        comboBox.setPreferredSize(new Dimension(width, 40));
+        comboBox.setMaximumSize(new Dimension(width, 40));
+        comboBox.setFont(fontLoader.loadFont(Font.PLAIN, 13f, "Quicksand-Regular")); // Smaller font
+        comboBox.setBackground(themeManager.getWhite());
+        comboBox.setForeground(themeManager.getDBlue());
+        comboBox.setFocusable(false);
+
+        comboBox.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(themeManager.getGray(), 1),
+                BorderFactory.createEmptyBorder(0, 6, 0, 2) // Less left padding, minimal right
+        ));
     }
 
     private static JPanel createLoginLinkPanel(Consumer<String> onButtonClick) {
-        JPanel loginPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+        JPanel loginPanel = new JPanel();
+        loginPanel.setLayout(new BoxLayout(loginPanel, BoxLayout.X_AXIS));
         loginPanel.setOpaque(false);
+        loginPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel alreadyHaveLabel = new JLabel("Already have an account? ");
         alreadyHaveLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
@@ -240,29 +270,52 @@ public class RegisterUIFactory {
         return loginPanel;
     }
 
-    public static JPanel createNextButtonPanel(Consumer<String> onButtonClick, Runnable onNextClick) {
-        JPanel buttonPanel = new JPanel(new GridBagLayout());
-        buttonPanel.setBackground(themeManager.getVBlue());
-        buttonPanel.setPreferredSize(new Dimension(100, 50));
+    private static void updateDaysForMonth(JComboBox<String> monthCombo, JComboBox<Integer> dayCombo, JComboBox<Integer> yearCombo) {
+        if (monthCombo.getSelectedItem() == null || yearCombo.getSelectedItem() == null) {
+            // Set default days if no selection
+            setDefaultDays(dayCombo);
+            return;
+        }
 
-        GridBagConstraints buttonGbc = new GridBagConstraints();
-        buttonGbc.insets = new Insets(0, 0, 0, 0);
-        buttonGbc.anchor = GridBagConstraints.CENTER;
+        String month = monthCombo.getSelectedItem().toString();
+        int year = (Integer) yearCombo.getSelectedItem();
+        int daysInMonth = getDaysInMonth(month, year);
 
-        JLabel buttonLabel = new JLabel("Next");
-        buttonLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-        buttonLabel.setForeground(themeManager.getWhite());
-        buttonPanel.add(buttonLabel, buttonGbc);
+        Integer currentDay = (Integer) dayCombo.getSelectedItem();
+        dayCombo.removeAllItems();
 
-        buttonPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                onNextClick.run();
-            }
-        });
-        buttonPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        // Add days for the current month
+        for (int i = 1; i <= daysInMonth; i++) {
+            dayCombo.addItem(i);
+        }
 
-        return buttonPanel;
+        // Restore selected day if it's still valid, otherwise set to 1
+        if (currentDay != null && currentDay <= daysInMonth && currentDay >= 1) {
+            dayCombo.setSelectedItem(currentDay);
+        } else if (daysInMonth > 0) {
+            dayCombo.setSelectedItem(1); // Default to day 1
+        }
+    }
+
+    private static void setDefaultDays(JComboBox<Integer> dayCombo) {
+        dayCombo.removeAllItems();
+        for (int i = 1; i <= 31; i++) {
+            dayCombo.addItem(i);
+        }
+        dayCombo.setSelectedItem(1);
+    }
+
+    private static int getDaysInMonth(String month, int year) {
+        return switch (month.toLowerCase()) {
+            case "january", "march", "may", "july", "august", "october", "december" -> 31;
+            case "april", "june", "september", "november" -> 30;
+            case "february" -> isLeapYear(year) ? 29 : 28;
+            default -> 31;
+        };
+    }
+
+    private static boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
     }
 
     // Helper methods
@@ -283,5 +336,4 @@ public class RegisterUIFactory {
         return new String[]{"January", "February", "March", "April", "May", "June", "July", "August",
                 "September", "October", "November", "December"};
     }
-
 }

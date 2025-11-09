@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import Factory.RegisterUIFactory;
 import data.UserManager;
+import util.DialogManager;
 import util.FontLoader;
 import util.ThemeManager;
 
@@ -86,14 +87,12 @@ public class RegisterPage extends JPanel {
                     validateBirthdate(),
                     getUsername()
             )) {
+                user.loginAccount(getUsername(),getPIN(), onButtonClick);
                 onButtonClick.accept("success");
                 clearForm();
             }
         } else {
-            JOptionPane.showMessageDialog(this,
-                    "Please fill in all fields correctly.",
-                    "Validation Error",
-                    JOptionPane.WARNING_MESSAGE);
+            DialogManager.showErrorDialog(this,"Please fill in all fields");
         }
     }
 

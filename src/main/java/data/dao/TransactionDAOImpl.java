@@ -66,6 +66,24 @@ public class TransactionDAOImpl implements TransactionDAO {
         return false;
     }
 
+    // Gets a specific transaction by transaction ID
+    public Transaction getTransactionById(int transactionId) {
+        String query = "SELECT * FROM Transactions WHERE transactionID = ? AND userID = ?";
+
+        try (PreparedStatement pstmt = database.prepareStatement(query)) {
+            pstmt.setInt(1, transactionId);
+            pstmt.setInt(2, UserInfo.getInstance().getCurrentUserId());
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return mapResultSetToTransaction(rs);
+            }
+        } catch (Exception e) {
+            System.err.println("Error finding transaction by ID: " + e.getMessage());
+        }
+        return null;
+    }
+
     // Generates a unique reference number for each transaction
     private String getReference(){
         LocalDate currentDate = LocalDate.now();
@@ -147,6 +165,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         transaction.setTransactionType(rs.getString("transactionType"));
         transaction.setAmount(rs.getDouble("amount"));
         transaction.setTransactionDate(rs.getString("transactionDate"));
+        transaction.setReferenceID(rs.getString("referenceID"));
         return transaction;
     }
 

@@ -60,6 +60,10 @@ public class ImageLoader {
         images.put("amount", resizeImage("icons/sendMoney/amount.png", 60, 60));
         images.put("successMoney", resizeImage("icons/sendMoney/successMoney.png", 60, 60));
 
+        //TRANSACTION ICON
+        images.put("transactionIcon", resizeImage("icons/transaction/transactionIcon.png", 80, 80));
+        images.put("transactionHistoryIcon", resizeImage("icons/transaction/transactionHistoryIcon.png", 80, 80));
+
         //=================================PAY BILLS ICONS==========================================================//
 //Electricity
         images.put("Meralco", resizeImage("icons/payBillsImages/Electricity/Meralco.png", 75, 65));

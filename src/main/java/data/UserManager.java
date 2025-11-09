@@ -3,7 +3,7 @@ package data;
 import components.customDialog.PinEntryDialog;
 import main.MainFrame;
 import pages.ProfilePage;
-import pages.TransactionHistoryPage;
+import pages.transaction.TransactionHistoryPage;
 import pages.rewards.RewardsPage;
 import panels.*;
 import data.dao.*;
@@ -93,6 +93,7 @@ public class UserManager {
             System.out.println("Adding user failed: " + e.getMessage());
             return false;
         }
+
     }
 
     public void loginAccount(String username, String password, Consumer<String> onButtonClick) {

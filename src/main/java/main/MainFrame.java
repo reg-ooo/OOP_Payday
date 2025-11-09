@@ -7,8 +7,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.function.Consumer;
 
+import data.dao.TransactionDAOImpl;
+import data.model.Transaction;
 import data.model.UserInfo;
 import pages.*;
 import pages.buyLoad.BuyLoadPage;
@@ -30,6 +31,9 @@ import pages.rewards.RewardsReceiptPage;
 import pages.sendMoney.SendMoneyPage;
 import pages.sendMoney.SendMoneyPage2;
 import pages.sendMoney.SendMoneyPage3;
+import pages.transaction.TransactionHistoryPage;
+import pages.transaction.TransactionReceiptPage;
+import panels.TransactionPanel;
 import util.ThemeManager;
 import util.AnimatedPageSwitcher;
 
@@ -86,7 +90,10 @@ public class MainFrame extends JFrame {
         // NAVBAR PAGES
         mainPanel.add(new LaunchPage(this::handleLaunchResult), "Launch");
         mainPanel.add(ProfilePage.getInstance(this::handleProfileResult), "Profile");
+
+        //TRANSACTION PAGE
         mainPanel.add(transactionHistoryPage, "TransactionHistory");
+        mainPanel.add(new TransactionReceiptPage(this::handleTransactionHistoryResult), "TransactionReceipt");
 
         // SEND MONEY PAGES
         mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
@@ -102,7 +109,6 @@ public class MainFrame extends JFrame {
 
         // QRPage uses the instance created above
         mainPanel.add(qrPage, "QRPage");
-
         mainPanel.add(cashInReceiptPage, "CashInReceipt");
 
         // CASH OUT PAGES
@@ -189,22 +195,38 @@ public class MainFrame extends JFrame {
 
         switch (result) {
             case "Launch" -> slideContentTransition("Launch", -1);
-            case "Profile" -> slideContentTransition("Profile", 1);
+            case "Profile" -> {
+                slideContentTransition("Profile", 1);
+            }
         }
     }
 
     private void handleLoginResult(String result) {
+        System.out.println("DEBUG: handleLoginResult received: " + result);
+
         switch (result) {
-            case "success" -> slideContentTransition("Launch", -1);
-            case "Register" -> slideContentTransition("Register", 1);
-            default -> slideContentTransition(result, 1);
+            case "success" -> {
+                System.out.println("DEBUG: Switching to Launch page");
+                slideContentTransition("Launch", 1);
+            }
+            case "Register" -> {
+                System.out.println("DEBUG: Switching to Register page");
+                slideContentTransition("Register", 1);
+            }
+            default -> {
+                System.out.println("DEBUG: Unknown result, switching to: " + result);
+                slideContentTransition(result, 1);
+            }
         }
     }
 
     private void handleRegisterResult(String result) {
         switch (result) {
             case "BackToLogin" -> slideContentTransition("Login", -1);
-            case "success" -> slideContentTransition("Launch", -1);
+            case "success" -> {
+                TransactionPanel.getInstance().loadComponents();
+                slideContentTransition("Launch", 1);
+            }
             default -> slideContentTransition(result, 1);
         }
     }
@@ -237,7 +259,10 @@ public class MainFrame extends JFrame {
             case "CashIn" -> slideContentTransition("CashIn", 1);
             case "BuyLoad" -> slideContentTransition("BuyLoad", 1);
             case "Rewards" -> slideContentTransition("Rewards", 1);
-            case "Profile" -> slideContentTransition("Profile", 1);
+            case "Profile" ->  {
+                ProfilePage.getInstance().loadComponents();
+                slideContentTransition("Profile", 1);
+            }
             case "TransactionHistory" -> slideContentTransition("TransactionHistory", 1); // ADDED: Routing from
                                                                                           // LaunchPage
             default -> System.out.println("Unknown action: " + result);
@@ -345,8 +370,18 @@ public class MainFrame extends JFrame {
     private void handleTransactionHistoryResult(String result) {
         if (result.equals("Launch")) {
             slideContentTransition("Launch", -1);
-        } else {
-            System.out.println("Unknown TransactionHistory action: " + result);
+        } else if (result.equals("TransactionHistory")) {
+            slideContentTransition("TransactionHistory", -1);
+        } else if (result.startsWith("TransactionReceipt")) {
+            // Find receipt page and apply data
+            for (Component comp : mainPanel.getComponents()) {
+                if (comp instanceof TransactionReceiptPage receiptPage) {
+                    receiptPage.applyPendingTransaction();
+                    break;
+                }
+            }
+
+            slideContentTransition("TransactionReceipt", 1);
         }
     }
 

@@ -20,9 +20,9 @@ public class LoginUIFactory {
         mainContainer.setBackground(themeManager.getWhite());
         mainContainer.setPreferredSize(new Dimension(420, 650));
 
-        mainContainer.add(Box.createVerticalStrut(2));
+        mainContainer.add(Box.createVerticalStrut(50));
         mainContainer.add(createLogoSection(usernameField));
-        mainContainer.add(Box.createVerticalStrut(2));
+        mainContainer.add(Box.createVerticalStrut(10));
         mainContainer.add(createPinLoginPanel(pinDots, onButtonClick, processPinDigit, clearPinInput));
         mainContainer.add(Box.createVerticalGlue()); // Push everything up, register link goes to bottom
         mainContainer.add(createRegisterLinkPanel(onButtonClick));
@@ -39,10 +39,10 @@ public class LoginUIFactory {
 
         try {
             ImageIcon logo = new ImageIcon("appLogo.png");
-            Image scaledLogo = logo.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            Image scaledLogo = logo.getImage().getScaledInstance(180, 90, Image.SCALE_SMOOTH);
             JLabel logoLabel = new JLabel(new ImageIcon(scaledLogo));
             logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-            logoPanel.add(Box.createVerticalStrut(-10));
+            logoPanel.add(Box.createVerticalStrut(10));
             logoPanel.add(logoLabel);
         } catch (Exception e) {
             JLabel fallbackLabel = new JLabel("LOGO", SwingConstants.CENTER);
@@ -52,7 +52,7 @@ public class LoginUIFactory {
             logoPanel.add(fallbackLabel);
         }
 
-        logoPanel.add(Box.createVerticalStrut(-15));
+        logoPanel.add(Box.createVerticalStrut(15));
         logoPanel.add(createRoundedUsernameField(usernameField));
         logoPanel.add(Box.createVerticalStrut(4));
         return logoPanel;

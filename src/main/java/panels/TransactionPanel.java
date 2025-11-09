@@ -119,12 +119,33 @@ public class TransactionPanel extends JPanel{
             transactionContainer.add(transactionRoundedPanel);
             this.add(transactionContainer, BorderLayout.CENTER);
 
-            repaint();
-            revalidate();
+        } else {
+            // Show "No Transactions Found" message for new users
+            transactionContentPanel.add(createNoTransactionsMessage());
         }
+
+        transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
+        transactionContainer.add(transactionRoundedPanel);
+        this.add(transactionContainer, BorderLayout.CENTER);
+
+        repaint();
+        revalidate();
     }
 
+    // Add this method to create the "No Transactions Found" message
+    private JPanel createNoTransactionsMessage() {
+        JPanel messagePanel = new PanelBuilder()
+                .setLayout(new BorderLayout())
+                .setBorder(BorderFactory.createEmptyBorder(40, 10, 40, 10))
+                .build();
 
+        JLabel messageLabel = new JLabel("No Transactions Found", SwingConstants.CENTER);
+        messageLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 17f, "Quicksand-Regular"));
+        messageLabel.setForeground(ThemeManager.getDBlue());
+
+        messagePanel.add(messageLabel, BorderLayout.CENTER);
+        return messagePanel;
+    }
 
     public void unloadComponents(){
         transactionContentPanel.removeAll();

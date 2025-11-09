@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
 public class ProfilePage extends JPanel {
@@ -19,6 +18,7 @@ public class ProfilePage extends JPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final JPanel infoPanel;
     private final JLabel nameLabel;
+    private final JLabel initialsLabel;
     private final JLabel emailValueLabel = new JLabel();
     private final JLabel birthdayValueLabel = new JLabel();
     private final JLabel phoneValueLabel = new JLabel();
@@ -39,52 +39,61 @@ public class ProfilePage extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // ===== HEADER SECTION - Fixed version =====
+        // ===== HEADER SECTION =====
         JPanel headerWrapper = new JPanel();
         headerWrapper.setLayout(new BoxLayout(headerWrapper, BoxLayout.Y_AXIS));
         headerWrapper.setOpaque(false);
         headerWrapper.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Gradient panel (without the image inside)
+        // Gradient panel
         GradientPanel headerPanel = new GradientPanel(themeManager.getDvBlue(), themeManager.getVBlue(), 25);
         headerPanel.setLayout(new BorderLayout());
-        headerPanel.setPreferredSize(new Dimension(340, 130)); // Reduced height
+        headerPanel.setPreferredSize(new Dimension(340, 130));
         headerPanel.setMaximumSize(new Dimension(340, 130));
 
-        // "My Account" label
+        // "My Profile" label
         JLabel titleLabel = new JLabel("My Profile");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 0));
         headerPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Profile image - OUTSIDE the gradient panel
-        JLabel profileImage = new JLabel(makeCircularImage("customer.png", 120)); // Smaller size
-        profileImage.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Initials circle - OUTSIDE the gradient panel
+        initialsLabel = new JLabel();
+        initialsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        initialsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        initialsLabel.setVerticalAlignment(SwingConstants.CENTER);
+        initialsLabel.setOpaque(true);
+        initialsLabel.setBackground(themeManager.getPBlue());
+        initialsLabel.setForeground(Color.WHITE);
+        initialsLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
 
-        // Create a container for the image that positions it to overlap
-        JPanel imageContainer = new JPanel();
-        imageContainer.setLayout(new BoxLayout(imageContainer, BoxLayout.Y_AXIS));
-        imageContainer.setOpaque(false);
-        imageContainer.add(Box.createVerticalStrut(60)); // Position image to overlap
-        imageContainer.add(profileImage);
+        // Create circular initials panel
+        JPanel initialsPanel = createCircularInitialsPanel(initialsLabel, 120);
 
-        // Combine gradient panel and image container
+        // Create a container for the initials that positions it to overlap
+        JPanel initialsContainer = new JPanel();
+        initialsContainer.setLayout(new BoxLayout(initialsContainer, BoxLayout.Y_AXIS));
+        initialsContainer.setOpaque(false);
+        initialsContainer.add(Box.createVerticalStrut(60)); // Position initials to overlap
+        initialsContainer.add(initialsPanel);
+
+        // Combine gradient panel and initials container
         JPanel headerContainer = new JPanel();
         headerContainer.setLayout(new OverlayLayout(headerContainer));
         headerContainer.setOpaque(false);
         headerContainer.setPreferredSize(new Dimension(340, 180));
 
-        headerContainer.add(imageContainer);
+        headerContainer.add(initialsContainer);
         headerContainer.add(headerPanel);
 
         headerWrapper.add(headerContainer);
 
-        // ===== NAME LABEL BELOW IMAGE =====
-        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 0)); // 30px left margin
+        // ===== NAME LABEL BELOW INITIALS =====
+        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 0));
         namePanel.setOpaque(false);
 
-        nameLabel = new JLabel("Cyan Oger Sigurado"); // This will be dynamic
+        nameLabel = new JLabel("Loading...");
         nameLabel.setFont(fontLoader.loadFont(Font.BOLD, 22f, "Quicksand-Bold"));
         nameLabel.setForeground(themeManager.getBlack());
 
@@ -121,6 +130,78 @@ public class ProfilePage extends JPanel {
         add(centerPanel, BorderLayout.CENTER);
     }
 
+    private JPanel createCircularInitialsPanel(JLabel label, int size) {
+        JPanel circularPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                // Draw circular background
+                g2.setColor(label.getBackground());
+                g2.fillOval(0, 0, getWidth(), getHeight());
+
+                g2.dispose();
+                super.paintComponent(g);
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(size, size);
+            }
+
+            @Override
+            public Dimension getMinimumSize() {
+                return getPreferredSize();
+            }
+
+            @Override
+            public Dimension getMaximumSize() {
+                return getPreferredSize();
+            }
+        };
+
+        circularPanel.setLayout(new GridBagLayout());
+        circularPanel.setOpaque(false);
+        circularPanel.add(label);
+
+        return circularPanel;
+    }
+
+    private String getInitials(String fullName) {
+        if (fullName == null || fullName.trim().isEmpty()) {
+            return "??";
+        }
+
+        String[] names = fullName.trim().split("\\s+");
+        if (names.length == 0) {
+            return "??";
+        }
+
+        StringBuilder initials = new StringBuilder();
+
+        // Get first character of first name
+        if (names[0].length() > 0) {
+            initials.append(Character.toUpperCase(names[0].charAt(0)));
+        }
+
+        // Get first character of last name if available
+        if (names.length > 1 && names[names.length - 1].length() > 0) {
+            initials.append(Character.toUpperCase(names[names.length - 1].charAt(0)));
+        }
+
+        // If only one name, just use first two characters (or one if very short)
+        if (initials.length() == 0) {
+            if (fullName.length() >= 2) {
+                return fullName.substring(0, 2).toUpperCase();
+            } else if (fullName.length() == 1) {
+                return fullName.toUpperCase() + "?";
+            }
+        }
+
+        return initials.toString();
+    }
+
     // Create info rows
     private JPanel makeInfoRow(String labelText, JLabel valueLabel) {
         JPanel row = new JPanel(new BorderLayout());
@@ -140,23 +221,6 @@ public class ProfilePage extends JPanel {
 
         return row;
     }
-//    private JPanel makeInfoRow(String labelText, String valueText) {
-//        JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 3));
-//        row.setOpaque(false);
-//
-//        JLabel label = new JLabel(labelText);
-//        label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-//        label.setForeground(themeManager.getDBlue());
-//
-//        JLabel value = new JLabel(valueText);
-//        value.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-//        value.setForeground(themeManager.getGray());
-//        value.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 0));
-//
-//        row.add(label);
-//        row.add(value);
-//        return row;
-//    }
 
     // Clickable rows (e.g., Change Password)
     private JPanel makeClickableRow(String text, Consumer<String> onClick, String command) {
@@ -180,9 +244,9 @@ public class ProfilePage extends JPanel {
 
         // Get icons from ImageLoader and make them final
         ImageLoader imageLoader = ImageLoader.getInstance();
-        final ImageIcon normalIcon = imageLoader.getImage(normalKey); // ← ADD final
+        final ImageIcon normalIcon = imageLoader.getImage(normalKey);
         final ImageIcon hoverIcon = imageLoader.getImage(hoverKey) != null ?
-                imageLoader.getImage(hoverKey) : normalIcon; // ← ADD final
+                imageLoader.getImage(hoverKey) : normalIcon;
 
         JLabel iconLabel = new JLabel(normalIcon);
         iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
@@ -203,7 +267,7 @@ public class ProfilePage extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 if (!text.equals("Sign Out")) {
                     label.setForeground(themeManager.getPBlue());
-                    iconLabel.setIcon(hoverIcon); // Now can access hoverIcon
+                    iconLabel.setIcon(hoverIcon);
                 } else {
                     label.setForeground(themeManager.getRed());
                     iconLabel.setIcon(hoverIcon);
@@ -213,55 +277,27 @@ public class ProfilePage extends JPanel {
             @Override
             public void mouseExited(MouseEvent e) {
                 label.setForeground(themeManager.getDBlue());
-                iconLabel.setIcon(normalIcon); // Now can access normalIcon
+                iconLabel.setIcon(normalIcon);
             }
         });
 
         return row;
     }
 
-    // Make circular profile picture
-    private ImageIcon makeCircularImage(String imagePath, int size) {
-        Image image;
-
-        try {
-            ImageIcon icon = new ImageIcon(imagePath);
-            image = icon.getImage();
-
-            if (image.getWidth(null) <= 0 || image.getHeight(null) <= 0) {
-                throw new Exception("Invalid image dimensions");
-            }
-        } catch (Exception e) {
-            System.out.println("⚠️ Failed to load image: " + e.getMessage());
-            BufferedImage placeholder = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g = placeholder.createGraphics();
-            g.setColor(Color.LIGHT_GRAY);
-            g.fillOval(0, 0, size, size);
-            g.setColor(Color.DARK_GRAY);
-            g.setFont(new Font("Arial", Font.BOLD, 12));
-            g.drawString("No Img", 10, size / 2);
-            g.dispose();
-            image = placeholder;
-        }
-
-        BufferedImage circular = new BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = circular.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setClip(new java.awt.geom.Ellipse2D.Float(0, 0, size, size));
-        g2.drawImage(image, 0, 0, size, size, null);
-        g2.dispose();
-
-        return new ImageIcon(circular);
-    }
-
     public void loadComponents(){
         UserInfo user = UserInfo.getInstance();
         String birthday = user.getBirthDate();
         String formattedBirthday = birthday.substring(5, 7) + "/" + birthday.substring(8, 10) + "/" + birthday.substring(0, 4);
+
+        // Set user data
         nameLabel.setText(user.getFullName());
         emailValueLabel.setText(user.getEmail());
         birthdayValueLabel.setText(formattedBirthday);
         phoneValueLabel.setText(user.getPhoneNumber());
+
+        // Set initials
+        String initials = getInitials(user.getFullName());
+        initialsLabel.setText(initials);
 
         infoPanel.revalidate();
         infoPanel.repaint();

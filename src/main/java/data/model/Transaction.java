@@ -6,6 +6,7 @@ public class Transaction {
     private String transactionType;
     private double amount;
     private String transactionDate;
+    private String referenceID;
 
     public Transaction() {}
 
@@ -29,6 +30,9 @@ public class Transaction {
 
     public String getTransactionDate() { return transactionDate; }
     public void setTransactionDate(String transactionDate) { this.transactionDate = transactionDate; }
+
+    public String getReferenceID() { return referenceID; } // Add getter
+    public void setReferenceID(String referenceID) { this.referenceID = referenceID; } // Add setter
 
     public String getTime(){
         return checkTime(this.transactionDate.substring(11, 16));
