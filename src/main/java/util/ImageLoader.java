@@ -30,6 +30,10 @@ public class ImageLoader {
         images.put("darkModeOff", resizeImage("darkModeOff.png", 50, 50));
         images.put("bigDarkModeOff", resizeImage("darkModeOn.png", 55, 55));
 
+        //SEE BALANCE
+        images.put("showBalance", resizeImage("icons/balanceIcon/showBalance.png", 30, 30));
+        images.put("hideBalance", resizeImage("icons/balanceIcon/hideBalance.png", 30, 30));
+
         //DIALOG ICONS
         images.put("checkIcon", resizeImage("icons/dialog/checkIcon.png", 50, 50));
         images.put("errorIcon", resizeImage("icons/dialog/errorIcon.png", 55, 55));

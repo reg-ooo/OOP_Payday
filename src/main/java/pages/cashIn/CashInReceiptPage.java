@@ -2,7 +2,7 @@ package pages.cashIn;
 
 import components.RoundedBorder;
 import components.RoundedButton;
-import panels.RoundedPanel;
+import launchPagePanels.RoundedPanel;
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;

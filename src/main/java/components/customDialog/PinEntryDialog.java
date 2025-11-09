@@ -2,7 +2,7 @@ package components.customDialog;
 
 import components.NumPad;
 import components.RoundedBorder;
-import panels.RoundedPanel;
+import launchPagePanels.RoundedPanel;
 import util.FontLoader;
 import util.ThemeManager;
 

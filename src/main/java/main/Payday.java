@@ -1,13 +1,9 @@
 package main;
 
 import javax.swing.*;
-import java.awt.*;
-import java.sql.*;
 
 import data.Database;
 //import pages.SplashScreen;
-import pages.*;
-import panels.*;
 
 import static data.Database.DBConnect;
 

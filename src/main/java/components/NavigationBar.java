@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import panels.*;
+import launchPagePanels.*;
 import util.FontLoader;
 import util.ThemeManager;
 

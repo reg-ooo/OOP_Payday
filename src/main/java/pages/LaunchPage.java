@@ -2,11 +2,9 @@ package pages;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import components.*;
-import panels.*;
+import launchPagePanels.*;
 
 public class LaunchPage extends JPanel {
     private NPanel nPanel = NPanel.getInstance();

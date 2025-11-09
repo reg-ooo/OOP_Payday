@@ -3,7 +3,7 @@ package components.customDialog;
 import Factory.sendMoney.ConcreteSendMoneyBaseFactory;
 import components.RoundedBorder;
 import main.MainFrame;
-import panels.RoundedPanel;
+import launchPagePanels.RoundedPanel;
 import util.FontLoader;
 import util.ThemeManager;
 
