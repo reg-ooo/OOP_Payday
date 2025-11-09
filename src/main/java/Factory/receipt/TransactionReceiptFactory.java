@@ -67,18 +67,17 @@ public class TransactionReceiptFactory extends ConcreteSendMoneyBaseFactory impl
         panel.add(Box.createVerticalStrut(10));
 
         // ===== RECEIPT DETAILS PANEL =====
-        // Create the rounded border container (wrapper) - MAKE IT TALLER TO INCLUDE SUCCESS SECTION
         RoundedBorder receiptContainer = new RoundedBorder(15, themeManager.getVBlue(), 3);
         receiptContainer.setLayout(new FlowLayout());
         receiptContainer.setOpaque(false);
-        receiptContainer.setPreferredSize(new Dimension(370, 400)); // Increased height
-        receiptContainer.setMaximumSize(new Dimension(370, 400));   // Increased height
+        receiptContainer.setPreferredSize(new Dimension(370, 430)); // Increased height slightly
+        receiptContainer.setMaximumSize(new Dimension(370, 430));   // Increased height slightly
         receiptContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create inner rounded panel
         RoundedPanel receiptRoundedPanel = new RoundedPanel(15, themeManager.getWhite());
         receiptRoundedPanel.setLayout(new BorderLayout());
-        receiptRoundedPanel.setPreferredSize(new Dimension(350, 390)); // Increased height
+        receiptRoundedPanel.setPreferredSize(new Dimension(350, 420)); // Increased height slightly
         receiptRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Create content panel for the receipt details
@@ -117,6 +116,11 @@ public class TransactionReceiptFactory extends ConcreteSendMoneyBaseFactory impl
 
         receiptContentPanel.add(Box.createVerticalStrut(15));
 
+        // Parse dateTime to separate date and time
+        String[] dateTimeParts = parseDateTime(dateTime);
+        String datePart = dateTimeParts[0];
+        String timePart = dateTimeParts[1];
+
         // Transaction Type Section
         receiptContentPanel.add(createDetailRow("Transaction Type", transactionType));
         receiptContentPanel.add(Box.createVerticalStrut(10));
@@ -129,8 +133,12 @@ public class TransactionReceiptFactory extends ConcreteSendMoneyBaseFactory impl
         receiptContentPanel.add(createDetailRow("Ref. No.", referenceNo));
         receiptContentPanel.add(Box.createVerticalStrut(10));
 
-        // Date & Time
-        receiptContentPanel.add(createDetailRow("Date & Time", dateTime));
+        // Date (separated)
+        receiptContentPanel.add(createDetailRow("Date", datePart));
+        receiptContentPanel.add(Box.createVerticalStrut(10));
+
+        // Time (separated)
+        receiptContentPanel.add(createDetailRow("Time", timePart));
 
         // Add content to rounded panel
         receiptRoundedPanel.add(receiptContentPanel, BorderLayout.CENTER);
@@ -143,6 +151,30 @@ public class TransactionReceiptFactory extends ConcreteSendMoneyBaseFactory impl
         panel.add(Box.createVerticalStrut(40));
 
         return panel;
+    }
+
+    private String[] parseDateTime(String dateTime) {
+        try {
+            // Normalize separators
+            dateTime = dateTime.replace(",", "").replace("|", "").trim();
+
+            // Example expected now: "November 09 2025 10:35PM"
+            String[] parts = dateTime.split("\\s+(?=\\d{1,2}:\\d{2})");
+
+            if (parts.length == 2) {
+                String datePart = parts[0].trim();   // "November 09 2025"
+                String timePart = parts[1].trim();   // "10:35PM"
+
+                SimpleDateFormat inputDate = new SimpleDateFormat("MMMM dd yyyy");
+                Date date = inputDate.parse(datePart);
+
+                SimpleDateFormat outDate = new SimpleDateFormat("MMMM dd, yyyy");
+                return new String[] { outDate.format(date), timePart };
+            }
+        } catch (Exception ignored) {}
+
+        // Last fallback if everything fails
+        return new String[]{dateTime, ""};
     }
 
     @Override

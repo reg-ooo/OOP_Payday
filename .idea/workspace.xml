@@ -6,11 +6,36 @@
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/panels/NPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ImageLoader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/panels/NPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/panels/NPanel.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ImageLoader.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/receipt/TransactionReceiptFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/receipt/TransactionReceiptFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/CommandTemplateMethod/CashInCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/CommandTemplateMethod/CashInCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/data/model/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/data/model/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInReceiptPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/CashInReceiptPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/transaction/TransactionReceiptPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/transaction/TransactionReceiptPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/receipt/TransactionReceiptFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/receipt/TransactionReceiptFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/CommandTemplateMethod/CashInCommand.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/CommandTemplateMethod/CashInCommand.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/data/model/Transaction.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/data/model/Transaction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInReceiptPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInReceiptPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInReceiptPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/CashInReceiptPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/transaction/TransactionReceiptPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/transaction/TransactionReceiptPage.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -198,7 +223,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762692113981</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="PUSHED NEW VERSION">
+      <option name="closed" value="true" />
+      <created>1762696685491</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762696685491</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

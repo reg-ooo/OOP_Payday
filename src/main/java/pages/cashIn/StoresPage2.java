@@ -33,7 +33,7 @@ public class StoresPage2 extends JPanel {
     private JLabel actualBalanceLabel;
     private String selectedStoreName = "";
 
-
+    private final String defaultAccountPlaceholder = "Enter number";
     private final String defaultAmountPlaceholder = "0.00";
 
     // Component Dimensions (Retrieved from factory constants)
@@ -68,13 +68,12 @@ public class StoresPage2 extends JPanel {
             }
         }
 
-        // 2. Reset the account/reference field content
+        // 2. Reset the account field content
         accountField.setText(UserInfo.getInstance().getPhoneNumber());
         accountField.setForeground(themeManager.getBlack());
         accountField.setHorizontalAlignment(JTextField.LEFT);
         accountField.setEditable(false);
         accountField.setFocusable(false);
-
 
         // 3. Reset the amount field content
         amountField.setText("₱ " + defaultAmountPlaceholder);
@@ -201,7 +200,7 @@ public class StoresPage2 extends JPanel {
      * Sets up the account/reference field with listeners.
      */
     private JPanel setupAccountField(JTextField field) {
-        final String placeholder = UserInfo.getInstance().getPhoneNumber();
+        final String placeholder = defaultAccountPlaceholder;
         Color normalBorder = themeManager.getGray();
         Color activeBorder = themeManager.getDBlue();
 
@@ -427,7 +426,7 @@ public class StoresPage2 extends JPanel {
                 return;
             }
 
-            if (accountRef.isEmpty() || accountRef.equals(UserInfo.getInstance().getPhoneNumber())) {
+            if (accountRef.isEmpty() || accountRef.equals(defaultAccountPlaceholder)) {
                 DialogManager.showEmptyAccountDialog(this, "Please enter number");
                 return;
             }
@@ -440,29 +439,18 @@ public class StoresPage2 extends JPanel {
             try {
                 double amountValue = Double.parseDouble(amountText);
 
-                CashInCommand CIM = new CashInCommand(amountValue);
-                boolean success = CIM.execute();
+                String finalAmount = String.format("%,.2f", amountValue);
 
-                if (success) {
+                QRPage qrPage = QRPage.getInstance(onButtonClick);
+                qrPage.updateSelectedEntity(
+                        selectedStoreName,
+                        false, // isBank = true
+                        accountRef,
+                        finalAmount,
+                        "StoresPage2"
+                );
 
-                    String finalAmount = String.format("%,.2f", amountValue);
-
-                    // Prepare and navigate to QRPage
-                    QRPage qrPage = QRPage.getInstance(onButtonClick);
-
-                    qrPage.updateSelectedEntity(
-                            selectedStoreName,
-                            false,
-                            accountRef,
-                            finalAmount,
-                            "CashInStores2"
-                    );
-
-                    DialogManager.showSuccessDialog(this, "Cash In Successful!");
-                    onButtonClick.accept("QRPage");
-                } else {
-                    DialogManager.showErrorDialog(this, "Cash In Failed!");
-                }
+                onButtonClick.accept("QRPage");
 
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error", JOptionPane.ERROR_MESSAGE);

@@ -1,5 +1,8 @@
 package pages.cashIn;
 
+import data.CommandTemplateMethod.CashInCommand;
+import data.model.UserInfo;
+import util.DialogManager;
 import util.ThemeManager;
 import util.FontLoader;
 import util.ImageLoader;
@@ -59,7 +62,7 @@ public class QRPage extends JPanel {
     {
         // 1. Store the data
         this.currentEntityName = entityName;
-        this.currentAccountRef = accountRef;
+        this.currentAccountRef = UserInfo.getInstance().getPhoneNumber();
         this.currentAmount = amount;
         this.sourcePageKey = sourcePageKey;
 
@@ -69,10 +72,10 @@ public class QRPage extends JPanel {
             entityNameLabel.setText("Cash In via " + type + ": " + entityName);
         }
         if (accountRefLabel != null) {
-            accountRefLabel.setText("Ref/Account: " + currentAccountRef);
+            accountRefLabel.setText("Account: " + currentAccountRef);
         }
         if (referenceNoLabel != null) {
-            referenceNoLabel.setText("Ref. No.: "); // Placeholder
+            referenceNoLabel.setText("");
         }
         if (amountLabel != null) {
             amountLabel.setText("Amount: ₱ " + currentAmount);
@@ -135,7 +138,16 @@ public class QRPage extends JPanel {
 
         // ⭐ FACTORY USAGE: Confirm Button (Replaces createConfirmButton)
         JButton confirmButton = factory.createActionButton("Confirm Transaction");
-        confirmButton.addActionListener(e -> onButtonClick.accept("CashInReceipt"));
+        confirmButton.addActionListener(e -> {
+            CashInCommand CIM = new CashInCommand(Double.parseDouble(currentAmount));
+            boolean success = CIM.execute();
+            if (success) {
+                DialogManager.showSuccessDialog(this, "Cash In Successful!");
+                onButtonClick.accept("CashInReceipt");
+            }else{
+                DialogManager.showErrorDialog(this, "Cash In Failed!");
+            }
+        });
         confirmButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Ensure action button uses the preferred size of the factory (300x45)

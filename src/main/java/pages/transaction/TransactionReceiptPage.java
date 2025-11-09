@@ -58,7 +58,7 @@ public class TransactionReceiptPage extends JPanel {
         this.transaction = transaction;
         this.referenceNo = transaction.getReferenceID() != null ?
                 transaction.getReferenceID() : "TXN" + (System.currentTimeMillis() % 1000000);
-        this.dateTime = factory.getCurrentTimestamp();
+        this.dateTime = transaction.getFormattedDate() + " | " + transaction.getTime();
         setupUI();
         refreshUI();
     }

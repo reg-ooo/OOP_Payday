@@ -2,6 +2,7 @@ package pages.cashIn;
 
 import components.RoundedBorder;
 import components.RoundedButton;
+import data.dao.TransactionDAOImpl;
 import launchPagePanels.RoundedPanel;
 import util.ThemeManager;
 import util.FontLoader;
@@ -58,7 +59,7 @@ public class CashInReceiptPage extends JPanel {
         this.entityName = entityName;
         this.accountRef = accountRef;
         this.amount = amount;
-        this.referenceNo = generatedRefNo;
+        this.referenceNo = TransactionDAOImpl.getInstance().getReferenceNum();
         this.timestamp = timestamp;
 
         refreshUI();
