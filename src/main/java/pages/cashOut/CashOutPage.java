@@ -3,7 +3,7 @@ package pages.cashOut;
 import Factory.sendMoney.ConcreteSendMoneyPage1Factory;
 import Factory.sendMoney.SendMoneyPage1Factory;
 import data.model.UserInfo;
-import panels.GradientPanel;
+import launchPagePanels.GradientPanel;
 import util.DialogManager;
 import util.FontLoader;
 import util.ImageLoader;

@@ -2,7 +2,7 @@ package pages;
 
 import data.UserManager;
 import data.model.UserInfo;
-import panels.GradientPanel;
+import launchPagePanels.GradientPanel;
 import util.FontLoader;
 import util.ThemeManager;
 import util.ImageLoader;

@@ -8,8 +8,6 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import data.dao.TransactionDAOImpl;
-import data.model.Transaction;
 import data.model.UserInfo;
 import pages.*;
 import pages.buyLoad.BuyLoadPage;
@@ -33,7 +31,7 @@ import pages.sendMoney.SendMoneyPage2;
 import pages.sendMoney.SendMoneyPage3;
 import pages.transaction.TransactionHistoryPage;
 import pages.transaction.TransactionReceiptPage;
-import panels.TransactionPanel;
+import launchPagePanels.TransactionPanel;
 import util.ThemeManager;
 import util.AnimatedPageSwitcher;
 

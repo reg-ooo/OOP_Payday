@@ -5,7 +5,7 @@ import main.MainFrame;
 import pages.ProfilePage;
 import pages.transaction.TransactionHistoryPage;
 import pages.rewards.RewardsPage;
-import panels.*;
+import launchPagePanels.*;
 import data.dao.*;
 import data.model.*;
 import util.DialogManager;

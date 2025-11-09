@@ -1,4 +1,4 @@
-package panels;
+package launchPagePanels;
 
 import Factory.LabelFactory;
 import Factory.PanelBuilder;

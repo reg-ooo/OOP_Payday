@@ -2,8 +2,8 @@ package pages.rewards;
 
 import components.RoundedBorder;
 import data.CommandTemplateMethod.RewardsCommand;
-import panels.GradientPanel;
-import panels.RoundedPanel;
+import launchPagePanels.GradientPanel;
+import launchPagePanels.RoundedPanel;
 import data.dao.RewardsDAOImpl;
 import data.model.UserInfo;
 import util.DialogManager;

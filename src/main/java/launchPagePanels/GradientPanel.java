@@ -1,4 +1,4 @@
-package panels;
+package launchPagePanels;
 
 import util.ThemeManager;
 

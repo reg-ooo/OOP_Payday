@@ -1,4 +1,4 @@
-package panels;
+package launchPagePanels;
 
 import javax.swing.*;
 import java.awt.*;

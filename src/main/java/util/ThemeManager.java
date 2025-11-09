@@ -2,10 +2,10 @@ package util;
 import components.NavigationBar;
 import main.MainFrame;
 import pages.LaunchPage;
-import panels.CenterPanel;
-import panels.GradientPanel;
-import panels.NPanel;
-import panels.TransactionPanel;
+import launchPagePanels.CenterPanel;
+import launchPagePanels.GradientPanel;
+import launchPagePanels.NPanel;
+import launchPagePanels.TransactionPanel;
 
 import javax.swing.*;
 import java.awt.*;

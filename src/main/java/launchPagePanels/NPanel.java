@@ -1,4 +1,4 @@
-package panels;
+package launchPagePanels;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +15,7 @@ import Factory.PanelBuilder;
 public class NPanel extends JPanel {
     private static NPanel instance;
     ThemeManager themeManager = ThemeManager.getInstance();
+    private boolean isBalanceVisible = true;
 
     public static NPanel getInstance() {
         if (instance == null) {
@@ -26,12 +27,12 @@ public class NPanel extends JPanel {
     //BUTTON
     ImageIcon icon = ImageLoader.getInstance().getImage("darkModeOn");
     JButton balanceButton = new JButton(icon);
+
+    ImageIcon showBalanceIcon = ImageLoader.getInstance().getImage("showBalance");
+    ImageIcon hideBalanceIcon = ImageLoader.getInstance().getImage("hideBalance");
+    JButton balanceToggleButton = new JButton(showBalanceIcon);
+
     JLabel amountText;
-
-
-    //    JPanel headerPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 15), null, null);
-//    JPanel upperBalancePanel = PanelFactory.getInstance().createPanel(new Dimension(360, 45), null, new FlowLayout(FlowLayout.LEFT, 15, 10));
-//    JPanel amountPanel = PanelFactory.getInstance().createPanel(new Dimension(420, 200), null, new FlowLayout(FlowLayout.LEFT, 15, 0));
 
     private NPanel() {
         initComponents();
@@ -50,7 +51,7 @@ public class NPanel extends JPanel {
 
         JPanel upperBalancePanel = new PanelBuilder()
                 .setPreferredSize(new Dimension(360, 45))
-                .setLayout(new FlowLayout(FlowLayout.LEFT, 15, 10))
+                .setLayout(new BorderLayout())
                 .build();
         upperBalancePanel.setOpaque(false);
         JPanel amountPanel = new PanelBuilder()
@@ -72,19 +73,27 @@ public class NPanel extends JPanel {
         balPanel.add(upperBalancePanel, BorderLayout.NORTH);
 
         amountPanel.add(amountText);
-        upperBalancePanel.setLayout(new BorderLayout());
 
         styleDarkModeButton(balanceButton);
+        styleBalanceToggleButton(balanceToggleButton);
+
+        // Create button panel for top-right corner
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
+        buttonPanel.setOpaque(false);
+        buttonPanel.setBorder(new EmptyBorder(-8, 0, 0, 0));
+        buttonPanel.add(balanceToggleButton);
+        buttonPanel.add(Box.createRigidArea(new Dimension(70, -30))); // Add gap here
+        buttonPanel.add(balanceButton);
 
         upperBalancePanel.add(balanceText, BorderLayout.WEST);
-        upperBalancePanel.add(balanceButton, BorderLayout.EAST);
-        upperBalancePanel.add(balanceText);
+        upperBalancePanel.add(buttonPanel, BorderLayout.EAST);
+
 
         JPanel headerPanel = new PanelBuilder()
                 .setPreferredSize(new Dimension(420, 15))
                 .build();
+
         //UPPER PANELS
-        //  JPanel containerPanel = PanelFactory.getInstance().createPanel(new Dimension(360, 150), null, new FlowLayout());
         JPanel containerPanel = new PanelBuilder().
                 setPreferredSize(new Dimension(360, 150))
                 .setLayout(new FlowLayout())
@@ -105,6 +114,47 @@ public class NPanel extends JPanel {
 
     public void unloadComponents(){
         amountText.setText(String.format("%s %.2f", "\u20B1", 0.00));
+        revalidate();
+        repaint();
+    }
+
+    private void styleBalanceToggleButton(JButton button){
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setOpaque(false);
+        button.setBorder(new EmptyBorder(5, 5, 0, 5));
+
+        button.addActionListener(e -> {
+            isBalanceVisible = !isBalanceVisible;
+            updateBalanceDisplay();
+        });
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Optional: Add hover effect
+                button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+        });
+    }
+
+    private void updateBalanceDisplay() {
+        UserInfo userInfo = UserInfo.getInstance();
+
+        if (isBalanceVisible) {
+            amountText.setText(String.format("%s %.2f", "\u20B1", userInfo.getBalance()));
+            balanceToggleButton.setIcon(showBalanceIcon);
+        } else {
+            amountText.setText(String.format("%s •••••", "\u20B1"));
+            balanceToggleButton.setIcon(hideBalanceIcon);
+        }
+
         revalidate();
         repaint();
     }
@@ -134,26 +184,6 @@ public class NPanel extends JPanel {
             // Force repaint
             this.revalidate();
             this.repaint();
-        });
-
-        balanceButton.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                if (themeManager.isDarkMode()) {
-                    balanceButton.setIcon(ImageLoader.getInstance().getImage("bigDarkModeOff")); // sun bigger
-                } else {
-                    balanceButton.setIcon(ImageLoader.getInstance().getImage("bigDarkModeOn"));  // moon bigger
-                }
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                if (themeManager.isDarkMode()) {
-                    balanceButton.setIcon(ImageLoader.getInstance().getImage("darkModeOff")); // sun normal
-                } else {
-                    balanceButton.setIcon(ImageLoader.getInstance().getImage("darkModeOn"));  // moon normal
-                }
-            }
         });
     }
 }

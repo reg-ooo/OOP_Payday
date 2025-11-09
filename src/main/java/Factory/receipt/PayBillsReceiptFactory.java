@@ -2,7 +2,7 @@ package Factory.receipt;
 
 import Factory.sendMoney.ConcreteSendMoneyBaseFactory;
 import components.RoundedBorder;
-import panels.RoundedPanel;
+import launchPagePanels.RoundedPanel;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;

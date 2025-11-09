@@ -3,7 +3,7 @@ package pages.transaction;
 import components.RoundedBorder;
 import data.dao.TransactionDAOImpl;
 import data.model.Transaction;
-import panels.RoundedPanel;
+import launchPagePanels.RoundedPanel;
 import util.FontLoader;
 import util.ThemeManager;
 import util.ImageLoader;
