@@ -116,9 +116,9 @@ public class ProfilePage extends JPanel {
 
         namePanel.add(nameAndIconPanel, BorderLayout.CENTER);
 
-        infoPanel = new RoundedPanel(25, themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
+        infoPanel = new RoundedPanel(25, themeManager.isDarkMode() ? new Color(0x0F172A) : Color.WHITE);
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
 
         JLabel basicLabel = new JLabel("Basic Information");
         basicLabel.setFont(fontLoader.loadFont(Font.PLAIN, 17f, "Quicksand-Regular"));
@@ -166,6 +166,11 @@ public class ProfilePage extends JPanel {
         
         // Update titleLabel color
         titleLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : Color.WHITE);
+        
+        // Update infoPanel background color
+        if (infoPanel != null) {
+            infoPanel.setBackground(themeManager.isDarkMode() ? new Color(0x0F172A) : Color.WHITE);
+        }
         
         revalidate();
         repaint();

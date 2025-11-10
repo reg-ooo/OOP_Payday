@@ -30,7 +30,7 @@ public class CashOutReceiptPage extends JPanel {
         setLayout(new BorderLayout());
         setBackground(themeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
-
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         add(createReceiptPanel(), BorderLayout.CENTER);
         add(createFooterPanel(), BorderLayout.SOUTH);
     }
