@@ -276,4 +276,30 @@ public class QRPage extends JPanel {
     }
 
     // --- REMOVED: createConfirmButton is replaced by factory.createActionButton ---
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            applyTheme();
+        }
+    }
+
+    private void applyTheme() {
+        themeManager.applyTheme(this);
+        applyThemeRecursive(this);
+    }
+
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            jl.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
+        } else if (comp instanceof JPanel jp) {
+            jp.setBackground(themeManager.isDarkMode() ? new Color(0x0F172A) : Color.WHITE);
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
+    }
 }
