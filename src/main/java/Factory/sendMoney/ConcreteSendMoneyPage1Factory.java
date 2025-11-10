@@ -25,8 +25,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
 
         phoneField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(0x64748B), 1), // Updated to #64748B (inactive)
-                BorderFactory.createEmptyBorder(10, 15, 10, 15)
-        ));
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)));
 
         addCenterPlaceholderLeftTyping(phoneField, "Enter number");
         return phoneField;
@@ -43,8 +42,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
 
         amountField.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(0x64748B), 1), // Updated to #64748B (inactive)
-                BorderFactory.createEmptyBorder(10, 15, 10, 15)
-        ));
+                BorderFactory.createEmptyBorder(10, 15, 10, 15)));
 
         addPlaceholderWithPeso(amountField, "0.00");
         return amountField;
@@ -130,7 +128,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
 
     @Override
     public JPanel createContentPanel(JLabel sendToLabel, JTextField phoneField, JLabel amountLabel,
-                                     JTextField amountField, JLabel balanceLabel, JPanel buttonPanel) {
+            JTextField amountField, JLabel balanceLabel, JPanel buttonPanel) {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setOpaque(false);
@@ -181,8 +179,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         return themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getDBlue();
     }
 
-
-    //PAGE1
+    // PAGE1
     private static void addPlaceholderWithPeso(JTextField textField, String placeholder) {
         Color normalBorder = new Color(0x64748B); // #64748B (inactive)
         Color activeBorder = new Color(0x60A5FA); // #60A5FA (active)
@@ -292,8 +289,9 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
 
                 // Max 13 digits for whole number part (including decimal)
                 String potentialNewText = numberPart + c;
-                String wholePart = potentialNewText.contains(".") ?
-                        potentialNewText.substring(0, potentialNewText.indexOf(".")) : potentialNewText;
+                String wholePart = potentialNewText.contains(".")
+                        ? potentialNewText.substring(0, potentialNewText.indexOf("."))
+                        : potentialNewText;
                 if (wholePart.length() > 13) {
                     e.consume();
                 }
@@ -312,13 +310,13 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                     textField.setHorizontalAlignment(JTextField.LEFT);
                     setSafeCaretPosition(textField, 2); // Force cursor after "₱ "
                 } else {
-                    // When field gains focus, set caret to the END of the text, not stuck at position 2
+                    // When field gains focus, set caret to the END of the text, not stuck at
+                    // position 2
                     setSafeCaretPosition(textField, textField.getText().length());
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(activeBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
 
             @Override
@@ -350,15 +348,22 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(normalBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
         });
 
         textField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
 
             private void updateAlignment() {
                 String text = textField.getText().replace("₱ ", "").replace("₱", "").trim();
@@ -406,7 +411,8 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         });
     }
 
-    //PAGE1 - For phone number field (max 11 digits, no letters, ONE leading zero allowed)
+    // PAGE1 - For phone number field (max 11 digits, no letters, ONE leading zero
+    // allowed)
     private static void addCenterPlaceholderLeftTyping(JTextField textField, String placeholder) {
         Color normalBorder = new Color(0x64748B); // #64748B (inactive)
         Color activeBorder = new Color(0x60A5FA); // #60A5FA (active)
@@ -444,7 +450,8 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                 }
 
                 // Prevent multiple leading zeros
-// Only block zero if we're trying to add it at position 1 and we already have a zero at position 0
+                // Only block zero if we're trying to add it at position 1 and we already have a
+                // zero at position 0
                 if (currentLength == 1 && actualText.charAt(0) == '0' && c == '0') {
                     e.consume();
                     return;
@@ -483,8 +490,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(activeBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
 
             @Override
@@ -505,15 +511,22 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(normalBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
         });
 
         textField.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
 
             private void updateAlignment() {
                 String text = textField.getText().trim();

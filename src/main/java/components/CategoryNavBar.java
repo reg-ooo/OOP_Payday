@@ -23,7 +23,8 @@ public class CategoryNavBar extends JPanel {
     // Rounded border panel
     private JPanel roundedContainer;
 
-    public CategoryNavBar(String[] categories, String[] icons, String defaultCategory, Consumer<String> onCategorySelect) {
+    public CategoryNavBar(String[] categories, String[] icons, String defaultCategory,
+            Consumer<String> onCategorySelect) {
         this.categories = categories;
         this.icons = icons;
         this.selectedCategory = defaultCategory;
@@ -33,17 +34,17 @@ public class CategoryNavBar extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(themeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
 
         // Create the main content panel
         JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(themeManager.getWhite());
+        contentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         contentPanel.setOpaque(false);
 
         categoriesPanel = new JPanel();
         categoriesPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        categoriesPanel.setBackground(themeManager.getWhite());
+        categoriesPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         categoriesPanel.setOpaque(false);
         categoriesPanel.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
 
@@ -65,7 +66,8 @@ public class CategoryNavBar extends JPanel {
         roundedContainer = new JPanel(new BorderLayout()) {
             @Override
             public Dimension getPreferredSize() {
-                // Fixed width to fit within PayBills panel content area (300px - 60px padding = 240px)
+                // Fixed width to fit within PayBills panel content area (300px - 60px padding =
+                // 240px)
                 int width = 240;
                 int height = categoriesPanel.getPreferredSize().height + 5;
                 return new Dimension(width, height);
@@ -81,16 +83,17 @@ public class CategoryNavBar extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Draw background first - use grey in dark mode
-                Color bgColor = themeManager.isDarkMode() ? 
-                    new Color(0x1E293B) : themeManager.getWhite();
+                // Draw background - use dark mode blue in dark mode, white in light mode
+                Color bgColor = themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite();
                 g2.setColor(bgColor);
-                g2.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
+                g2.fillRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 15, 15);
 
-                // Draw border second
-                g2.setColor(themeManager.getDvBlue());
+                // Draw border with theme-aware color
+                Color borderColor = themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite()
+                        : ThemeManager.getDvBlue();
+                g2.setColor(borderColor);
                 g2.setStroke(new BasicStroke(2));
-                g2.drawRoundRect(1, 1, getWidth()-3, getHeight()-3, 15, 15);
+                g2.drawRoundRect(1, 1, getWidth() - 3, getHeight() - 3, 15, 15);
 
                 g2.dispose();
             }
@@ -107,8 +110,9 @@ public class CategoryNavBar extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setBackground(themeManager.getWhite());
-        scrollPane.getViewport().setBackground(themeManager.getWhite());
+        scrollPane.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        scrollPane.getViewport()
+                .setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 6, 0, 6));
@@ -163,7 +167,7 @@ public class CategoryNavBar extends JPanel {
         JPanel categoryPanel = new JPanel();
         categoryPanel.setLayout(new BoxLayout(categoryPanel, BoxLayout.Y_AXIS));
         categoryPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        categoryPanel.setBackground(themeManager.getWhite());
+        categoryPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         categoryPanel.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
         categoryPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         categoryPanel.setOpaque(false);
@@ -237,7 +241,7 @@ public class CategoryNavBar extends JPanel {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     g2.setColor(themeManager.getDvBlue());
-                    int underlineWidth = (int)(getWidth() * 0.6);
+                    int underlineWidth = (int) (getWidth() * 0.6);
                     int x = (getWidth() - underlineWidth) / 2;
                     int y = getHeight() - 3;
                     g2.fillRoundRect(x, y, underlineWidth, 3, 5, 5);
@@ -276,6 +280,40 @@ public class CategoryNavBar extends JPanel {
     // Public method to get currently selected category
     public String getSelectedCategory() {
         return selectedCategory;
+    }
+
+    // Public method to apply theme when theme changes
+    public void applyTheme() {
+        // Update main panel background
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+
+        // Update all child panels
+        updatePanelBackgrounds(this);
+
+        // Repaint the rounded container to update border
+        if (roundedContainer != null) {
+            roundedContainer.repaint();
+        }
+
+        // Update all category buttons
+        updateAllCategoryButtons();
+    }
+
+    private void updatePanelBackgrounds(Container container) {
+        Color bgColor = themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite();
+        for (Component comp : container.getComponents()) {
+            if (comp instanceof JPanel && comp != roundedContainer) {
+                ((JPanel) comp).setBackground(bgColor);
+            }
+            if (comp instanceof JScrollPane) {
+                JScrollPane scrollPane = (JScrollPane) comp;
+                scrollPane.setBackground(bgColor);
+                scrollPane.getViewport().setBackground(bgColor);
+            }
+            if (comp instanceof Container) {
+                updatePanelBackgrounds((Container) comp);
+            }
+        }
     }
 
     private void updateAllCategoryButtons() {

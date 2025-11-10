@@ -73,12 +73,12 @@ public class SendMoneyPage extends JPanel {
         // Create next button panel through factory
         JPanel buttonPanel = factory.createNextButtonPanel(
                 onButtonClick,
-                this::handleNextButton
-        );
+                this::handleNextButton);
 
         // Create ALL panels through factory
         JPanel headerPanel = factory.createHeaderPanel(backLabel);
-        JPanel contentPanel = factory.createContentPanel(sendToLabel, phoneField, amountLabel, amountField, balanceLabel, buttonPanel);
+        JPanel contentPanel = factory.createContentPanel(sendToLabel, phoneField, amountLabel, amountField,
+                balanceLabel, buttonPanel);
         JPanel centerPanel = factory.createCenterPanel(titleLabel, contentPanel);
         JPanel footerPanel = factory.createFooterPanel(stepLabel);
 
@@ -106,7 +106,6 @@ public class SendMoneyPage extends JPanel {
     private void handleNextButton() {
         String enteredAmount = getEnteredAmount();
         String enteredPhone = getEnteredPhoneNumber();
-
 
         // Validate phone number
         if (enteredPhone.isEmpty()) {
@@ -141,7 +140,8 @@ public class SendMoneyPage extends JPanel {
 
             // Check if amount is positive
             if (amount <= 0) {
-                JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -149,7 +149,8 @@ public class SendMoneyPage extends JPanel {
             JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error checking balance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Error checking balance: " + e.getMessage(), "Error",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
         SendMoneyCommand SMC = new SendMoneyCommand(getEnteredPhoneNumber(), Double.parseDouble(getEnteredAmount()));
@@ -214,7 +215,8 @@ public class SendMoneyPage extends JPanel {
                     balanceLabel.setForeground(Color.RED);
                 } else {
                     balanceLabel.setText("Available balance: PHP " + String.format("%.2f", updatedBalance));
-                    balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
+                    balanceLabel
+                            .setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
                 }
             } catch (NumberFormatException e) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));

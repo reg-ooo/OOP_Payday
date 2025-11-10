@@ -233,4 +233,6 @@ public class ThemeManager {
     public static Color getLightText() {return lightText;}
 
     public static Color getDarkModeWhite() {return darkModeWhite;}
+
+    public static Color getDarkModeBlue() {return darkModeBlue;}
 }

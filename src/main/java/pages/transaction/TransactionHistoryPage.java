@@ -34,7 +34,8 @@ public class TransactionHistoryPage extends RoundedPanel {
 
     public static TransactionHistoryPage getInstance() {
         if (instance == null) {
-            throw new IllegalStateException("TransactionHistoryPage must be initialized with getInstance(Consumer<String>) first");
+            throw new IllegalStateException(
+                    "TransactionHistoryPage must be initialized with getInstance(Consumer<String>) first");
         }
         return instance;
     }
@@ -155,7 +156,8 @@ public class TransactionHistoryPage extends RoundedPanel {
         listPanel.add(Box.createVerticalStrut(10));
     }
 
-    private JPanel createTransactionCard(Transaction transaction, String date, String description, String time, String amount, boolean isPositive) {
+    private JPanel createTransactionCard(Transaction transaction, String date, String description, String time,
+            String amount, boolean isPositive) {
         // Rounded container
         RoundedBorder borderContainer = new RoundedBorder(15, ThemeManager.getDBlue(), 2);
         borderContainer.setLayout(new FlowLayout());
@@ -248,7 +250,8 @@ public class TransactionHistoryPage extends RoundedPanel {
     }
 
     private String getImageKeyForTransactionType(String transactionType) {
-        if (transactionType == null) return "cashIn"; // default fallback
+        if (transactionType == null)
+            return "cashIn"; // default fallback
 
         String lowerType = transactionType.toLowerCase();
         if (lowerType.contains("send") || lowerType.contains("transfer")) {
@@ -270,7 +273,7 @@ public class TransactionHistoryPage extends RoundedPanel {
         }
     }
 
-    public void loadComponents(){
+    public void loadComponents() {
         historyListPanel.removeAll();
         transactionCards.clear(); // Clear stored card references
         transactionDescLabels.clear(); // Clear description label references
@@ -283,7 +286,7 @@ public class TransactionHistoryPage extends RoundedPanel {
         if (transactionsList.isEmpty() || dateList.isEmpty()) {
             historyListPanel.add(createNoTransactionsMessage());
         } else {
-            for(String date : dateList) {
+            for (String date : dateList) {
                 System.out.println(date);
                 int dateString = Integer.parseInt(date.substring(5, 7));
                 String monthName = Month.of(dateString).name();
@@ -293,14 +296,12 @@ public class TransactionHistoryPage extends RoundedPanel {
                     System.out.println(transaction.getTransactionDate());
                     if (transaction.getTransactionDate().substring(0, 10).equals(date)) {
                         historyListPanel.add(createTransactionCard(
-                                        transaction,
-                                        transaction.getTransactionDate().substring(5, 10),
-                                        transaction.getTransactionType(),
-                                        transaction.getTime(),
-                                        String.valueOf(transaction.getAmount()),
-                                        TransactionDAOImpl.getInstance().gainMoney(transaction)
-                                )
-                        );
+                                transaction,
+                                transaction.getTransactionDate().substring(5, 10),
+                                transaction.getTransactionType(),
+                                transaction.getTime(),
+                                String.valueOf(transaction.getAmount()),
+                                TransactionDAOImpl.getInstance().gainMoney(transaction)));
                         historyListPanel.add(Box.createVerticalStrut(15));
                     }
                 }
@@ -328,62 +329,62 @@ public class TransactionHistoryPage extends RoundedPanel {
 
     public void applyTheme() {
         themeManager.applyTheme(this);
-        
+
         // Update transaction card backgrounds
         Color cardColor = themeManager.isDarkMode() ? themeManager.getDSBlue() : themeManager.getSBlue();
         for (RoundedPanel card : transactionCards) {
             card.setBackground(cardColor);
         }
-        
+
         // Update transaction description labels
         Color descColor = themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDBlue();
         for (JLabel descLabel : transactionDescLabels) {
             descLabel.setForeground(descColor);
         }
-        
+
         // Update transaction date/time labels
         Color dateTimeColor = themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getBlack();
         for (JLabel dateTimeLabel : transactionDateTimeLabels) {
             dateTimeLabel.setForeground(dateTimeColor);
         }
-        
+
         applyThemeRecursive(this);
         revalidate();
         repaint();
     }
 
     private void applyThemeRecursive(Component comp) {
-       if (comp instanceof JLabel jl) {
-           // Skip amount label - it has its own color logic (red/green)
-           if(jl == amountLabel){
-               return;
-           }
-           
-           // Only update specific labels
-           if (jl == backLabel) {
-               if (ThemeManager.getInstance().isDarkMode()) {
-                   jl.setForeground(new Color(0xF8FAFC));
-               } else {
-                   jl.setForeground(themeManager.getPBlue());
-               }
-           } else if (jl == titleLabel) {
-               if (ThemeManager.getInstance().isDarkMode()) {
-                   jl.setForeground(new Color(0xF8FAFC));
-               } else {
-                   jl.setForeground(themeManager.getDBlue());
-               }
-           } else {
-               // For date group labels (separator labels with "Today", "MMM dd" format)
-               // Check if the label has the date group styling
-               Font labelFont = jl.getFont();
-               if (labelFont != null && labelFont.getSize() == 19) {
-                   if (ThemeManager.getInstance().isDarkMode()) {
-                       jl.setForeground(new Color(0xF8FAFC));
-                   } else {
-                       jl.setForeground(themeManager.getDBlue());
-                   }
-               }
-           }
+        if (comp instanceof JLabel jl) {
+            // Skip amount label - it has its own color logic (red/green)
+            if (jl == amountLabel) {
+                return;
+            }
+
+            // Only update specific labels
+            if (jl == backLabel) {
+                if (ThemeManager.getInstance().isDarkMode()) {
+                    jl.setForeground(new Color(0xF8FAFC));
+                } else {
+                    jl.setForeground(themeManager.getPBlue());
+                }
+            } else if (jl == titleLabel) {
+                if (ThemeManager.getInstance().isDarkMode()) {
+                    jl.setForeground(new Color(0xF8FAFC));
+                } else {
+                    jl.setForeground(themeManager.getDBlue());
+                }
+            } else {
+                // For date group labels (separator labels with "Today", "MMM dd" format)
+                // Check if the label has the date group styling
+                Font labelFont = jl.getFont();
+                if (labelFont != null && labelFont.getSize() == 19) {
+                    if (ThemeManager.getInstance().isDarkMode()) {
+                        jl.setForeground(new Color(0xF8FAFC));
+                    } else {
+                        jl.setForeground(themeManager.getDBlue());
+                    }
+                }
+            }
         }
         if (comp instanceof Container container) {
             for (Component child : container.getComponents()) {

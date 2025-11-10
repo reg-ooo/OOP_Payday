@@ -44,7 +44,7 @@ public class StoresPage2 extends JPanel {
         this.onButtonClick = onButtonClick;
         setupUI();
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
@@ -53,7 +53,7 @@ public class StoresPage2 extends JPanel {
             applyThemeRecursive(this);
         }
     }
-    
+
     private void applyThemeRecursive(Component comp) {
         if (comp instanceof JTextField jtf) {
             if (ThemeManager.getInstance().isDarkMode()) {
@@ -222,7 +222,8 @@ public class StoresPage2 extends JPanel {
      * Retrieves the user's current balance and updates the dedicated JLabel.
      */
     private void updateBalanceDisplay() {
-        if (actualBalanceLabel == null) return;
+        if (actualBalanceLabel == null)
+            return;
         try {
             // Simulating balance retrieval from UserInfo
             double balance = UserInfo.getInstance().getBalance();
@@ -258,9 +259,9 @@ public class StoresPage2 extends JPanel {
                 }
                 field.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(activeBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (field.getText().isEmpty()) {
@@ -270,15 +271,23 @@ public class StoresPage2 extends JPanel {
                 }
                 field.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(normalBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
         });
 
         field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
             private void updateAlignment() {
                 String text = field.getText().trim();
                 if (text.isEmpty() || text.equals(placeholder)) {
@@ -324,6 +333,7 @@ public class StoresPage2 extends JPanel {
                     e.consume();
                 }
             }
+
             @Override
             public void keyTyped(java.awt.event.KeyEvent e) {
                 String currentText = field.getText();
@@ -345,12 +355,10 @@ public class StoresPage2 extends JPanel {
                     return;
                 }
 
-
                 if (c == '.' && numberPart.contains(".")) {
                     e.consume();
                     return;
                 }
-
 
                 if (numberPart.contains(".")) {
                     int decimalIndex = numberPart.indexOf(".");
@@ -362,7 +370,6 @@ public class StoresPage2 extends JPanel {
                 }
             }
         });
-
 
         field.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -377,9 +384,9 @@ public class StoresPage2 extends JPanel {
                 }
                 field.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(activeBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
+
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 String currentText = field.getText().replace("₱ ", "").replace("₱", "").replace(",", "").trim();
@@ -393,19 +400,28 @@ public class StoresPage2 extends JPanel {
                         double value = Double.parseDouble(currentText);
                         field.setText("₱ " + String.format("%.2f", value));
                         field.setForeground(getTextFieldColor());
-                    } catch (NumberFormatException e) {}
+                    } catch (NumberFormatException e) {
+                    }
                 }
                 field.setBorder(BorderFactory.createCompoundBorder(
                         BorderFactory.createLineBorder(normalBorder, 1),
-                        BorderFactory.createEmptyBorder(10, 15, 10, 15)
-                ));
+                        BorderFactory.createEmptyBorder(10, 15, 10, 15)));
             }
         });
 
         field.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { updateAlignment(); }
+            public void insertUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void removeUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
+            public void changedUpdate(javax.swing.event.DocumentEvent e) {
+                updateAlignment();
+            }
+
             private void updateAlignment() {
                 String text = field.getText().replace("₱ ", "").replace("₱", "").trim();
                 if (text.isEmpty() || text.equals(placeholder)) {
@@ -445,6 +461,7 @@ public class StoresPage2 extends JPanel {
                     nextButton.setBackground(themeManager.getGradientLBlue());
                 }
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 if (!themeManager.isDarkMode()) {
@@ -460,7 +477,8 @@ public class StoresPage2 extends JPanel {
             String amountText = amountField.getText().replace("₱", "").replace(",", "").trim();
 
             if (selectedStoreName.isEmpty() || selectedStoreName.equals("Select a Store")) {
-                JOptionPane.showMessageDialog(this, "Please select a store first.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Please select a store first.", "Validation Error",
+                        JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
@@ -474,7 +492,8 @@ public class StoresPage2 extends JPanel {
                 return;
             }
 
-            if (amountText.isEmpty() || amountText.equals(defaultAmountPlaceholder) || amountText.equals("0") || amountText.equals("0.00")) {
+            if (amountText.isEmpty() || amountText.equals(defaultAmountPlaceholder) || amountText.equals("0")
+                    || amountText.equals("0.00")) {
                 DialogManager.showEmptyAmountDialog(this, "Please enter amount");
                 return;
             }
@@ -490,13 +509,14 @@ public class StoresPage2 extends JPanel {
                         false, // isBank = true
                         accountRef,
                         finalAmount,
-                        "CashInStores2"
-                );
+                        "CashInStores2");
 
                 onButtonClick.accept("QRPage");
 
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "Invalid amount entered. Please use only numbers and a decimal point.", "Validation Error",
+                        JOptionPane.ERROR_MESSAGE);
             }
         });
 

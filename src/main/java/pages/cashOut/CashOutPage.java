@@ -153,8 +153,8 @@ public class CashOutPage extends JPanel {
                 return;
             }
 
-                // If user is logged in and amount is valid, proceed to next step
-                onButtonClick.accept("CashOut2:" + enteredAmount);
+            // If user is logged in and amount is valid, proceed to next step
+            onButtonClick.accept("CashOut2:" + enteredAmount);
         });
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(buttonPanel);
@@ -297,7 +297,8 @@ public class CashOutPage extends JPanel {
      * Helper method to get entered amount
      */
     private String getEnteredAmount() {
-        if (amountField == null) return "";
+        if (amountField == null)
+            return "";
 
         String text = amountField.getText().trim();
 
@@ -332,7 +333,7 @@ public class CashOutPage extends JPanel {
             applyThemeRecursive(this);
         }
     }
-    
+
     private void applyThemeRecursive(Component comp) {
         if (comp instanceof JLabel jl) {
             // Skip labels inside GradientPanel (they should always be white)
@@ -343,7 +344,7 @@ public class CashOutPage extends JPanel {
                 }
                 parent = parent.getParent();
             }
-            
+
             if (ThemeManager.getInstance().isDarkMode()) {
                 jl.setForeground(Color.WHITE);
             } else {
@@ -369,7 +370,7 @@ public class CashOutPage extends JPanel {
             }
         }
     }
-    
+
     private Color getTextFieldColor() {
         return themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getDBlue();
     }

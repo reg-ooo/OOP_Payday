@@ -14,10 +14,11 @@ public class PayBills extends JPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final ImageLoader imageLoader = ImageLoader.getInstance();
     private final Consumer<String> onButtonClick;
+    private JPanel mainPanel;
 
     // Category data
-    private final String[] categories = {"Electricity", "Water", "Internet", "Healthcare", "Schools"};
-    private final String[] categoryIcons = {"⚡", "💧", "🌐", "🏥", "🎓"};
+    private final String[] categories = { "Electricity", "Water", "Internet", "Healthcare", "Schools" };
+    private final String[] categoryIcons = { "⚡", "💧", "🌐", "🏥", "🎓" };
 
     // Content area
     private JPanel contentArea;
@@ -47,8 +48,7 @@ public class PayBills extends JPanel {
                 categories,
                 categoryIcons,
                 "Electricity",
-                this::handleCategorySelect
-        );
+                this::handleCategorySelect);
         northPanel.add(categoriesNavBar, BorderLayout.CENTER);
 
         // Add the combined north panel to the main layout
@@ -76,7 +76,7 @@ public class PayBills extends JPanel {
     }
 
     private JPanel createCategoryContent(String category) {
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(themeManager.getWhite());
 
         // Title
@@ -205,17 +205,19 @@ public class PayBills extends JPanel {
     private String[] getProvidersForCategory(String category) {
         switch (category) {
             case "Electricity":
-                return new String[]{"Meralco", "Visayan Electric", "Davao Light", "Aboitiz Power", "NGCP"};
+                return new String[] { "Meralco", "Visayan Electric", "Davao Light", "Aboitiz Power", "NGCP" };
             case "Water":
-                return new String[]{"Maynilad", "Manila Water", "Laguna Water", "Cebu Water", "Prime Water"};
+                return new String[] { "Maynilad", "Manila Water", "Laguna Water", "Cebu Water", "Prime Water" };
             case "Internet":
-                return new String[]{"PLDT", "Globe Telecom", "Converge ICT", "DITO Telecommunity", "Sky Cable"};
+                return new String[] { "PLDT", "Globe Telecom", "Converge ICT", "DITO Telecommunity", "Sky Cable" };
             case "Healthcare":
-                return new String[]{"Davao Doctors Hospital", "Brokenshire Hospital", "Davao Adventist Hospital", "Southern Philippines Medical Center", "San Pedro Hospital"};
+                return new String[] { "Davao Doctors Hospital", "Brokenshire Hospital", "Davao Adventist Hospital",
+                        "Southern Philippines Medical Center", "San Pedro Hospital" };
             case "Schools":
-                return new String[]{"Ateneo de Davao University", "UP Mindanao", "University of Mindanao", "Mapua Malayan Colleges Mindanao", "TESDA"};
+                return new String[] { "Ateneo de Davao University", "UP Mindanao", "University of Mindanao",
+                        "Mapua Malayan Colleges Mindanao", "TESDA" };
             default:
-                return new String[]{"Provider 1", "Provider 2", "Provider 3"};
+                return new String[] { "Provider 1", "Provider 2", "Provider 3" };
         }
     }
 
@@ -244,26 +246,24 @@ public class PayBills extends JPanel {
 
         return headerPanel;
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (visible) {
+            mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getInstance().getDarkModeBlue()
+                    : ThemeManager.getInstance().getWhite());
             applyThemeRecursive(this);
         }
     }
-    
+
     private void applyThemeRecursive(Component comp) {
         if (comp instanceof CategoryNavBar categoryNavBar) {
-            // Set grey background for CategoryNavBar in dark mode
-            if (ThemeManager.getInstance().isDarkMode()) {
-                categoryNavBar.setBackground(new Color(0x1E293B)); // Dark grey
-            } else {
-                categoryNavBar.setBackground(Color.WHITE);
-            }
-            categoryNavBar.repaint();
+            // Call the CategoryNavBar's own applyTheme method
+            categoryNavBar.applyTheme();
         } else if (comp instanceof JLabel jl) {
-            // Skip labels inside CategoryNavBar (category icons should keep their original colors)
+            // Skip labels inside CategoryNavBar (category icons should keep their original
+            // colors)
             Container parent = jl.getParent();
             while (parent != null) {
                 if (parent instanceof CategoryNavBar) {
@@ -271,7 +271,7 @@ public class PayBills extends JPanel {
                 }
                 parent = parent.getParent();
             }
-            
+
             if (ThemeManager.getInstance().isDarkMode()) {
                 jl.setForeground(Color.WHITE);
             } else {

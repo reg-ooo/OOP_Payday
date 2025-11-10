@@ -58,8 +58,7 @@ public class BuyLoadPage2 extends JPanel {
 
         // ===== BACK BUTTON =====
         JPanel backPanel = factory.createHeaderPanel(
-                factory.createBackLabel(() -> onButtonClick.accept("BuyLoad"))
-        );
+                factory.createBackLabel(() -> onButtonClick.accept("BuyLoad")));
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         mainPanel.add(backPanel);
 
@@ -79,7 +78,8 @@ public class BuyLoadPage2 extends JPanel {
 
         mainTitleLabel = new JLabel("Buy Load");
         mainTitleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 28f, "Quicksand-Bold"));
-        mainTitleLabel.setForeground(themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : themeManager.getDBlue());
+        mainTitleLabel
+                .setForeground(themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : themeManager.getDBlue());
 
         mainTitlePanel.add(mainTitleLabel);
         mainTitlePanel.add(mainIconLabel);
@@ -97,7 +97,8 @@ public class BuyLoadPage2 extends JPanel {
 
         networkTitleLabel = new JLabel("Network Provider");
         networkTitleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"));
-        networkTitleLabel.setForeground(themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : themeManager.getDBlue());
+        networkTitleLabel
+                .setForeground(themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : themeManager.getDBlue());
 
         networkTitlePanel.add(networkTitleLabel);
 
@@ -128,7 +129,8 @@ public class BuyLoadPage2 extends JPanel {
             try {
                 double amountValue = Double.parseDouble(amount);
                 if (amountValue <= 0) {
-                    JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 } else if (amountValue > currentBalance) {
                     DialogManager.showInsuffBalanceDialog(this, "Insufficient Balance");
@@ -143,16 +145,17 @@ public class BuyLoadPage2 extends JPanel {
             }
         });
 
-        //CREATE WITH SMP1FACTORY
+        // CREATE WITH SMP1FACTORY
         JLabel sendToLabel = SendMoneyPage1Factory.createSectionLabel("Send to", true);
         phoneField = SendMoneyPage1Factory.createPhoneNumberField(); // Store as instance variable
         JLabel amountLabel = SendMoneyPage1Factory.createSectionLabel("Amount", true);
         amountField = SendMoneyPage1Factory.createAmountField(); // Store as instance variable
         balanceLabel = SendMoneyPage1Factory.createBalanceLabel();
 
-        JPanel contentPanel = SendMoneyPage1Factory.createContentPanel(sendToLabel, phoneField, amountLabel, amountField, balanceLabel, buttonPanel);
+        JPanel contentPanel = SendMoneyPage1Factory.createContentPanel(sendToLabel, phoneField, amountLabel,
+                amountField, balanceLabel, buttonPanel);
 
-        //buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(contentPanel);
 
         // ===== STEP INDICATOR =====
@@ -231,7 +234,8 @@ public class BuyLoadPage2 extends JPanel {
                     balanceLabel.setForeground(Color.RED);
                 } else {
                     balanceLabel.setText("Available balance: PHP " + String.format("%.2f", updatedBalance));
-                    balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
+                    balanceLabel
+                            .setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
                 }
             } catch (NumberFormatException e) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));
@@ -252,7 +256,7 @@ public class BuyLoadPage2 extends JPanel {
         String text = amountField.getText().replace("₱ ", "").trim();
         return text.equals("0.00") ? "" : text;
     }
-    
+
     /**
      * Get the icon name based on selected network provider
      */
@@ -280,7 +284,7 @@ public class BuyLoadPage2 extends JPanel {
      */
     public void applyTheme() {
         themeManager.applyTheme(this);
-        
+
         // Apply theme to labels
         if (themeManager.isDarkMode()) {
             // Update label colors for dark mode
@@ -290,7 +294,7 @@ public class BuyLoadPage2 extends JPanel {
             updateLabelColors(this, ThemeManager.getDBlue());
         }
     }
-    
+
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
@@ -299,14 +303,14 @@ public class BuyLoadPage2 extends JPanel {
             updateBalanceDisplay(); // Update balance with theme-aware colors
         }
     }
-    
+
     private void applyThemeRecursive(Container container) {
         for (Component component : container.getComponents()) {
             if (component instanceof JLabel) {
                 JLabel label = (JLabel) component;
                 if (themeManager.isDarkMode()) {
                     label.setForeground(Color.WHITE);
-                } else{
+                } else {
                     label.setForeground(ThemeManager.getDBlue());
                 }
             } else if (component instanceof JTextField tf) {
@@ -324,20 +328,22 @@ public class BuyLoadPage2 extends JPanel {
                 applyThemeRecursive((Container) component);
             }
         }
-        
+
         // Update specific labels with theme-aware colors
         if (mainTitleLabel != null) {
-            mainTitleLabel.setForeground(themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getDBlue());
+            mainTitleLabel.setForeground(
+                    themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getDBlue());
         }
         if (networkTitleLabel != null) {
-            networkTitleLabel.setForeground(themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getDBlue());
+            networkTitleLabel.setForeground(
+                    themeManager.isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getDBlue());
         }
     }
-    
+
     private Color getTextFieldColor() {
         return themeManager.isDarkMode() ? new Color(0xE2E8F0) : ThemeManager.getDBlue();
     }
-    
+
     /**
      * Recursively updates label colors
      */

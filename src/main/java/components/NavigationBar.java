@@ -12,7 +12,8 @@ import util.FontLoader;
 import util.ThemeManager;
 
 public class NavigationBar extends JPanel {
-    public GradientPanel navBarPanel = new GradientPanel(ThemeManager.getInstance().getDvBlue(), ThemeManager.getInstance().getVBlue(), 15);
+    public GradientPanel navBarPanel = new GradientPanel(ThemeManager.getInstance().getDvBlue(),
+            ThemeManager.getInstance().getVBlue(), 15);
     private final Consumer<String> onButtonClick;
 
     // Store references to buttons and their components for updating
@@ -127,7 +128,8 @@ public class NavigationBar extends JPanel {
         JLabel textLabel = textLabels.get(pageId);
         JPanel iconContainer = iconContainers.get(pageId);
 
-        if (navButton == null) return;
+        if (navButton == null)
+            return;
 
         // Clear old content
         navButton.removeAll();
@@ -154,7 +156,7 @@ public class NavigationBar extends JPanel {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     g2.setColor(Color.WHITE);
-                    int underlineWidth = (int)(getWidth() * 0.6);
+                    int underlineWidth = (int) (getWidth() * 0.6);
                     int x = (getWidth() - underlineWidth) / 2;
                     int y = getHeight() - 3;
                     g2.fillRoundRect(x, y, underlineWidth, 3, 5, 5);

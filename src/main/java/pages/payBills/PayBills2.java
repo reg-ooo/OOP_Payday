@@ -64,8 +64,7 @@ public class PayBills2 extends JPanel {
 
         // ===== BACK BUTTON =====
         JPanel backPanel = factory.createHeaderPanel(
-                factory.createBackLabel(() -> onButtonClick.accept("PayBills"))
-        );
+                factory.createBackLabel(() -> onButtonClick.accept("PayBills")));
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         mainPanel.add(backPanel);
 
@@ -137,7 +136,8 @@ public class PayBills2 extends JPanel {
             try {
                 double amountValue = Double.parseDouble(amount);
                 if (amountValue <= 0) {
-                    JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Please enter a positive amount", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                     return;
                 } else if (amountValue > currentBalance) {
                     DialogManager.showInsuffBalanceDialog(this, "Insufficient Balance");
@@ -145,7 +145,8 @@ public class PayBills2 extends JPanel {
                 }
 
                 // Pass all data to PayBills3
-                onButtonClick.accept("PayBills3:" + selectedCategory + ":" + selectedProvider + ":" + amount + ":" + accountNumber);
+                onButtonClick.accept(
+                        "PayBills3:" + selectedCategory + ":" + selectedProvider + ":" + amount + ":" + accountNumber);
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(this, "Please enter a valid amount", "Error", JOptionPane.ERROR_MESSAGE);
@@ -160,7 +161,8 @@ public class PayBills2 extends JPanel {
         amountField = SendMoneyPage1Factory.createAmountField(); // Store as instance variable
         balanceLabel = SendMoneyPage1Factory.createBalanceLabel();
 
-        JPanel contentPanel = SendMoneyPage1Factory.createContentPanel(accountLabel, accountField, amountLabel, amountField, balanceLabel, buttonPanel);
+        JPanel contentPanel = SendMoneyPage1Factory.createContentPanel(accountLabel, accountField, amountLabel,
+                amountField, balanceLabel, buttonPanel);
 
         mainPanel.add(contentPanel);
 
@@ -212,11 +214,11 @@ public class PayBills2 extends JPanel {
             double balance = UserInfo.getInstance().getBalance();
             System.out.println("DEBUG: updateBalanceDisplay - Balance: " + balance);
             balanceLabel.setText("Available balance: PHP " + String.format("%.2f", balance));
-            balanceLabel.setForeground(themeManager.getDSBlue());
+            balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDSBlue());
         } catch (Exception e) {
             System.out.println("DEBUG: Error in updateBalanceDisplay: " + e.getMessage());
             balanceLabel.setText("Available balance: PHP 0.00");
-            balanceLabel.setForeground(themeManager.getDSBlue());
+            balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDSBlue());
         }
     }
 
@@ -227,7 +229,7 @@ public class PayBills2 extends JPanel {
 
             if (amountText.isEmpty() || amountText.equals("0.00")) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));
-                balanceLabel.setForeground(themeManager.getDSBlue());
+                balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDSBlue());
                 return;
             }
 
@@ -240,11 +242,12 @@ public class PayBills2 extends JPanel {
                     balanceLabel.setForeground(Color.RED);
                 } else {
                     balanceLabel.setText("Available balance: PHP " + String.format("%.2f", updatedBalance));
-                    balanceLabel.setForeground(themeManager.getDSBlue());
+                    balanceLabel
+                            .setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDSBlue());
                 }
             } catch (NumberFormatException e) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));
-                balanceLabel.setForeground(themeManager.getDSBlue());
+                balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDSBlue());
             }
         } catch (Exception e) {
             updateBalanceDisplay();

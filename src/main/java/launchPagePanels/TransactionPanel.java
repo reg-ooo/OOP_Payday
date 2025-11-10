@@ -15,13 +15,16 @@ import util.FontLoader;
 import util.ThemeManager;
 import Factory.PanelBuilder;
 
-
-public class TransactionPanel extends JPanel{
+public class TransactionPanel extends JPanel {
     private TransactionList trans;
     private RoundedBorder transactionContainer;
     public RoundedPanel transactionRoundedPanel = new RoundedPanel(15, ThemeManager.getInstance().getSBlue());
-    private final JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History", FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"), ThemeManager.getInstance().getDBlue());
-    private final JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
+    private final JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History",
+            FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"),
+            ThemeManager.getInstance().getDBlue());
+    private final JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all",
+            FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"),
+            ThemeManager.getInstance().getPBlue());
     private JLabel descLabel;
     private JLabel timeLabel;
 
@@ -57,8 +60,7 @@ public class TransactionPanel extends JPanel{
             .setColor(ThemeManager.getInstance().getSBlue())
             .build();
 
-
-    private void initComponents(){
+    private void initComponents() {
         ThemeManager.getInstance();
         this.setOpaque(true);
         this.setBackground(ThemeManager.getWhite());
@@ -110,15 +112,20 @@ public class TransactionPanel extends JPanel{
         this.add(transactionContainer, BorderLayout.CENTER);
     }
 
-    public void loadComponents(){
+    public void loadComponents() {
         transactionContentPanel.removeAll();
 
         TransactionDAOImpl userInfo = TransactionDAOImpl.getInstance();
-        if(userInfo.checkForTransactions()) {
-            String time = userInfo.getTransaction().getTransactionDate().substring(userInfo.getTransaction().getTransactionDate().indexOf(" "), userInfo.getTransaction().getTransactionDate().length() - 3);
+        if (userInfo.checkForTransactions()) {
+            String time = userInfo.getTransaction().getTransactionDate().substring(
+                    userInfo.getTransaction().getTransactionDate().indexOf(" "),
+                    userInfo.getTransaction().getTransactionDate().length() - 3);
             String validatedTime = checkTime(time);
-            transactionContentPanel.add(createDateSection(userInfo.getTransaction().getTransactionDate().substring(0, userInfo.getTransaction().getTransactionDate().indexOf(" "))));
-            transactionContentPanel.add(createTransactionItem(userInfo.getTransaction().getTime(), userInfo.getTransaction().getTransactionType(), "₱" + userInfo.getTransaction().getAmount(), userInfo.gainMoney(userInfo.getTransaction())));
+            transactionContentPanel.add(createDateSection(userInfo.getTransaction().getTransactionDate().substring(0,
+                    userInfo.getTransaction().getTransactionDate().indexOf(" "))));
+            transactionContentPanel.add(createTransactionItem(userInfo.getTransaction().getTime(),
+                    userInfo.getTransaction().getTransactionType(), "₱" + userInfo.getTransaction().getAmount(),
+                    userInfo.gainMoney(userInfo.getTransaction())));
             transactionRoundedPanel.add(transactionContentPanel, BorderLayout.CENTER);
             transactionContainer.add(transactionRoundedPanel);
             this.add(transactionContainer, BorderLayout.CENTER);
@@ -151,7 +158,7 @@ public class TransactionPanel extends JPanel{
         return messagePanel;
     }
 
-    public void unloadComponents(){
+    public void unloadComponents() {
         transactionContentPanel.removeAll();
         repaint();
         revalidate();
@@ -171,11 +178,13 @@ public class TransactionPanel extends JPanel{
         descLabel = new JLabel(description);
         descLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
 
-        descLabel.setForeground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
+        descLabel.setForeground(
+                ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
 
         timeLabel = new JLabel(time);
         timeLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        timeLabel.setForeground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
+        timeLabel.setForeground(
+                ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
 
         leftPanel.add(descLabel);
         leftPanel.add(timeLabel);
@@ -197,8 +206,8 @@ public class TransactionPanel extends JPanel{
         this.setBackground(isDarkMode ? ThemeManager.getBlack() : ThemeManager.getWhite());
 
         // Card backgrounds
-        Color lightCard = ThemeManager.getSBlue();   // sky blue
-        Color darkCard = ThemeManager.getDSBlue();     // dark slate blue
+        Color lightCard = ThemeManager.getSBlue(); // sky blue
+        Color darkCard = ThemeManager.getDSBlue(); // dark slate blue
         transactionRoundedPanel.setBackground(isDarkMode ? darkCard : lightCard);
 
         // Header labels
@@ -253,8 +262,9 @@ public class TransactionPanel extends JPanel{
                 .setBorder(BorderFactory.createEmptyBorder(15, 10, 5, 10))
                 .build();
 
-
-        JLabel dateLabel = LabelFactory.getInstance().createLabel(date, FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-BOLD"), ThemeManager.getInstance().getDBlue());
+        JLabel dateLabel = LabelFactory.getInstance().createLabel(date,
+                FontLoader.getInstance().loadFont(Font.BOLD, 12f, "Quicksand-BOLD"),
+                ThemeManager.getInstance().isDarkMode() ? ThemeManager.getNBlue() : ThemeManager.getDBlue());
         dateLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
 
         datePanel.add(dateLabel, BorderLayout.WEST);
@@ -262,11 +272,11 @@ public class TransactionPanel extends JPanel{
         return datePanel;
     }
 
-    private String checkTime(String time){
+    private String checkTime(String time) {
         int hour = Integer.parseInt(time.substring(0, 3).trim());
         System.out.println(hour);
-        if(hour > 12){
-            return hour - 12 +  time.substring(3) + "PM";
+        if (hour > 12) {
+            return hour - 12 + time.substring(3) + "PM";
         }
         if (hour == 12) {
             return hour + time.substring(3) + "PM";
