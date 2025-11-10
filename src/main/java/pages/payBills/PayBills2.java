@@ -37,6 +37,14 @@ public class PayBills2 extends JPanel {
         setLayout(new BorderLayout());
     }
 
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            applyTheme();
+        }
+    }
+
     public void setSelectedProvider(String provider, String category) {
         this.selectedProvider = provider;
         this.selectedCategory = category;
@@ -252,5 +260,41 @@ public class PayBills2 extends JPanel {
     private String getEnteredAmount() {
         String text = amountField.getText().replace("₱ ", "").trim();
         return text.equals("0.00") ? "" : text;
+    }
+
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        applyThemeRecursive(this);
+        revalidate();
+        repaint();
+    }
+
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JTextField jtf) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jtf.setBackground(new Color(0x1E293B)); // dark background
+                jtf.setForeground(new Color(0xF1F5F9)); // light text
+                jtf.setCaretColor(new Color(0xF1F5F9)); // make caret visible
+                jtf.setSelectedTextColor(new Color(0xF1F5F9)); // selected text color
+                jtf.setDisabledTextColor(new Color(0xF1F5F9));
+            } else {
+                jtf.setForeground(Color.BLACK);
+                jtf.setBackground(Color.WHITE);
+                jtf.setCaretColor(Color.BLACK);
+                jtf.setSelectedTextColor(Color.BLACK);
+                jtf.setDisabledTextColor(Color.BLACK);
+            }
+        } else if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(new Color(0xF8FAFC));
+            } else {
+                jl.setForeground(Color.BLACK);
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
     }
 }
