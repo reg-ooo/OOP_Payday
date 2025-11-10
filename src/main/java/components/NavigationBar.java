@@ -28,7 +28,7 @@ public class NavigationBar extends JPanel {
         this.setLayout(new BorderLayout());
         this.onButtonClick = onButtonClick;
 
-        navBarPanel.setOpaque(true);
+        navBarPanel.setOpaque(false);
         navBarPanel.setLayout(new GridLayout(1, 3));
         navBarPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
@@ -183,5 +183,14 @@ public class NavigationBar extends JPanel {
         label.setFont(font);
         label.setForeground(color);
         return label;
+    }
+
+    public void applyTheme() {
+        // Update the gradient panel colors based on theme
+        if (ThemeManager.getInstance().isDarkMode()) {
+            navBarPanel.setGradientColors(ThemeManager.getDSBlue(), ThemeManager.getDSBlue());
+        } else {
+            navBarPanel.setGradientColors(ThemeManager.getDvBlue(), ThemeManager.getVBlue());
+        }
     }
 }

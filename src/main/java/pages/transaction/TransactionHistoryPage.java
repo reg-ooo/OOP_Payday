@@ -26,7 +26,11 @@ public class TransactionHistoryPage extends RoundedPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final ImageLoader imageLoader = ImageLoader.getInstance();
     private final Consumer<String> onButtonClick;
+    private JLabel amountLabel, backLabel, titleLabel;
     JPanel historyListPanel;
+    private ArrayList<RoundedPanel> transactionCards = new ArrayList<>();
+    private ArrayList<JLabel> transactionDescLabels = new ArrayList<>();
+    private ArrayList<JLabel> transactionDateTimeLabels = new ArrayList<>();
 
     public static TransactionHistoryPage getInstance() {
         if (instance == null) {
@@ -60,7 +64,7 @@ public class TransactionHistoryPage extends RoundedPanel {
         backButtonPanel.setOpaque(false);
         backButtonPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        JLabel backLabel = new JLabel("Back");
+        backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
         backLabel.setForeground(themeManager.getPBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -82,7 +86,7 @@ public class TransactionHistoryPage extends RoundedPanel {
         JLabel iconLabel = new JLabel(transactionHistoryIcon);
 
         // Transaction History label
-        JLabel titleLabel = new JLabel("Transaction History");
+        titleLabel = new JLabel("Transaction History");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
         titleLabel.setForeground(themeManager.getDBlue());
         headerPanel.add(titleLabel);
@@ -160,7 +164,8 @@ public class TransactionHistoryPage extends RoundedPanel {
         borderContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Use a simple RoundedPanel for the card background
-        RoundedPanel card = new RoundedPanel(15, themeManager.getSBlue());
+        Color cardColor = themeManager.isDarkMode() ? themeManager.getDSBlue() : themeManager.getSBlue();
+        RoundedPanel card = new RoundedPanel(15, cardColor);
 
         // Use BorderLayout with adjusted gap to accommodate image
         card.setLayout(new BorderLayout(10, 0));
@@ -205,12 +210,12 @@ public class TransactionHistoryPage extends RoundedPanel {
 
         JLabel descLabel = new JLabel(description);
         descLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        descLabel.setForeground(themeManager.getDBlue());
+        descLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDBlue());
         descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel dateTimeLabel = new JLabel(date + " | " + time);
         dateTimeLabel.setFont(fontLoader.loadFont(Font.PLAIN, 13f, "Quicksand-Regular"));
-        dateTimeLabel.setForeground(themeManager.getBlack());
+        dateTimeLabel.setForeground(themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getBlack());
         dateTimeLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         stackedPanel.add(descLabel);
@@ -224,7 +229,7 @@ public class TransactionHistoryPage extends RoundedPanel {
         contentPanel.add(descriptionTimePanel, BorderLayout.CENTER);
 
         // Amount label on the far right
-        JLabel amountLabel = new JLabel("₱" + amount);
+        amountLabel = new JLabel("₱" + amount);
         amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Regular"));
         amountLabel.setForeground(isPositive ? themeManager.getGreen() : themeManager.getRed());
         amountLabel.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -232,6 +237,11 @@ public class TransactionHistoryPage extends RoundedPanel {
         // Add components to card
         card.add(contentPanel, BorderLayout.CENTER);
         card.add(amountLabel, BorderLayout.EAST);
+
+        // Store card reference for theme updates
+        transactionCards.add(card);
+        transactionDescLabels.add(descLabel);
+        transactionDateTimeLabels.add(dateTimeLabel);
 
         borderContainer.add(card);
         return borderContainer;
@@ -262,6 +272,9 @@ public class TransactionHistoryPage extends RoundedPanel {
 
     public void loadComponents(){
         historyListPanel.removeAll();
+        transactionCards.clear(); // Clear stored card references
+        transactionDescLabels.clear(); // Clear description label references
+        transactionDateTimeLabels.clear(); // Clear date/time label references
 
         ArrayList<Transaction> transactionsList = TransactionDAOImpl.getInstance().getAllTransactions();
         ArrayList<String> dateList = TransactionDAOImpl.getInstance().getDistinctDates();
@@ -311,5 +324,71 @@ public class TransactionHistoryPage extends RoundedPanel {
 
         messagePanel.add(messageLabel, BorderLayout.CENTER);
         return messagePanel;
+    }
+
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        
+        // Update transaction card backgrounds
+        Color cardColor = themeManager.isDarkMode() ? themeManager.getDSBlue() : themeManager.getSBlue();
+        for (RoundedPanel card : transactionCards) {
+            card.setBackground(cardColor);
+        }
+        
+        // Update transaction description labels
+        Color descColor = themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDBlue();
+        for (JLabel descLabel : transactionDescLabels) {
+            descLabel.setForeground(descColor);
+        }
+        
+        // Update transaction date/time labels
+        Color dateTimeColor = themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getBlack();
+        for (JLabel dateTimeLabel : transactionDateTimeLabels) {
+            dateTimeLabel.setForeground(dateTimeColor);
+        }
+        
+        applyThemeRecursive(this);
+        revalidate();
+        repaint();
+    }
+
+    private void applyThemeRecursive(Component comp) {
+       if (comp instanceof JLabel jl) {
+           // Skip amount label - it has its own color logic (red/green)
+           if(jl == amountLabel){
+               return;
+           }
+           
+           // Only update specific labels
+           if (jl == backLabel) {
+               if (ThemeManager.getInstance().isDarkMode()) {
+                   jl.setForeground(new Color(0xF8FAFC));
+               } else {
+                   jl.setForeground(themeManager.getPBlue());
+               }
+           } else if (jl == titleLabel) {
+               if (ThemeManager.getInstance().isDarkMode()) {
+                   jl.setForeground(new Color(0xF8FAFC));
+               } else {
+                   jl.setForeground(themeManager.getDBlue());
+               }
+           } else {
+               // For date group labels (separator labels with "Today", "MMM dd" format)
+               // Check if the label has the date group styling
+               Font labelFont = jl.getFont();
+               if (labelFont != null && labelFont.getSize() == 19) {
+                   if (ThemeManager.getInstance().isDarkMode()) {
+                       jl.setForeground(new Color(0xF8FAFC));
+                   } else {
+                       jl.setForeground(themeManager.getDBlue());
+                   }
+               }
+           }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
     }
 }
