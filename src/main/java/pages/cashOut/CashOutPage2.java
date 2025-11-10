@@ -203,7 +203,7 @@ public class CashOutPage2 extends JPanel {
         // ===== STEP INDICATOR =====
         JPanel stepPanel = new JPanel();
         stepPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        stepPanel.setBackground(Color.WHITE);
+        stepPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         stepPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 10));
 
         JLabel stepLabel = new JLabel("Step 2 of 2");
@@ -367,6 +367,15 @@ public class CashOutPage2 extends JPanel {
     
     private void applyThemeRecursive(Component comp) {
         if (comp instanceof JLabel jl) {
+            // Skip labels inside GradientPanel (they should always be white)
+            Container parent = jl.getParent();
+            while (parent != null) {
+                if (parent instanceof GradientPanel) {
+                    return; // Don't change labels inside gradient panels
+                }
+                parent = parent.getParent();
+            }
+            
             if (ThemeManager.getInstance().isDarkMode()) {
                 jl.setForeground(Color.WHITE);
             } else {
