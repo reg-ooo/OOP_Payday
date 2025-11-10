@@ -371,6 +371,31 @@ public class BuyLoadPage3 extends JPanel {
         super.setVisible(visible);
         if (visible) {
             refreshBalance();
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            // Skip labels inside GradientPanel (they should always be white)
+            Container parent = jl.getParent();
+            while (parent != null) {
+                if (parent instanceof GradientPanel) {
+                    return; // Don't change labels inside gradient panels
+                }
+                parent = parent.getParent();
+            }
+            
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
         }
     }
 

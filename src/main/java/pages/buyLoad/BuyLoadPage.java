@@ -44,7 +44,7 @@ public class BuyLoadPage extends JPanel {
 
         this.factory = new ConcreteCashInPageFactory();
 
-        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : ThemeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
 
         setLayout(new BorderLayout());
 
@@ -56,7 +56,7 @@ public class BuyLoadPage extends JPanel {
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
 
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -86,7 +86,7 @@ public class BuyLoadPage extends JPanel {
 
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px gap between icon and text
 
-        titlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        titlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
 
         titlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
 
@@ -156,7 +156,7 @@ public class BuyLoadPage extends JPanel {
 
         gridPanel.setLayout(new GridLayout(2, 2, 20, 20)); // 2x2 grid with 20px gaps
 
-        gridPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        gridPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
 
         gridPanel.setMaximumSize(new Dimension(350, 350));
 
@@ -205,6 +205,13 @@ public class BuyLoadPage extends JPanel {
         RoundedBorder roundedButton = new RoundedBorder(25, ThemeManager.getDeepBlue(), 3);
 
         roundedButton.setPreferredSize(new Dimension(120, 120));
+        
+        // In dark mode, make it transparent; in light mode, use the original VBlue color
+        if (themeManager.isDarkMode()) {
+            roundedButton.setOpaque(false);
+        } else {
+            roundedButton.setBackground(ThemeManager.getVBlue());
+        }
 
         roundedButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -220,7 +227,7 @@ public class BuyLoadPage extends JPanel {
 
         wrapperPanel.setPreferredSize(new Dimension(130, 140));
 
-        wrapperPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        wrapperPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
 
         wrapperPanel.setOpaque(false);
 
@@ -327,83 +334,67 @@ public class BuyLoadPage extends JPanel {
     }
     
     private void updateButtonBackgrounds() {
-        Color bgColor = themeManager.isDarkMode() ? ThemeManager.getDarkGray() : ThemeManager.getWhite();
-        
         if (smartPanel != null) {
             // Find the RoundedBorder component inside the wrapper panel
             for (Component comp : smartPanel.getComponents()) {
-                if (comp instanceof JPanel) {
-                    comp.setBackground(bgColor);
+                if (comp instanceof JPanel panel) {
+                    if (themeManager.isDarkMode()) {
+                        panel.setOpaque(false);
+                    } else {
+                        panel.setBackground(ThemeManager.getVBlue());
+                    }
                 }
             }
         }
         
         if (globePanel != null) {
             for (Component comp : globePanel.getComponents()) {
-                if (comp instanceof JPanel) {
-                    comp.setBackground(bgColor);
+                if (comp instanceof JPanel panel) {
+                    if (themeManager.isDarkMode()) {
+                        panel.setOpaque(false);
+                    } else {
+                        panel.setBackground(ThemeManager.getVBlue());
+                    }
                 }
             }
         }
         
         if (tntPanel != null) {
             for (Component comp : tntPanel.getComponents()) {
-                if (comp instanceof JPanel) {
-                    comp.setBackground(bgColor);
+                if (comp instanceof JPanel panel) {
+                    if (themeManager.isDarkMode()) {
+                        panel.setOpaque(false);
+                    } else {
+                        panel.setBackground(ThemeManager.getVBlue());
+                    }
                 }
             }
         }
         
         if (ditoPanel != null) {
             for (Component comp : ditoPanel.getComponents()) {
-                if (comp instanceof JPanel) {
-                    comp.setBackground(bgColor);
+                if (comp instanceof JPanel panel) {
+                    if (themeManager.isDarkMode()) {
+                        panel.setOpaque(false);
+                    } else {
+                        panel.setBackground(ThemeManager.getVBlue());
+                    }
                 }
             }
         }
     }
     
-    private void applyThemeRecursive(Container container) {
-        for (Component component : container.getComponents()) {
-            if (component instanceof JLabel) {
-                JLabel label = (JLabel) component;
-                if (themeManager.isDarkMode()) {
-                    label.setForeground(Color.WHITE);
-                }
-            } else if (component instanceof Container) {
-                applyThemeRecursive((Container) component);
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
             }
         }
-    }
-
-    /**
-     * Applies the current theme to this component
-     */
-    public void applyTheme() {
-        themeManager.applyTheme(this);
-        
-        // Apply theme to labels
-        if (themeManager.isDarkMode()) {
-            // Update title label color for dark mode
-            updateLabelColors(this, ThemeManager.getLightText());
-        } else {
-            // Update title label color for light mode
-            updateLabelColors(this, ThemeManager.getDBlue());
-        }
-    }
-    
-    /**
-     * Recursively updates label colors
-     */
-    private void updateLabelColors(Container container, Color color) {
-        for (Component component : container.getComponents()) {
-            if (component instanceof JLabel label) {
-                // Only update text labels, not icon labels
-                if (label.getText() != null && !label.getText().isEmpty()) {
-                    label.setForeground(color);
-                }
-            } else if (component instanceof Container subContainer) {
-                updateLabelColors(subContainer, color);
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
             }
         }
     }
