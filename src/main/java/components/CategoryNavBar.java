@@ -65,12 +65,15 @@ public class CategoryNavBar extends JPanel {
         roundedContainer = new JPanel(new BorderLayout()) {
             @Override
             public Dimension getPreferredSize() {
-                // Use the full available width of the parent
-                int width = getParent() != null ? getParent().getWidth() : 300;
-
-                // ADJUST HEIGHT HERE - reduce the +16 padding
-                int height = categoriesPanel.getPreferredSize().height + 5; // Reduced from +16 to +10
+                // Fixed width to fit within PayBills panel content area (300px - 60px padding = 240px)
+                int width = 240;
+                int height = categoriesPanel.getPreferredSize().height + 5;
                 return new Dimension(width, height);
+            }
+
+            @Override
+            public Dimension getMaximumSize() {
+                return new Dimension(240, super.getMaximumSize().height);
             }
 
             @Override
@@ -78,8 +81,10 @@ public class CategoryNavBar extends JPanel {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-                // Draw background first
-                g2.setColor(themeManager.getWhite());
+                // Draw background first - use grey in dark mode
+                Color bgColor = themeManager.isDarkMode() ? 
+                    new Color(0x1E293B) : themeManager.getWhite();
+                g2.setColor(bgColor);
                 g2.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
 
                 // Draw border second
@@ -191,22 +196,6 @@ public class CategoryNavBar extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 setSelectedCategory(category);
                 onCategorySelect.accept(category);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                if (!category.equals(selectedCategory)) {
-                    categoryPanel.setBackground(new Color(248, 248, 248));
-                    categoryPanel.setOpaque(true);
-                }
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (!category.equals(selectedCategory)) {
-                    categoryPanel.setBackground(themeManager.getWhite());
-                    categoryPanel.setOpaque(false);
-                }
             }
         });
 

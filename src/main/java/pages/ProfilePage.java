@@ -4,6 +4,7 @@ import data.UserManager;
 import data.dao.TransactionDAOImpl;
 import data.model.UserInfo;
 import launchPagePanels.GradientPanel;
+import launchPagePanels.RoundedPanel;
 import util.FontLoader;
 import util.ThemeManager;
 import util.ImageLoader;
@@ -114,9 +115,8 @@ public class ProfilePage extends JPanel {
 
         namePanel.add(nameAndIconPanel, BorderLayout.CENTER);
 
-        infoPanel = new JPanel();
+        infoPanel = new RoundedPanel(25, Color.WHITE);
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(Color.WHITE);
         infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
 
         JLabel basicLabel = new JLabel("Basic Information");
@@ -142,6 +142,72 @@ public class ProfilePage extends JPanel {
         centerPanel.add(infoPanel);
 
         add(centerPanel, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            applyTheme();
+        }
+    }
+
+    private void applyTheme() {
+        themeManager.applyTheme(this);
+        applyThemeRecursive(this);
+        
+        // Update circular panel background
+        initialsLabel.setBackground(themeManager.isDarkMode() ? 
+            new Color(0x1E293B) : themeManager.getPBlue());
+        
+        revalidate();
+        repaint();
+    }
+
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            // Skip the verified icon label and verified value label
+            if (jl == verifiedIconLabel || jl == verifiedValueLabel) {
+                return;
+            }
+            
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                // Restore original colors for light mode
+                if (jl == nameLabel) {
+                    jl.setForeground(ThemeManager.getBlack());
+                } else {
+                    jl.setForeground(ThemeManager.getDBlue());
+                }
+            }
+        } else if (comp instanceof RoundedPanel roundedPanel) {
+            // Handle RoundedPanel background color for dark mode
+            if (ThemeManager.getInstance().isDarkMode()) {
+                roundedPanel.setBackground(ThemeManager.getBlack());
+            } else {
+                roundedPanel.setBackground(Color.WHITE);
+            }
+        } else if (comp instanceof JPanel panel) {
+            // Set panel backgrounds for dark mode (except GradientPanel)
+            if (!(comp instanceof GradientPanel)) {
+                if (ThemeManager.getInstance().isDarkMode()) {
+                    if (panel.isOpaque()) {
+                        panel.setBackground(ThemeManager.getBlack());
+                    }
+                } else {
+                    if (panel.isOpaque()) {
+                        panel.setBackground(Color.WHITE);
+                    }
+                }
+            }
+        }
+        
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
     }
 
     private JPanel createCircularInitialsPanel(JLabel label, int size) {
@@ -264,9 +330,15 @@ public class ProfilePage extends JPanel {
 
         JLabel iconLabel = new JLabel(normalIcon);
         iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+        iconLabel.setOpaque(false);
+        
+        // Wrap icon in transparent panel to ensure no background shows
+        JPanel iconWrapper = new JPanel(new BorderLayout());
+        iconWrapper.setOpaque(false);
+        iconWrapper.add(iconLabel, BorderLayout.CENTER);
 
         row.add(label, BorderLayout.CENTER);
-        row.add(iconLabel, BorderLayout.EAST);
+        row.add(iconWrapper, BorderLayout.EAST);
 
         row.addMouseListener(new MouseAdapter() {
             @Override
