@@ -31,6 +31,12 @@ public class BuyLoadPage extends JPanel {
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
     private final CashInPageFactory factory;
+    
+    // Store button panel references for theme updates
+    private JPanel smartPanel;
+    private JPanel globePanel;
+    private JPanel tntPanel;
+    private JPanel ditoPanel;
 
 
 
@@ -158,13 +164,13 @@ public class BuyLoadPage extends JPanel {
 
 // Create 4 rounded border buttons like in CenterPanel
 
-        JPanel smartPanel = createRoundedLoadButton("smart", () -> onButtonClick.accept("BuyLoad2:Smart"));
+        smartPanel = createRoundedLoadButton("smart", () -> onButtonClick.accept("BuyLoad2:Smart"));
 
-        JPanel globePanel = createRoundedLoadButton("globe", () -> onButtonClick.accept("BuyLoad2:Globe"));
+        globePanel = createRoundedLoadButton("globe", () -> onButtonClick.accept("BuyLoad2:Globe"));
 
-        JPanel tntPanel = createRoundedLoadButton("tnt", () -> onButtonClick.accept("BuyLoad2:TNT"));
+        tntPanel = createRoundedLoadButton("tnt", () -> onButtonClick.accept("BuyLoad2:TNT"));
 
-        JPanel ditoPanel = createRoundedLoadButton("dito", () -> onButtonClick.accept("BuyLoad2:Dito"));
+        ditoPanel = createRoundedLoadButton("dito", () -> onButtonClick.accept("BuyLoad2:Dito"));
 
 
 
@@ -196,7 +202,7 @@ public class BuyLoadPage extends JPanel {
 
 // Create rounded border like in CenterPanel
 
-        RoundedBorder roundedButton = new RoundedBorder(25, ThemeManager.getInstance().getVBlue(), 2);
+        RoundedBorder roundedButton = new RoundedBorder(25, ThemeManager.getDeepBlue(), 3);
 
         roundedButton.setPreferredSize(new Dimension(120, 120));
 
@@ -261,33 +267,27 @@ public class BuyLoadPage extends JPanel {
         roundedButton.addMouseListener(new java.awt.event.MouseAdapter() {
 
             public void mouseEntered(java.awt.event.MouseEvent evt) {
+                if (!themeManager.isDarkMode()) {
+                    roundedButton.setBackground(ThemeManager.getInstance().getDBlue());
+                    roundedButton.setPreferredSize(new Dimension(125, 125));
 
-                roundedButton.setBackground(ThemeManager.getInstance().getDBlue());
+                    revalidateParentContainers(roundedButton);
 
-                roundedButton.setPreferredSize(new Dimension(125, 125));
-
-
-
-                revalidateParentContainers(roundedButton);
-
-                roundedButton.repaint();
-
+                    roundedButton.repaint();
+                }
             }
 
 
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
+                if (!themeManager.isDarkMode()) {
+                    roundedButton.setBackground(ThemeManager.getInstance().getVBlue());
+                    roundedButton.setPreferredSize(new Dimension(120, 120));
 
-                roundedButton.setBackground(ThemeManager.getInstance().getVBlue());
+                    revalidateParentContainers(roundedButton);
 
-                roundedButton.setPreferredSize(new Dimension(120, 120));
-
-
-
-                revalidateParentContainers(roundedButton);
-
-                roundedButton.repaint();
-
+                    roundedButton.repaint();
+                }
             }
 
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -315,6 +315,65 @@ public class BuyLoadPage extends JPanel {
 
         }
 
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            updateButtonBackgrounds();
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void updateButtonBackgrounds() {
+        Color bgColor = themeManager.isDarkMode() ? ThemeManager.getDarkGray() : ThemeManager.getWhite();
+        
+        if (smartPanel != null) {
+            // Find the RoundedBorder component inside the wrapper panel
+            for (Component comp : smartPanel.getComponents()) {
+                if (comp instanceof JPanel) {
+                    comp.setBackground(bgColor);
+                }
+            }
+        }
+        
+        if (globePanel != null) {
+            for (Component comp : globePanel.getComponents()) {
+                if (comp instanceof JPanel) {
+                    comp.setBackground(bgColor);
+                }
+            }
+        }
+        
+        if (tntPanel != null) {
+            for (Component comp : tntPanel.getComponents()) {
+                if (comp instanceof JPanel) {
+                    comp.setBackground(bgColor);
+                }
+            }
+        }
+        
+        if (ditoPanel != null) {
+            for (Component comp : ditoPanel.getComponents()) {
+                if (comp instanceof JPanel) {
+                    comp.setBackground(bgColor);
+                }
+            }
+        }
+    }
+    
+    private void applyThemeRecursive(Container container) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                if (themeManager.isDarkMode()) {
+                    label.setForeground(Color.WHITE);
+                }
+            } else if (component instanceof Container) {
+                applyThemeRecursive((Container) component);
+            }
+        }
     }
 
     /**

@@ -138,7 +138,9 @@ public class ConcreteCashInPageFactory implements CashInPageFactory {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                button.setBackground(themeManager.getGradientLBlue());
+                if (!themeManager.isDarkMode()) {
+                    button.setBackground(themeManager.getGradientLBlue());
+                }
             }
 
             @Override

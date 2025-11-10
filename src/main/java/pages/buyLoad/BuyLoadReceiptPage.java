@@ -29,7 +29,7 @@ public class BuyLoadReceiptPage extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : ThemeManager.getWhite());
+        setBackground(ThemeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         add(createReceiptPanel(), BorderLayout.CENTER);

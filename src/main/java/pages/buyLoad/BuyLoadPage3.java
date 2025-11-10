@@ -36,18 +36,18 @@ public class BuyLoadPage3 extends JPanel {
 
     public BuyLoadPage3(Consumer<String> onButtonClick) {
         setLayout(new BorderLayout());
-        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         this.factory = new ConcreteSendMoneyPage1Factory();
 
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 20, 20, 20));
 
         // ===== BACK BUTTON =====
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
         JLabel backLabel = createBackLabel(() -> {
@@ -61,7 +61,7 @@ public class BuyLoadPage3 extends JPanel {
         // ===== HEADER SECTION WITH ICON =====
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px gap between icon and text
-        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         headerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -119,7 +119,7 @@ public class BuyLoadPage3 extends JPanel {
         detailsContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create inner rounded panel (like transactionRoundedPanel)
-        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         detailsRoundedPanel.setLayout(new BorderLayout());
         detailsRoundedPanel.setPreferredSize(new Dimension(350, 210));
         detailsRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -127,7 +127,7 @@ public class BuyLoadPage3 extends JPanel {
         // Create content panel for the details
         JPanel detailsContentPanel = new JPanel();
         detailsContentPanel.setLayout(new BoxLayout(detailsContentPanel, BoxLayout.Y_AXIS));
-        detailsContentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        detailsContentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
 
         // Title
         JLabel detailsTitle = new JLabel("Load Purchase Details");
@@ -285,7 +285,7 @@ public class BuyLoadPage3 extends JPanel {
      */
     private JPanel createDetailRow(String label, String value, String type) {
         JPanel rowPanel = new JPanel(new BorderLayout());
-        rowPanel.setBackground(Color.WHITE);
+        rowPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         rowPanel.setMaximumSize(new Dimension(300, 25));
 
         JLabel keyLabel = new JLabel(label);

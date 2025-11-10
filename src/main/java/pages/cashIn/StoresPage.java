@@ -39,6 +39,38 @@ public class StoresPage extends JPanel {
         setupUI();
     }
     
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            // Update button backgrounds when page becomes visible
+            updateButtonBackgrounds();
+            // Update labels recursively
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void updateButtonBackgrounds() {
+        if (cliqq != null) cliqq.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        if (familyMart != null) familyMart.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        if (shell != null) shell.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
+    }
+    
     public void applyTheme(boolean darkMode) {
         setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());

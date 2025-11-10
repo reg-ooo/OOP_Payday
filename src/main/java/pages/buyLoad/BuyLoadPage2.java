@@ -35,7 +35,7 @@ public class BuyLoadPage2 extends JPanel {
         this.onButtonClick = onButtonClick;
         this.factory = new ConcreteCashInPageFactory();
         this.SendMoneyPage1Factory = new ConcreteSendMoneyPage1Factory();
-        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         setLayout(new BorderLayout());
 
     }
@@ -53,7 +53,7 @@ public class BuyLoadPage2 extends JPanel {
         // Main content panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // ===== BACK BUTTON =====
@@ -68,7 +68,7 @@ public class BuyLoadPage2 extends JPanel {
         // ===== MAIN TITLE SECTION =====
         JPanel mainTitlePanel = new JPanel();
         mainTitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        mainTitlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        mainTitlePanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         mainTitlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         mainTitlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -89,19 +89,15 @@ public class BuyLoadPage2 extends JPanel {
         // ===== NETWORK TITLE SECTION =====
         JPanel networkTitlePanel = new JPanel();
         networkTitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        networkTitlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        networkTitlePanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         networkTitlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         networkTitlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        ImageIcon networkIcon = ImageLoader.getInstance().getImage(selectedNetwork.toLowerCase());
-        JLabel networkIconLabel = new JLabel(networkIcon);
 
         JLabel networkTitleLabel = new JLabel("Network Provider");
         networkTitleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"));
         networkTitleLabel.setForeground(themeManager.getDBlue());
 
         networkTitlePanel.add(networkTitleLabel);
-        networkTitlePanel.add(networkIconLabel);
 
         mainPanel.add(networkTitlePanel);
 
@@ -160,7 +156,7 @@ public class BuyLoadPage2 extends JPanel {
         // ===== STEP INDICATOR =====
         JPanel stepPanel = new JPanel();
         stepPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        stepPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
+        stepPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         stepPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         JLabel stepLabel = new JLabel("Step 2 of 3");
@@ -268,6 +264,27 @@ public class BuyLoadPage2 extends JPanel {
         } else {
             // Update label colors for light mode
             updateLabelColors(this, ThemeManager.getDBlue());
+        }
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void applyThemeRecursive(Container container) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                if (themeManager.isDarkMode()) {
+                    label.setForeground(Color.WHITE);
+                }
+            } else if (component instanceof Container) {
+                applyThemeRecursive((Container) component);
+            }
         }
     }
     

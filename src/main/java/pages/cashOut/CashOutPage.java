@@ -27,7 +27,7 @@ public class CashOutPage extends JPanel {
 
     public CashOutPage(Consumer<String> onButtonClick) {
         setLayout(new BorderLayout());
-        setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         this.factory = new ConcreteSendMoneyPage1Factory();
 
         clearAmountField();
@@ -35,12 +35,12 @@ public class CashOutPage extends JPanel {
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // ===== BACK BUTTON =====
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
+        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
         JLabel backLabel = createBackLabel(() -> {
@@ -54,7 +54,7 @@ public class CashOutPage extends JPanel {
         // ===== HEADER SECTION WITH ICON =====
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px gap between icon and text
-        headerPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         headerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -164,7 +164,7 @@ public class CashOutPage extends JPanel {
         // ===== STEP INDICATOR =====
         JPanel stepPanel = new JPanel();
         stepPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        stepPanel.setBackground(Color.WHITE);
+        stepPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         stepPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         JLabel stepLabel = new JLabel("Step 1 of 2");
@@ -328,6 +328,32 @@ public class CashOutPage extends JPanel {
         super.setVisible(visible);
         if (visible) {
             refreshBalance();
+            // Update labels recursively
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            // Skip labels inside GradientPanel (they should always be white)
+            Container parent = jl.getParent();
+            while (parent != null) {
+                if (parent instanceof GradientPanel) {
+                    return; // Don't change labels inside gradient panels
+                }
+                parent = parent.getParent();
+            }
+            
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
         }
     }
 

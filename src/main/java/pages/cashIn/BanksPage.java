@@ -19,10 +19,51 @@ public class BanksPage extends JPanel {
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
     private final CashInFormFactory factory = new ConcreteCashInFormFactory();
+    
+    // Store button references
+    private JButton bpiButton;
+    private JButton bdoButton;
+    private JButton unionBankButton;
+    private JButton pnbButton;
+    private JButton metrobankButton;
 
     public BanksPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setupUI();
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            // Update button backgrounds when page becomes visible
+            updateButtonBackgrounds();
+            // Update labels recursively
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void updateButtonBackgrounds() {
+        if (bpiButton != null) bpiButton.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        if (bdoButton != null) bdoButton.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        if (unionBankButton != null) unionBankButton.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        if (pnbButton != null) pnbButton.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        if (metrobankButton != null) metrobankButton.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
     }
 
     private void setupUI() {
@@ -72,23 +113,28 @@ public class BanksPage extends JPanel {
 
         // Row 1: Two buttons side by side
         gbc.gridx = 0; gbc.gridy = 0;
-        contentPanel.add(factory.createSmallerSelectionButton("BPI", onButtonClick, nextKeyPrefix), gbc);
+        bpiButton = factory.createSmallerSelectionButton("BPI", onButtonClick, nextKeyPrefix);
+        contentPanel.add(bpiButton, gbc);
 
         gbc.gridx = 1;
-        contentPanel.add(factory.createSmallerSelectionButton("BDO", onButtonClick, nextKeyPrefix), gbc);
+        bdoButton = factory.createSmallerSelectionButton("BDO", onButtonClick, nextKeyPrefix);
+        contentPanel.add(bdoButton, gbc);
 
         // Row 2: Two buttons side by side
         gbc.gridx = 0; gbc.gridy = 1;
-        contentPanel.add(factory.createSmallerSelectionButton("UnionBank", onButtonClick, nextKeyPrefix), gbc);
+        unionBankButton = factory.createSmallerSelectionButton("UnionBank", onButtonClick, nextKeyPrefix);
+        contentPanel.add(unionBankButton, gbc);
 
         gbc.gridx = 1;
-        contentPanel.add(factory.createSmallerSelectionButton("PNB", onButtonClick, nextKeyPrefix), gbc);
+        pnbButton = factory.createSmallerSelectionButton("PNB", onButtonClick, nextKeyPrefix);
+        contentPanel.add(pnbButton, gbc);
 
         // Row 3: One button centered
         gbc.gridx = 0; gbc.gridy = 2;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        contentPanel.add(factory.createSmallerSelectionButton("Metrobank", onButtonClick, nextKeyPrefix), gbc);
+        metrobankButton = factory.createSmallerSelectionButton("Metrobank", onButtonClick, nextKeyPrefix);
+        contentPanel.add(metrobankButton, gbc);
 
         // --- Footer: Step Label (Manual, matching StoresPage style) ---
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));

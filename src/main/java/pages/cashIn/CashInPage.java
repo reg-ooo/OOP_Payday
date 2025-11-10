@@ -15,12 +15,59 @@ public class CashInPage extends JPanel {
 
     // ADDED: Factory instance
     private final CashInPageFactory factory;
+    
+    // Store button references
+    private JPanel banksOptionPanel;
+    private JPanel storesOptionPanel;
 
     public CashInPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         // Instantiate the concrete factory
         this.factory = new ConcreteCashInPageFactory();
         setupUI();
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            // Update button backgrounds when page becomes visible
+            updateButtonBackgrounds();
+            // Update labels recursively
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void updateButtonBackgrounds() {
+        if (banksOptionPanel != null) {
+            updatePanelButtons(banksOptionPanel);
+        }
+        if (storesOptionPanel != null) {
+            updatePanelButtons(storesOptionPanel);
+        }
+    }
+    
+    private void updatePanelButtons(JPanel panel) {
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof JButton button) {
+                button.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+            }
+        }
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
     }
 
     private void setupUI() {
@@ -40,13 +87,13 @@ public class CashInPage extends JPanel {
         );
 
         // 3. Option Buttons (uses factory to create complex button panels)
-        JPanel banksOptionPanel = factory.createCashInOptionPanel(
+        banksOptionPanel = factory.createCashInOptionPanel(
                 "bankTransfer",
                 "Banks",
                 e -> onButtonClick.accept("CashInBanks")
         );
 
-        JPanel storesOptionPanel = factory.createCashInOptionPanel(
+        storesOptionPanel = factory.createCashInOptionPanel(
                 "Stores",
                 "Stores",
                 e -> onButtonClick.accept("CashInStores")

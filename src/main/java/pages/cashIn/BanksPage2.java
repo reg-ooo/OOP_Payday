@@ -42,6 +42,30 @@ public class BanksPage2 extends JPanel {
         this.onButtonClick = onButtonClick;
         setupUI();
     }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            // Update labels recursively when page becomes visible
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
+    }
 
     /**
      * Updates the UI based on the bank selected from BanksPage.
