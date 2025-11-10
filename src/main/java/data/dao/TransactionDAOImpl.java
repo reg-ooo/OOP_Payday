@@ -32,7 +32,7 @@ public class TransactionDAOImpl implements TransactionDAO {
     // Inserts a new transaction into the database
     @Override
     public void insertTransaction(int walletID, String transactionType, double amount) {
-        String sql = "INSERT INTO Transactions(walletID, transactionType, referenceID, amount, userID) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Transactions(walletID, transactionType, referenceID, amount) VALUES(?, ?, ?, ?)";
         DatabaseProtectionProxy.getInstance().setUserContext(-1, true);
         if(!transactionType.equals("Receive Money")) {
             referenceNum = getReference();
@@ -42,7 +42,6 @@ public class TransactionDAOImpl implements TransactionDAO {
             stmt.setString(2, transactionType);
             stmt.setString(3, referenceNum);
             stmt.setDouble(4, amount);
-            stmt.setInt(5, walletID);
             stmt.executeUpdate();
             DatabaseProtectionProxy.getInstance().setUserContext(UserInfo.getInstance().getCurrentUserId(), true);
         } catch (SQLException e) {
@@ -53,7 +52,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     // Checks if there are any transactions for the current user
     public boolean checkForTransactions(){
-        String query = "SELECT COUNT(*) FROM Transactions WHERE userID = ?";
+        String query = "SELECT COUNT(*) FROM Transactions WHERE walletID = ?";
         try (PreparedStatement pstmt = database.prepareStatement(query)){
             pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());
             ResultSet rs = pstmt.executeQuery();
@@ -68,7 +67,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     // Gets a specific transaction by transaction ID
     public Transaction getTransactionById(int transactionId) {
-        String query = "SELECT * FROM Transactions WHERE transactionID = ? AND userID = ?";
+        String query = "SELECT * FROM Transactions WHERE transactionID = ? AND walletID = ?";
 
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
             pstmt.setInt(1, transactionId);
@@ -119,7 +118,7 @@ public class TransactionDAOImpl implements TransactionDAO {
     @Override
     public ArrayList<Transaction> getAllTransactions() {
         ArrayList<Transaction> transactions = new ArrayList<>();
-        String query = "SELECT * FROM Transactions WHERE userID = ? ORDER BY transactionID DESC LIMIT 8";
+        String query = "SELECT * FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 8";
 
         try {
             PreparedStatement pstmt = database.prepareStatement(query);
@@ -137,7 +136,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     public ArrayList<String> getDistinctDates(){
         ArrayList<String> dates = new ArrayList<>();
-        String query = "SELECT transactionDate FROM Transactions WHERE userID = ? ORDER BY transactionID DESC LIMIT 8";
+        String query = "SELECT transactionDate FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 8";
         try{
             PreparedStatement pstmt = database.prepareStatement(query);
             pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());

@@ -6,6 +6,7 @@ import launchPagePanels.CenterPanel;
 import launchPagePanels.GradientPanel;
 import launchPagePanels.NPanel;
 import launchPagePanels.TransactionPanel;
+import pages.sendMoney.SendMoneyPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,7 @@ public class ThemeManager {
     private static final Color gold = new Color(255, 215, 0);
     private static final Color darkGray = Color.BLACK;  // Black for dark mode backgrounds
     private static final Color lightText = new Color(220, 220, 220);  // Light text for dark mode
+    private static final Color darkModeBlue = new Color(0x0F172A);
 
     private static final Color transparent = new Color(0,0,0,0);
 
@@ -72,22 +74,22 @@ public class ThemeManager {
         if (comp.getClass().getName().contains("QRPage")) {
             return;
         }
-        
-        MainFrame.container.setBackground(isDarkMode ? black : white);
+
+        MainFrame.container.setBackground(isDarkMode ? darkModeBlue : white);
 
         // Check for pages with custom applyTheme methods
-        String className = comp.getClass().getSimpleName();
-        if (className.equals("SendMoneyPage") || className.equals("SendMoneyPage2") || 
-            className.equals("RewardsPage") || className.equals("Rewards2") || className.equals("Rewards3") ||
-            className.equals("CashInPage") || className.equals("BanksPage") || className.equals("BanksPage2") ||
-            className.equals("StoresPage") || className.equals("StoresPage2")) {
-            try {
-                comp.getClass().getMethod("applyTheme", boolean.class).invoke(comp, isDarkMode);
-                return; // Don't recurse, the page handles its own children
-            } catch (Exception e) {
-                // If method doesn't exist, continue with normal processing
-            }
-        }
+//        String className = comp.getClass().getSimpleName();
+//        if (className.equals("") || className.equals("") ||
+//            className.equals("RewardsPage") || className.equals("Rewards2") || className.equals("Rewards3") ||
+//            className.equals("CashInPage") || className.equals("BanksPage") || className.equals("BanksPage2") ||
+//            className.equals("StoresPage") || className.equals("StoresPage2")) {
+//            try {
+//                comp.getClass().getMethod("applyTheme", boolean.class).invoke(comp, isDarkMode);
+//                return; // Don't recurse, the page handles its own children
+//            } catch (Exception e) {
+//                // If method doesn't exist, continue with normal processing
+//            }
+//        }
 
         if (comp instanceof GradientPanel gp) {
             // Gradient panels (backgrounds)
@@ -123,6 +125,13 @@ public class ThemeManager {
                 lp.setBackground(black);
             } else {
                 lp.setBackground(white);
+            }
+        }
+        else if(comp instanceof SendMoneyPage smp){
+            if(isDarkMode){
+                smp.setBackground(darkModeBlue);
+            }else{
+                smp.setBackground(white);
             }
         }
         else if (comp instanceof JPanel jp) {
@@ -209,8 +218,8 @@ public class ThemeManager {
     public static Color getDGray() {return dGray;}
 
     public static Color getGreen() {return green;}
-    
+
     public static Color getDarkGray() {return darkGray;}
-    
+
     public static Color getLightText() {return lightText;}
 }

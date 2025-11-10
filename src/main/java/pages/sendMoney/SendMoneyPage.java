@@ -44,7 +44,8 @@ public class SendMoneyPage extends JPanel {
         setupUI();
     }
 
-    /** ON METHOD handleNextButton
+    /**
+     * ON METHOD handleNextButton
      * DATA FLOW: PAGE 1 → PAGE 2
      * When user clicks "Next" button, this method collects the form data
      * and sends it to the next page via the onButtonClick callback
@@ -94,7 +95,7 @@ public class SendMoneyPage extends JPanel {
         updateBalanceDisplay();
     }
 
-    public void clearForm(){
+    public void clearForm() {
         phoneField.setText("Enter number");
         amountField.setText("₱ 0.00");
         revalidate();
@@ -150,12 +151,12 @@ public class SendMoneyPage extends JPanel {
             JOptionPane.showMessageDialog(this, "Error checking balance: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-            SendMoneyCommand SMC = new SendMoneyCommand(getEnteredPhoneNumber(), Double.parseDouble(getEnteredAmount()));
-            if(SMC.sendToOwnNumber()) {
-                DialogManager.showErrorDialog(this, "Cannot send money to your own number");
-                return;
-            }
-            onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
+        SendMoneyCommand SMC = new SendMoneyCommand(getEnteredPhoneNumber(), Double.parseDouble(getEnteredAmount()));
+        if (SMC.sendToOwnNumber()) {
+            DialogManager.showErrorDialog(this, "Cannot send money to your own number");
+            return;
+        }
+        onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
     }
 
     private void setupEventHandlers() {
@@ -232,49 +233,40 @@ public class SendMoneyPage extends JPanel {
         String text = amountField.getText().replace("₱ ", "").trim();
         return text.equals("0.00") ? "" : text;
     }
-    
-    public void applyTheme(boolean isDarkMode) {
-        // Update background
-        setBackground(isDarkMode ? ThemeManager.getBlack() : ThemeManager.getWhite());
-        
-        // Update all labels
-        if (titleLabel != null) {
-            titleLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
-        }
-        if (sendToLabel != null) {
-            sendToLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
-        }
-        if (amountLabel != null) {
-            amountLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
-        }
-        if (balanceLabel != null) {
-            balanceLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDSBlue());
-        }
-        if (stepLabel != null) {
-            stepLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDSBlue());
-        }
-        
-        // Recursively apply to all child components
-        for (Component comp : getComponents()) {
-            if (comp instanceof Container) {
-                applyThemeToContainer((Container) comp, isDarkMode);
-            }
-        }
-        
+
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        applyThemeRecursive(this);
         revalidate();
         repaint();
     }
-    
-    private void applyThemeToContainer(Container container, boolean isDarkMode) {
-        for (Component comp : container.getComponents()) {
-            if (comp instanceof JPanel) {
-                JPanel panel = (JPanel) comp;
-                if (panel.getBackground().equals(Color.WHITE) || panel.getBackground().equals(ThemeManager.getBlack())) {
-                    panel.setBackground(isDarkMode ? ThemeManager.getBlack() : Color.WHITE);
-                }
+
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JTextField jtf) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jtf.setBackground(new Color(0x1E293B)); // dark background
+                jtf.setForeground(new Color(0xF1F5F9)); // light text
+                jtf.setCaretColor(new Color(0xF1F5F9)); // make caret visible
+                jtf.setSelectedTextColor(new Color(0xF1F5F9)); // selected text color
+                jtf.setDisabledTextColor(new Color(0xF1F5F9));
+            } else {
+                jtf.setForeground(Color.BLACK);
+                jtf.setBackground(Color.WHITE);
+                jtf.setCaretColor(Color.BLACK);
+                jtf.setSelectedTextColor(Color.BLACK);
+                jtf.setDisabledTextColor(Color.BLACK);
             }
-            if (comp instanceof Container) {
-                applyThemeToContainer((Container) comp, isDarkMode);
+        } else if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(new Color(0xF8FAFC));
+            } else {
+                jl.setForeground(Color.BLACK);
+
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
             }
         }
     }

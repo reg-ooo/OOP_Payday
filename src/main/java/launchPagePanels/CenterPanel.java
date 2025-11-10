@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import pages.sendMoney.SendMoneyPage;
 import util.FontLoader;
 import util.ImageLoader;
 import util.ThemeManager;
@@ -104,6 +105,7 @@ public class CenterPanel extends JPanel {
             }
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (text.equals("Send Money")) {
+                    SendMoneyPage.getInstance().applyTheme();
                     onButtonClick.accept("SendMoney");
                 } else if (text.equals("Cash In")) {
                     onButtonClick.accept("CashIn");
