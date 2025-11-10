@@ -1,7 +1,7 @@
 package pages.cashIn;
 
+import Factory.sendMoney.ConcreteSendMoneyBaseFactory;
 import components.RoundedBorder;
-import components.RoundedButton;
 import data.dao.TransactionDAOImpl;
 import launchPagePanels.RoundedPanel;
 import util.ThemeManager;
@@ -19,6 +19,7 @@ public class CashInReceiptPage extends JPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
     private final ImageLoader imageLoader = ImageLoader.getInstance();
     private final Consumer<String> onButtonClick;
+    private final ConcreteSendMoneyBaseFactory factory = new ConcreteSendMoneyBaseFactory();
 
     // --- DATA FIELDS (These will be updated by updateReceiptDetails) ---
     public String entityName = "";
@@ -96,7 +97,8 @@ public class CashInReceiptPage extends JPanel {
         mainContent.add(createReceiptDetailsPanel());
         mainContent.add(Box.createVerticalStrut(40));
 
-        mainContent.add(createButtonsPanel());
+        // Use factory for createNextButtonPanel and our own createSecondaryButton
+        mainContent.add(createReceiptButtonPanel(onButtonClick));
 
         add(mainContent, BorderLayout.CENTER);
         add(createFooterPanel(), BorderLayout.SOUTH);
@@ -136,7 +138,7 @@ public class CashInReceiptPage extends JPanel {
         // Reduced inner panel height from 250 to 220
         RoundedPanel receiptRoundedPanel = new RoundedPanel(15, Color.WHITE);
         receiptRoundedPanel.setLayout(new BorderLayout());
-        receiptRoundedPanel.setPreferredSize(new Dimension(350, 220));
+        receiptRoundedPanel.setPreferredSize(new Dimension(350, 210));
         receiptRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JPanel receiptContentPanel = new JPanel();
@@ -195,65 +197,78 @@ public class CashInReceiptPage extends JPanel {
         return panel;
     }
 
-    // --- IMPROVISED BUTTONS PANEL ---
-    private JPanel createButtonsPanel() {
+    // Use factory for primary button and our own method for secondary button
+    private JPanel createReceiptButtonPanel(Consumer<String> onButtonClick) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Increased size back toward your original receipt style
-        final int BUTTON_WIDTH = 300;
-        final int BUTTON_HEIGHT = 45;
+        // Done Button - Use factory method
+        JPanel doneButtonPanel = factory.createNextButtonPanel(onButtonClick,
+                () -> onButtonClick.accept("Launch"));
+        updateButtonText(doneButtonPanel, "Done");
+        doneButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Done Button (Primary)
-        JButton doneButton = new RoundedButton("Done", 15, themeManager.getVBlue());
-        doneButton.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        doneButton.setForeground(themeManager.getWhite());
-        doneButton.setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-        doneButton.setMaximumSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
-        doneButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        doneButton.addActionListener(e -> onButtonClick.accept("Launch"));
-        doneButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Cash In Again Button - Use our own createSecondaryButton method
+        JPanel cashInAgainButtonPanel = createSecondaryButton("Cash In Again",
+                () -> onButtonClick.accept("CashIn"));
+        cashInAgainButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // New Cash-In Button (Secondary)
-        JButton newCashInButton = createSecondaryRoundedButton("New Cash-In", () -> onButtonClick.accept("CashInPage"), BUTTON_WIDTH, BUTTON_HEIGHT);
-        newCashInButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        panel.add(doneButton);
+        panel.add(doneButtonPanel);
         panel.add(Box.createVerticalStrut(15));
-        panel.add(newCashInButton);
+        panel.add(cashInAgainButtonPanel);
 
         return panel;
     }
 
-    private JButton createSecondaryRoundedButton(String text, Runnable action, int width, int height) {
-        JButton button = new RoundedButton(text, 15, themeManager.getWhite());
-        button.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold")); // Increased font size
-        button.setForeground(themeManager.getPBlue());
-        button.setPreferredSize(new Dimension(width, height));
-        button.setMaximumSize(new Dimension(width, height));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    // Helper method to update button text
+    private void updateButtonText(JPanel buttonPanel, String newText) {
+        Component[] components = buttonPanel.getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JButton) {
+                JButton button = (JButton) comp;
+                button.setText(newText);
+                break;
+            }
+        }
+    }
+
+    // COPIED FROM BUYLOAD: Same secondary button creation
+    private JPanel createSecondaryButton(String text, Runnable action) {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        panel.setMaximumSize(new Dimension(300, 50));
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
+
+        JButton button = new JButton(text);
+        button.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
+        button.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getPBlue());
+        button.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
+        button.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
+        button.setOpaque(true);
 
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(themeManager.getPBlue(), 2),
-                BorderFactory.createEmptyBorder(0, 0, 0, 0)
+                BorderFactory.createEmptyBorder(10, 0, 10, 0)
         ));
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(themeManager.getLightGray());
+                button.setBackground(themeManager.isDarkMode() ? new Color(50, 50, 70) : themeManager.getLightGray());
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(themeManager.getWhite());
+                button.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
             }
         });
 
         button.addActionListener(e -> action.run());
 
-        return button;
+        panel.add(button, BorderLayout.CENTER);
+        return panel;
     }
 
     private JPanel createFooterPanel() {

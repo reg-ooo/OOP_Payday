@@ -8,6 +8,7 @@ import launchPagePanels.NPanel;
 import launchPagePanels.TransactionPanel;
 import pages.rewards.RewardsPage;
 import pages.sendMoney.SendMoneyPage;
+import pages.sendMoney.SendMoneyPage3;
 
 import javax.swing.*;
 import java.awt.*;
@@ -110,6 +111,13 @@ public class ThemeManager {
             }
         }
         else if(comp instanceof SendMoneyPage smp){
+            if(isDarkMode){
+                smp.setBackground(darkModeBlue);
+            }else{
+                smp.setBackground(white);
+            }
+        }
+        else if(comp instanceof SendMoneyPage3 smp) {
             if(isDarkMode){
                 smp.setBackground(darkModeBlue);
             }else{

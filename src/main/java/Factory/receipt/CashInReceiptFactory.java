@@ -30,6 +30,7 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         // Success Message with Image (Uses method copied from BuyLoadFactory structure)
         panel.add(createSuccessSection());
@@ -53,19 +54,21 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
         receiptContainer.setMaximumSize(new Dimension(370, 270));
         receiptContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        RoundedPanel receiptRoundedPanel = new RoundedPanel(15, Color.WHITE);
+        // Create inner rounded panel with dark mode support
+        Color innerBackground = themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE;
+        RoundedPanel receiptRoundedPanel = new RoundedPanel(15, innerBackground);
         receiptRoundedPanel.setLayout(new BorderLayout());
         receiptRoundedPanel.setPreferredSize(new Dimension(350, 250));
         receiptRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JPanel receiptContentPanel = new JPanel();
         receiptContentPanel.setLayout(new BoxLayout(receiptContentPanel, BoxLayout.Y_AXIS));
-        receiptContentPanel.setBackground(Color.WHITE);
+        receiptContentPanel.setBackground(innerBackground);
 
         // Title
         JLabel receiptTitle = new JLabel("Receipt Details");
         receiptTitle.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        receiptTitle.setForeground(themeManager.getDBlue());
+        receiptTitle.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         receiptTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         receiptContentPanel.add(receiptTitle);
 
@@ -105,7 +108,7 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
         panel.add(receiptContainer);
         panel.add(Box.createVerticalStrut(20));
 
-        // Buttons
+        // Buttons - SAME STRUCTURE AS BUYLOAD
         panel.add(createReceiptButtonPanel(onButtonClick));
 
         return panel;
@@ -120,6 +123,7 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         ImageLoader imageLoader = ImageLoader.getInstance();
         ImageIcon successIcon = imageLoader.getImage("successMoney");
@@ -131,7 +135,7 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
 
         JLabel successLabel = new JLabel("Cash-In Successful");
         successLabel.setFont(fontLoader.loadFont(Font.BOLD, 22f, "Quicksand-Bold"));
-        successLabel.setForeground(themeManager.getDBlue());
+        successLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         successLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(successLabel);
 
@@ -142,14 +146,15 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         panel.setMaximumSize(new Dimension(400, 25));
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         JLabel leftLabel = new JLabel(label);
         leftLabel.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-        leftLabel.setForeground(themeManager.getDSBlue());
+        leftLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
 
         JLabel rightLabel = new JLabel(value);
         rightLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        rightLabel.setForeground(themeManager.getDBlue());
+        rightLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         panel.add(leftLabel, BorderLayout.WEST);
         panel.add(rightLabel, BorderLayout.EAST);
@@ -157,26 +162,28 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
         return panel;
     }
 
+    // UPDATED: Same button structure as BuyLoadReceiptFactory
     public JPanel createReceiptButtonPanel(Consumer<String> onButtonClick) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
-        // Done Button (Back to Home)
+        // Done Button - SAME AS BUYLOAD
         JPanel doneButtonPanel = createNextButtonPanel(onButtonClick,
                 () -> onButtonClick.accept("Launch"));
         updateButtonText(doneButtonPanel, "Done");
         doneButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // New Cash-In Button
-        JPanel newCashInButtonPanel = createSecondaryButton("New Cash-In",
-                () -> onButtonClick.accept("CashInPage"));
-        newCashInButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Cash In Again Button - SAME STRUCTURE AS BUYLOAD
+        JPanel cashInAgainButtonPanel = createSecondaryButton("Cash In Again",
+                () -> onButtonClick.accept("CashIn"));
+        cashInAgainButtonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         panel.add(doneButtonPanel);
         panel.add(Box.createVerticalStrut(15));
-        panel.add(newCashInButtonPanel);
+        panel.add(cashInAgainButtonPanel);
 
         return panel;
     }
@@ -192,15 +199,17 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
         }
     }
 
+    // UPDATED: Same secondary button as BuyLoadReceiptFactory
     public JPanel createSecondaryButton(String text, Runnable action) {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         panel.setMaximumSize(new Dimension(300, 50));
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         JButton button = new JButton(text);
         button.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        button.setForeground(themeManager.getPBlue());
-        button.setBackground(themeManager.getWhite());
+        button.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getPBlue());
+        button.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
         button.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
@@ -213,11 +222,11 @@ public class CashInReceiptFactory extends ConcreteSendMoneyBaseFactory {
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(themeManager.getLightGray());
+                button.setBackground(themeManager.isDarkMode() ? new Color(50, 50, 70) : themeManager.getLightGray());
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(themeManager.getWhite());
+                button.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
             }
         });
 
