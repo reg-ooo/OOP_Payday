@@ -70,13 +70,11 @@ public class ThemeManager {
     }
 
     public void applyTheme(Component comp) {
+        MainFrame.container.setBackground(isDarkMode ? darkModeBlue : white);
         // Skip QRPage and its children from theme changes
         if (comp.getClass().getName().contains("QRPage")) {
             return;
         }
-
-        MainFrame.container.setBackground(isDarkMode ? darkModeBlue : white);
-
         // Check for pages with custom applyTheme methods
 //        String className = comp.getClass().getSimpleName();
 //        if (className.equals("") || className.equals("") ||
@@ -102,9 +100,11 @@ public class ThemeManager {
         else if (comp instanceof NavigationBar nb) {
             // NavigationBar (uses GradientPanel inside)
             if (isDarkMode) {
+                nb.setBackground(black);  // Add this line
                 nb.navBarPanel.setGradientColors(getDarkStartColor(), getDarkEndColor());
                 nb.navBarPanel.setBackground(black);
             } else {
+                nb.setBackground(white);  // Add this line
                 nb.navBarPanel.setGradientColors(lightStartColor, lightEndColor);
                 nb.navBarPanel.setBackground(white);
             }

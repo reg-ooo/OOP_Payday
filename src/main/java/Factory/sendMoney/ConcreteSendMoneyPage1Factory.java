@@ -19,11 +19,11 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
     public JTextField createPhoneNumberField() {
         JTextField phoneField = new JTextField();
         phoneField.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-        phoneField.setForeground(themeManager.getDBlue());
+        phoneField.setForeground(getTextFieldColor()); // Use helper method
         phoneField.setMaximumSize(new Dimension(300, 45));
 
         phoneField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getGray(), 1),
+                BorderFactory.createLineBorder(new Color(0x64748B), 1), // Updated to #64748B (inactive)
                 BorderFactory.createEmptyBorder(10, 15, 10, 15)
         ));
 
@@ -36,11 +36,11 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         JTextField amountField = new JTextField();
         amountField.setHorizontalAlignment(JTextField.RIGHT);
         amountField.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-        amountField.setForeground(themeManager.getDBlue());
+        amountField.setForeground(getTextFieldColor()); // Use helper method
         amountField.setMaximumSize(new Dimension(300, 45));
 
         amountField.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(themeManager.getGray(), 1),
+                BorderFactory.createLineBorder(new Color(0x64748B), 1), // Updated to #64748B (inactive)
                 BorderFactory.createEmptyBorder(10, 15, 10, 15)
         ));
 
@@ -96,7 +96,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
     public JLabel createBalanceLabel() {
         JLabel balanceLabel = new JLabel("Available balance: PHP 0.00");
         balanceLabel.setFont(fontLoader.loadFont(Font.BOLD, 13f, "Quicksand-Regular"));
-        balanceLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
+        balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
         return balanceLabel;
     }
 
@@ -174,11 +174,16 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         return footerPanel;
     }
 
+    // Helper method to get the appropriate text field color based on theme
+    private static Color getTextFieldColor() {
+        return themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getDBlue();
+    }
+
 
     //PAGE1
     private static void addPlaceholderWithPeso(JTextField textField, String placeholder) {
-        Color normalBorder = themeManager.getGray();
-        Color activeBorder = themeManager.getDBlue();
+        Color normalBorder = new Color(0x64748B); // #64748B (inactive)
+        Color activeBorder = new Color(0x60A5FA); // #60A5FA (active)
 
         textField.setText("₱ " + placeholder);
         textField.setForeground(themeManager.getLightGray());
@@ -301,7 +306,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
 
                 if (currentText.equals(fullPlaceholder)) {
                     textField.setText("₱ ");
-                    textField.setForeground(themeManager.getDBlue());
+                    textField.setForeground(getTextFieldColor());
                     textField.setHorizontalAlignment(JTextField.LEFT);
                     setSafeCaretPosition(textField, 2); // Force cursor after "₱ "
                 } else {
@@ -332,7 +337,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                             formatted = formatted.substring(0, formatted.length() - 3);
                         }
                         textField.setText("₱ " + formatted);
-                        textField.setForeground(themeManager.getDBlue());
+                        textField.setForeground(getTextFieldColor());
                         textField.setHorizontalAlignment(JTextField.LEFT);
                     } catch (NumberFormatException ex) {
                         // If parsing fails, revert to placeholder
@@ -360,7 +365,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                     textField.setForeground(themeManager.getLightGray());
                 } else {
                     textField.setHorizontalAlignment(JTextField.LEFT);
-                    textField.setForeground(themeManager.getDBlue());
+                    textField.setForeground(getTextFieldColor());
                 }
 
                 // REMOVED the caret position enforcement here - let user move caret freely
@@ -401,8 +406,8 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
 
     //PAGE1 - For phone number field (max 11 digits, no letters, ONE leading zero allowed)
     private static void addCenterPlaceholderLeftTyping(JTextField textField, String placeholder) {
-        Color normalBorder = themeManager.getGray();
-        Color activeBorder = themeManager.getDBlue();
+        Color normalBorder = new Color(0x64748B); // #64748B (inactive)
+        Color activeBorder = new Color(0x60A5FA); // #60A5FA (active)
 
         textField.setText(placeholder);
         textField.setForeground(themeManager.getLightGray());
@@ -470,7 +475,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (textField.getText().equals(placeholder)) {
                     textField.setText("");
-                    textField.setForeground(themeManager.getDBlue());
+                    textField.setForeground(getTextFieldColor());
                     textField.setHorizontalAlignment(JTextField.LEFT);
                     textField.setCaretPosition(0);
                 }
@@ -493,7 +498,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                         currentText = currentText.substring(0, 11);
                         textField.setText(currentText);
                     }
-                    textField.setForeground(themeManager.getDBlue());
+                    textField.setForeground(getTextFieldColor());
                     textField.setHorizontalAlignment(JTextField.LEFT);
                 }
                 textField.setBorder(BorderFactory.createCompoundBorder(
@@ -515,7 +520,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
                     textField.setForeground(themeManager.getLightGray());
                 } else {
                     textField.setHorizontalAlignment(JTextField.LEFT);
-                    textField.setForeground(themeManager.getDBlue());
+                    textField.setForeground(getTextFieldColor());
                 }
             }
         });

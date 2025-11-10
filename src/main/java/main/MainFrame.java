@@ -95,7 +95,7 @@ public class MainFrame extends JFrame {
 
         // SEND MONEY PAGES
         mainPanel.add(SendMoneyPage.getInstance(this::handleSendMoneyResult), "SendMoney");
-        mainPanel.add(new SendMoneyPage2(this::handleSendMoney2Result), "SendMoney2");
+        mainPanel.add(SendMoneyPage2.getInstance(this::handleSendMoney2Result), "SendMoney2");
         mainPanel.add(new SendMoneyPage3(this::handleSendMoney3Result), "SendMoney3");
 
         // CASH IN PAGES

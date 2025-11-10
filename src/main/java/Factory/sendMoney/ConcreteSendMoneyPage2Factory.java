@@ -277,7 +277,7 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
     public JLabel createStepLabel(String stepText) {
         JLabel label = new JLabel(stepText);
         label.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        label.setForeground(themeManager.getDSBlue());
+        label.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         return label;
     }
 

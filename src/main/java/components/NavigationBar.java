@@ -28,7 +28,7 @@ public class NavigationBar extends JPanel {
         this.setLayout(new BorderLayout());
         this.onButtonClick = onButtonClick;
 
-        navBarPanel.setOpaque(false);
+        navBarPanel.setOpaque(true);
         navBarPanel.setLayout(new GridLayout(1, 3));
         navBarPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
