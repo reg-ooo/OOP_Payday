@@ -273,4 +273,32 @@ public class CashInReceiptPage extends JPanel {
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd yyyy, hh:mm a");
         return sdf.format(new Date());
     }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            applyTheme();
+        }
+    }
+
+    private void applyTheme() {
+        themeManager.applyTheme(this);
+        applyThemeRecursive(this);
+    }
+
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            jl.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
+        } else if (comp instanceof JPanel jp) {
+            if (!(jp instanceof RoundedPanel) && !(jp instanceof RoundedBorder)) {
+                jp.setBackground(themeManager.isDarkMode() ? new Color(0x0F172A) : Color.WHITE);
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
+    }
 }
