@@ -254,7 +254,15 @@ public class PayBills extends JPanel {
     }
     
     private void applyThemeRecursive(Component comp) {
-        if (comp instanceof JLabel jl) {
+        if (comp instanceof CategoryNavBar categoryNavBar) {
+            // Set grey background for CategoryNavBar in dark mode
+            if (ThemeManager.getInstance().isDarkMode()) {
+                categoryNavBar.setBackground(new Color(0x1E293B)); // Dark grey
+            } else {
+                categoryNavBar.setBackground(Color.WHITE);
+            }
+            categoryNavBar.repaint();
+        } else if (comp instanceof JLabel jl) {
             // Skip labels inside CategoryNavBar (category icons should keep their original colors)
             Container parent = jl.getParent();
             while (parent != null) {

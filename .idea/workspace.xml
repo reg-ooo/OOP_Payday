@@ -6,25 +6,22 @@
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/BanksPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/QRPage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashIn/StoresPage2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/BanksPage2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/QRPage.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2$6.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashIn/StoresPage2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/components/CategoryNavBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/components/CategoryNavBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/payBills/PayBills.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/CategoryNavBar$5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/CategoryNavBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/CategoryNavBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/payBills/PayBills.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
