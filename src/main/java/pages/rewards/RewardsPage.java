@@ -59,20 +59,6 @@ public class RewardsPage extends JPanel {
         refreshUI();
     }
 
-    public void addPoints(double transactionAmount) {
-        rewardsDAO.addReward(transactionAmount);
-        updatePointsDisplay();
-    }
-
-    public boolean subtractPoints(int pointsToSubtract) {
-        int currentPoints = getCurrentPoints();
-        if (currentPoints >= pointsToSubtract) {
-            rewardsDAO.subtractReward(pointsToSubtract);
-            updatePointsDisplay();
-            return true;
-        }
-        return false;
-    }
 
     private void refreshUI() {
         this.removeAll();
@@ -394,12 +380,22 @@ public class RewardsPage extends JPanel {
 
     public void loadComponents() {
         updatePointsDisplay();
+        applyTheme();
         this.revalidate();
         this.repaint();
     }
     
-    public void applyTheme(boolean isDarkMode) {
-        // Refresh the entire UI to apply dark mode
-        refreshUI();
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+
+        // Apply theme recursively to all child components
+        applyThemeRecursive(this);
+
+        revalidate();
+        repaint();
+    }
+
+    private void applyThemeRecursive(Component comp) {
+
     }
 }
