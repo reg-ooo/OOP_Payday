@@ -7,6 +7,7 @@ import launchPagePanels.GradientPanel;
 import launchPagePanels.NPanel;
 import launchPagePanels.TransactionPanel;
 import pages.sendMoney.SendMoneyPage;
+import pages.transaction.TransactionHistoryPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,6 +34,7 @@ public class ThemeManager {
     private static final Color darkGray = Color.BLACK;  // Black for dark mode backgrounds
     private static final Color lightText = new Color(220, 220, 220);  // Light text for dark mode
     private static final Color darkModeBlue = new Color(0x0F172A);
+    private static final Color darkModeWhite = new Color(0xF8FAFC);
 
     private static final Color transparent = new Color(0,0,0,0);
 
@@ -134,6 +136,13 @@ public class ThemeManager {
                 smp.setBackground(white);
             }
         }
+        else if(comp instanceof TransactionHistoryPage thp){
+            if(isDarkMode){
+                thp.setBackground(darkModeBlue);
+            }else{
+                thp.setBackground(white);
+            }
+        }
         else if (comp instanceof JPanel jp) {
             // Generic JPanel handling - change white backgrounds to black in dark mode
             if (isDarkMode && jp.getBackground().equals(white)) {
@@ -222,4 +231,6 @@ public class ThemeManager {
     public static Color getDarkGray() {return darkGray;}
 
     public static Color getLightText() {return lightText;}
+
+    public static Color getDarkModeWhite() {return darkModeWhite;}
 }

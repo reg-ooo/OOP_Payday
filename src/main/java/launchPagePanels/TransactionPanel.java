@@ -10,6 +10,7 @@ import Factory.LabelFactory;
 import components.*;
 import data.TransactionList;
 import data.dao.TransactionDAOImpl;
+import pages.transaction.TransactionHistoryPage;
 import util.FontLoader;
 import util.ThemeManager;
 import Factory.PanelBuilder;
@@ -21,6 +22,8 @@ public class TransactionPanel extends JPanel{
     public RoundedPanel transactionRoundedPanel = new RoundedPanel(15, ThemeManager.getInstance().getSBlue());
     private final JLabel transactionLabel = LabelFactory.getInstance().createLabel("Transaction History", FontLoader.getInstance().loadFont(Font.BOLD, 20f, "Quicksand-Regular"), ThemeManager.getInstance().getDBlue());
     private final JLabel seeAllLabel = LabelFactory.getInstance().createLabel("See all", FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"), ThemeManager.getInstance().getPBlue());
+    private JLabel descLabel;
+    private JLabel timeLabel;
 
     private static TransactionPanel instance;
     private final Consumer<String> onSeeAllClick; // New field for the handler
@@ -80,6 +83,7 @@ public class TransactionPanel extends JPanel{
             public void mouseClicked(MouseEvent e) {
                 if (onSeeAllClick != null) {
                     // Send the key for the new page
+                    TransactionHistoryPage.getInstance().applyTheme();
                     onSeeAllClick.accept("TransactionHistory");
                 }
             }
@@ -164,14 +168,14 @@ public class TransactionPanel extends JPanel{
         JPanel leftPanel = new PanelBuilder().build();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 
-        JLabel descLabel = new JLabel(description);
+        descLabel = new JLabel(description);
         descLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
 
-        descLabel.setForeground(ThemeManager.getBlack());
+        descLabel.setForeground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
 
-        JLabel timeLabel = new JLabel(time);
+        timeLabel = new JLabel(time);
         timeLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        timeLabel.setForeground(ThemeManager.getBlack());
+        timeLabel.setForeground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
 
         leftPanel.add(descLabel);
         leftPanel.add(timeLabel);
@@ -201,6 +205,14 @@ public class TransactionPanel extends JPanel{
         transactionLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
         seeAllLabel.setForeground(isDarkMode ? ThemeManager.getNBlue() : ThemeManager.getPBlue());
 
+        // Update transaction description and time labels
+        if (descLabel != null) {
+            descLabel.setForeground(isDarkMode ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
+        }
+        if (timeLabel != null) {
+            timeLabel.setForeground(isDarkMode ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
+        }
+
         // Update children inside content panel
         for (Component comp : transactionContentPanel.getComponents()) {
             if (comp instanceof JPanel panel) {
@@ -216,11 +228,11 @@ public class TransactionPanel extends JPanel{
                         }
                         // Time labels
                         else if (lbl.getForeground().equals(ThemeManager.getGray())) {
-                            lbl.setForeground(isDarkMode ? ThemeManager.getLightGray() : ThemeManager.getGray());
+                            lbl.setForeground(isDarkMode ? ThemeManager.getDarkModeWhite() : ThemeManager.getGray());
                         }
                         // Description labels
                         else if (lbl.getForeground().equals(ThemeManager.getBlack())) {
-                            lbl.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getBlack());
+                            lbl.setForeground(isDarkMode ? ThemeManager.getDarkModeWhite() : ThemeManager.getBlack());
                         }
                         // Amount stays green/red, no change
                     }
@@ -249,8 +261,6 @@ public class TransactionPanel extends JPanel{
 
         return datePanel;
     }
-
-
 
     private String checkTime(String time){
         int hour = Integer.parseInt(time.substring(0, 3).trim());
