@@ -34,37 +34,46 @@ public abstract class CustomBaseDialog extends JDialog {
     protected void initializeBaseUI(String message, ImageIcon icon, Consumer<JButton> buttonConfigurator) {
         setLayout(new BorderLayout());
         setUndecorated(true);
-        setBackground(themeManager.getWhite());
+
+        // Background based on dark mode
+        Color backgroundColor = themeManager.isDarkMode() ?
+                ThemeManager.getDarkModeBlue() : themeManager.getWhite();
+        setBackground(backgroundColor);
         setPreferredSize(new Dimension(306, 208));
 
-        // Rounded container
-        RoundedBorder borderContainer = new RoundedBorder(40, getBorderColor(), 3);
+        // Rounded container - original border colors
+        RoundedBorder borderContainer = new RoundedBorder(40, themeManager.isDarkMode() ?
+                ThemeManager.getWhite() : themeManager.getVBlue(), 3);
         borderContainer.setLayout(new FlowLayout());
         borderContainer.setOpaque(false);
         borderContainer.setPreferredSize(new Dimension(320, 208));
         borderContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        RoundedPanel roundedPanel = new RoundedPanel(40, themeManager.getWhite());
+        // Inner panel background based on dark mode
+        Color innerBackground = themeManager.isDarkMode() ?
+                ThemeManager.getDarkModeBlue() : themeManager.getWhite();
+        RoundedPanel roundedPanel = new RoundedPanel(40, innerBackground);
         roundedPanel.setLayout(new BorderLayout());
         roundedPanel.setPreferredSize(new Dimension(300, 200));
         roundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(themeManager.getWhite());
+        contentPanel.setBackground(innerBackground);
         contentPanel.setOpaque(false);
 
         // Icon
         JLabel iconLabel = new JLabel(icon);
         iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Message
+        // Message - white in dark mode, dark blue in light mode
         JLabel messageLabel = new JLabel(message);
         messageLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        messageLabel.setForeground(ThemeManager.getInstance().getDBlue());
+        messageLabel.setForeground(themeManager.isDarkMode() ?
+                Color.WHITE : ThemeManager.getInstance().getDBlue());
         messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Button
+        // Button (keeps original colors)
         JButton okButton = createOkButton();
         if (buttonConfigurator != null) {
             buttonConfigurator.accept(okButton);
@@ -83,7 +92,7 @@ public abstract class CustomBaseDialog extends JDialog {
         pack();
         setLocationRelativeTo(getParent());
 
-        setDialogShape();
+        setDialogShape(backgroundColor);
     }
 
     protected JButton createOkButton() {
@@ -95,9 +104,10 @@ public abstract class CustomBaseDialog extends JDialog {
         });
     }
 
-    protected void setDialogShape() {
+    protected void setDialogShape(Color backgroundColor) {
         SwingUtilities.invokeLater(() -> {
             try {
+                setBackground(backgroundColor);
                 RoundRectangle2D roundedRect = new RoundRectangle2D.Float(
                         0, 0, getWidth(), getHeight(), 40, 40
                 );
@@ -106,11 +116,6 @@ public abstract class CustomBaseDialog extends JDialog {
                 System.err.println("Error setting dialog shape: " + e.getMessage());
             }
         });
-    }
-
-    // Abstract method for subclasses to define border color
-    protected Color getBorderColor() {
-        return ThemeManager.getInstance().getDvBlue();
     }
 
     // Optional: Method for subclasses to customize button behavior

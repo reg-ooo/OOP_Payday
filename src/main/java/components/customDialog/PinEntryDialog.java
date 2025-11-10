@@ -48,18 +48,29 @@ public class PinEntryDialog extends JDialog {
     private void initializeUI() {
         setLayout(new BorderLayout());
         setUndecorated(true);
-        setBackground(themeManager.getWhite());
+
+        // Set background to white in dark mode to match the border
+        Color backgroundColor = themeManager.isDarkMode() ?
+                Color.WHITE : // White background in dark mode to match border
+                themeManager.getWhite(); // White in light mode
+
+        setBackground(backgroundColor);
         setPreferredSize(new Dimension(327, 390));
 
-        // Create the rounded border container
-        RoundedBorder borderContainer = new RoundedBorder(40, ThemeManager.getInstance().getDBlue(), 3);
+        // Create the rounded border container - WHITE in dark mode
+        Color borderColor = themeManager.isDarkMode() ?
+                Color.WHITE : // White border for dark mode
+                ThemeManager.getInstance().getDBlue(); // DBlue for light mode
+
+        RoundedBorder borderContainer = new RoundedBorder(40, borderColor, 3);
         borderContainer.setLayout(new FlowLayout());
         borderContainer.setOpaque(false);
         borderContainer.setPreferredSize(new Dimension(350, 400));
         borderContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Create inner rounded panel
-        RoundedPanel roundedPanel = new RoundedPanel(40, Color.WHITE);
+        // Create inner rounded panel - use dark mode blue as background
+        Color innerBackground = themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE;
+        RoundedPanel roundedPanel = new RoundedPanel(40, innerBackground);
         roundedPanel.setLayout(new BorderLayout());
         roundedPanel.setPreferredSize(new Dimension(320, 380));
         roundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -67,13 +78,13 @@ public class PinEntryDialog extends JDialog {
         // Main content panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(innerBackground);
         mainPanel.setOpaque(false);
 
-        // Title
+        // Title - white in dark mode
         JLabel titleLabel = new JLabel("Enter PIN");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getInstance().getDBlue());
+        titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getInstance().getDBlue());
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(titleLabel);
 
@@ -92,7 +103,7 @@ public class PinEntryDialog extends JDialog {
 
         mainPanel.add(Box.createVerticalStrut(20));
 
-        // Cancel Button
+        // Cancel Button - white in dark mode
         JButton cancelButton = createCancelButton();
         cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(cancelButton);
@@ -104,17 +115,19 @@ public class PinEntryDialog extends JDialog {
         pack();
         setLocationRelativeTo(getParent());
 
-        // Set the dialog shape to match rounded corners
-        setDialogShape();
+        // Set the dialog shape with white background
+        setDialogShape(backgroundColor);
     }
 
-    private void setDialogShape() {
+    private void setDialogShape(Color backgroundColor) {
         SwingUtilities.invokeLater(() -> {
             try {
+                setBackground(backgroundColor);
                 RoundRectangle2D roundedRect = new RoundRectangle2D.Float(
                         0, 0, getWidth(), getHeight(), 40, 40
                 );
                 setShape(roundedRect);
+                repaint();
             } catch (Exception e) {
                 System.err.println("Error setting dialog shape: " + e.getMessage());
             }
@@ -131,7 +144,15 @@ public class PinEntryDialog extends JDialog {
         for (int i = 0; i < 4; i++) {
             pinDots[i] = new JLabel("○");
             pinDots[i].setFont(systemFont);
-            pinDots[i].setForeground(ThemeManager.getInstance().getLightGray());
+
+            // PIN dots: inverse colors for better visibility
+            if (themeManager.isDarkMode()) {
+                // Dark mode: light gray when empty, white when filled
+                pinDots[i].setForeground(ThemeManager.getInstance().getLightGray());
+            } else {
+                // Light mode: light gray when empty, dark blue when filled
+                pinDots[i].setForeground(ThemeManager.getInstance().getLightGray());
+            }
             panel.add(pinDots[i]);
         }
 
@@ -141,8 +162,9 @@ public class PinEntryDialog extends JDialog {
     private JButton createCancelButton() {
         JButton button = new JButton("Cancel");
         button.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        button.setForeground(ThemeManager.getInstance().getPBlue());
-        button.setBackground(Color.WHITE);
+        // Cancel button text: white in dark mode, blue in light mode
+        button.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getInstance().getPBlue());
+        button.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
         button.setContentAreaFilled(false);
@@ -204,9 +226,15 @@ public class PinEntryDialog extends JDialog {
         for (int i = 0; i < 4; i++) {
             if (i < pinInput.length()) {
                 pinDots[i].setText("●");
-                pinDots[i].setForeground(ThemeManager.getInstance().getDBlue());
+                // Filled dots: inverse colors
+                if (themeManager.isDarkMode()) {
+                    pinDots[i].setForeground(Color.WHITE); // Bright in dark mode
+                } else {
+                    pinDots[i].setForeground(ThemeManager.getInstance().getDBlue()); // Dark in light mode
+                }
             } else {
                 pinDots[i].setText("○");
+                // Empty dots: consistent light gray in both modes
                 pinDots[i].setForeground(ThemeManager.getInstance().getLightGray());
             }
         }

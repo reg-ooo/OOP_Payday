@@ -6,8 +6,8 @@ import launchPagePanels.CenterPanel;
 import launchPagePanels.GradientPanel;
 import launchPagePanels.NPanel;
 import launchPagePanels.TransactionPanel;
+import pages.rewards.RewardsPage;
 import pages.sendMoney.SendMoneyPage;
-import pages.transaction.TransactionHistoryPage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,24 +72,12 @@ public class ThemeManager {
     }
 
     public void applyTheme(Component comp) {
-        MainFrame.container.setBackground(isDarkMode ? darkModeBlue : white);
         // Skip QRPage and its children from theme changes
         if (comp.getClass().getName().contains("QRPage")) {
             return;
         }
-        // Check for pages with custom applyTheme methods
-//        String className = comp.getClass().getSimpleName();
-//        if (className.equals("") || className.equals("") ||
-//            className.equals("RewardsPage") || className.equals("Rewards2") || className.equals("Rewards3") ||
-//            className.equals("CashInPage") || className.equals("BanksPage") || className.equals("BanksPage2") ||
-//            className.equals("StoresPage") || className.equals("StoresPage2")) {
-//            try {
-//                comp.getClass().getMethod("applyTheme", boolean.class).invoke(comp, isDarkMode);
-//                return; // Don't recurse, the page handles its own children
-//            } catch (Exception e) {
-//                // If method doesn't exist, continue with normal processing
-//            }
-//        }
+
+        MainFrame.container.setBackground(isDarkMode ? darkModeBlue : white);
 
         if (comp instanceof GradientPanel gp) {
             // Gradient panels (backgrounds)
@@ -102,11 +90,9 @@ public class ThemeManager {
         else if (comp instanceof NavigationBar nb) {
             // NavigationBar (uses GradientPanel inside)
             if (isDarkMode) {
-                nb.setBackground(black);  // Add this line
                 nb.navBarPanel.setGradientColors(getDarkStartColor(), getDarkEndColor());
                 nb.navBarPanel.setBackground(black);
             } else {
-                nb.setBackground(white);  // Add this line
                 nb.navBarPanel.setGradientColors(lightStartColor, lightEndColor);
                 nb.navBarPanel.setBackground(white);
             }
@@ -136,11 +122,29 @@ public class ThemeManager {
                 smp.setBackground(white);
             }
         }
-        else if(comp instanceof TransactionHistoryPage thp){
+        else if(comp instanceof RewardsPage rp) {
             if(isDarkMode){
-                thp.setBackground(darkModeBlue);
-            }else{
-                thp.setBackground(white);
+                rp.setBackground(darkModeBlue);
+            } else {
+                rp.setBackground(white);
+            }
+        }
+        else if(comp instanceof pages.rewards.Rewards2 r2) {
+            if(isDarkMode){
+                r2.setBackground(darkModeBlue);
+                r2.applyTheme(); // Call Rewards2's own theme method
+            } else {
+                r2.setBackground(white);
+                r2.applyTheme();
+            }
+        }
+        else if(comp instanceof pages.rewards.Rewards3 r3) {
+            if(isDarkMode){
+                r3.setBackground(darkModeBlue);
+                r3.applyTheme(); // Call Rewards3's own theme method
+            } else {
+                r3.setBackground(white);
+                r3.applyTheme();
             }
         }
         else if (comp instanceof JPanel jp) {
@@ -231,8 +235,6 @@ public class ThemeManager {
     public static Color getDarkGray() {return darkGray;}
 
     public static Color getLightText() {return lightText;}
-
-    public static Color getDarkModeWhite() {return darkModeWhite;}
-
     public static Color getDarkModeBlue() {return darkModeBlue;}
+    public static Color getDarkModeWhite() {return darkModeWhite;}
 }

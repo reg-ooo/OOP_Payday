@@ -9,6 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import pages.rewards.RewardsPage;
 import pages.sendMoney.SendMoneyPage;
 import util.FontLoader;
 import util.ImageLoader;
@@ -110,6 +111,7 @@ public class CenterPanel extends JPanel {
                 } else if (text.equals("Cash In")) {
                     onButtonClick.accept("CashIn");
                 } else if (text.equals("Rewards")) {
+                    RewardsPage.getInstance().applyTheme();
                     onButtonClick.accept("Rewards");
                 } else if (text.equals("Cash Out")) {
                     onButtonClick.accept("CashOut");

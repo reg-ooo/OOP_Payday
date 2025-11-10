@@ -251,8 +251,8 @@ public class PayBills extends JPanel {
     public void setVisible(boolean visible) {
         super.setVisible(visible);
         if (visible) {
-            mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getInstance().getDarkModeBlue()
-                    : ThemeManager.getInstance().getWhite());
+            mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue()
+                    : ThemeManager.getWhite());
             applyThemeRecursive(this);
         }
     }

@@ -20,6 +20,7 @@ import java.util.function.Consumer;
 
 public class Rewards3 extends JPanel {
     private final FontLoader fontLoader = FontLoader.getInstance();
+    private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
     private final RewardsDAOImpl rewardsDAO;
 
@@ -35,7 +36,7 @@ public class Rewards3 extends JPanel {
         this.onButtonClick = onButtonClick;
         this.rewardsDAO = RewardsDAOImpl.getInstance();
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
 
         // Initialize UI
         setupUI();
@@ -47,12 +48,12 @@ public class Rewards3 extends JPanel {
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 20, 20, 20));
 
         // ===== BACK BUTTON =====
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(Color.WHITE);
+        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
         JLabel backLabel = createBackLabel(() -> {
@@ -64,14 +65,14 @@ public class Rewards3 extends JPanel {
         // ===== HEADER SECTION WITH ICON =====
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        headerPanel.setBackground(Color.WHITE);
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         headerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Confirm Redemption label
         JLabel confirmLabel = new JLabel("Confirm Redemption");
         confirmLabel.setFont(fontLoader.loadFont(Font.BOLD, 23f, "Quicksand-Bold"));
-        confirmLabel.setForeground(ThemeManager.getDBlue());
+        confirmLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
 
         headerPanel.add(confirmLabel);
 
@@ -105,7 +106,8 @@ public class Rewards3 extends JPanel {
         mainPanel.add(Box.createVerticalStrut(20));
 
         // ===== TRANSACTION DETAILS PANEL =====
-        RoundedBorder detailsContainer = new RoundedBorder(15, ThemeManager.getVBlue(), 3);
+        Color borderColor = themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getVBlue();
+        RoundedBorder detailsContainer = new RoundedBorder(15, borderColor, 3);
         detailsContainer.setLayout(new FlowLayout());
         detailsContainer.setOpaque(false);
         detailsContainer.setPreferredSize(new Dimension(370, 280));
@@ -113,7 +115,7 @@ public class Rewards3 extends JPanel {
         detailsContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create inner rounded panel
-        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, Color.WHITE);
+        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         detailsRoundedPanel.setLayout(new BorderLayout());
         detailsRoundedPanel.setPreferredSize(new Dimension(350, 250));
         detailsRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -121,12 +123,12 @@ public class Rewards3 extends JPanel {
         // Create content panel for the details
         JPanel detailsContentPanel = new JPanel();
         detailsContentPanel.setLayout(new BoxLayout(detailsContentPanel, BoxLayout.Y_AXIS));
-        detailsContentPanel.setBackground(Color.WHITE);
+        detailsContentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
 
         // Title
         JLabel detailsTitle = new JLabel("Reward Redemption Details");
         detailsTitle.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        detailsTitle.setForeground(ThemeManager.getDBlue());
+        detailsTitle.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
         detailsTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsContentPanel.add(detailsTitle);
 
@@ -170,15 +172,15 @@ public class Rewards3 extends JPanel {
 
         // ===== ACTION BUTTONS =====
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         buttonPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Cancel Button
         JButton cancelButton = new JButton("Cancel");
         cancelButton.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-        cancelButton.setForeground(ThemeManager.getDBlue());
-        cancelButton.setBackground(Color.WHITE);
+        cancelButton.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
+        cancelButton.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         cancelButton.setBorder(BorderFactory.createLineBorder(ThemeManager.getPBlue(), 2));
         cancelButton.setPreferredSize(new Dimension(130, 40));
         cancelButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -228,6 +230,7 @@ public class Rewards3 extends JPanel {
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.getViewport().setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
 
         add(scrollPane, BorderLayout.CENTER);
 
@@ -263,21 +266,21 @@ public class Rewards3 extends JPanel {
 
     private JPanel createDetailRow(String labelText, String value, String type) {
         JPanel row = new JPanel(new BorderLayout());
-        row.setBackground(Color.WHITE);
+        row.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         row.setOpaque(false);
 
         JLabel label = new JLabel(labelText);
         label.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-        label.setForeground(ThemeManager.getDBlue());
+        label.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
         label.setPreferredSize(new Dimension(130, 20));
 
         JPanel valuePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        valuePanel.setBackground(Color.WHITE);
+        valuePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         valuePanel.setOpaque(false);
 
         JLabel valueLabel = new JLabel(value);
         valueLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        valueLabel.setForeground(ThemeManager.getBlack());
+        valueLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getBlack());
         valuePanel.add(valueLabel);
 
         row.add(label, BorderLayout.WEST);
@@ -289,7 +292,7 @@ public class Rewards3 extends JPanel {
     private JLabel createBackLabel(Runnable onClickAction) {
         JLabel backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Regular"));
-        backLabel.setForeground(ThemeManager.getPBlue());
+        backLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getPBlue());
         backLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
         backLabel.addMouseListener(new MouseAdapter() {
@@ -318,5 +321,87 @@ public class Rewards3 extends JPanel {
     private String getCurrentDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy");
         return dateFormat.format(new Date());
+    }
+
+    // Theme application method
+    public void applyTheme() {
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
+        applyThemeRecursive(this);
+        revalidate();
+        repaint();
+    }
+
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            // Skip labels that are already white (on gradient backgrounds)
+            String text = jl.getText();
+            if (text != null) {
+                if (text.contains("points") || text.equals("Current Points")) {
+                    return; // Leave these white (they're on gradient background)
+                }
+
+                // Make all other text labels white in dark mode
+                if (themeManager.isDarkMode()) {
+                    jl.setForeground(Color.WHITE);
+                } else {
+                    // Light mode colors
+                    if (text.equals("Confirm Redemption") || text.equals("Reward Redemption Details")) {
+                        jl.setForeground(ThemeManager.getDBlue());
+                    } else if (text.equals("Back")) {
+                        jl.setForeground(ThemeManager.getPBlue());
+                    } else if (text.contains("Category:") || text.contains("Reward:") ||
+                            text.contains("Points Required:") || text.contains("Date:")) {
+                        jl.setForeground(ThemeManager.getDBlue());
+                    } else {
+                        // Default for other labels
+                        jl.setForeground(ThemeManager.getBlack());
+                    }
+                }
+            }
+        }
+        else if (comp instanceof RoundedBorder rb) {
+            // Update RoundedBorder color based on theme
+            Color borderColor = themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getVBlue();
+            // You'll need a method in RoundedBorder to update its color, like:
+            // rb.setBorderColor(borderColor);
+        }
+        else if (comp instanceof JPanel jp) {
+            // Set panel backgrounds
+            if (themeManager.isDarkMode()) {
+                // Skip gradient panels and rounded panels with custom backgrounds
+                if (!(jp instanceof GradientPanel) && !(jp.getBackground().equals(Color.WHITE))) {
+                    jp.setBackground(ThemeManager.getDarkModeBlue());
+                }
+            } else {
+                if (!(jp instanceof GradientPanel) && jp.getBackground().equals(ThemeManager.getDarkModeBlue())) {
+                    jp.setBackground(Color.WHITE);
+                }
+            }
+        }
+        else if (comp instanceof JScrollPane jsp) {
+            // Handle scroll panes
+            if (themeManager.isDarkMode()) {
+                jsp.getViewport().setBackground(ThemeManager.getDarkModeBlue());
+                jsp.setBackground(ThemeManager.getDarkModeBlue());
+            } else {
+                jsp.getViewport().setBackground(Color.WHITE);
+                jsp.setBackground(Color.WHITE);
+            }
+        }
+        else if (comp instanceof RoundedPanel rp) {
+            // Handle rounded panels
+            if (themeManager.isDarkMode()) {
+                rp.setBackground(ThemeManager.getDarkModeBlue());
+            } else {
+                rp.setBackground(Color.WHITE);
+            }
+        }
+
+        // Recurse through children
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
     }
 }

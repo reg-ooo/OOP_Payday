@@ -25,7 +25,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         panel.setOpaque(false);
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panel.setBackground(themeManager.getWhite());
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         // Success Message
         panel.add(createSuccessSection());
@@ -57,13 +57,14 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         panel.setOpaque(false);
         panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         JLabel successTitle = new JLabel("Reward Redeemed!");
         successTitle.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
-        successTitle.setForeground(themeManager.getDBlue());
+        successTitle.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         JPanel titlePanel = new JPanel(new BorderLayout());
-        titlePanel.setBackground(Color.WHITE);
+        titlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         titlePanel.add(successTitle, BorderLayout.CENTER);
 
         panel.add(titlePanel);
@@ -73,7 +74,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
 
     public JPanel createReceiptDetailsSection(String category, String reward, int points,
                                               String referenceNo, String dateTime) {
-        // Create the rounded border container (wrapper)
+        // Create the rounded border container (wrapper) - KEEP ORIGINAL BLUE BORDER
         RoundedBorder receiptContainer = new RoundedBorder(15, themeManager.getVBlue(), 3);
         receiptContainer.setLayout(new FlowLayout());
         receiptContainer.setOpaque(false);
@@ -82,7 +83,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         receiptContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create inner rounded panel
-        RoundedPanel receiptRoundedPanel = new RoundedPanel(15, Color.WHITE);
+        RoundedPanel receiptRoundedPanel = new RoundedPanel(15, themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         receiptRoundedPanel.setLayout(new BorderLayout());
         receiptRoundedPanel.setPreferredSize(new Dimension(350, 300));
         receiptRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -90,12 +91,12 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         // Create content panel for the receipt
         JPanel receiptContentPanel = new JPanel();
         receiptContentPanel.setLayout(new BoxLayout(receiptContentPanel, BoxLayout.Y_AXIS));
-        receiptContentPanel.setBackground(Color.WHITE);
+        receiptContentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
 
         // Title
         JLabel receiptTitle = new JLabel("Redemption Receipt");
         receiptTitle.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        receiptTitle.setForeground(themeManager.getDBlue());
+        receiptTitle.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         receiptTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         receiptContentPanel.add(receiptTitle);
 
@@ -104,6 +105,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         // Divider
         JSeparator separator1 = new JSeparator();
         separator1.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        separator1.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDGray());
         receiptContentPanel.add(separator1);
 
         receiptContentPanel.add(Box.createVerticalStrut(10));
@@ -111,7 +113,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         // Create a grid panel for proper table-like alignment
         JPanel detailsGrid = new JPanel();
         detailsGrid.setLayout(new GridLayout(4, 2, 10, 8));
-        detailsGrid.setBackground(Color.WHITE);
+        detailsGrid.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         detailsGrid.setMaximumSize(new Dimension(300, 120));
 
         // Category row
@@ -137,6 +139,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         // Divider
         JSeparator separator2 = new JSeparator();
         separator2.setMaximumSize(new Dimension(Integer.MAX_VALUE, 1));
+        separator2.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDGray());
         receiptContentPanel.add(separator2);
 
         receiptContentPanel.add(Box.createVerticalStrut(10));
@@ -144,7 +147,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         // Reference ID
         JLabel referenceLabel = new JLabel("Reference ID: " + referenceNo);
         referenceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
-        referenceLabel.setForeground(themeManager.getBlack());
+        referenceLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getBlack());
         referenceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         receiptContentPanel.add(referenceLabel);
 
@@ -158,10 +161,10 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         JLabel label = new JLabel(text);
         if (isBold) {
             label.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-            label.setForeground(themeManager.getDBlue());
+            label.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         } else {
             label.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-            label.setForeground(themeManager.getBlack());
+            label.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getBlack());
         }
         label.setHorizontalAlignment(SwingConstants.LEFT);
         return label;
@@ -172,14 +175,15 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         panel.setMaximumSize(new Dimension(400, 25));
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         JLabel leftLabel = new JLabel(label);
         leftLabel.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-        leftLabel.setForeground(themeManager.getDSBlue());
+        leftLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
 
         JLabel rightLabel = new JLabel(value);
         rightLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        rightLabel.setForeground(themeManager.getDBlue());
+        rightLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         panel.add(leftLabel, BorderLayout.WEST);
         panel.add(rightLabel, BorderLayout.EAST);
@@ -190,7 +194,7 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
     @Override
     public JPanel createReceiptButtonPanel(Consumer<String> onButtonClick) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
-        panel.setBackground(Color.WHITE);
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         panel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -213,16 +217,18 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         JPanel panel = new JPanel(new BorderLayout());
         panel.setOpaque(false);
         panel.setMaximumSize(new Dimension(300, 50));
+        panel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         JButton button = new JButton(text);
         button.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        button.setForeground(themeManager.getPBlue());
-        button.setBackground(themeManager.getWhite());
+        button.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getPBlue());
+        button.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
         button.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         button.setFocusPainted(false);
         button.setOpaque(true);
 
+        // KEEP ORIGINAL BLUE BORDER
         button.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(themeManager.getPBlue(), 2),
                 BorderFactory.createEmptyBorder(10, 0, 10, 0)
@@ -230,11 +236,11 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(themeManager.getLightGray());
+                button.setBackground(themeManager.isDarkMode() ? new Color(50, 50, 70) : themeManager.getLightGray());
             }
 
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(themeManager.getWhite());
+                button.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
             }
         });
 
@@ -271,10 +277,11 @@ public class RewardsReceiptFactory extends ConcreteSendMoneyBaseFactory implemen
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setOpaque(false);
         footerPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        footerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : themeManager.getWhite());
 
         JLabel footerLabel = new JLabel("©PayDay");
         footerLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        footerLabel.setForeground(themeManager.getDSBlue());
+        footerLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         footerPanel.add(footerLabel);
 
         return footerPanel;

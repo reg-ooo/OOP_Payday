@@ -138,12 +138,12 @@ public class RewardsPage extends JPanel {
 
     private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25)); // Header padding
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : new Color(248, 250, 252));
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25));
 
         // Back button
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
+        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : new Color(248, 250, 252));
 
         JLabel backLabel = new JLabel("‹ Back");
         backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18.0F, "Quicksand-Bold"));
@@ -158,7 +158,7 @@ public class RewardsPage extends JPanel {
 
         // Points display with modern design
         JPanel pointsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
-        pointsPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
+        pointsPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : new Color(248, 250, 252));
 
         int currentPoints = UserInfo.getInstance().isLoggedIn() ? getCurrentPoints() : 0;
 
@@ -239,9 +239,9 @@ public class RewardsPage extends JPanel {
                 RoundRectangle2D baseRect = new RoundRectangle2D.Float(0, 0, width, height, CORNER_RADIUS, CORNER_RADIUS);
                 Area ticketShape = new Area(baseRect);
 
-                // Top notch
+// Top notch
                 Ellipse2D notchTop = new Ellipse2D.Float(separatorX - NOTCH_RADIUS, -NOTCH_RADIUS, NOTCH_RADIUS * 2, NOTCH_RADIUS * 2);
-                // Bottom notch
+// Bottom notch
                 Ellipse2D notchBottom = new Ellipse2D.Float(separatorX - NOTCH_RADIUS, height - NOTCH_RADIUS, NOTCH_RADIUS * 2, NOTCH_RADIUS * 2);
 
                 ticketShape.subtract(new Area(notchTop));
@@ -249,8 +249,15 @@ public class RewardsPage extends JPanel {
 
                 g2.fill(ticketShape);
 
-                // Dashed separator line - more prominent
-                g2.setColor(Color.WHITE);
+// Fill the notches with background color to create the perforation effect
+                Color notchColor = themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : new Color(248, 250, 252);
+                g2.setColor(notchColor);
+                g2.fill(notchTop);
+                g2.fill(notchBottom);
+
+// Dashed separator line - theme-aware colors
+                Color separatorColor = themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE;
+                g2.setColor(separatorColor);
                 float[] dashPattern = {6f, 4f};
                 BasicStroke dashedStroke = new BasicStroke(2f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dashPattern, 0.0f);
                 g2.setStroke(dashedStroke);
@@ -384,7 +391,7 @@ public class RewardsPage extends JPanel {
         this.revalidate();
         this.repaint();
     }
-    
+
     public void applyTheme() {
         themeManager.applyTheme(this);
 
@@ -396,6 +403,104 @@ public class RewardsPage extends JPanel {
     }
 
     private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            if (jl.getText() != null && jl.getText().equals("⭐")) {
+                return; // Leave it untouched
+            }
+            if (ThemeManager.getInstance().isDarkMode()) {
+                // Handle different label types
+                String text = jl.getText();
+                if (text != null) {
+                    if (text.contains("pts") || text.contains("PTS") ||
+                            text.contains("Load") || text.contains("Voucher") || text.contains("Pass") ||
+                            text.contains("Available to redeem") || text.contains("Need more points") ||
+                            text.contains("points required")) {
+                        // These labels are on colored backgrounds - keep them white
+                        jl.setForeground(Color.WHITE);
+                    } else if (text.equals("Available Rewards") || text.equals("Redeem your points for exciting rewards")) {
+                        // Main titles
+                        jl.setForeground(Color.WHITE);
+                    } else if (text.equals("‹ Back")) {
+                        // Back button
+                        jl.setForeground(Color.WHITE);
+                    } else {
+                        // Default labels
+                        jl.setForeground(Color.WHITE);
+                    }
+                }
+            } else {
+                // Light mode - keep your existing light mode logic
+                String text = jl.getText();
+                if (text != null) {
+                    if (text.contains("pts") || text.contains("PTS") ||
+                            text.contains("Load") || text.contains("Voucher") || text.contains("Pass") ||
+                            text.contains("Available to redeem") || text.contains("Need more points") ||
+                            text.contains("points required")) {
+                        // These labels are on colored backgrounds - keep them white
+                        jl.setForeground(Color.WHITE);
+                    } else if (text.equals("Available Rewards") || text.equals("Redeem your points for exciting rewards")) {
+                        // Main titles
+                        jl.setForeground(ThemeManager.getDBlue());
+                    } else if (text.equals("‹ Back")) {
+                        // Back button
+                        jl.setForeground(ThemeManager.getPBlue());
+                    } else {
+                        // Default labels
+                        jl.setForeground(ThemeManager.getWhite());
+                    }
+                }
+            }
+        }
+        else if (comp instanceof JPanel jp) {
+            // SIMPLIFIED: Just set the background based on theme, don't check current color
+            if (ThemeManager.getInstance().isDarkMode()) {
+                // Skip reward cards and points badge - they have custom painting
+                if (!isRewardCardOrPointsBadge(jp)) {
+                    jp.setBackground(ThemeManager.getDarkModeBlue());
+                }
+            } else {
+                // Skip reward cards and points badge - they have custom painting
+                if (!isRewardCardOrPointsBadge(jp)) {
+                    jp.setBackground(new Color(248, 250, 252));
+                }
+            }
+        }
+        else if (comp instanceof JScrollPane jsp) {
+            // Handle scroll panes
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jsp.getViewport().setBackground(ThemeManager.getDarkModeBlue());
+                jsp.setBackground(ThemeManager.getDarkModeBlue());
+            } else {
+                jsp.getViewport().setBackground(new Color(248, 250, 252));
+                jsp.setBackground(new Color(248, 250, 252));
+            }
+        }
 
+        // Recurse through ALL children
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
+    }
+
+    // Helper method to identify panels that should keep their custom backgrounds
+    private boolean isRewardCardOrPointsBadge(JPanel panel) {
+        // Check if this is a reward card (has custom paintComponent and specific size)
+        if (panel.getPreferredSize() != null &&
+                panel.getPreferredSize().equals(new Dimension(350, 110))) {
+            return true;
+        }
+
+        // Check if this is the points badge (has specific preferred size)
+        if (panel.getPreferredSize() != null &&
+                panel.getPreferredSize().equals(new Dimension(120, 35))) {
+            return true;
+        }
+
+        // Check if panel has custom painting (you could add more sophisticated checks)
+        // For now, we'll rely on the size checks above
+
+        return false;
     }
 }

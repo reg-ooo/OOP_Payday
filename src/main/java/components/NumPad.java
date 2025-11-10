@@ -27,29 +27,36 @@ public class NumPad extends JPanel {
         add(createBackspaceButton(onButtonClick));
     }
 
-
     protected static RoundedButton createNumberButton(String number, Consumer<String> onButtonClick) {
-        RoundedButton button = new RoundedButton(number, 20, themeManager.getSBlue());
-        button.setForeground(themeManager.getDBlue());
+        boolean isDarkMode = themeManager.isDarkMode();
+
+        // Swap colors for dark mode: use hover color as normal, and normal color as hover
+        Color normalColor = isDarkMode ? themeManager.getVBlue() : themeManager.getSBlue();
+        Color hoverColor = isDarkMode ? themeManager.getSBlue() : themeManager.getVBlue();
+
+        RoundedButton button = new RoundedButton(number, 20, normalColor);
+        button.setForeground(isDarkMode ? Color.WHITE : themeManager.getDBlue());
         button.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
         button.setPreferredSize(new Dimension(72, 58));
-
-        Color normalColor = themeManager.getSBlue();     // default background
-        Color hoverColor = themeManager.getVBlue();      // brighter on hover
 
         // Hover animation
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(hoverColor);
-                button.setForeground(themeManager.getWhite());
+                // Text becomes dark blue on hover ONLY in dark mode
+                if (isDarkMode) {
+                    button.setForeground(themeManager.getDBlue());
+                } else {
+                    button.setForeground(Color.WHITE); // Keep white text in light mode
+                }
                 button.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(normalColor);
-                button.setForeground(themeManager.getDBlue());
+                button.setForeground(isDarkMode ? Color.WHITE : themeManager.getDBlue());
                 button.repaint();
             }
         });
@@ -59,24 +66,34 @@ public class NumPad extends JPanel {
     }
 
     protected static RoundedButton createBackspaceButton(Consumer<String> onButtonClick) {
-        RoundedButton button = new RoundedButton("X", 20, themeManager.getLightGray());
-        button.setForeground(themeManager.getDBlue());
+        boolean isDarkMode = themeManager.isDarkMode();
+
+        // For backspace button, use appropriate colors for dark mode
+        Color normalColor = isDarkMode ? themeManager.getGray() : themeManager.getLightGray();
+        Color hoverColor = isDarkMode ? themeManager.getLightGray() : themeManager.getGray();
+
+        RoundedButton button = new RoundedButton("X", 20, normalColor);
+        button.setForeground(isDarkMode ? Color.WHITE : themeManager.getDBlue());
         button.setFont(new Font("Arial", Font.BOLD, 16));
         button.setPreferredSize(new Dimension(72, 58));
-
-        Color normalColor = themeManager.getLightGray();
-        Color hoverColor = themeManager.getGray(); // slightly darker gray
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 button.setBackground(hoverColor);
+                // Backspace text becomes dark blue on hover ONLY in dark mode
+                if (isDarkMode) {
+                    button.setForeground(themeManager.getDBlue());
+                } else {
+                    button.setForeground(themeManager.getDBlue()); // Keep dark blue in light mode
+                }
                 button.repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
                 button.setBackground(normalColor);
+                button.setForeground(isDarkMode ? Color.WHITE : themeManager.getDBlue());
                 button.repaint();
             }
         });
