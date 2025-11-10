@@ -91,7 +91,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         button.setPreferredSize(new Dimension(140, 140));
         button.setMinimumSize(new Dimension(140, 140));
         button.setMaximumSize(new Dimension(140, 140));
-        button.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
+        button.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite());
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -112,10 +112,14 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
 
         button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) { button.setBackground(themeManager.getGradientLBlue()); }
+            public void mouseEntered(MouseEvent e) { 
+                if (!themeManager.isDarkMode()) {
+                    button.setBackground(themeManager.getGradientLBlue()); 
+                }
+            }
             @Override
             public void mouseExited(MouseEvent e) { 
-                button.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite()); 
+                button.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite()); 
             }
         });
         button.addActionListener(e -> onButtonClick.accept(nextKeyPrefix + ":" + name));
@@ -153,10 +157,14 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
 
         button.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseEntered(MouseEvent e) { button.setBackground(themeManager.getGradientLBlue()); }
+            public void mouseEntered(MouseEvent e) { 
+                if (!themeManager.isDarkMode()) {
+                    button.setBackground(ThemeManager.getGradientLBlue()); 
+                }
+            }
             @Override
             public void mouseExited(MouseEvent e) { 
-                button.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite()); 
+                button.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite()); 
             }
         });
         button.addActionListener(e -> onButtonClick.accept(nextKeyPrefix + ":" + name));
@@ -170,10 +178,10 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     @Override
     public JPanel createHeaderPanel(Consumer<String> onButtonClick, String backPageKey) {
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        headerPanel.setBackground(themeManager.getWhite());
+        headerPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         JLabel backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        backLabel.setForeground(themeManager.getDeepBlue());
+        backLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDeepBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -186,10 +194,10 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     @Override
     public JPanel createTitleRow(String title, String iconName, int iconSize) {
         JPanel titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        titleRow.setBackground(themeManager.getWhite());
+        titleRow.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         JLabel titleLabel = new JLabel(title);
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getDBlue());
+        titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality(iconName, iconSize);
         JLabel iconLabel = new JLabel(titleIcon);
         titleRow.add(titleLabel);
@@ -200,7 +208,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     @Override
     public JPanel createFooterPanel(String stepText) {
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        footerPanel.setBackground(themeManager.getWhite());
+        footerPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
         footerPanel.add(createStepLabel(stepText));
         return footerPanel;
@@ -210,7 +218,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     public JLabel createStepLabel(String text) {
         JLabel stepLabel = new JLabel(text, SwingConstants.CENTER);
         stepLabel.setFont(fontLoader.loadFont(Font.PLAIN, 15f, "Quicksand-Bold"));
-        stepLabel.setForeground(themeManager.getDeepBlue());
+        stepLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDeepBlue());
         return stepLabel;
     }
 
@@ -253,13 +261,13 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     public JPanel createLabeledFormSection(String labelText, JPanel fieldPanel) {
         JPanel section = new JPanel();
         section.setLayout(new BoxLayout(section, BoxLayout.Y_AXIS));
-        section.setBackground(themeManager.getWhite());
+        section.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         section.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, 80));
         section.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel label = new JLabel(labelText);
         label.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        label.setForeground(themeManager.getDeepBlue());
+        label.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDeepBlue());
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         fieldPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -322,16 +330,16 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     public JPanel createBalanceDisplayContainer(JLabel balanceLabel) {
         JPanel balancePanelContainer = new JPanel();
         balancePanelContainer.setLayout(new BoxLayout(balancePanelContainer, BoxLayout.X_AXIS));
-        balancePanelContainer.setBackground(themeManager.getWhite());
+        balancePanelContainer.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         balancePanelContainer.setMaximumSize(new Dimension(MAX_COMPONENT_WIDTH, 30));
         balancePanelContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel balanceHint = new JLabel("Current balance: PHP");
         balanceHint.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        balanceHint.setForeground(Color.DARK_GRAY);
+        balanceHint.setForeground(themeManager.isDarkMode() ? Color.WHITE : Color.DARK_GRAY);
 
         balanceLabel.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        balanceLabel.setForeground(Color.DARK_GRAY);
+        balanceLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : Color.DARK_GRAY);
 
         balancePanelContainer.add(Box.createHorizontalGlue());
         balancePanelContainer.add(balanceHint);

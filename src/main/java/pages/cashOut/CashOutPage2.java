@@ -32,18 +32,18 @@ public class CashOutPage2 extends JPanel {
 
     public CashOutPage2(Consumer<String> onButtonClick) {
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         this.factory = new ConcreteSendMoneyPage1Factory();
 
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // ===== BACK BUTTON =====
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(Color.WHITE);
+        backPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
         JLabel backLabel = createBackLabel(() -> {
@@ -57,7 +57,7 @@ public class CashOutPage2 extends JPanel {
         // ===== HEADER SECTION WITH ICON =====
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px gap between icon and text
-        headerPanel.setBackground(Color.WHITE);
+        headerPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         headerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -68,7 +68,7 @@ public class CashOutPage2 extends JPanel {
         // Confirm Payment label
         JLabel cashOutLabel = new JLabel("Confirm Payment");
         cashOutLabel.setFont(fontLoader.loadFont(Font.BOLD, 28f, "Quicksand-Bold"));
-        cashOutLabel.setForeground(themeManager.getDBlue());
+        cashOutLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         // Add icon and label to header panel
         headerPanel.add(cashOutLabel);
@@ -115,7 +115,7 @@ public class CashOutPage2 extends JPanel {
         detailsContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create inner rounded panel (like transactionRoundedPanel)
-        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, Color.WHITE);
+        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         detailsRoundedPanel.setLayout(new BorderLayout());
         detailsRoundedPanel.setPreferredSize(new Dimension(350, 180));
         detailsRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -123,12 +123,12 @@ public class CashOutPage2 extends JPanel {
         // Create content panel for the details
         JPanel detailsContentPanel = new JPanel();
         detailsContentPanel.setLayout(new BoxLayout(detailsContentPanel, BoxLayout.Y_AXIS));
-        detailsContentPanel.setBackground(Color.WHITE);
+        detailsContentPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
 
         // Title
         JLabel detailsTitle = new JLabel("Transaction Details");
         detailsTitle.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        detailsTitle.setForeground(themeManager.getDBlue());
+        detailsTitle.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         detailsTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
         detailsContentPanel.add(detailsTitle);
 
@@ -240,16 +240,16 @@ public class CashOutPage2 extends JPanel {
      */
     private JPanel createDetailRow(String label, String value, String type) {
         JPanel rowPanel = new JPanel(new BorderLayout());
-        rowPanel.setBackground(Color.WHITE);
+        rowPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         rowPanel.setMaximumSize(new Dimension(300, 25));
 
         JLabel keyLabel = new JLabel(label);
         keyLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        keyLabel.setForeground(themeManager.getDBlue());
+        keyLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         JLabel valueLabel = new JLabel(value);
         valueLabel.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
-        valueLabel.setForeground(themeManager.getDBlue());
+        valueLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         valueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         // Store references based on type

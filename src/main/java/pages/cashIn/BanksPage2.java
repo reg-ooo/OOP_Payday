@@ -138,7 +138,7 @@ public class BanksPage2 extends JPanel {
 
         JLabel disclaimer = new JLabel("Please check details before confirming");
         disclaimer.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        disclaimer.setForeground(Color.DARK_GRAY);
+        disclaimer.setForeground(themeManager.isDarkMode() ? Color.WHITE : Color.DARK_GRAY);
         disclaimer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Build form panel
@@ -396,11 +396,15 @@ public class BanksPage2 extends JPanel {
         nextButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                nextButton.setBackground(themeManager.getGradientLBlue());
+                if (!themeManager.isDarkMode()) {
+                    nextButton.setBackground(themeManager.getGradientLBlue());
+                }
             }
             @Override
             public void mouseExited(MouseEvent e) {
-                nextButton.setBackground(themeManager.getVBlue());
+                if (!themeManager.isDarkMode()) {
+                    nextButton.setBackground(themeManager.getVBlue());
+                }
             }
         });
 

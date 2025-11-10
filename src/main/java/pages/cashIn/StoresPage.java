@@ -20,10 +20,39 @@ public class StoresPage extends JPanel {
     private final ImageLoader imageLoader = ImageLoader.getInstance();
 
     private final CashInFormFactory factory = new ConcreteCashInFormFactory();
+    
+    // Component references for theme updates
+    private JPanel headerPanel;
+    private JLabel backLabel;
+    private JPanel titleRow;
+    private JLabel titleLabel;
+    private JPanel contentPanel;
+    private JButton cliqq;
+    private JButton familyMart;
+    private JButton shell;
+    private JPanel footerPanel;
+    private JLabel stepLabel;
+    private JPanel centerPanel;
 
     public StoresPage(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
         setupUI();
+    }
+    
+    public void applyTheme(boolean darkMode) {
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        backLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDeepBlue());
+        titleRow.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
+        contentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        cliqq.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        familyMart.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        shell.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        footerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        stepLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDeepBlue());
+        centerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        repaint();
     }
 
     // --- REMOVED: Custom Rounded Button UI class (Moved to ConcreteCashInFormFactory) ---
@@ -36,11 +65,11 @@ public class StoresPage extends JPanel {
 
         // --- Header: Back Button ---
         // Using manual creation here for the header, consistent with your previous structure.
-        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(themeManager.getWhite());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
 
-        JLabel backLabel = new JLabel("Back");
+        backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
         backLabel.setForeground(themeManager.getDeepBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -55,20 +84,20 @@ public class StoresPage extends JPanel {
 
         // --- Title Row ---
         // Using manual creation here for the title, consistent with your previous structure.
-        JLabel titleLabel = new JLabel("Stores");
+        titleLabel = new JLabel("Stores");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
         titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
 
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("Stores.png", 60);
         JLabel iconLabel = new JLabel(titleIcon);
 
-        JPanel titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
+        titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         titleRow.setBackground(themeManager.getWhite());
         titleRow.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
         titleRow.add(titleLabel);
         titleRow.add(iconLabel);
 
-        JPanel contentPanel = new JPanel(new GridBagLayout());
+        contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(themeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -77,32 +106,35 @@ public class StoresPage extends JPanel {
         // Row 1: Two buttons side by side
         gbc.gridx = 0; gbc.gridy = 0;
         // ⭐ FACTORY CALL: Replaces createStoreButton("Cliqq")
-        contentPanel.add(factory.createSelectionButton("Cliqq", onButtonClick, "CashInStores2"), gbc);
+        cliqq = factory.createSelectionButton("Cliqq", onButtonClick, "CashInStores2");
+        contentPanel.add(cliqq, gbc);
 
         gbc.gridx = 1;
         // ⭐ FACTORY CALL: Replaces createStoreButton("FamilyMart")
-        contentPanel.add(factory.createSelectionButton("FamilyMart", onButtonClick, "CashInStores2"), gbc);
+        familyMart = factory.createSelectionButton("FamilyMart", onButtonClick, "CashInStores2");
+        contentPanel.add(familyMart, gbc);
 
         // Row 2: One button centered
         gbc.gridx = 0; gbc.gridy = 1;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         // ⭐ FACTORY CALL: Replaces createStoreButton("Shell")
-        contentPanel.add(factory.createSelectionButton("Shell", onButtonClick, "CashInStores2"), gbc);
+        shell = factory.createSelectionButton("Shell", onButtonClick, "CashInStores2");
+        contentPanel.add(shell, gbc);
 
         // --- Footer: Step Label ---
         // Using manual creation here for the footer, consistent with your previous structure.
-        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(themeManager.getWhite());
         footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
 
-        JLabel stepLabel = new JLabel("Step 2 of 4");
+        stepLabel = new JLabel("Step 2 of 4");
         stepLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
         stepLabel.setForeground(themeManager.getDeepBlue());
         footerPanel.add(stepLabel);
 
         // --- Assemble Page ---
-        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(themeManager.getWhite());
         centerPanel.add(titleRow, BorderLayout.NORTH);
         centerPanel.add(contentPanel, BorderLayout.CENTER);

@@ -27,7 +27,7 @@ public class CashOutPage extends JPanel {
 
     public CashOutPage(Consumer<String> onButtonClick) {
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         this.factory = new ConcreteSendMoneyPage1Factory();
 
         clearAmountField();
@@ -35,12 +35,12 @@ public class CashOutPage extends JPanel {
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // ===== BACK BUTTON =====
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(Color.WHITE);
+        backPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
         JLabel backLabel = createBackLabel(() -> {
@@ -54,7 +54,7 @@ public class CashOutPage extends JPanel {
         // ===== HEADER SECTION WITH ICON =====
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px gap between icon and text
-        headerPanel.setBackground(Color.WHITE);
+        headerPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : Color.WHITE);
         headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         headerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -65,7 +65,7 @@ public class CashOutPage extends JPanel {
         // Cash Out label
         JLabel cashOutLabel = new JLabel("Cash Out");
         cashOutLabel.setFont(fontLoader.loadFont(Font.BOLD, 28f, "Quicksand-Bold"));
-        cashOutLabel.setForeground(themeManager.getDBlue());
+        cashOutLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         // Add icon and label to header panel
         headerPanel.add(cashOutLabel);
@@ -105,7 +105,7 @@ public class CashOutPage extends JPanel {
         // ===== AMOUNT FIELD =====
         JLabel amountLabel = new JLabel("Enter Amount");
         amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        amountLabel.setForeground(themeManager.getDBlue());
+        amountLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         amountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(amountLabel);
 

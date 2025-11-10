@@ -37,6 +37,12 @@ public class GradientPanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        // Fill parent background color first to avoid white corners
+        if (getParent() != null) {
+            g2d.setColor(getParent().getBackground());
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+        }
 
         // Create a gradient paint from top to bottom
         GradientPaint gradient = new GradientPaint(
