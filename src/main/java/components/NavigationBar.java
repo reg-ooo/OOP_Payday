@@ -25,7 +25,8 @@ public class NavigationBar extends JPanel {
     private String currentActivePage = "Home"; // Default active page
 
     public NavigationBar(Consumer<String> onButtonClick) {
-        this.setOpaque(false);
+        this.setOpaque(true);
+        this.setBackground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDBlue() : Color.WHITE);
         this.setLayout(new BorderLayout());
         this.onButtonClick = onButtonClick;
 
@@ -188,10 +189,15 @@ public class NavigationBar extends JPanel {
     }
 
     public void applyTheme() {
-        // Update the gradient panel colors based on theme
+        // Update the container background based on theme
+        this.setBackground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDBlue() : Color.WHITE);
+        
+        // Update the gradient panel colors based on theme (keep original gradients)
         if (ThemeManager.getInstance().isDarkMode()) {
+            // Dark mode: gradient
             navBarPanel.setGradientColors(ThemeManager.getDSBlue(), ThemeManager.getDSBlue());
         } else {
+            // Light mode: gradient
             navBarPanel.setGradientColors(ThemeManager.getDvBlue(), ThemeManager.getVBlue());
         }
     }

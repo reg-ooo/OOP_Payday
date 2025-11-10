@@ -88,14 +88,8 @@ public class ThemeManager {
             }
         }
         else if (comp instanceof NavigationBar nb) {
-            // NavigationBar (uses GradientPanel inside)
-            if (isDarkMode) {
-                nb.navBarPanel.setGradientColors(getDarkStartColor(), getDarkEndColor());
-                nb.navBarPanel.setBackground(black);
-            } else {
-                nb.navBarPanel.setGradientColors(lightStartColor, lightEndColor);
-                nb.navBarPanel.setBackground(white);
-            }
+            // NavigationBar - call its applyTheme method to update both container and gradient
+            nb.applyTheme();
         }
         else if (comp instanceof NPanel np) {
             np.setBackground(isDarkMode ? black : white);

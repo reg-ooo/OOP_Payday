@@ -21,6 +21,7 @@ public class ProfilePage extends JPanel {
     private final JPanel infoPanel;
     private final JLabel nameLabel;
     private final JLabel initialsLabel;
+    private final JLabel titleLabel;
     private final JLabel emailValueLabel = new JLabel();
     private final JLabel birthdayValueLabel = new JLabel();
     private final JLabel phoneValueLabel = new JLabel();
@@ -56,9 +57,9 @@ public class ProfilePage extends JPanel {
         headerPanel.setMaximumSize(new Dimension(340, 130));
 
         // "My Profile" label
-        JLabel titleLabel = new JLabel("My Profile");
+        titleLabel = new JLabel("My Profile");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : Color.WHITE);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 0));
         headerPanel.add(titleLabel, BorderLayout.NORTH);
 
@@ -115,7 +116,7 @@ public class ProfilePage extends JPanel {
 
         namePanel.add(nameAndIconPanel, BorderLayout.CENTER);
 
-        infoPanel = new RoundedPanel(25, Color.WHITE);
+        infoPanel = new RoundedPanel(25, themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
 
@@ -160,6 +161,12 @@ public class ProfilePage extends JPanel {
         initialsLabel.setBackground(themeManager.isDarkMode() ? 
             new Color(0x1E293B) : themeManager.getPBlue());
         
+        // Update initials text color - always white
+        initialsLabel.setForeground(Color.WHITE);
+        
+        // Update titleLabel color
+        titleLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : Color.WHITE);
+        
         revalidate();
         repaint();
     }
@@ -172,11 +179,18 @@ public class ProfilePage extends JPanel {
             }
             
             if (ThemeManager.getInstance().isDarkMode()) {
-                jl.setForeground(Color.WHITE);
+                // For Sign Out row, use dark mode white
+                if (jl.getText().equals("Sign Out")) {
+                    jl.setForeground(new Color(0xF8FAFC));
+                } else {
+                    jl.setForeground(Color.WHITE);
+                }
             } else {
                 // Restore original colors for light mode
                 if (jl == nameLabel) {
                     jl.setForeground(ThemeManager.getBlack());
+                } else if (jl.getText().equals("Sign Out")) {
+                    jl.setForeground(ThemeManager.getDBlue());
                 } else {
                     jl.setForeground(ThemeManager.getDBlue());
                 }
@@ -310,7 +324,7 @@ public class ProfilePage extends JPanel {
 
         JLabel label = new JLabel(text);
         label.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Bold"));
-        label.setForeground(themeManager.getDBlue());
+        label.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDBlue());
 
         // Determine image keys for normal and hover states
         String normalKey = switch (command) {
@@ -362,7 +376,8 @@ public class ProfilePage extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                label.setForeground(themeManager.getWhite());
+                // Restore theme-aware color
+                label.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDBlue());
                 iconLabel.setIcon(normalIcon);
             }
         });
