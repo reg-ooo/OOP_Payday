@@ -15,6 +15,7 @@ import Factory.cashIn.ConcreteCashInFormFactory;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.util.function.Consumer;
 
@@ -96,8 +97,13 @@ public class QRPage extends JPanel {
         // FIX: Re-implement the dynamic back logic on the label *inside* the header.
         // We get the back label by finding the JLabel component in the factory's panel.
         for (Component comp : headerPanel.getComponents()) {
-            if (comp instanceof JLabel) {
-                comp.addMouseListener(new MouseAdapter() {
+            if (comp instanceof JLabel backLabel) {
+                // Remove existing mouse listeners added by factory
+                for (MouseListener ml : backLabel.getMouseListeners()) {
+                    backLabel.removeMouseListener(ml);
+                }
+                // Add new listener with dynamic sourcePageKey
+                backLabel.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
                         // Use the stored sourcePageKey, which is set in updateSelectedEntity
