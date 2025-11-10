@@ -194,8 +194,8 @@ public class NavigationBar extends JPanel {
         
         // Update the gradient panel colors based on theme (keep original gradients)
         if (ThemeManager.getInstance().isDarkMode()) {
-            // Dark mode: gradient
-            navBarPanel.setGradientColors(ThemeManager.getDSBlue(), ThemeManager.getDSBlue());
+            // Dark mode: solid dark mode blue (same as container)
+            navBarPanel.setGradientColors(ThemeManager.getDarkModeBlue(), ThemeManager.getDarkModeBlue());
         } else {
             // Light mode: gradient
             navBarPanel.setGradientColors(ThemeManager.getDvBlue(), ThemeManager.getVBlue());
