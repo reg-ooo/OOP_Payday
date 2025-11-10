@@ -29,6 +29,7 @@ public class CashInCommand extends TransactionCommand{
 
     @Override
     protected void logTransaction() {
+        System.out.println("User: " + UserInfo.getInstance().getCurrentUserId() + "");
         transactionDAO.insertTransaction(UserInfo.getInstance().getCurrentUserId(), "Cash In", amount);
     }
 }

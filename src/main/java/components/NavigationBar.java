@@ -26,7 +26,7 @@ public class NavigationBar extends JPanel {
 
     public NavigationBar(Consumer<String> onButtonClick) {
         this.setOpaque(true);
-        this.setBackground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDBlue() : Color.WHITE);
+        this.setBackground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         this.setLayout(new BorderLayout());
         this.onButtonClick = onButtonClick;
 
@@ -190,7 +190,7 @@ public class NavigationBar extends JPanel {
 
     public void applyTheme() {
         // Update the container background based on theme
-        this.setBackground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDBlue() : Color.WHITE);
+        this.setBackground(ThemeManager.getInstance().isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         
         // Update the gradient panel colors based on theme (keep original gradients)
         if (ThemeManager.getInstance().isDarkMode()) {

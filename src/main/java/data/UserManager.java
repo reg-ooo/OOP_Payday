@@ -88,6 +88,7 @@ public class UserManager {
                 return true;
             }
 
+
             return false;
         } catch (Exception e) {
             System.out.println("Adding user failed: " + e.getMessage());

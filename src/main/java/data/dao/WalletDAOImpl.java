@@ -24,11 +24,12 @@ public class WalletDAOImpl implements WalletDAO {
     // Inserts a new wallet into the database
     @Override
     public boolean insert(Wallet wallet) {
-        String query = "INSERT INTO Wallets(userID, balance) VALUES (?, ?)";
+        String query = "INSERT INTO Wallets(walletID, userID, balance) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
             pstmt.setInt(1, wallet.getUserID());
-            pstmt.setDouble(2, wallet.getBalance());
+            pstmt.setInt(2, wallet.getUserID());
+            pstmt.setDouble(3, wallet.getBalance());
 
             pstmt.executeUpdate();
             return true;

@@ -36,8 +36,8 @@ public class UserInfo {
     }
 
     public void logoutUser() {
-        this.isLoggedIn = false;
         DatabaseProtectionProxy.getInstance().clearUserContext();
+        clearUserContext();
     }
 
     public double getBalance() {
@@ -52,6 +52,17 @@ public class UserInfo {
         }
 
         return 0.0;
+    }
+
+    private void clearUserContext() {
+        this.currentUserId = 0;
+        fullName = null;
+        phoneNumber = null;
+        email = null;
+        pin = null;
+        birthDate = null;
+        username = null;
+        isLoggedIn = false;
     }
 
     public int getCurrentUserId() {

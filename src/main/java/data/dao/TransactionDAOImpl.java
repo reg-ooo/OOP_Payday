@@ -104,7 +104,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         try (PreparedStatement pstmt = database.prepareStatement(query)) {
             pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());
             ResultSet rs = pstmt.executeQuery();
-
+            System.out.println(UserInfo.getInstance().getCurrentUserId());
             if (rs.next()) {
                 return mapResultSetToTransaction(rs);
             }
