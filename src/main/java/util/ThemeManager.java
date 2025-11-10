@@ -8,6 +8,7 @@ import launchPagePanels.NPanel;
 import launchPagePanels.TransactionPanel;
 import pages.rewards.RewardsPage;
 import pages.sendMoney.SendMoneyPage;
+import pages.sendMoney.SendMoneyPage3;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,8 +73,9 @@ public class ThemeManager {
     }
 
     public void applyTheme(Component comp) {
-        // Skip QRPage and its children from theme changes
-        if (comp.getClass().getName().contains("QRPage")) {
+        // Skip QRPage, LoginPage, RegisterPage and their children from theme changes
+        String className = comp.getClass().getName();
+        if (className.contains("QRPage") || className.contains("LoginPage") || className.contains("RegisterPage")) {
             return;
         }
 
@@ -110,6 +112,13 @@ public class ThemeManager {
             }
         }
         else if(comp instanceof SendMoneyPage smp){
+            if(isDarkMode){
+                smp.setBackground(darkModeBlue);
+            }else{
+                smp.setBackground(white);
+            }
+        }
+        else if(comp instanceof SendMoneyPage3 smp) {
             if(isDarkMode){
                 smp.setBackground(darkModeBlue);
             }else{

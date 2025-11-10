@@ -188,12 +188,18 @@ public class MainFrame extends JFrame {
     // --- END Utility methods ---
 
     private void handleNavBarClick(String result) {
+        System.out.println("DEBUG: handleNavBarClick received: " + result);
         prevCard = currentCard;
         currentCard = result;
 
         switch (result) {
-            case "Launch" -> slideContentTransition("Launch", -1);
+            case "Launch" -> {
+                System.out.println("DEBUG: Switching to Launch with animation");
+                slideContentTransition("Launch", -1);
+            }
             case "Profile" -> {
+                System.out.println("DEBUG: Switching to Profile with animation");
+                ProfilePage.getInstance().loadComponents();
                 slideContentTransition("Profile", 1);
             }
         }

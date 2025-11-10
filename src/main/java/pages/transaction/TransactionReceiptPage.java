@@ -27,7 +27,7 @@ public class TransactionReceiptPage extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(themeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkModeBlue() : Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         add(createReceiptPanel(), BorderLayout.CENTER);

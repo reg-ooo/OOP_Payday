@@ -226,22 +226,24 @@ public class PayBills extends JPanel {
         headerPanel.setBackground(themeManager.getWhite());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
 
-        // Back button
-        JButton backButton = new JButton("Back");
-        backButton.setFont(fontLoader.loadFont(Font.BOLD, 19f, "Quicksand-Bold"));
-        backButton.setForeground(themeManager.getPBlue());
-        backButton.setBackground(themeManager.getWhite());
-        backButton.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-        backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        backButton.setOpaque(false);
-        backButton.addActionListener(e -> onButtonClick.accept("Launch"));
+        // Back label (matching CashIn style)
+        JLabel backLabel = new JLabel("Back");
+        backLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
+        backLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDeepBlue());
+        backLabel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        backLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                onButtonClick.accept("Launch");
+            }
+        });
 
         // Title
         JLabel titleLabel = new JLabel("Pay Bills", SwingConstants.CENTER);
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 30f, "Quicksand-Bold"));
-        titleLabel.setForeground(themeManager.getDBlue());
+        titleLabel.setForeground(ThemeManager.getDBlue());
 
-        headerPanel.add(backButton, BorderLayout.WEST);
+        headerPanel.add(backLabel, BorderLayout.WEST);
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
         return headerPanel;

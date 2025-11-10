@@ -4,7 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION" />
+    <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Factory/receipt/TransactionReceiptFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Factory/receipt/TransactionReceiptFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/components/NavigationBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/components/NavigationBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutReceiptPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/cashOut/CashOutReceiptPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/pages/transaction/TransactionReceiptPage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/transaction/TransactionReceiptPage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/util/ThemeManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/util/ThemeManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/receipt/TransactionReceiptFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/receipt/TransactionReceiptFactory$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/Factory/receipt/TransactionReceiptFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Factory/receipt/TransactionReceiptFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/components/NavigationBar.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/components/NavigationBar.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/ProfilePage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/ProfilePage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutReceiptPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/cashOut/CashOutReceiptPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/pages/transaction/TransactionReceiptPage.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/pages/transaction/TransactionReceiptPage.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/util/ThemeManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/util/ThemeManager.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +36,13 @@
         <option value="Interface" />
         <option value="Class" />
       </list>
+    </option>
+  </component>
+  <component name="Git.Pull.Settings">
+    <option name="OPTIONS">
+      <set>
+        <option value="REBASE" />
+      </set>
     </option>
   </component>
   <component name="Git.Settings">
@@ -40,7 +67,7 @@
   }
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -154,6 +181,7 @@
       <workItem from="1762747081272" duration="342000" />
       <workItem from="1762766987206" duration="5415000" />
       <workItem from="1762788582245" duration="365000" />
+      <workItem from="1762788972778" duration="3136000" />
     </task>
     <task id="LOCAL-00001" summary="branch test">
       <option name="closed" value="true" />
@@ -187,7 +215,23 @@
       <option name="project" value="LOCAL" />
       <updated>1762078384683</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="PUSHED NEW VERSION">
+      <option name="closed" value="true" />
+      <created>1762789135685</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1762789135685</updated>
+    </task>
+    <task id="LOCAL-00006" summary="PUSHED NEW VERSION">
+      <option name="closed" value="true" />
+      <created>1762789147252</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1762789147252</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -209,6 +253,7 @@
     <MESSAGE value="files" />
     <MESSAGE value="dao complete" />
     <MESSAGE value="NEW VERSION&#10;ERROR HANDLING&#10;MPIN&#10;5 NEW DIALOG PANELS" />
-    <option name="LAST_COMMIT_MESSAGE" value="NEW VERSION&#10;ERROR HANDLING&#10;MPIN&#10;5 NEW DIALOG PANELS" />
+    <MESSAGE value="PUSHED NEW VERSION" />
+    <option name="LAST_COMMIT_MESSAGE" value="PUSHED NEW VERSION" />
   </component>
 </project>
