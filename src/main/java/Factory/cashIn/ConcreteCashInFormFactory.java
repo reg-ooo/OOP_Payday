@@ -91,7 +91,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         button.setPreferredSize(new Dimension(140, 140));
         button.setMinimumSize(new Dimension(140, 140));
         button.setMaximumSize(new Dimension(140, 140));
-        button.setBackground(themeManager.getWhite());
+        button.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -114,7 +114,9 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
             @Override
             public void mouseEntered(MouseEvent e) { button.setBackground(themeManager.getGradientLBlue()); }
             @Override
-            public void mouseExited(MouseEvent e) { button.setBackground(themeManager.getWhite()); }
+            public void mouseExited(MouseEvent e) { 
+                button.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite()); 
+            }
         });
         button.addActionListener(e -> onButtonClick.accept(nextKeyPrefix + ":" + name));
         return button;
@@ -129,7 +131,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         button.setPreferredSize(new Dimension(120, 120));
         button.setMinimumSize(new Dimension(120, 120));
         button.setMaximumSize(new Dimension(120, 120));
-        button.setBackground(themeManager.getWhite());
+        button.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -153,7 +155,9 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
             @Override
             public void mouseEntered(MouseEvent e) { button.setBackground(themeManager.getGradientLBlue()); }
             @Override
-            public void mouseExited(MouseEvent e) { button.setBackground(themeManager.getWhite()); }
+            public void mouseExited(MouseEvent e) { 
+                button.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite()); 
+            }
         });
         button.addActionListener(e -> onButtonClick.accept(nextKeyPrefix + ":" + name));
         return button;
@@ -214,7 +218,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
     public JPanel createBankInfoPanel(JLabel imageLabel, JLabel nameLabel) {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(themeManager.getWhite());
+        infoPanel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         infoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 180));
         infoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -223,7 +227,7 @@ public class ConcreteCashInFormFactory implements CashInFormFactory {
         imagePlaceholder.setMinimumSize(new Dimension(100, 100));
         imagePlaceholder.setMaximumSize(new Dimension(100, 100));
         imagePlaceholder.setBorder(BorderFactory.createLineBorder(themeManager.getDeepBlue(), 3, true));
-        imagePlaceholder.setBackground(themeManager.getWhite());
+        imagePlaceholder.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         imagePlaceholder.setLayout(new BorderLayout());
         imagePlaceholder.setAlignmentX(Component.CENTER_ALIGNMENT);
 

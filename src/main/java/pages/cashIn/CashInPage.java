@@ -25,7 +25,7 @@ public class CashInPage extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(ThemeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // 1. Header (uses factory for back button and panel)
@@ -61,11 +61,11 @@ public class CashInPage extends JPanel {
 
         // Final Assembly
         JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBackground(ThemeManager.getWhite());
+        centerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
 
         JPanel topSection = new JPanel();
         topSection.setLayout(new BoxLayout(topSection, BoxLayout.Y_AXIS));
-        topSection.setBackground(ThemeManager.getWhite());
+        topSection.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : ThemeManager.getWhite());
         topSection.add(titlePanel);
         topSection.add(contentPanel);
         topSection.add(Box.createVerticalStrut(40)); // Space after buttons
@@ -76,6 +76,14 @@ public class CashInPage extends JPanel {
 
         add(headerPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
+    }
+    
+    public void applyTheme(boolean isDarkMode) {
+        // Refresh the entire UI to apply dark mode
+        removeAll();
+        setupUI();
+        revalidate();
+        repaint();
     }
 
     // REMOVED: createCashInOption method (moved to factory)

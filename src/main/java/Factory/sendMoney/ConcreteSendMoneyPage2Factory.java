@@ -19,7 +19,7 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
                                           Consumer<String> onConfirm, Consumer<String> onBack) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(themeManager.getWhite());
+        panel.setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // Header with back button
@@ -30,7 +30,7 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
         // ADD CONFIRM PAYMENT TITLE HERE
         JLabel confirmTitle = new JLabel("Confirm Payment");
         confirmTitle.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
-        confirmTitle.setForeground(themeManager.getDBlue());
+        confirmTitle.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         confirmTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(confirmTitle);
         panel.add(Box.createVerticalStrut(30)); // Space after title
@@ -65,7 +65,7 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
         // Instruction
         JLabel instruction = new JLabel("Check details before proceeding with payment");
         instruction.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        instruction.setForeground(themeManager.getDSBlue());
+        instruction.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         instruction.setAlignmentX(Component.CENTER_ALIGNMENT);
         contentPanel.add(instruction);
         contentPanel.add(Box.createVerticalStrut(25));
@@ -94,12 +94,12 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
 
         JLabel title = new JLabel("Pay To");
         title.setFont(fontLoader.loadFont(Font.BOLD, 17f, "Quicksand-Bold"));
-        title.setForeground(themeManager.getDSBlue());
+        title.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel method = new JLabel(recipientName);
         method.setFont(fontLoader.loadFont(Font.BOLD, 18f, "Quicksand-Bold"));
-        method.setForeground(themeManager.getDBlue());
+        method.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         method.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         textPanel.add(title);
@@ -138,13 +138,13 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
 
         JLabel title = new JLabel("Available Balance");
         title.setFont(fontLoader.loadFont(Font.BOLD, 17f, "Quicksand-Bold"));
-        title.setForeground(themeManager.getDSBlue());
+        title.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // Current balance
         JLabel currentBalanceLabel = new JLabel("PHP " + currentBalance);
         currentBalanceLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        currentBalanceLabel.setForeground(themeManager.getDBlue());
+        currentBalanceLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         currentBalanceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         textPanel.add(title);
@@ -165,7 +165,7 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
                     projectedBalanceLabel.setForeground(Color.RED);
                     projectedBalanceLabel.setText("→ PHP " + String.format("%,.2f", projectedBalance) + " (Insufficient)");
                 } else {
-                    projectedBalanceLabel.setForeground(themeManager.getDSBlue());
+                    projectedBalanceLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
                 }
 
                 projectedBalanceLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -202,12 +202,12 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
 
         JLabel title = new JLabel("Amount");
         title.setFont(fontLoader.loadFont(Font.BOLD, 17f, "Quicksand-Bold"));
-        title.setForeground(themeManager.getDSBlue());
+        title.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel amountLabel = new JLabel("PHP " + amount);
         amountLabel.setFont(fontLoader.loadFont(Font.BOLD, 22f, "Quicksand-Bold"));
-        amountLabel.setForeground(themeManager.getDBlue());
+        amountLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         amountLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         textPanel.add(title);
@@ -236,11 +236,11 @@ public class ConcreteSendMoneyPage2Factory extends ConcreteSendMoneyBaseFactory 
 
         JLabel title = new JLabel("Total");
         title.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        title.setForeground(themeManager.getDBlue());
+        title.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         JLabel totalLabel = new JLabel("PHP " + amount);
         totalLabel.setFont(fontLoader.loadFont(Font.BOLD, 16f, "Quicksand-Bold"));
-        totalLabel.setForeground(themeManager.getDBlue());
+        totalLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
 
         panel.add(title, BorderLayout.WEST);
         panel.add(totalLabel, BorderLayout.EAST);

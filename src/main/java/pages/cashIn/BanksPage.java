@@ -27,17 +27,17 @@ public class BanksPage extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(themeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         // --- Header: Back Button (Manual, matching StoresPage style) ---
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(themeManager.getWhite());
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite());
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
 
         JLabel backLabel = new JLabel("Back");
         backLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        backLabel.setForeground(themeManager.getDeepBlue());
+        backLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDeepBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
             @Override
@@ -50,20 +50,20 @@ public class BanksPage extends JPanel {
         // --- Title Row (Manual, matching StoresPage style) ---
         JLabel titleLabel = new JLabel("Banks");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getDBlue());
+        titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
 
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("bankTransfer.png", 50);
         JLabel iconLabel = new JLabel(titleIcon);
 
         JPanel titleRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        titleRow.setBackground(themeManager.getWhite());
+        titleRow.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite());
         titleRow.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
         titleRow.add(titleLabel);
         titleRow.add(iconLabel);
 
         // --- Content: Bank Buttons (USING FACTORY's createSmallerSelectionButton) ---
         JPanel contentPanel = new JPanel(new GridBagLayout());
-        contentPanel.setBackground(themeManager.getWhite());
+        contentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.fill = GridBagConstraints.NONE;
@@ -92,22 +92,30 @@ public class BanksPage extends JPanel {
 
         // --- Footer: Step Label (Manual, matching StoresPage style) ---
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        footerPanel.setBackground(themeManager.getWhite());
+        footerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite());
         footerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 10, 0));
 
         JLabel stepLabel = new JLabel("Step 2 of 4");
         stepLabel.setFont(fontLoader.loadFont(Font.BOLD, 14f, "Quicksand-Bold"));
-        stepLabel.setForeground(themeManager.getDeepBlue());
+        stepLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDeepBlue());
         footerPanel.add(stepLabel);
 
         // --- Assemble Page ---
         JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBackground(themeManager.getWhite());
+        centerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : themeManager.getWhite());
         centerPanel.add(titleRow, BorderLayout.NORTH);
         centerPanel.add(contentPanel, BorderLayout.CENTER);
         centerPanel.add(footerPanel, BorderLayout.SOUTH);
 
         add(headerPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
+    }
+    
+    public void applyTheme(boolean isDarkMode) {
+        // Refresh the entire UI to apply dark mode
+        removeAll();
+        setupUI();
+        revalidate();
+        repaint();
     }
 }

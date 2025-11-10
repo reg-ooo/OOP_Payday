@@ -56,7 +56,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         } else {
             label.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Regular"));
         }
-        label.setForeground(themeManager.getDBlue());
+        label.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         return label;
     }
 
@@ -64,7 +64,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
     public JLabel createStepLabel(String stepText) {
         JLabel label = new JLabel(stepText);
         label.setFont(fontLoader.loadFont(Font.PLAIN, 12f, "Quicksand-Regular"));
-        label.setForeground(themeManager.getDSBlue());
+        label.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         return label;
     }
 
@@ -88,7 +88,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
     public JLabel createTitleLabel() {
         JLabel titleLabel = new JLabel("Send Money");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 26f, "Quicksand-Bold"));
-        titleLabel.setForeground(themeManager.getDBlue());
+        titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDBlue());
         return titleLabel;
     }
 
@@ -96,7 +96,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
     public JLabel createBalanceLabel() {
         JLabel balanceLabel = new JLabel("Available balance: PHP 0.00");
         balanceLabel.setFont(fontLoader.loadFont(Font.BOLD, 13f, "Quicksand-Regular"));
-        balanceLabel.setForeground(themeManager.getDSBlue());
+        balanceLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : themeManager.getDSBlue());
         return balanceLabel;
     }
 

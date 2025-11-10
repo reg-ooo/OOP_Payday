@@ -190,7 +190,7 @@ public class TransactionPanel extends JPanel{
     public void applyTheme(boolean isDarkMode) {
         ThemeManager.getInstance();
         // Background of the whole panel
-        this.setBackground(isDarkMode ? Color.BLACK : ThemeManager.getWhite());
+        this.setBackground(isDarkMode ? ThemeManager.getBlack() : ThemeManager.getWhite());
 
         // Card backgrounds
         Color lightCard = ThemeManager.getSBlue();   // sky blue
@@ -198,7 +198,7 @@ public class TransactionPanel extends JPanel{
         transactionRoundedPanel.setBackground(isDarkMode ? darkCard : lightCard);
 
         // Header labels
-        transactionLabel.setForeground(isDarkMode ? ThemeManager.getWhite() : ThemeManager.getDBlue());
+        transactionLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
         seeAllLabel.setForeground(isDarkMode ? ThemeManager.getNBlue() : ThemeManager.getPBlue());
 
         // Update children inside content panel
@@ -220,7 +220,7 @@ public class TransactionPanel extends JPanel{
                         }
                         // Description labels
                         else if (lbl.getForeground().equals(ThemeManager.getBlack())) {
-                            lbl.setForeground(isDarkMode ? ThemeManager.getWhite() : ThemeManager.getBlack());
+                            lbl.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getBlack());
                         }
                         // Amount stays green/red, no change
                     }

@@ -57,7 +57,7 @@ public class StoresPage extends JPanel {
         // Using manual creation here for the title, consistent with your previous structure.
         JLabel titleLabel = new JLabel("Stores");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getDBlue());
+        titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
 
         ImageIcon titleIcon = imageLoader.loadAndScaleHighQuality("Stores.png", 60);
         JLabel iconLabel = new JLabel(titleIcon);

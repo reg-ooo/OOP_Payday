@@ -83,7 +83,7 @@ public class RewardsPage extends JPanel {
 
     private void setupUI() {
         this.setLayout(new BorderLayout());
-        this.setBackground(new Color(248, 250, 252));
+        this.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
         this.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0)); // Remove outer padding for scroll pane
 
         // ===== HEADER SECTION =====
@@ -98,27 +98,27 @@ public class RewardsPage extends JPanel {
     private JScrollPane createScrollableContent() {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
-        contentPanel.setBackground(new Color(248, 250, 252));
+        contentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 25, 25));
 
         // Title - centered
         JLabel titleLabel = new JLabel("Available Rewards");
         titleLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 32.0F, "Quicksand-Bold"));
-        titleLabel.setForeground(ThemeManager.getDBlue());
+        titleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
         // Subtitle - centered
         JLabel subtitleLabel = new JLabel("Redeem your points for exciting rewards");
         subtitleLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 16.0F, "Quicksand-Regular"));
-        subtitleLabel.setForeground(ThemeManager.getDGray());
+        subtitleLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDGray());
         subtitleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         subtitleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
 
         // SIMPLIFIED: Create centered container for rewards
         JPanel centeredContainer = new JPanel();
         centeredContainer.setLayout(new BoxLayout(centeredContainer, BoxLayout.Y_AXIS));
-        centeredContainer.setBackground(new Color(248, 250, 252));
+        centeredContainer.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
         centeredContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Add rewards directly to centered container
@@ -143,7 +143,7 @@ public class RewardsPage extends JPanel {
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.getViewport().setBackground(new Color(248, 250, 252));
+        scrollPane.getViewport().setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         scrollPane.setWheelScrollingEnabled(true);
 
@@ -152,16 +152,16 @@ public class RewardsPage extends JPanel {
 
     private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(new Color(248, 250, 252));
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 25, 15, 25)); // Header padding
 
         // Back button
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(new Color(248, 250, 252));
+        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
 
         JLabel backLabel = new JLabel("‹ Back");
         backLabel.setFont(FontLoader.getInstance().loadFont(Font.BOLD, 18.0F, "Quicksand-Bold"));
-        backLabel.setForeground(ThemeManager.getDBlue());
+        backLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
         backLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         backLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -172,7 +172,7 @@ public class RewardsPage extends JPanel {
 
         // Points display with modern design
         JPanel pointsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
-        pointsPanel.setBackground(new Color(248, 250, 252));
+        pointsPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : new Color(248, 250, 252));
 
         int currentPoints = UserInfo.getInstance().isLoggedIn() ? getCurrentPoints() : 0;
 
@@ -396,5 +396,10 @@ public class RewardsPage extends JPanel {
         updatePointsDisplay();
         this.revalidate();
         this.repaint();
+    }
+    
+    public void applyTheme(boolean isDarkMode) {
+        // Refresh the entire UI to apply dark mode
+        refreshUI();
     }
 }

@@ -22,6 +22,10 @@ public class SendMoneyPage extends JPanel {
     private JLabel balanceLabel;
     private JTextField amountField;
     private JTextField phoneField;
+    private JLabel titleLabel;
+    private JLabel sendToLabel;
+    private JLabel amountLabel;
+    private JLabel stepLabel;
 
     public static SendMoneyPage getInstance() {
         return instance;
@@ -56,13 +60,13 @@ public class SendMoneyPage extends JPanel {
     private void setupUI() {
         // Create ALL components through factory
         JLabel backLabel = factory.createBackLabel(() -> onButtonClick.accept("Launch"));
-        JLabel titleLabel = factory.createTitleLabel();
-        JLabel sendToLabel = factory.createSectionLabel("Send to", true);
+        titleLabel = factory.createTitleLabel();
+        sendToLabel = factory.createSectionLabel("Send to", true);
         phoneField = factory.createPhoneNumberField(); // Store as instance variable
-        JLabel amountLabel = factory.createSectionLabel("Amount", true);
+        amountLabel = factory.createSectionLabel("Amount", true);
         amountField = factory.createAmountField(); // Store as instance variable
         balanceLabel = factory.createBalanceLabel();
-        JLabel stepLabel = factory.createStepLabel("Step 1 of 2");
+        stepLabel = factory.createStepLabel("Step 1 of 2");
 
         // Create next button panel through factory
         JPanel buttonPanel = factory.createNextButtonPanel(
@@ -78,7 +82,7 @@ public class SendMoneyPage extends JPanel {
 
         // Setup main panel
         setLayout(new BorderLayout());
-        setBackground(themeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(40, 30, 40, 30));
 
         add(headerPanel, BorderLayout.NORTH);
@@ -227,5 +231,51 @@ public class SendMoneyPage extends JPanel {
     private String getEnteredAmount() {
         String text = amountField.getText().replace("₱ ", "").trim();
         return text.equals("0.00") ? "" : text;
+    }
+    
+    public void applyTheme(boolean isDarkMode) {
+        // Update background
+        setBackground(isDarkMode ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        
+        // Update all labels
+        if (titleLabel != null) {
+            titleLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
+        }
+        if (sendToLabel != null) {
+            sendToLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
+        }
+        if (amountLabel != null) {
+            amountLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDBlue());
+        }
+        if (balanceLabel != null) {
+            balanceLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDSBlue());
+        }
+        if (stepLabel != null) {
+            stepLabel.setForeground(isDarkMode ? Color.WHITE : ThemeManager.getDSBlue());
+        }
+        
+        // Recursively apply to all child components
+        for (Component comp : getComponents()) {
+            if (comp instanceof Container) {
+                applyThemeToContainer((Container) comp, isDarkMode);
+            }
+        }
+        
+        revalidate();
+        repaint();
+    }
+    
+    private void applyThemeToContainer(Container container, boolean isDarkMode) {
+        for (Component comp : container.getComponents()) {
+            if (comp instanceof JPanel) {
+                JPanel panel = (JPanel) comp;
+                if (panel.getBackground().equals(Color.WHITE) || panel.getBackground().equals(ThemeManager.getBlack())) {
+                    panel.setBackground(isDarkMode ? ThemeManager.getBlack() : Color.WHITE);
+                }
+            }
+            if (comp instanceof Container) {
+                applyThemeToContainer((Container) comp, isDarkMode);
+            }
+        }
     }
 }

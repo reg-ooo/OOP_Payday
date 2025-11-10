@@ -54,7 +54,7 @@ public class SendMoneyPage2 extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(themeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? themeManager.getBlack() : themeManager.getWhite());
 
         updateBalanceFromUserInfo();
 
@@ -140,5 +140,42 @@ public class SendMoneyPage2 extends JPanel {
         setupUI();
         revalidate();
         repaint();
+    }
+    
+    public void applyTheme(boolean isDarkMode) {
+        // Update background
+        setBackground(isDarkMode ? ThemeManager.getBlack() : ThemeManager.getWhite());
+        
+        // Recursively apply to all child components
+        for (Component comp : getComponents()) {
+            if (comp instanceof Container) {
+                applyThemeToContainer((Container) comp, isDarkMode);
+            }
+        }
+        
+        revalidate();
+        repaint();
+    }
+    
+    private void applyThemeToContainer(Container container, boolean isDarkMode) {
+        for (Component comp : container.getComponents()) {
+            if (comp instanceof JPanel) {
+                JPanel panel = (JPanel) comp;
+                if (panel.getBackground().equals(Color.WHITE) || panel.getBackground().equals(ThemeManager.getBlack())) {
+                    panel.setBackground(isDarkMode ? ThemeManager.getBlack() : Color.WHITE);
+                }
+            }
+            if (comp instanceof JLabel) {
+                JLabel label = (JLabel) comp;
+                Color currentColor = label.getForeground();
+                // Only change non-blue colors (neutral colors)
+                if (!currentColor.equals(ThemeManager.getPBlue()) && !currentColor.equals(Color.RED)) {
+                    label.setForeground(isDarkMode ? Color.WHITE : currentColor);
+                }
+            }
+            if (comp instanceof Container) {
+                applyThemeToContainer((Container) comp, isDarkMode);
+            }
+        }
     }
 }

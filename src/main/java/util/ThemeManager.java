@@ -73,7 +73,21 @@ public class ThemeManager {
             return;
         }
         
-        MainFrame.container.setBackground(isDarkMode ? Color.BLACK : Color.WHITE);
+        MainFrame.container.setBackground(isDarkMode ? black : white);
+
+        // Check for pages with custom applyTheme methods
+        String className = comp.getClass().getSimpleName();
+        if (className.equals("SendMoneyPage") || className.equals("SendMoneyPage2") || 
+            className.equals("RewardsPage") || className.equals("Rewards2") || className.equals("Rewards3") ||
+            className.equals("CashInPage") || className.equals("BanksPage") || className.equals("BanksPage2") ||
+            className.equals("StoresPage") || className.equals("StoresPage2")) {
+            try {
+                comp.getClass().getMethod("applyTheme", boolean.class).invoke(comp, isDarkMode);
+                return; // Don't recurse, the page handles its own children
+            } catch (Exception e) {
+                // If method doesn't exist, continue with normal processing
+            }
+        }
 
         if (comp instanceof GradientPanel gp) {
             // Gradient panels (backgrounds)
@@ -87,36 +101,36 @@ public class ThemeManager {
             // NavigationBar (uses GradientPanel inside)
             if (isDarkMode) {
                 nb.navBarPanel.setGradientColors(getDarkStartColor(), getDarkEndColor());
-                nb.navBarPanel.setBackground(Color.black);
+                nb.navBarPanel.setBackground(black);
             } else {
                 nb.navBarPanel.setGradientColors(lightStartColor, lightEndColor);
-                nb.navBarPanel.setBackground(Color.white);
+                nb.navBarPanel.setBackground(white);
             }
         }
         else if (comp instanceof NPanel np) {
-            np.setBackground(isDarkMode ? Color.BLACK : Color.WHITE);
+            np.setBackground(isDarkMode ? black : white);
         }
         else if (comp instanceof CenterPanel cp) {
             // CenterPanel background only
-            cp.setBackground(isDarkMode ? Color.BLACK : Color.WHITE);
-            cp.centerPanel.setBackground(isDarkMode ? Color.BLACK : Color.WHITE);
+            cp.setBackground(isDarkMode ? black : white);
+            cp.centerPanel.setBackground(isDarkMode ? black : white);
         }
         else if (comp instanceof TransactionPanel tp) {
             tp.applyTheme(isDarkMode);
         }
         else if (comp instanceof LaunchPage lp) {
             if (isDarkMode) {
-                lp.setBackground(Color.black);
+                lp.setBackground(black);
             } else {
-                lp.setBackground(Color.white);
+                lp.setBackground(white);
             }
         }
         else if (comp instanceof JPanel jp) {
-            // Generic JPanel handling - change white backgrounds to dark gray in dark mode
-            if (isDarkMode && jp.getBackground().equals(Color.WHITE)) {
-                jp.setBackground(getDarkGray());
-            } else if (!isDarkMode && jp.getBackground().equals(getDarkGray())) {
-                jp.setBackground(Color.WHITE);
+            // Generic JPanel handling - change white backgrounds to black in dark mode
+            if (isDarkMode && jp.getBackground().equals(white)) {
+                jp.setBackground(black);
+            } else if (!isDarkMode && jp.getBackground().equals(black)) {
+                jp.setBackground(white);
             }
         }
 

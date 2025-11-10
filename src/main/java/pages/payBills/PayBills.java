@@ -184,16 +184,6 @@ public class PayBills extends JPanel {
                 // Navigate to PayBills2 with provider and category info
                 onButtonClick.accept("PayBills2:" + category + ":" + provider);
             }
-
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent e) {
-                rowPanel.setBackground(new Color(248, 248, 248));
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent e) {
-                rowPanel.setBackground(themeManager.getWhite());
-            }
         });
 
         rowPanel.add(leftPanel, BorderLayout.CENTER);
