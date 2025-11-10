@@ -240,8 +240,8 @@ public class BanksPage2 extends JPanel {
      */
     private JPanel setupAccountField(JTextField field) {
         final String placeholder = defaultAccountPlaceholder;
-        Color normalBorder = themeManager.getGray();
-        Color activeBorder = themeManager.getDBlue();
+        Color normalBorder = new Color(0x64748B); // #64748B (inactive)
+        Color activeBorder = new Color(0x60A5FA); // #60A5FA (active)
 
         JPanel panel = factory.createStyledInputFieldPanel(field, placeholder);
 
@@ -254,7 +254,7 @@ public class BanksPage2 extends JPanel {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 if (field.getText().equals(placeholder)) {
                     field.setText("");
-                    field.setForeground(themeManager.getDBlue());
+                    field.setForeground(getTextFieldColor());
                     field.setHorizontalAlignment(JTextField.LEFT);
                 }
                 field.setBorder(BorderFactory.createCompoundBorder(
@@ -287,7 +287,7 @@ public class BanksPage2 extends JPanel {
                     field.setForeground(themeManager.getLightGray());
                 } else {
                     field.setHorizontalAlignment(JTextField.LEFT);
-                    field.setForeground(themeManager.getDBlue());
+                    field.setForeground(getTextFieldColor());
                 }
             }
         });
@@ -299,8 +299,8 @@ public class BanksPage2 extends JPanel {
      */
     private JPanel setupAmountField(JTextField field) {
         final String placeholder = defaultAmountPlaceholder;
-        Color normalBorder = themeManager.getGray();
-        Color activeBorder = themeManager.getDBlue();
+        Color normalBorder = new Color(0x64748B); // #64748B (inactive)
+        Color activeBorder = new Color(0x60A5FA); // #60A5FA (active)
 
         JPanel panel = factory.createStyledInputFieldPanel(field, "₱ " + placeholder);
 
@@ -367,7 +367,7 @@ public class BanksPage2 extends JPanel {
                 String fullPlaceholder = "₱ " + placeholder;
                 if (currentText.equals(fullPlaceholder)) {
                     field.setText("₱ ");
-                    field.setForeground(themeManager.getDBlue());
+                    field.setForeground(getTextFieldColor());
                     field.setHorizontalAlignment(JTextField.LEFT);
                     field.setCaretPosition(2);
                 }
@@ -387,6 +387,7 @@ public class BanksPage2 extends JPanel {
                     try {
                         double value = Double.parseDouble(currentText);
                         field.setText("₱ " + String.format("%.2f", value));
+                        field.setForeground(getTextFieldColor());
                     } catch (NumberFormatException e) {}
                 }
                 field.setBorder(BorderFactory.createCompoundBorder(
@@ -407,7 +408,7 @@ public class BanksPage2 extends JPanel {
                     field.setForeground(themeManager.getLightGray());
                 } else {
                     field.setHorizontalAlignment(JTextField.LEFT);
-                    field.setForeground(themeManager.getDBlue());
+                    field.setForeground(getTextFieldColor());
                 }
             }
         });
@@ -492,5 +493,10 @@ public class BanksPage2 extends JPanel {
 
         buttonPanel.add(nextButton);
         return buttonPanel;
+    }
+
+    // Helper method to get the appropriate text field color based on theme
+    private Color getTextFieldColor() {
+        return themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getDBlue();
     }
 }
