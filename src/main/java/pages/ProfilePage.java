@@ -352,7 +352,7 @@ public class ProfilePage extends JPanel {
             @Override
             public void mouseEntered(MouseEvent e) {
                 if (!text.equals("Sign Out")) {
-                    label.setForeground(themeManager.getPBlue());
+                    label.setForeground(themeManager.getWhite());
                     iconLabel.setIcon(hoverIcon);
                 } else {
                     label.setForeground(themeManager.getRed());
@@ -362,7 +362,7 @@ public class ProfilePage extends JPanel {
 
             @Override
             public void mouseExited(MouseEvent e) {
-                label.setForeground(themeManager.getDBlue());
+                label.setForeground(themeManager.getWhite());
                 iconLabel.setIcon(normalIcon);
             }
         });
