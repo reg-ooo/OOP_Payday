@@ -231,6 +231,7 @@ public class PayBills extends JPanel {
         backButton.setBackground(themeManager.getWhite());
         backButton.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         backButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        backButton.setOpaque(false);
         backButton.addActionListener(e -> onButtonClick.accept("Launch"));
 
         // Title
@@ -242,6 +243,38 @@ public class PayBills extends JPanel {
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
         return headerPanel;
+    }
+    
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+        if (visible) {
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            // Skip labels inside CategoryNavBar (category icons should keep their original colors)
+            Container parent = jl.getParent();
+            while (parent != null) {
+                if (parent instanceof CategoryNavBar) {
+                    return; // Don't change labels inside CategoryNavBar
+                }
+                parent = parent.getParent();
+            }
+            
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
+        }
     }
 
     private void handleCategorySelect(String category) {

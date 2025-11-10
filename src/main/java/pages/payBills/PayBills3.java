@@ -381,6 +381,37 @@ public class PayBills3 extends JPanel {
         super.setVisible(visible);
         if (visible) {
             refreshBalance();
+            applyThemeRecursive(this);
+        }
+    }
+
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            // Check if this label is inside a GradientPanel
+            Container parent = jl.getParent();
+            boolean isInGradientPanel = false;
+            while (parent != null) {
+                if (parent instanceof GradientPanel) {
+                    isInGradientPanel = true;
+                    break;
+                }
+                parent = parent.getParent();
+            }
+
+            // If inside GradientPanel, keep white. Otherwise, apply theme.
+            if (!isInGradientPanel) {
+                if (ThemeManager.getInstance().isDarkMode()) {
+                    jl.setForeground(Color.WHITE);
+                } else {
+                    jl.setForeground(ThemeManager.getDeepBlue());
+                }
+            }
+        }
+
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
         }
     }
 
