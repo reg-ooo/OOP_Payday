@@ -73,8 +73,9 @@ public class ThemeManager {
     }
 
     public void applyTheme(Component comp) {
-        // Skip QRPage and its children from theme changes
-        if (comp.getClass().getName().contains("QRPage")) {
+        // Skip QRPage, LoginPage, RegisterPage and their children from theme changes
+        String className = comp.getClass().getName();
+        if (className.contains("QRPage") || className.contains("LoginPage") || className.contains("RegisterPage")) {
             return;
         }
 

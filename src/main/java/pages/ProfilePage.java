@@ -27,7 +27,14 @@ public class ProfilePage extends JPanel {
     private final JLabel phoneValueLabel = new JLabel();
     private static ProfilePage instance;
     private final JLabel verifiedValueLabel = new JLabel();
-    private final JLabel verifiedIconLabel = new JLabel(); // Add this field
+    private final JLabel verifiedIconLabel = new JLabel();
+
+    // Add these references for theme exclusion
+    private final GradientPanel headerPanel;
+    private final JPanel initialsPanel;
+    private final JPanel initialsContainer;
+    private final JPanel headerContainer;
+    private final JPanel headerWrapper;
 
     public static ProfilePage getInstance() {
         return instance;
@@ -42,52 +49,56 @@ public class ProfilePage extends JPanel {
 
     private ProfilePage(Consumer<String> onButtonClick) {
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
 
         // ===== HEADER SECTION =====
-        JPanel headerWrapper = new JPanel();
+        headerWrapper = new JPanel(); // Initialize the field
         headerWrapper.setLayout(new BoxLayout(headerWrapper, BoxLayout.Y_AXIS));
         headerWrapper.setOpaque(false);
         headerWrapper.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Gradient panel
-        GradientPanel headerPanel = new GradientPanel(themeManager.getDvBlue(), themeManager.getVBlue(), 25);
+        headerPanel = new GradientPanel(themeManager.getDvBlue(), themeManager.getVBlue(), 25); // Initialize the field
         headerPanel.setLayout(new BorderLayout());
         headerPanel.setPreferredSize(new Dimension(340, 130));
         headerPanel.setMaximumSize(new Dimension(340, 130));
+        headerPanel.setOpaque(false);
 
         // "My Profile" label
         titleLabel = new JLabel("My Profile");
         titleLabel.setFont(fontLoader.loadFont(Font.BOLD, 20f, "Quicksand-Bold"));
-        titleLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : Color.WHITE);
+        titleLabel.setForeground(Color.WHITE); // Always white, not theme-dependent
         titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 0, 0));
+        titleLabel.setOpaque(false);
         headerPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Initials circle - OUTSIDE the gradient panel
+        // Initials circle
         initialsLabel = new JLabel();
         initialsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         initialsLabel.setHorizontalAlignment(SwingConstants.CENTER);
         initialsLabel.setVerticalAlignment(SwingConstants.CENTER);
-        initialsLabel.setOpaque(true);
-        initialsLabel.setBackground(themeManager.getPBlue());
-        initialsLabel.setForeground(Color.WHITE);
-        initialsLabel.setFont(fontLoader.loadFont(Font.BOLD, 32f, "Quicksand-Bold"));
+        initialsLabel.setOpaque(false);
+        initialsLabel.setBackground(themeManager.getPBlue()); // Always use the original blue
+        initialsLabel.setForeground(Color.WHITE); // Always white
+        initialsLabel.setFont(fontLoader.loadFont(Font.BOLD, 48f, "Quicksand-Bold")); // Increased from 3
 
         // Create circular initials panel
-        JPanel initialsPanel = createCircularInitialsPanel(initialsLabel, 120);
+        initialsPanel = createCircularInitialsPanel(initialsLabel, 120); // Initialize the field
+        initialsPanel.setOpaque(false);
 
         // Create a container for the initials that positions it to overlap
-        JPanel initialsContainer = new JPanel();
+        initialsContainer = new JPanel(); // Initialize the field
         initialsContainer.setLayout(new BoxLayout(initialsContainer, BoxLayout.Y_AXIS));
         initialsContainer.setOpaque(false);
-        initialsContainer.add(Box.createVerticalStrut(60)); // Position initials to overlap
+        initialsContainer.add(Box.createVerticalStrut(60));
         initialsContainer.add(initialsPanel);
 
-        // Combine gradient panel and initials container
-        JPanel headerContainer = new JPanel();
+        // Combine gradient panel and initials container with OverlayLayout
+        headerContainer = new JPanel(); // Initialize the field
         headerContainer.setLayout(new OverlayLayout(headerContainer));
         headerContainer.setOpaque(false);
         headerContainer.setPreferredSize(new Dimension(340, 180));
+        headerContainer.setBackground(new Color(0, 0, 0, 0));
 
         headerContainer.add(initialsContainer);
         headerContainer.add(headerPanel);
@@ -154,38 +165,57 @@ public class ProfilePage extends JPanel {
     }
 
     private void applyTheme() {
+        // Set main background
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
+
         themeManager.applyTheme(this);
         applyThemeRecursive(this);
-        
-        // Update circular panel background
-        initialsLabel.setBackground(themeManager.isDarkMode() ? 
-            new Color(0x1E293B) : themeManager.getPBlue());
-        
+
+        // DO NOT update circular panel background - keep original color
+        // initialsLabel.setBackground(themeManager.isDarkMode() ?
+        //         new Color(0x1E293B) : themeManager.getPBlue());
+
         // Update initials text color - always white
         initialsLabel.setForeground(Color.WHITE);
-        
-        // Update titleLabel color
-        titleLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : Color.WHITE);
-        
+
+        // DO NOT update titleLabel color - keep original white
+        // titleLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : Color.WHITE);
+
+        // Ensure header container remains transparent
+        Component[] components = getComponents();
+        for (Component comp : components) {
+            if (comp instanceof JPanel) {
+                comp.setBackground(getBackground());
+            }
+        }
+
         // Update infoPanel background color
         if (infoPanel != null) {
             infoPanel.setBackground(themeManager.isDarkMode() ? new Color(0x0F172A) : Color.WHITE);
         }
-        
+
         revalidate();
         repaint();
     }
 
     private void applyThemeRecursive(Component comp) {
+        // Skip the gradient header panel and its children
+        if (isHeaderComponent(comp)) {
+            return;
+        }
+
         if (comp instanceof JLabel jl) {
             // Skip the verified icon label and verified value label
             if (jl == verifiedIconLabel || jl == verifiedValueLabel) {
                 return;
             }
-            
+
+            // FIX: Add null check for text
+            String labelText = jl.getText();
+
             if (ThemeManager.getInstance().isDarkMode()) {
                 // For Sign Out row, use dark mode white
-                if (jl.getText().equals("Sign Out")) {
+                if (labelText != null && labelText.equals("Sign Out")) {
                     jl.setForeground(new Color(0xF8FAFC));
                 } else {
                     jl.setForeground(Color.WHITE);
@@ -194,7 +224,7 @@ public class ProfilePage extends JPanel {
                 // Restore original colors for light mode
                 if (jl == nameLabel) {
                     jl.setForeground(ThemeManager.getBlack());
-                } else if (jl.getText().equals("Sign Out")) {
+                } else if (labelText != null && labelText.equals("Sign Out")) {
                     jl.setForeground(ThemeManager.getDBlue());
                 } else {
                     jl.setForeground(ThemeManager.getDBlue());
@@ -208,8 +238,8 @@ public class ProfilePage extends JPanel {
                 roundedPanel.setBackground(Color.WHITE);
             }
         } else if (comp instanceof JPanel panel) {
-            // Set panel backgrounds for dark mode (except GradientPanel)
-            if (!(comp instanceof GradientPanel)) {
+            // Set panel backgrounds for dark mode (except GradientPanel and header components)
+            if (!(comp instanceof GradientPanel) && !isHeaderComponent(comp)) {
                 if (ThemeManager.getInstance().isDarkMode()) {
                     if (panel.isOpaque()) {
                         panel.setBackground(ThemeManager.getBlack());
@@ -221,12 +251,34 @@ public class ProfilePage extends JPanel {
                 }
             }
         }
-        
+
         if (comp instanceof Container container) {
             for (Component child : container.getComponents()) {
                 applyThemeRecursive(child);
             }
         }
+    }
+
+    // Helper method to identify header components that should not be affected by dark mode
+    private boolean isHeaderComponent(Component comp) {
+        if (comp == headerPanel || comp == initialsLabel || comp == titleLabel ||
+                comp == initialsPanel || comp == initialsContainer || comp == headerContainer ||
+                comp == headerWrapper) {
+            return true;
+        }
+
+        // Check if component is part of the header hierarchy
+        Component parent = comp.getParent();
+        while (parent != null) {
+            if (parent == headerPanel || parent == initialsLabel || parent == titleLabel ||
+                    parent == initialsPanel || parent == initialsContainer || parent == headerContainer ||
+                    parent == headerWrapper) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+
+        return false;
     }
 
     private JPanel createCircularInitialsPanel(JLabel label, int size) {
@@ -331,33 +383,21 @@ public class ProfilePage extends JPanel {
         label.setFont(fontLoader.loadFont(Font.PLAIN, 14f, "Quicksand-Bold"));
         label.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDBlue());
 
-        // Determine image keys for normal and hover states
-        String normalKey = switch (command) {
-            case "ChangeDetails" -> "edit";
-            case "ChangePassword" -> "lock";
-            case "Logout" -> "logout";
-            default -> "arrow";
-        };
+        // Use emoji instead of image
+        String emoji = "➡\uFE0F"; // Door emoji for Sign Out
+        JLabel emojiLabel = new JLabel(emoji);
+        emojiLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 18));
+        emojiLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
+        emojiLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+        emojiLabel.setOpaque(false);
 
-        String hoverKey = normalKey + "Hover";
-
-        // Get icons from ImageLoader and make them final
-        ImageLoader imageLoader = ImageLoader.getInstance();
-        final ImageIcon normalIcon = imageLoader.getImage(normalKey);
-        final ImageIcon hoverIcon = imageLoader.getImage(hoverKey) != null ?
-                imageLoader.getImage(hoverKey) : normalIcon;
-
-        JLabel iconLabel = new JLabel(normalIcon);
-        iconLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
-        iconLabel.setOpaque(false);
-        
-        // Wrap icon in transparent panel to ensure no background shows
-        JPanel iconWrapper = new JPanel(new BorderLayout());
-        iconWrapper.setOpaque(false);
-        iconWrapper.add(iconLabel, BorderLayout.CENTER);
+        // Wrap emoji in transparent panel
+        JPanel emojiWrapper = new JPanel(new BorderLayout());
+        emojiWrapper.setOpaque(false);
+        emojiWrapper.add(emojiLabel, BorderLayout.CENTER);
 
         row.add(label, BorderLayout.CENTER);
-        row.add(iconWrapper, BorderLayout.EAST);
+        row.add(emojiWrapper, BorderLayout.EAST);
 
         row.addMouseListener(new MouseAdapter() {
             @Override
@@ -372,18 +412,18 @@ public class ProfilePage extends JPanel {
             public void mouseEntered(MouseEvent e) {
                 if (!text.equals("Sign Out")) {
                     label.setForeground(themeManager.getWhite());
-                    iconLabel.setIcon(hoverIcon);
+                    emojiLabel.setForeground(themeManager.getWhite());
                 } else {
                     label.setForeground(themeManager.getRed());
-                    iconLabel.setIcon(hoverIcon);
+                    emojiLabel.setForeground(themeManager.getRed());
                 }
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                // Restore theme-aware color
+                // Restore theme-aware colors
                 label.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : ThemeManager.getDBlue());
-                iconLabel.setIcon(normalIcon);
+                emojiLabel.setForeground(themeManager.isDarkMode() ? Color.WHITE : ThemeManager.getDBlue());
             }
         });
 
