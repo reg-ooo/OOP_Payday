@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="42abd338-5c9e-4d82-b5a7-15ee47bc1b36" name="Changes" comment="PUSHED NEW VERSION">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/pages/ProfilePage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/buyLoad/DITO.png" beforeDir="false" afterPath="$PROJECT_DIR$/icons/buyLoad/DITO.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/buyLoad/Globe.png" beforeDir="false" afterPath="$PROJECT_DIR$/icons/buyLoad/Globe.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/buyLoad/Smart.png" beforeDir="false" afterPath="$PROJECT_DIR$/icons/buyLoad/Smart.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/icons/buyLoad/TNT.png" beforeDir="false" afterPath="$PROJECT_DIR$/icons/buyLoad/TNT.png" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
