@@ -1,5 +1,6 @@
 package pages.transaction;
 
+import Factory.PanelBuilder;
 import components.RoundedBorder;
 import data.dao.TransactionDAOImpl;
 import data.model.Transaction;
@@ -264,30 +265,51 @@ public class TransactionHistoryPage extends RoundedPanel {
 
         ArrayList<Transaction> transactionsList = TransactionDAOImpl.getInstance().getAllTransactions();
         ArrayList<String> dateList = TransactionDAOImpl.getInstance().getDistinctDates();
-        for(String date : dateList) {
-            System.out.println(date);
-            int dateString = Integer.parseInt(date.substring(5,7));
-            String monthName = Month.of(dateString).name();
 
-            addTransactionGroup(historyListPanel, date);
-            for (Transaction transaction : transactionsList) {
-                System.out.println(transaction.getTransactionDate());
-                if(transaction.getTransactionDate().substring(0,10).equals(date)) {
-                    historyListPanel.add(createTransactionCard(
-                                    transaction,
-                                    transaction.getTransactionDate().substring(5,10),
-                                    transaction.getTransactionType(),
-                                    transaction.getTime(),
-                                    String.valueOf(transaction.getAmount()),
-                                    TransactionDAOImpl.getInstance().gainMoney(transaction)
-                            )
-                    );
-                    historyListPanel.add(Box.createVerticalStrut(15));
+        // Check if there are any transactions
+        if (transactionsList.isEmpty() || dateList.isEmpty()) {
+            historyListPanel.add(createNoTransactionsMessage());
+        } else {
+            for(String date : dateList) {
+                System.out.println(date);
+                int dateString = Integer.parseInt(date.substring(5, 7));
+                String monthName = Month.of(dateString).name();
+
+                addTransactionGroup(historyListPanel, date);
+                for (Transaction transaction : transactionsList) {
+                    System.out.println(transaction.getTransactionDate());
+                    if (transaction.getTransactionDate().substring(0, 10).equals(date)) {
+                        historyListPanel.add(createTransactionCard(
+                                        transaction,
+                                        transaction.getTransactionDate().substring(5, 10),
+                                        transaction.getTransactionType(),
+                                        transaction.getTime(),
+                                        String.valueOf(transaction.getAmount()),
+                                        TransactionDAOImpl.getInstance().gainMoney(transaction)
+                                )
+                        );
+                        historyListPanel.add(Box.createVerticalStrut(15));
+                    }
                 }
             }
         }
 
         historyListPanel.revalidate();
         historyListPanel.repaint();
+    }
+
+    // Add this method to create the "No Transactions Found" message
+    private JPanel createNoTransactionsMessage() {
+        JPanel messagePanel = new PanelBuilder()
+                .setLayout(new BorderLayout())
+                .setBorder(BorderFactory.createEmptyBorder(40, 10, 40, 10))
+                .build();
+
+        JLabel messageLabel = new JLabel("No Transactions Found", SwingConstants.CENTER);
+        messageLabel.setFont(FontLoader.getInstance().loadFont(Font.PLAIN, 17f, "Quicksand-Regular"));
+        messageLabel.setForeground(ThemeManager.getDBlue());
+
+        messagePanel.add(messageLabel, BorderLayout.CENTER);
+        return messagePanel;
     }
 }

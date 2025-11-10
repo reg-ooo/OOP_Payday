@@ -1,6 +1,7 @@
 package pages;
 
 import data.UserManager;
+import data.dao.TransactionDAOImpl;
 import data.model.UserInfo;
 import launchPagePanels.GradientPanel;
 import util.FontLoader;
@@ -23,6 +24,8 @@ public class ProfilePage extends JPanel {
     private final JLabel birthdayValueLabel = new JLabel();
     private final JLabel phoneValueLabel = new JLabel();
     private static ProfilePage instance;
+    private final JLabel verifiedValueLabel = new JLabel();
+    private final JLabel verifiedIconLabel = new JLabel(); // Add this field
 
     public static ProfilePage getInstance() {
         return instance;
@@ -90,14 +93,26 @@ public class ProfilePage extends JPanel {
         headerWrapper.add(headerContainer);
 
         // ===== NAME LABEL BELOW INITIALS =====
-        JPanel namePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 0));
+        JPanel namePanel = new JPanel(new BorderLayout());
         namePanel.setOpaque(false);
+        namePanel.setMaximumSize(new Dimension(300, 40));
 
         nameLabel = new JLabel("Loading...");
         nameLabel.setFont(fontLoader.loadFont(Font.BOLD, 22f, "Quicksand-Bold"));
         nameLabel.setForeground(themeManager.getBlack());
+        nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        namePanel.add(nameLabel);
+        // Verified icon label (initially hidden/empty)
+        verifiedIconLabel.setPreferredSize(new Dimension(27, 24));
+        verifiedIconLabel.setVisible(false);
+
+        // Create a wrapper panel for name and icon
+        JPanel nameAndIconPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0)); // Reduced gap to 5px
+        nameAndIconPanel.setOpaque(false);
+        nameAndIconPanel.add(nameLabel);
+        nameAndIconPanel.add(verifiedIconLabel);
+
+        namePanel.add(nameAndIconPanel, BorderLayout.CENTER);
 
         infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
@@ -114,10 +129,9 @@ public class ProfilePage extends JPanel {
         infoPanel.add(makeInfoRow("Email:", emailValueLabel));
         infoPanel.add(makeInfoRow("Birthday:", birthdayValueLabel));
         infoPanel.add(makeInfoRow("Phone Number:", phoneValueLabel));
+        infoPanel.add(makeInfoRow("Verified:", verifiedValueLabel));
         infoPanel.add(new JSeparator());
 
-        infoPanel.add(makeClickableRow("Change Account Details", onButtonClick, "ChangeDetails"));
-        infoPanel.add(makeClickableRow("Change Password", onButtonClick, "ChangePassword"));
         infoPanel.add(makeClickableRow("Sign Out", onButtonClick, "Logout"));
 
         JPanel centerPanel = new JPanel();
@@ -294,6 +308,33 @@ public class ProfilePage extends JPanel {
         emailValueLabel.setText(user.getEmail());
         birthdayValueLabel.setText(formattedBirthday);
         phoneValueLabel.setText(user.getPhoneNumber());
+
+        // Set user data
+        nameLabel.setText(user.getFullName());
+        emailValueLabel.setText(user.getEmail());
+        birthdayValueLabel.setText(formattedBirthday);
+        phoneValueLabel.setText(user.getPhoneNumber());
+
+        // Set verification status
+        boolean hasTransactions = TransactionDAOImpl.getInstance().checkForTransactions();
+        if (hasTransactions) {
+            verifiedValueLabel.setText("Verified");
+            verifiedValueLabel.setForeground(themeManager.getGreen());
+
+            // Show checkmark icon next to name
+            ImageIcon successIcon = ImageLoader.getInstance().getImage("verifiedIcon");
+            if (successIcon != null) {
+                verifiedIconLabel.setIcon(successIcon);
+                verifiedIconLabel.setVisible(true);
+            }
+        } else {
+            verifiedValueLabel.setText("Unverified");
+            verifiedValueLabel.setForeground(themeManager.getRed());
+
+            // Hide the icon for unverified users
+            verifiedIconLabel.setIcon(null);
+            verifiedIconLabel.setVisible(false);
+        }
 
         // Set initials
         String initials = getInitials(user.getFullName());
