@@ -26,6 +26,7 @@ public class SendMoneyPage extends JPanel {
     private JLabel sendToLabel;
     private JLabel amountLabel;
     private JLabel stepLabel;
+    private JLabel backLabel;
 
     public static SendMoneyPage getInstance() {
         return instance;
@@ -60,7 +61,7 @@ public class SendMoneyPage extends JPanel {
 
     private void setupUI() {
         // Create ALL components through factory
-        JLabel backLabel = factory.createBackLabel(() -> onButtonClick.accept("Launch"));
+        backLabel = factory.createBackLabel(() -> onButtonClick.accept("Launch"));
         titleLabel = factory.createTitleLabel();
         sendToLabel = factory.createSectionLabel("Send to", true);
         phoneField = factory.createPhoneNumberField(); // Store as instance variable
@@ -156,6 +157,7 @@ public class SendMoneyPage extends JPanel {
             DialogManager.showErrorDialog(this, "Cannot send money to your own number");
             return;
         }
+        SendMoneyPage2.getInstance().applyTheme();
         onButtonClick.accept("SendMoney2:" + enteredPhone + ":" + enteredAmount);
     }
 
@@ -184,11 +186,11 @@ public class SendMoneyPage extends JPanel {
             double balance = UserInfo.getInstance().getBalance();
             System.out.println("DEBUG: updateBalanceDisplay - Balance: " + balance);
             balanceLabel.setText("Available balance: PHP " + String.format("%.2f", balance));
-            balanceLabel.setForeground(themeManager.getDSBlue());
+            balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
         } catch (Exception e) {
             System.out.println("DEBUG: Error in updateBalanceDisplay: " + e.getMessage());
             balanceLabel.setText("Available balance: PHP 0.00");
-            balanceLabel.setForeground(themeManager.getDSBlue());
+            balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
         }
     }
 
@@ -199,7 +201,7 @@ public class SendMoneyPage extends JPanel {
 
             if (amountText.isEmpty() || amountText.equals("0.00")) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));
-                balanceLabel.setForeground(themeManager.getDSBlue());
+                balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
                 return;
             }
 
@@ -212,11 +214,11 @@ public class SendMoneyPage extends JPanel {
                     balanceLabel.setForeground(Color.RED);
                 } else {
                     balanceLabel.setText("Available balance: PHP " + String.format("%.2f", updatedBalance));
-                    balanceLabel.setForeground(themeManager.getDSBlue());
+                    balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
                 }
             } catch (NumberFormatException e) {
                 balanceLabel.setText("Available balance: PHP " + String.format("%.2f", currentBalance));
-                balanceLabel.setForeground(themeManager.getDSBlue());
+                balanceLabel.setForeground(themeManager.isDarkMode() ? new Color(0xF8FAFC) : themeManager.getDSBlue());
             }
         } catch (Exception e) {
             updateBalanceDisplay();
@@ -245,23 +247,39 @@ public class SendMoneyPage extends JPanel {
         if (comp instanceof JTextField jtf) {
             if (ThemeManager.getInstance().isDarkMode()) {
                 jtf.setBackground(new Color(0x1E293B)); // dark background
-                jtf.setForeground(new Color(0xF1F5F9)); // light text
-                jtf.setCaretColor(new Color(0xF1F5F9)); // make caret visible
-                jtf.setSelectedTextColor(new Color(0xF1F5F9)); // selected text color
-                jtf.setDisabledTextColor(new Color(0xF1F5F9));
+                jtf.setForeground(new Color(0xE2E8F0)); // #E2E8F0 - light text
+                jtf.setCaretColor(new Color(0xE2E8F0)); // make caret visible
+                jtf.setSelectedTextColor(new Color(0xE2E8F0)); // selected text color
+                jtf.setDisabledTextColor(new Color(0xE2E8F0));
             } else {
-                jtf.setForeground(Color.BLACK);
+                jtf.setForeground(themeManager.getDBlue()); // Use dark blue for light mode
                 jtf.setBackground(Color.WHITE);
-                jtf.setCaretColor(Color.BLACK);
-                jtf.setSelectedTextColor(Color.BLACK);
-                jtf.setDisabledTextColor(Color.BLACK);
+                jtf.setCaretColor(themeManager.getDBlue());
+                jtf.setSelectedTextColor(themeManager.getDBlue());
+                jtf.setDisabledTextColor(themeManager.getDBlue());
             }
         } else if (comp instanceof JLabel jl) {
             if (ThemeManager.getInstance().isDarkMode()) {
                 jl.setForeground(new Color(0xF8FAFC));
+                // Ensure balance label uses appropriate dark mode color
+                if (jl == balanceLabel) {
+                    balanceLabel.setForeground(new Color(0xF8FAFC));
+                }
             } else {
                 jl.setForeground(Color.BLACK);
-
+                if (jl == balanceLabel) {
+                    balanceLabel.setForeground(themeManager.getDSBlue());
+                } else if (jl == backLabel) {
+                    backLabel.setForeground(themeManager.getPBlue());
+                } else if (jl == titleLabel) {
+                    titleLabel.setForeground(themeManager.getDBlue());
+                } else if (jl == sendToLabel) {
+                    sendToLabel.setForeground(themeManager.getDBlue());
+                } else if (jl == amountLabel) {
+                    amountLabel.setForeground(themeManager.getDBlue());
+                } else if (jl == stepLabel) {
+                    stepLabel.setForeground(themeManager.getDBlue());
+                }
             }
         }
         if (comp instanceof Container container) {

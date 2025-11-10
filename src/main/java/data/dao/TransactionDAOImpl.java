@@ -118,7 +118,7 @@ public class TransactionDAOImpl implements TransactionDAO {
     @Override
     public ArrayList<Transaction> getAllTransactions() {
         ArrayList<Transaction> transactions = new ArrayList<>();
-        String query = "SELECT * FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 8";
+        String query = "SELECT * FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 15";
 
         try {
             PreparedStatement pstmt = database.prepareStatement(query);
@@ -136,7 +136,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     public ArrayList<String> getDistinctDates(){
         ArrayList<String> dates = new ArrayList<>();
-        String query = "SELECT transactionDate FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 8";
+        String query = "SELECT transactionDate FROM Transactions WHERE walletID = ? ORDER BY transactionID DESC LIMIT 15";
         try{
             PreparedStatement pstmt = database.prepareStatement(query);
             pstmt.setInt(1, UserInfo.getInstance().getCurrentUserId());
@@ -173,6 +173,7 @@ public class TransactionDAOImpl implements TransactionDAO {
         return !transaction.getTransactionType().equals("Send Money") &&
                 !transaction.getTransactionType().equals("Cash Out") &&
                 !transaction.getTransactionType().equals("Bank Transfer") &&
-                !transaction.getTransactionType().equals("Pay Bills");
+                !transaction.getTransactionType().equals("Pay Bills") &&
+                !transaction.getTransactionType().equals("Buy Load");
     }
 }

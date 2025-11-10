@@ -24,7 +24,7 @@ public class CashInCommand extends TransactionCommand{
 
     @Override
     protected boolean checkBalance() {
-        return UserInfo.getInstance().getBalance() >= amount;
+        return true;
     }
 
     @Override

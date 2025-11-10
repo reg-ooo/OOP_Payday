@@ -15,12 +15,24 @@ public class SendMoneyPage2 extends JPanel {
     private final ThemeManager themeManager = ThemeManager.getInstance();
     private final Consumer<String> onButtonClick;
     private final SendMoneyPage2Factory factory;
-
+    private static SendMoneyPage2 instance;
+    private JLabel stepLabel;
     // Transaction data
     private String recipientName;
     private String phoneNumber;
     private String amount;
     private String currentBalance;
+
+    public static SendMoneyPage2 getInstance() {
+        return instance;
+    }
+
+    public static SendMoneyPage2 getInstance(Consumer<String> onButtonClick) {
+        if (instance == null) {
+            instance = new SendMoneyPage2(onButtonClick);
+        }
+        return instance;
+    }
 
     public SendMoneyPage2(Consumer<String> onButtonClick) {
         this.onButtonClick = onButtonClick;
@@ -129,7 +141,7 @@ public class SendMoneyPage2 extends JPanel {
         footerPanel.setOpaque(false);
         footerPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 8, 0));
 
-        JLabel stepLabel = factory.createStepLabel("Step 2 of 2"); // USING FACTORY
+        stepLabel = factory.createStepLabel("Step 2 of 2"); // USING FACTORY
         footerPanel.add(stepLabel);
 
         return footerPanel;
@@ -141,41 +153,68 @@ public class SendMoneyPage2 extends JPanel {
         revalidate();
         repaint();
     }
-    
-    public void applyTheme(boolean isDarkMode) {
-        // Update background
-        setBackground(isDarkMode ? ThemeManager.getBlack() : ThemeManager.getWhite());
-        
-        // Recursively apply to all child components
-        for (Component comp : getComponents()) {
-            if (comp instanceof Container) {
-                applyThemeToContainer((Container) comp, isDarkMode);
-            }
-        }
-        
+
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        applyThemeRecursive(this);
         revalidate();
         repaint();
     }
-    
-    private void applyThemeToContainer(Container container, boolean isDarkMode) {
-        for (Component comp : container.getComponents()) {
-            if (comp instanceof JPanel) {
-                JPanel panel = (JPanel) comp;
-                if (panel.getBackground().equals(Color.WHITE) || panel.getBackground().equals(ThemeManager.getBlack())) {
-                    panel.setBackground(isDarkMode ? ThemeManager.getBlack() : Color.WHITE);
+
+    private void applyThemeRecursive(Component comp) {
+
+        if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(new Color(0xF8FAFC));
+                // Ensure balance label uses appropriate dark mode color
+            } else {
+                jl.setForeground(Color.BLACK);
+                if( jl == stepLabel) {
+                    stepLabel.setForeground(themeManager.getDBlue());
                 }
             }
-            if (comp instanceof JLabel) {
-                JLabel label = (JLabel) comp;
-                Color currentColor = label.getForeground();
-                // Only change non-blue colors (neutral colors)
-                if (!currentColor.equals(ThemeManager.getPBlue()) && !currentColor.equals(Color.RED)) {
-                    label.setForeground(isDarkMode ? Color.WHITE : currentColor);
-                }
-            }
-            if (comp instanceof Container) {
-                applyThemeToContainer((Container) comp, isDarkMode);
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
             }
         }
     }
+
+//    public void applyTheme(boolean isDarkMode) {
+//        // Update background
+//        setBackground(isDarkMode ? ThemeManager.getBlack() : ThemeManager.getWhite());
+//
+//        // Recursively apply to all child components
+//        for (Component comp : getComponents()) {
+//            if (comp instanceof Container) {
+//                applyThemeToContainer((Container) comp, isDarkMode);
+//            }
+//        }
+//
+//        revalidate();
+//        repaint();
+//    }
+//
+//    private void applyThemeToContainer(Container container, boolean isDarkMode) {
+//        for (Component comp : container.getComponents()) {
+//            if (comp instanceof JPanel) {
+//                JPanel panel = (JPanel) comp;
+//                if (panel.getBackground().equals(Color.WHITE) || panel.getBackground().equals(ThemeManager.getBlack())) {
+//                    panel.setBackground(isDarkMode ? ThemeManager.getBlack() : Color.WHITE);
+//                }
+//            }
+//            if (comp instanceof JLabel) {
+//                JLabel label = (JLabel) comp;
+//                Color currentColor = label.getForeground();
+//                // Only change non-blue colors (neutral colors)
+//                if (!currentColor.equals(ThemeManager.getPBlue()) && !currentColor.equals(Color.RED)) {
+//                    label.setForeground(isDarkMode ? Color.WHITE : currentColor);
+//                }
+//            }
+//            if (comp instanceof Container) {
+//                applyThemeToContainer((Container) comp, isDarkMode);
+//            }
+//        }
+//    }
 }
