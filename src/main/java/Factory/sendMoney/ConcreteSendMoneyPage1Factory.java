@@ -20,6 +20,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         JTextField phoneField = new JTextField();
         phoneField.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
         phoneField.setForeground(getTextFieldColor()); // Use helper method
+        phoneField.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         phoneField.setMaximumSize(new Dimension(300, 45));
 
         phoneField.setBorder(BorderFactory.createCompoundBorder(
@@ -37,6 +38,7 @@ public class ConcreteSendMoneyPage1Factory extends ConcreteSendMoneyBaseFactory 
         amountField.setHorizontalAlignment(JTextField.RIGHT);
         amountField.setFont(fontLoader.loadFont(Font.PLAIN, 16f, "Quicksand-Regular"));
         amountField.setForeground(getTextFieldColor()); // Use helper method
+        amountField.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
         amountField.setMaximumSize(new Dimension(300, 45));
 
         amountField.setBorder(BorderFactory.createCompoundBorder(

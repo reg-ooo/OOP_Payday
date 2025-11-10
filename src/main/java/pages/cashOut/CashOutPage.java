@@ -350,11 +350,28 @@ public class CashOutPage extends JPanel {
                 jl.setForeground(ThemeManager.getDeepBlue());
             }
         }
+        if (comp instanceof JTextField tf) {
+            // Update text field colors based on theme, but skip placeholder text
+            String text = tf.getText();
+            if (!text.equals("₱ 0.00") && !text.trim().isEmpty()) {
+                tf.setForeground(getTextFieldColor());
+            }
+            // Update background color
+            tf.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
+        }
+        if (comp instanceof JPanel jp && !(comp instanceof GradientPanel)) {
+            // Update panel backgrounds based on theme
+            jp.setBackground(themeManager.isDarkMode() ? ThemeManager.getBlack() : Color.WHITE);
+        }
         if (comp instanceof Container container) {
             for (Component child : container.getComponents()) {
                 applyThemeRecursive(child);
             }
         }
+    }
+    
+    private Color getTextFieldColor() {
+        return themeManager.isDarkMode() ? new Color(0xE2E8F0) : themeManager.getDBlue();
     }
 
     private JLabel createBackLabel(Runnable backAction) {
