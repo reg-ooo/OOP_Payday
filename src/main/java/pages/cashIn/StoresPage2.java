@@ -55,7 +55,21 @@ public class StoresPage2 extends JPanel {
     }
     
     private void applyThemeRecursive(Component comp) {
-        if (comp instanceof JLabel jl) {
+        if (comp instanceof JTextField jtf) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jtf.setBackground(new Color(0x1E293B)); // dark background
+                jtf.setForeground(new Color(0xE2E8F0)); // light text
+                jtf.setCaretColor(new Color(0xE2E8F0)); // make caret visible
+                jtf.setSelectedTextColor(new Color(0xE2E8F0)); // selected text color
+                jtf.setDisabledTextColor(new Color(0xE2E8F0));
+            } else {
+                jtf.setForeground(ThemeManager.getDBlue()); // Use dark blue for light mode
+                jtf.setBackground(Color.WHITE);
+                jtf.setCaretColor(ThemeManager.getDBlue());
+                jtf.setSelectedTextColor(ThemeManager.getDBlue());
+                jtf.setDisabledTextColor(ThemeManager.getDBlue());
+            }
+        } else if (comp instanceof JLabel jl) {
             if (ThemeManager.getInstance().isDarkMode()) {
                 jl.setForeground(Color.WHITE);
             } else {
@@ -377,7 +391,7 @@ public class StoresPage2 extends JPanel {
                     try {
 
                         double value = Double.parseDouble(currentText);
-                        field.setText("₱ " + String.format("%,.2f", value));
+                        field.setText("₱ " + String.format("%.2f", value));
                     } catch (NumberFormatException e) {}
                 }
                 field.setBorder(BorderFactory.createCompoundBorder(
@@ -467,7 +481,7 @@ public class StoresPage2 extends JPanel {
             try {
                 double amountValue = Double.parseDouble(amountText);
 
-                String finalAmount = String.format("%,.2f", amountValue);
+                String finalAmount = String.format("%.2f", amountValue);
 
                 QRPage qrPage = QRPage.getInstance(onButtonClick);
                 qrPage.updateSelectedEntity(
@@ -475,7 +489,7 @@ public class StoresPage2 extends JPanel {
                         false, // isBank = true
                         accountRef,
                         finalAmount,
-                        "StoresPage2"
+                        "CashInStores2"
                 );
 
                 onButtonClick.accept("QRPage");
