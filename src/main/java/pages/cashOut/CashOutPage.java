@@ -328,6 +328,23 @@ public class CashOutPage extends JPanel {
         super.setVisible(visible);
         if (visible) {
             refreshBalance();
+            // Update labels recursively
+            applyThemeRecursive(this);
+        }
+    }
+    
+    private void applyThemeRecursive(Component comp) {
+        if (comp instanceof JLabel jl) {
+            if (ThemeManager.getInstance().isDarkMode()) {
+                jl.setForeground(Color.WHITE);
+            } else {
+                jl.setForeground(ThemeManager.getDeepBlue());
+            }
+        }
+        if (comp instanceof Container container) {
+            for (Component child : container.getComponents()) {
+                applyThemeRecursive(child);
+            }
         }
     }
 
