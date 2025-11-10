@@ -35,7 +35,7 @@ public class BuyLoadPage2 extends JPanel {
         this.onButtonClick = onButtonClick;
         this.factory = new ConcreteCashInPageFactory();
         this.SendMoneyPage1Factory = new ConcreteSendMoneyPage1Factory();
-        setBackground(Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         setLayout(new BorderLayout());
 
     }
@@ -53,7 +53,7 @@ public class BuyLoadPage2 extends JPanel {
         // Main content panel
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // ===== BACK BUTTON =====
@@ -68,7 +68,7 @@ public class BuyLoadPage2 extends JPanel {
         // ===== MAIN TITLE SECTION =====
         JPanel mainTitlePanel = new JPanel();
         mainTitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        mainTitlePanel.setBackground(Color.WHITE);
+        mainTitlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         mainTitlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         mainTitlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -89,7 +89,7 @@ public class BuyLoadPage2 extends JPanel {
         // ===== NETWORK TITLE SECTION =====
         JPanel networkTitlePanel = new JPanel();
         networkTitlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        networkTitlePanel.setBackground(Color.WHITE);
+        networkTitlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         networkTitlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         networkTitlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -160,7 +160,7 @@ public class BuyLoadPage2 extends JPanel {
         // ===== STEP INDICATOR =====
         JPanel stepPanel = new JPanel();
         stepPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        stepPanel.setBackground(Color.WHITE);
+        stepPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         stepPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
         JLabel stepLabel = new JLabel("Step 2 of 3");
@@ -253,5 +253,37 @@ public class BuyLoadPage2 extends JPanel {
     private String getEnteredAmount() {
         String text = amountField.getText().replace("₱ ", "").trim();
         return text.equals("0.00") ? "" : text;
+    }
+
+    /**
+     * Applies the current theme to this component
+     */
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        
+        // Apply theme to labels
+        if (themeManager.isDarkMode()) {
+            // Update label colors for dark mode
+            updateLabelColors(this, ThemeManager.getLightText());
+        } else {
+            // Update label colors for light mode
+            updateLabelColors(this, ThemeManager.getDBlue());
+        }
+    }
+    
+    /**
+     * Recursively updates label colors
+     */
+    private void updateLabelColors(Container container, Color color) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JLabel label) {
+                // Only update text labels, not icon labels
+                if (label.getText() != null && !label.getText().isEmpty()) {
+                    label.setForeground(color);
+                }
+            } else if (component instanceof Container subContainer) {
+                updateLabelColors(subContainer, color);
+            }
+        }
     }
 }

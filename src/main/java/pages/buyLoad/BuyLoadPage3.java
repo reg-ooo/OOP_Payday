@@ -36,18 +36,18 @@ public class BuyLoadPage3 extends JPanel {
 
     public BuyLoadPage3(Consumer<String> onButtonClick) {
         setLayout(new BorderLayout());
-        setBackground(Color.WHITE);
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         this.factory = new ConcreteSendMoneyPage1Factory();
 
         // Main content panel with padding
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         mainPanel.setBorder(BorderFactory.createEmptyBorder(8, 20, 20, 20));
 
         // ===== BACK BUTTON =====
         JPanel backPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        backPanel.setBackground(Color.WHITE);
+        backPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         backPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
         JLabel backLabel = createBackLabel(() -> {
@@ -61,7 +61,7 @@ public class BuyLoadPage3 extends JPanel {
         // ===== HEADER SECTION WITH ICON =====
         JPanel headerPanel = new JPanel();
         headerPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px gap between icon and text
-        headerPanel.setBackground(Color.WHITE);
+        headerPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
         headerPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -119,7 +119,7 @@ public class BuyLoadPage3 extends JPanel {
         detailsContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Create inner rounded panel (like transactionRoundedPanel)
-        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, Color.WHITE);
+        RoundedPanel detailsRoundedPanel = new RoundedPanel(15, themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
         detailsRoundedPanel.setLayout(new BorderLayout());
         detailsRoundedPanel.setPreferredSize(new Dimension(350, 210));
         detailsRoundedPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -127,7 +127,7 @@ public class BuyLoadPage3 extends JPanel {
         // Create content panel for the details
         JPanel detailsContentPanel = new JPanel();
         detailsContentPanel.setLayout(new BoxLayout(detailsContentPanel, BoxLayout.Y_AXIS));
-        detailsContentPanel.setBackground(Color.WHITE);
+        detailsContentPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
 
         // Title
         JLabel detailsTitle = new JLabel("Load Purchase Details");
@@ -386,5 +386,37 @@ public class BuyLoadPage3 extends JPanel {
             }
         });
         return backLabel;
+    }
+
+    /**
+     * Applies the current theme to this component
+     */
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        
+        // Apply theme to labels
+        if (themeManager.isDarkMode()) {
+            // Update label colors for dark mode
+            updateLabelColors(this, ThemeManager.getLightText());
+        } else {
+            // Update label colors for light mode
+            updateLabelColors(this, ThemeManager.getDBlue());
+        }
+    }
+    
+    /**
+     * Recursively updates label colors
+     */
+    private void updateLabelColors(Container container, Color color) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JLabel label) {
+                // Only update text labels, not icon labels
+                if (label.getText() != null && !label.getText().isEmpty()) {
+                    label.setForeground(color);
+                }
+            } else if (component instanceof Container subContainer) {
+                updateLabelColors(subContainer, color);
+            }
+        }
     }
 }

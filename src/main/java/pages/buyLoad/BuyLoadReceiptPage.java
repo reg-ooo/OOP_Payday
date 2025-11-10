@@ -29,7 +29,7 @@ public class BuyLoadReceiptPage extends JPanel {
 
     private void setupUI() {
         setLayout(new BorderLayout());
-        setBackground(themeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : ThemeManager.getWhite());
         setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
         add(createReceiptPanel(), BorderLayout.CENTER);
@@ -59,5 +59,37 @@ public class BuyLoadReceiptPage extends JPanel {
 
     private JPanel createFooterPanel() {
         return factory.createReceiptFooterPanel();
+    }
+
+    /**
+     * Applies the current theme to this component
+     */
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        
+        // Apply theme to labels
+        if (themeManager.isDarkMode()) {
+            // Update label colors for dark mode
+            updateLabelColors(this, ThemeManager.getLightText());
+        } else {
+            // Update label colors for light mode
+            updateLabelColors(this, ThemeManager.getDBlue());
+        }
+    }
+    
+    /**
+     * Recursively updates label colors
+     */
+    private void updateLabelColors(Container container, Color color) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JLabel label) {
+                // Only update text labels, not icon labels
+                if (label.getText() != null && !label.getText().isEmpty()) {
+                    label.setForeground(color);
+                }
+            } else if (component instanceof Container subContainer) {
+                updateLabelColors(subContainer, color);
+            }
+        }
     }
 }

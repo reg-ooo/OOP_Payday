@@ -38,7 +38,7 @@ public class BuyLoadPage extends JPanel {
 
         this.factory = new ConcreteCashInPageFactory();
 
-        setBackground(ThemeManager.getWhite());
+        setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : ThemeManager.getWhite());
 
         setLayout(new BorderLayout());
 
@@ -50,7 +50,7 @@ public class BuyLoadPage extends JPanel {
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
-        mainPanel.setBackground(Color.WHITE);
+        mainPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
 
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
@@ -80,7 +80,7 @@ public class BuyLoadPage extends JPanel {
 
         titlePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 0)); // 15px gap between icon and text
 
-        titlePanel.setBackground(Color.WHITE);
+        titlePanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
 
         titlePanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
 
@@ -150,7 +150,7 @@ public class BuyLoadPage extends JPanel {
 
         gridPanel.setLayout(new GridLayout(2, 2, 20, 20)); // 2x2 grid with 20px gaps
 
-        gridPanel.setBackground(Color.WHITE);
+        gridPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
 
         gridPanel.setMaximumSize(new Dimension(350, 350));
 
@@ -214,7 +214,7 @@ public class BuyLoadPage extends JPanel {
 
         wrapperPanel.setPreferredSize(new Dimension(130, 140));
 
-        wrapperPanel.setBackground(Color.WHITE);
+        wrapperPanel.setBackground(themeManager.isDarkMode() ? ThemeManager.getDarkGray() : Color.WHITE);
 
         wrapperPanel.setOpaque(false);
 
@@ -315,6 +315,38 @@ public class BuyLoadPage extends JPanel {
 
         }
 
+    }
+
+    /**
+     * Applies the current theme to this component
+     */
+    public void applyTheme() {
+        themeManager.applyTheme(this);
+        
+        // Apply theme to labels
+        if (themeManager.isDarkMode()) {
+            // Update title label color for dark mode
+            updateLabelColors(this, ThemeManager.getLightText());
+        } else {
+            // Update title label color for light mode
+            updateLabelColors(this, ThemeManager.getDBlue());
+        }
+    }
+    
+    /**
+     * Recursively updates label colors
+     */
+    private void updateLabelColors(Container container, Color color) {
+        for (Component component : container.getComponents()) {
+            if (component instanceof JLabel label) {
+                // Only update text labels, not icon labels
+                if (label.getText() != null && !label.getText().isEmpty()) {
+                    label.setForeground(color);
+                }
+            } else if (component instanceof Container subContainer) {
+                updateLabelColors(subContainer, color);
+            }
+        }
     }
 
 }

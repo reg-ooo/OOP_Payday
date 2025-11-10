@@ -17,7 +17,7 @@ public class ThemeManager {
     private static final Color dBlue = new Color(0x163F5C);
     private static final Color sBlue = new Color(230, 240, 250);
     private static final Color lBlue = new Color(0xC4E4FF);
-    private static final Color black = new Color(0x000000);
+    private static final Color black = new Color(0x0F172A);
     private static final Color white = new Color(0xFFFFFF);
     private static final Color vBlue = new Color(0x1A43BF);
     private static final Color dvBlue = new Color(0x123499);
@@ -29,6 +29,8 @@ public class ThemeManager {
     private static final Color red = new Color(255, 0 ,0);
     private static final Color green = new Color(0, 128, 0);
     private static final Color gold = new Color(255, 215, 0);
+    private static final Color darkGray = Color.BLACK;  // Black for dark mode backgrounds
+    private static final Color lightText = new Color(220, 220, 220);  // Light text for dark mode
 
     private static final Color transparent = new Color(0,0,0,0);
 
@@ -66,6 +68,11 @@ public class ThemeManager {
     }
 
     public void applyTheme(Component comp) {
+        // Skip QRPage and its children from theme changes
+        if (comp.getClass().getName().contains("QRPage")) {
+            return;
+        }
+        
         MainFrame.container.setBackground(isDarkMode ? Color.BLACK : Color.WHITE);
 
         if (comp instanceof GradientPanel gp) {
@@ -102,6 +109,14 @@ public class ThemeManager {
                 lp.setBackground(Color.black);
             } else {
                 lp.setBackground(Color.white);
+            }
+        }
+        else if (comp instanceof JPanel jp) {
+            // Generic JPanel handling - change white backgrounds to dark gray in dark mode
+            if (isDarkMode && jp.getBackground().equals(Color.WHITE)) {
+                jp.setBackground(getDarkGray());
+            } else if (!isDarkMode && jp.getBackground().equals(getDarkGray())) {
+                jp.setBackground(Color.WHITE);
             }
         }
 
@@ -180,4 +195,8 @@ public class ThemeManager {
     public static Color getDGray() {return dGray;}
 
     public static Color getGreen() {return green;}
+    
+    public static Color getDarkGray() {return darkGray;}
+    
+    public static Color getLightText() {return lightText;}
 }
